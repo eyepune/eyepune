@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,12 +28,26 @@ export default function TestimonialSubmission() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const currentUser = await base44.auth.me();
-                setUser(currentUser);
-                setFormData(prev => ({
-                    ...prev,
-                    customer_name: currentUser.full_name || '',
-                }));
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    const { data: profile } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('id', session.user.id)
+                        .single();
+                    
+                    setUser({
+                        id: session.user.id,
+                        email: session.user.email,
+                        full_name: profile?.full_name || session.user.user_metadata?.full_name || session.user.email?.split('@')[0],
+                    });
+                    setFormData(prev => ({
+                        ...prev,
+                        customer_name: profile?.full_name || session.user.user_metadata?.full_name || '',
+                    }));
+                } else {
+                    setUser(null);
+                }
             } catch {
                 setUser(null);
             } finally {
@@ -44,7 +58,15 @@ export default function TestimonialSubmission() {
     }, []);
 
     const submitMutation = useMutation({
-        mutationFn: (data) => base44.entities.Testimonial.create({ ...data, status: 'pending' }),
+        mutationFn: async (data) => {
+            const { data: result, error } = await supabase
+                .from('testimonials')
+                .insert([{ ...data, status: 'pending' }])
+                .select()
+                .single();
+            if (error) throw error;
+            return result;
+        },
         onSuccess: () => {
             setIsSuccess(true);
             setFormData({
@@ -64,8 +86,19 @@ export default function TestimonialSubmission() {
         if (!file) return;
 
         setUploadingImage(true);
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
-        setFormData({ ...formData, customer_image: file_url });
+        try {
+            const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+            const { data, error } = await supabase.storage
+                .from('uploads')
+                .upload(fileName, file, { cacheControl: '3600', upsert: false });
+            
+            if (error) throw error;
+
+            const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(data.path);
+            setFormData({ ...formData, customer_image: urlData.publicUrl });
+        } catch (err) {
+            console.error('Upload error:', err);
+        }
         setUploadingImage(false);
     };
 
@@ -97,8 +130,8 @@ export default function TestimonialSubmission() {
                     <p className="text-muted-foreground mb-6">
                         You need to be logged in to submit a testimonial. This helps us verify authentic feedback from our clients.
                     </p>
-                    <Button 
-                        onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
+                    <Button
+                        onClick={() => window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`}
                         className="bg-red-600 hover:bg-red-700"
                     >
                         <LogIn className="w-4 h-4 mr-2" />

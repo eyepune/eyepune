@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/integrations/supabase/client";
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,11 +11,16 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
     const { data: testimonials = [], isLoading } = useQuery({
         queryKey: ['testimonials', serviceFilter, featured],
         queryFn: async () => {
-            let query = { status: 'approved' };
-            if (featured) query.featured = true;
-            if (serviceFilter) query.service = serviceFilter;
+            let query = supabase.from('testimonials').select('*').eq('status', 'approved');
+            
+            if (featured) query = query.eq('featured', true);
+            if (serviceFilter) query = query.eq('service', serviceFilter);
+            
+            query = query.order('created_at', { ascending: false }).limit(limit);
 
-            return await base44.entities.Testimonial.filter(query, '-created_at', limit);
+            const { data, error } = await query;
+            if (error) throw error;
+            return data || [];
         }
     });
 
@@ -81,22 +86,22 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
 
                             {/* Author info */}
                             <div className="flex items-center gap-3 pt-4 border-t">
-                                {testimonial.customerImage ? (
+                                {testimonial.customer_image ? (
                                     <img
-                                        src={testimonial.customerImage}
-                                        alt={testimonial.customerName}
+                                        src={testimonial.customer_image}
+                                        alt={testimonial.customer_name}
                                         className="w-12 h-12 rounded-full object-cover"
                                     />
                                 ) : (
                                     <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold">
-                                        {testimonial.customerName?.[0]?.toUpperCase() || '?'}
+                                        {testimonial.customer_name?.[0]?.toUpperCase() || '?'}
                                     </div>
                                 )}
                                 <div>
-                                    <p className="font-semibold">{testimonial.customerName}</p>
-                                    {testimonial.customerTitle && testimonial.customerCompany && (
+                                    <p className="font-semibold">{testimonial.customer_name}</p>
+                                    {testimonial.customer_title && testimonial.customer_company && (
                                         <p className="text-sm text-muted-foreground">
-                                            {testimonial.customerTitle} at {testimonial.customerCompany}
+                                            {testimonial.customer_title} at {testimonial.customer_company}
                                         </p>
                                     )}
                                 </div>
@@ -113,22 +118,22 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
                         <>
                             <DialogHeader>
                                 <DialogTitle className="flex items-center gap-3 pr-8">
-                                    {selectedTestimonial.customerImage ? (
+                                    {selectedTestimonial.customer_image ? (
                                         <img
-                                            src={selectedTestimonial.customerImage}
-                                            alt={selectedTestimonial.customerName}
+                                            src={selectedTestimonial.customer_image}
+                                            alt={selectedTestimonial.customer_name}
                                             className="w-12 h-12 rounded-full object-cover"
                                         />
                                     ) : (
                                         <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold flex-shrink-0">
-                                            {selectedTestimonial.customerName?.[0]?.toUpperCase() || '?'}
+                                            {selectedTestimonial.customer_name?.[0]?.toUpperCase() || '?'}
                                         </div>
                                     )}
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-semibold truncate">{selectedTestimonial.customerName}</p>
-                                        {selectedTestimonial.customerTitle && selectedTestimonial.customerCompany && (
+                                        <p className="font-semibold truncate">{selectedTestimonial.customer_name}</p>
+                                        {selectedTestimonial.customer_title && selectedTestimonial.customer_company && (
                                             <p className="text-sm text-muted-foreground font-normal truncate">
-                                                {selectedTestimonial.customerTitle} at {selectedTestimonial.customerCompany}
+                                                {selectedTestimonial.customer_title} at {selectedTestimonial.customer_company}
                                             </p>
                                         )}
                                     </div>
