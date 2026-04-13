@@ -29,18 +29,24 @@ export default function Login() {
             });
             if (error) throw error;
 
-            // Check if user is admin
-            const { data: profile, error: profileError } = await supabase
+            // Check user role and redirect accordingly
+            const { data: profile } = await supabase
                 .from('users')
                 .select('role')
                 .eq('id', data.user.id)
                 .single();
 
-            if (profile?.role === 'admin') {
+            // Check for redirect parameter in URL
+            const params = new URLSearchParams(window.location.search);
+            const redirect = params.get('redirect');
+
+            if (redirect) {
+                window.location.href = redirect;
+            } else if (profile?.role === 'admin') {
                 window.location.href = '/Admin_Dashboard';
             } else {
-                toast.error('You do not have admin privileges');
-                await supabase.auth.signOut();
+                // Non-admin users go to client dashboard
+                window.location.href = '/Client_Dashboard';
             }
         } catch (error) {
             toast.error(error.message || 'Login failed');
@@ -54,8 +60,8 @@ export default function Login() {
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
                     <Logo variant="dark" size="md" className="justify-center mb-4" />
-                    <h1 className="text-2xl font-bold text-white">Admin Login</h1>
-                    <p className="text-gray-500 mt-1">Sign in to manage your website</p>
+                    <h1 className="text-2xl font-bold text-white">Sign In</h1>
+                    <p className="text-gray-500 mt-1">Access your dashboard</p>
                 </div>
 
                 <Card className="bg-[#111] border-white/[0.06]">
@@ -102,7 +108,7 @@ export default function Login() {
                 </Card>
 
                 <p className="text-center text-xs text-gray-600 mt-6">
-                    EyE PunE Admin Panel • Authorized access only
+                    EyE PunE &bull; Secure login
                 </p>
             </div>
         </div>
