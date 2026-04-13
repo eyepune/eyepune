@@ -7,6 +7,7 @@ import TestimonialSubmission from "@/components/testimonials/TestimonialSubmissi
 
 export default function Testimonials() {
     const [activeTab, setActiveTab] = useState('all');
+    const [serviceFilter, setServiceFilter] = useState(null);
 
     return (
         <div className="min-h-screen bg-background py-20">
@@ -39,11 +40,11 @@ export default function Testimonials() {
                         </TabsList>
 
                         <TabsContent value="all">
-                            <TestimonialDisplay limit={12} />
+                            <TestimonialDisplay serviceFilter={serviceFilter} limit={12} />
                         </TabsContent>
 
                         <TabsContent value="featured">
-                            <TestimonialDisplay featured={true} limit={12} />
+                            <TestimonialDisplay featured={true} serviceFilter={serviceFilter} limit={12} />
                         </TabsContent>
 
                         <TabsContent value="submit">
@@ -74,13 +75,10 @@ export default function Testimonials() {
                             ].map((filter) => (
                                 <Button
                                     key={filter.label}
-                                    variant="outline"
+                                    variant={serviceFilter === filter.value ? 'default' : 'outline'}
                                     size="sm"
                                     className="rounded-full"
-                                    onClick={() => {
-                                        // This is simplified - you'd need state management for service filter
-                                        console.log('Filter:', filter.value);
-                                    }}
+                                    onClick={() => setServiceFilter(filter.value)}
                                 >
                                     {filter.label}
                                 </Button>

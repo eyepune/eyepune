@@ -17,13 +17,12 @@ export default function TestimonialSubmission() {
     const [checkingAuth, setCheckingAuth] = useState(true);
     const [formData, setFormData] = useState({
         customer_name: '',
-        customer_email: '',
-        company: '',
-        position: '',
-        testimonial_text: '',
+        customer_title: '',
+        customer_company: '',
+        content: '',
         rating: 5,
         customer_image: '',
-        service_used: 'full_service'
+        service: 'full_service'
     });
 
     useEffect(() => {
@@ -34,7 +33,6 @@ export default function TestimonialSubmission() {
                 setFormData(prev => ({
                     ...prev,
                     customer_name: currentUser.full_name || '',
-                    customer_email: currentUser.email || ''
                 }));
             } catch {
                 setUser(null);
@@ -51,13 +49,12 @@ export default function TestimonialSubmission() {
             setIsSuccess(true);
             setFormData({
                 customer_name: '',
-                customer_email: '',
-                company: '',
-                position: '',
-                testimonial_text: '',
+                customer_title: '',
+                customer_company: '',
+                content: '',
                 rating: 5,
                 customer_image: '',
-                service_used: 'full_service'
+                service: 'full_service'
             });
         }
     });
@@ -153,52 +150,40 @@ export default function TestimonialSubmission() {
                             />
                         </div>
                         <div>
-                            <Label>Email *</Label>
+                            <Label>Company</Label>
                             <Input
-                                type="email"
-                                value={formData.customer_email}
-                                onChange={(e) => setFormData({ ...formData, customer_email: e.target.value })}
-                                required
-                                disabled
-                                className="bg-muted"
+                                value={formData.customer_company}
+                                onChange={(e) => setFormData({ ...formData, customer_company: e.target.value })}
                             />
                         </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                            <Label>Company</Label>
+                            <Label>Job Title</Label>
                             <Input
-                                value={formData.company}
-                                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                                value={formData.customer_title}
+                                onChange={(e) => setFormData({ ...formData, customer_title: e.target.value })}
                             />
                         </div>
                         <div>
-                            <Label>Position</Label>
-                            <Input
-                                value={formData.position}
-                                onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                            />
+                            <Label>Service Used *</Label>
+                            <Select
+                                value={formData.service}
+                                onValueChange={(value) => setFormData({ ...formData, service: value })}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="social_media">Social Media Marketing</SelectItem>
+                                    <SelectItem value="web_app">Website / App Development</SelectItem>
+                                    <SelectItem value="ai_automation">AI Automations</SelectItem>
+                                    <SelectItem value="branding">Branding & Content</SelectItem>
+                                    <SelectItem value="full_service">Full Service</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
-                    </div>
-
-                    <div>
-                        <Label>Service Used *</Label>
-                        <Select
-                            value={formData.service_used}
-                            onValueChange={(value) => setFormData({ ...formData, service_used: value })}
-                        >
-                            <SelectTrigger>
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="social_media">Social Media Marketing</SelectItem>
-                                <SelectItem value="web_app">Website / App Development</SelectItem>
-                                <SelectItem value="ai_automation">AI Automations</SelectItem>
-                                <SelectItem value="branding">Branding & Content</SelectItem>
-                                <SelectItem value="full_service">Full Service</SelectItem>
-                            </SelectContent>
-                        </Select>
                     </div>
 
                     <div>
@@ -226,8 +211,8 @@ export default function TestimonialSubmission() {
                     <div>
                         <Label>Your Testimonial *</Label>
                         <Textarea
-                            value={formData.testimonial_text}
-                            onChange={(e) => setFormData({ ...formData, testimonial_text: e.target.value })}
+                            value={formData.content}
+                            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                             required
                             className="min-h-[120px]"
                             placeholder="Tell us about your experience..."

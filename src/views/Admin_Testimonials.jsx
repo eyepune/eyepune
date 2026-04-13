@@ -21,7 +21,7 @@ function Admin_Testimonials() {
     const queryClient = useQueryClient();
 
     const [formData, setFormData] = useState({
-        client_name: '', company: '', testimonial: '', rating: 5, is_featured: false, status: 'pending',
+        customer_name: '', customer_company: '', customer_title: '', content: '', rating: 5, featured: false, status: 'pending', service: '',
     });
 
     const { data: testimonials = [], isLoading } = useQuery({
@@ -63,7 +63,7 @@ function Admin_Testimonials() {
     });
 
     const resetForm = () => {
-        setFormData({ client_name: '', company: '', testimonial: '', rating: 5, is_featured: false, status: 'pending' });
+        setFormData({ customer_name: '', customer_company: '', customer_title: '', content: '', rating: 5, featured: false, status: 'pending', service: '' });
         setEditingItem(null);
         setIsDialogOpen(false);
     };
@@ -71,9 +71,9 @@ function Admin_Testimonials() {
     const handleEdit = (item) => {
         setEditingItem(item);
         setFormData({
-            client_name: item.client_name || '', company: item.company || '',
-            testimonial: item.testimonial || '', rating: item.rating || 5,
-            is_featured: item.is_featured || false, status: item.status || 'pending',
+            customer_name: item.customer_name || '', customer_company: item.customer_company || '',
+            customer_title: item.customer_title || '', content: item.content || '', rating: item.rating || 5,
+            featured: item.featured || false, status: item.status || 'pending', service: item.service || '',
         });
         setIsDialogOpen(true);
     };
@@ -126,8 +126,8 @@ function Admin_Testimonials() {
                             <CardHeader className="pb-3">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <CardTitle className="text-white text-base">{item.client_name}</CardTitle>
-                                        <p className="text-xs text-gray-500">{item.company}</p>
+                                        <CardTitle className="text-white text-base">{item.customer_name}</CardTitle>
+                                        <p className="text-xs text-gray-500">{item.customer_company}</p>
                                     </div>
                                     <div className="flex gap-1">
                                         <Button variant="ghost" size="icon" onClick={() => toggleStatus(item)} title={item.status === 'approved' ? 'Unapprove' : 'Approve'}>
@@ -143,7 +143,7 @@ function Admin_Testimonials() {
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-gray-300 text-sm italic mb-3">&ldquo;{item.testimonial}&rdquo;</p>
+                                <p className="text-gray-300 text-sm italic mb-3">&ldquo;{item.content}&rdquo;</p>
                                 <div className="flex items-center justify-between">
                                     <div className="flex gap-0.5">
                                         {[1,2,3,4,5].map(i => (
@@ -171,16 +171,26 @@ function Admin_Testimonials() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <Label className="text-gray-400">Client Name *</Label>
-                                <Input value={formData.client_name} onChange={(e) => setFormData({...formData, client_name: e.target.value})} required className="bg-[#1a1a1a] border-white/[0.06]" />
+                                <Input value={formData.customer_name} onChange={(e) => setFormData({...formData, customer_name: e.target.value})} required className="bg-[#1a1a1a] border-white/[0.06]" />
                             </div>
                             <div>
                                 <Label className="text-gray-400">Company</Label>
-                                <Input value={formData.company} onChange={(e) => setFormData({...formData, company: e.target.value})} className="bg-[#1a1a1a] border-white/[0.06]" />
+                                <Input value={formData.customer_company} onChange={(e) => setFormData({...formData, customer_company: e.target.value})} className="bg-[#1a1a1a] border-white/[0.06]" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <Label className="text-gray-400">Job Title</Label>
+                                <Input value={formData.customer_title} onChange={(e) => setFormData({...formData, customer_title: e.target.value})} className="bg-[#1a1a1a] border-white/[0.06]" />
+                            </div>
+                            <div>
+                                <Label className="text-gray-400">Service</Label>
+                                <Input value={formData.service} onChange={(e) => setFormData({...formData, service: e.target.value})} className="bg-[#1a1a1a] border-white/[0.06]" placeholder="e.g. social_media, web_app, ai_automation" />
                             </div>
                         </div>
                         <div>
                             <Label className="text-gray-400">Testimonial *</Label>
-                            <Textarea value={formData.testimonial} onChange={(e) => setFormData({...formData, testimonial: e.target.value})} rows={4} required className="bg-[#1a1a1a] border-white/[0.06]" />
+                            <Textarea value={formData.content} onChange={(e) => setFormData({...formData, content: e.target.value})} rows={4} required className="bg-[#1a1a1a] border-white/[0.06]" />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -205,7 +215,7 @@ function Admin_Testimonials() {
                         </div>
                         <div className="flex items-center justify-between">
                             <Label className="text-gray-400">Featured on Homepage</Label>
-                            <Switch checked={formData.is_featured} onCheckedChange={(v) => setFormData({...formData, is_featured: v})} />
+                            <Switch checked={formData.featured} onCheckedChange={(v) => setFormData({...formData, featured: v})} />
                         </div>
                         <div className="flex gap-2 pt-2">
                             <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending} className="flex-1 bg-red-600 hover:bg-red-700">

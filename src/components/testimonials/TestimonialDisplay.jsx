@@ -13,9 +13,9 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
         queryFn: async () => {
             let query = { status: 'approved' };
             if (featured) query.featured = true;
-            if (serviceFilter) query.service_used = serviceFilter;
-            
-            return await base44.entities.Testimonial.filter(query, '-created_date', limit);
+            if (serviceFilter) query.service = serviceFilter;
+
+            return await base44.entities.Testimonial.filter(query, '-created_at', limit);
         }
     });
 
@@ -75,7 +75,7 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
                             <div className="relative mb-6">
                                 <Quote className="absolute -top-2 -left-2 w-8 h-8 text-red-600/20" />
                                 <p className="text-muted-foreground relative z-10 line-clamp-4">
-                                    {testimonial.testimonial_text}
+                                    {testimonial.content}
                                 </p>
                             </div>
 
@@ -94,9 +94,9 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
                                 )}
                                 <div>
                                     <p className="font-semibold">{testimonial.customer_name}</p>
-                                    {testimonial.position && testimonial.company && (
+                                    {testimonial.customer_title && testimonial.customer_company && (
                                         <p className="text-sm text-muted-foreground">
-                                            {testimonial.position} at {testimonial.company}
+                                            {testimonial.customer_title} at {testimonial.customer_company}
                                         </p>
                                     )}
                                 </div>
@@ -126,9 +126,9 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
                                     )}
                                     <div className="flex-1 min-w-0">
                                         <p className="font-semibold truncate">{selectedTestimonial.customer_name}</p>
-                                        {selectedTestimonial.position && selectedTestimonial.company && (
+                                        {selectedTestimonial.customer_title && selectedTestimonial.customer_company && (
                                             <p className="text-sm text-muted-foreground font-normal truncate">
-                                                {selectedTestimonial.position} at {selectedTestimonial.company}
+                                                {selectedTestimonial.customer_title} at {selectedTestimonial.customer_company}
                                             </p>
                                         )}
                                     </div>
@@ -152,15 +152,15 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
                                 <div className="relative">
                                     <Quote className="absolute -top-2 -left-2 w-8 h-8 text-red-600/20" />
                                     <p className="text-muted-foreground relative z-10 text-base leading-relaxed">
-                                        {selectedTestimonial.testimonial_text}
+                                        {selectedTestimonial.content}
                                     </p>
                                 </div>
 
-                                {selectedTestimonial.service_used && (
+                                {selectedTestimonial.service && (
                                     <div className="pt-4 border-t">
                                         <p className="text-sm text-muted-foreground">
                                             Service: <span className="font-medium text-foreground">
-                                                {selectedTestimonial.service_used.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                                {selectedTestimonial.service.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                             </span>
                                         </p>
                                     </div>
