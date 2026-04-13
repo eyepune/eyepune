@@ -38,46 +38,55 @@ export default function ClientLogos() {
     const duplicatedLogos = [...displayLogos, ...displayLogos, ...displayLogos];
 
     return (
-        <section className="py-16 bg-muted/30 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold mb-4">Trusted by Leading Brands</h2>
-                    <p className="text-muted-foreground">Empowering businesses across industries</p>
-                </div>
-                <div className="relative">
-                    <div className="flex animate-scroll">
-                        {duplicatedLogos.map((logo, index) => (
-                            <div
-                                key={`${logo.id}-${index}`}
-                                className="flex-shrink-0 mx-6 group"
-                            >
-                                {logo.website_url ? (
-                                    <a
-                                        href={logo.website_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="block"
-                                    >
-                                        <div className="w-32 h-32 flex items-center justify-center p-4 rounded-lg bg-background border hover:shadow-lg transition-all duration-300 group-hover:scale-110">
-                                            <img
-                                                src={logo.logo_url}
-                                                alt={logo.company_name}
-                                                className="max-w-full max-h-full object-contain transition-all"
-                                            />
-                                        </div>
-                                    </a>
-                                ) : (
-                                    <div className="w-32 h-32 flex items-center justify-center p-4 rounded-lg bg-background border hover:shadow-lg transition-all duration-300 group-hover:scale-110">
+        <div className="w-full overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6 mb-10">
+                <p className="text-center text-gray-500 text-sm tracking-[0.3em] uppercase font-medium">
+                    Trusted by Leading Brands
+                </p>
+            </div>
+            <div className="relative group">
+                {/* Fade edges */}
+                <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#040404] to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#040404] to-transparent z-10 pointer-events-none" />
+
+                <div className="flex animate-scroll">
+                    {duplicatedLogos.map((logo, index) => (
+                        <div
+                            key={`${logo.id}-${index}`}
+                            className="flex-shrink-0 mx-8 group/logo"
+                        >
+                            {logo.website_url ? (
+                                <a
+                                    href={logo.website_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block"
+                                >
+                                    <div className="w-28 h-28 flex items-center justify-center p-5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.15] hover:bg-white/[0.06] transition-all duration-300 group-hover/logo:scale-105">
                                         <img
                                             src={logo.logo_url}
                                             alt={logo.company_name}
-                                            className="max-w-full max-h-full object-contain transition-all"
+                                            className="max-w-full max-h-full object-contain opacity-60 hover:opacity-90 transition-opacity duration-300 filter brightness-0 invert"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                            }}
                                         />
                                     </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                                </a>
+                            ) : (
+                                <div className="w-28 h-28 flex items-center justify-center p-5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.15] hover:bg-white/[0.06] transition-all duration-300 group-hover/logo:scale-105">
+                                    <img
+                                        src={logo.logo_url}
+                                        alt={logo.company_name}
+                                        className="max-w-full max-h-full object-contain opacity-60 hover:opacity-90 transition-opacity duration-300 filter brightness-0 invert"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                        }}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
             <style jsx>{`
@@ -90,12 +99,12 @@ export default function ClientLogos() {
                     }
                 }
                 .animate-scroll {
-                    animation: scroll 20s linear infinite;
+                    animation: scroll 25s linear infinite;
                 }
                 .animate-scroll:hover {
                     animation-play-state: paused;
                 }
             `}</style>
-        </section>
+        </div>
     );
 }

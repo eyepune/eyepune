@@ -11,6 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { Plus, Pencil, Trash2, Upload, Image as ImageIcon, Loader2, Link } from "lucide-react";
 import { toast } from 'sonner';
 
+const STORAGE_BUCKET = 'client-logos';
+
 function Admin_ClientLogos() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingLogo, setEditingLogo] = useState(null);
@@ -27,29 +29,29 @@ function Admin_ClientLogos() {
         is_active: true
     });
 
-    // Fetch all client logos (admin view via API with service role key)
+    // Fetch all client logos (admin view — uses auth token, RLS allows admin full access)
     const { data: logos = [], isLoading } = useQuery({
         queryKey: ['admin-client-logos'],
         queryFn: async () => {
-            const res = await fetch('/api/client-logos');
-            if (!res.ok) throw new Error('Failed to fetch logos');
-            return res.json();
+            const { data, error } = await supabase
+                .from('client_logos')
+                .select('*')
+                .order('display_order', { ascending: true });
+            if (error) throw error;
+            return data || [];
         }
     });
 
     // Create mutation
     const createMutation = useMutation({
         mutationFn: async (data) => {
-            const res = await fetch('/api/client-logos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
-            if (!res.ok) {
-                const err = await res.json();
-                throw new Error(err.error || 'Failed to create logo');
-            }
-            return res.json();
+            const { data: result, error } = await supabase
+                .from('client_logos')
+                .insert([data])
+                .select()
+                .single();
+            if (error) throw error;
+            return result;
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['admin-client-logos']);
@@ -65,16 +67,14 @@ function Admin_ClientLogos() {
     // Update mutation
     const updateMutation = useMutation({
         mutationFn: async ({ id, data }) => {
-            const res = await fetch(`/api/client-logos/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
-            if (!res.ok) {
-                const err = await res.json();
-                throw new Error(err.error || 'Failed to update logo');
-            }
-            return res.json();
+            const { data: result, error } = await supabase
+                .from('client_logos')
+                .update(data)
+                .eq('id', id)
+                .select()
+                .single();
+            if (error) throw error;
+            return result;
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['admin-client-logos']);
@@ -90,14 +90,12 @@ function Admin_ClientLogos() {
     // Delete mutation
     const deleteMutation = useMutation({
         mutationFn: async (id) => {
-            const res = await fetch(`/api/client-logos/${id}`, {
-                method: 'DELETE',
-            });
-            if (!res.ok) {
-                const err = await res.json();
-                throw new Error(err.error || 'Failed to delete logo');
-            }
-            return res.json();
+            const { error } = await supabase
+                .from('client_logos')
+                .delete()
+                .eq('id', id);
+            if (error) throw error;
+            return { success: true };
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['admin-client-logos']);
@@ -144,7 +142,7 @@ function Admin_ClientLogos() {
         }
     };
 
-    // Upload file via server-side API route (uses service role key)
+    // Upload file directly to Supabase Storage (uses auth token, RLS allows admin uploads)
     const handleFileUpload = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -163,21 +161,42 @@ function Admin_ClientLogos() {
 
         setUploading(true);
         try {
-            const uploadFormData = new FormData();
-            uploadFormData.append('file', file);
+            // Ensure bucket exists (create if not)
+            const { data: buckets } = await supabase.storage.listBuckets();
+            const bucketExists = buckets?.some(b => b.id === STORAGE_BUCKET);
 
-            const res = await fetch('/api/client-logos/upload', {
-                method: 'POST',
-                body: uploadFormData,
-            });
-
-            if (!res.ok) {
-                const err = await res.json();
-                throw new Error(err.error || 'Upload failed');
+            if (!bucketExists) {
+                const { error: createError } = await supabase.storage.createBucket(STORAGE_BUCKET, {
+                    public: true,
+                    fileSizeLimit: 5242880,
+                    allowedMimeTypes: allowedTypes,
+                });
+                if (createError) {
+                    console.warn('Bucket creation warning:', createError.message);
+                    // Bucket might already exist due to race condition, continue anyway
+                }
             }
 
-            const { url } = await res.json();
-            setFormData({ ...formData, logo_url: url });
+            // Generate unique filename
+            const fileExt = file.name.split('.').pop();
+            const fileName = `logos/${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+
+            // Upload to Supabase Storage
+            const { error: uploadError } = await supabase.storage
+                .from(STORAGE_BUCKET)
+                .upload(fileName, file, {
+                    cacheControl: '3600',
+                    upsert: false,
+                });
+
+            if (uploadError) throw uploadError;
+
+            // Get public URL
+            const { data: urlData } = supabase.storage
+                .from(STORAGE_BUCKET)
+                .getPublicUrl(fileName);
+
+            setFormData({ ...formData, logo_url: urlData.publicUrl });
             toast.success('Image uploaded successfully');
         } catch (error) {
             console.error('Upload error:', error);
