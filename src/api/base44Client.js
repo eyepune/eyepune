@@ -23,30 +23,43 @@ const auth = {
       throw { status: 401, message: 'Not authenticated' };
     }
     
+    const authUser = session.user;
+    const fallback = {
+      id: authUser.id,
+      email: authUser.email,
+      full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0],
+      role: 'client',
+      avatar_url: authUser.user_metadata?.avatar_url || null,
+    };
+
     // Fetch the user profile from the users table for role info
-    const { data: userProfile, error: profileError } = await supabase
+    let { data: userProfile, error: profileError } = await supabase
       .from('users')
       .select('*')
-      .eq('id', session.user.id)
+      .eq('id', authUser.id)
       .single();
     
-    if (profileError) {
-      // Return basic user info from auth if profile not found
-      return {
-        id: session.user.id,
-        email: session.user.email,
-        full_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0],
-        role: 'client',
-        avatar_url: session.user.user_metadata?.avatar_url || null,
-      };
+    // If no profile row exists, create one (handles case where trigger hasn't run)
+    if (profileError || !userProfile) {
+      const { data: inserted, error: upsertError } = await supabase
+        .from('users')
+        .upsert(fallback, { onConflict: 'id' })
+        .select()
+        .single();
+
+      if (!upsertError && inserted) {
+        userProfile = inserted;
+      } else {
+        return fallback;
+      }
     }
     
     return {
-      id: session.user.id,
-      email: session.user.email,
-      full_name: userProfile.full_name || session.user.user_metadata?.full_name,
+      id: authUser.id,
+      email: authUser.email,
+      full_name: userProfile.full_name || authUser.user_metadata?.full_name,
       role: userProfile.role || 'client',
-      avatar_url: userProfile.avatar_url || session.user.user_metadata?.avatar_url,
+      avatar_url: userProfile.avatar_url || authUser.user_metadata?.avatar_url,
       ...userProfile,
     };
   },

@@ -71,31 +71,56 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserProfile = async (userId) => {
     try {
-      const { data: userProfile, error: profileError } = await supabase
+      const { data: { session } } = await supabase.auth.getSession();
+      const authUser = session?.user;
+
+      let { data: userProfile, error: profileError } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (profileError || !userProfile) {
-        // Return basic user info from auth session if profile not found
-        const { data: { session } } = await supabase.auth.getSession();
-        const authUser = session?.user;
-        if (authUser) {
-          setUser({
-            id: authUser.id,
-            email: authUser.email,
-            full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0],
-            role: 'client',
-            avatar_url: authUser.user_metadata?.avatar_url || null,
-          });
+      // If the profile row is missing (trigger may not have run yet),
+      // create it now as a fallback so everything works smoothly.
+      if ((profileError || !userProfile) && authUser) {
+        const fallbackProfile = {
+          id: authUser.id,
+          email: authUser.email,
+          full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0],
+          role: 'client',
+          avatar_url: authUser.user_metadata?.avatar_url || null,
+        };
+
+        const { data: inserted, error: insertError } = await supabase
+          .from('users')
+          .upsert(fallbackProfile, { onConflict: 'id' })
+          .select()
+          .single();
+
+        if (!insertError && inserted) {
+          userProfile = inserted;
+          profileError = null;
+        } else {
+          // If upsert also fails (e.g. RLS), use the basic auth info
+          console.warn('[Auth] Could not upsert user row:', insertError?.message);
+          setUser(fallbackProfile);
           setIsAuthenticated(true);
+          return;
         }
-        return;
       }
 
-      const { data: { session } } = await supabase.auth.getSession();
-      const authUser = session?.user;
+      if (!userProfile) {
+        // Absolute fallback
+        setUser({
+          id: authUser?.id || userId,
+          email: authUser?.email,
+          full_name: authUser?.user_metadata?.full_name || authUser?.email?.split('@')[0],
+          role: 'client',
+          avatar_url: authUser?.user_metadata?.avatar_url || null,
+        });
+        setIsAuthenticated(true);
+        return;
+      }
 
       setUser({
         id: userId,
