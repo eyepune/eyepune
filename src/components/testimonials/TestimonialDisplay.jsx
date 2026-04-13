@@ -81,22 +81,22 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
 
                             {/* Author info */}
                             <div className="flex items-center gap-3 pt-4 border-t">
-                                {testimonial.customer_image ? (
+                                {testimonial.customerImage ? (
                                     <img
-                                        src={testimonial.customer_image}
-                                        alt={testimonial.customer_name}
+                                        src={testimonial.customerImage}
+                                        alt={testimonial.customerName}
                                         className="w-12 h-12 rounded-full object-cover"
                                     />
                                 ) : (
                                     <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold">
-                                        {testimonial.customer_name[0].toUpperCase()}
+                                        {testimonial.customerName?.[0]?.toUpperCase() || '?'}
                                     </div>
                                 )}
                                 <div>
-                                    <p className="font-semibold">{testimonial.customer_name}</p>
-                                    {testimonial.customer_title && testimonial.customer_company && (
+                                    <p className="font-semibold">{testimonial.customerName}</p>
+                                    {testimonial.customerTitle && testimonial.customerCompany && (
                                         <p className="text-sm text-muted-foreground">
-                                            {testimonial.customer_title} at {testimonial.customer_company}
+                                            {testimonial.customerTitle} at {testimonial.customerCompany}
                                         </p>
                                     )}
                                 </div>
@@ -113,22 +113,22 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
                         <>
                             <DialogHeader>
                                 <DialogTitle className="flex items-center gap-3 pr-8">
-                                    {selectedTestimonial.customer_image ? (
+                                    {selectedTestimonial.customerImage ? (
                                         <img
-                                            src={selectedTestimonial.customer_image}
-                                            alt={selectedTestimonial.customer_name}
+                                            src={selectedTestimonial.customerImage}
+                                            alt={selectedTestimonial.customerName}
                                             className="w-12 h-12 rounded-full object-cover"
                                         />
                                     ) : (
                                         <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold flex-shrink-0">
-                                            {selectedTestimonial.customer_name[0].toUpperCase()}
+                                            {selectedTestimonial.customerName?.[0]?.toUpperCase() || '?'}
                                         </div>
                                     )}
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-semibold truncate">{selectedTestimonial.customer_name}</p>
-                                        {selectedTestimonial.customer_title && selectedTestimonial.customer_company && (
+                                        <p className="font-semibold truncate">{selectedTestimonial.customerName}</p>
+                                        {selectedTestimonial.customerTitle && selectedTestimonial.customerCompany && (
                                             <p className="text-sm text-muted-foreground font-normal truncate">
-                                                {selectedTestimonial.customer_title} at {selectedTestimonial.customer_company}
+                                                {selectedTestimonial.customerTitle} at {selectedTestimonial.customerCompany}
                                             </p>
                                         )}
                                     </div>
