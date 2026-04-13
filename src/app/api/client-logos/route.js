@@ -1,12 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase credentials not configured');
+  }
+  return createClient(supabaseUrl, supabaseAnonKey);
+}
+
+// Try to use service role key if available, otherwise fall back to anon key
 function getAdminClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set in .env');
+  if (serviceRoleKey) {
+    return createClient(supabaseUrl, serviceRoleKey);
   }
-  return createClient(supabaseUrl, serviceRoleKey);
+  // Fall back to anon key — RLS policies will apply
+  return getSupabaseClient();
 }
 
 // GET — List all client logos (admin view, including inactive)

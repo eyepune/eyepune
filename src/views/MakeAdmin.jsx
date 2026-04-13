@@ -19,6 +19,7 @@ export default function MakeAdmin() {
     const [signUpEmail, setSignUpEmail] = useState('');
     const [signUpPassword, setSignUpPassword] = useState('');
     const [signUpName, setSignUpName] = useState('');
+    const [manualInstructions, setManualInstructions] = useState(null);
 
     // Check if any admin users already exist
     useEffect(() => {
@@ -58,12 +59,14 @@ export default function MakeAdmin() {
 
             const data = await res.json();
 
-            if (!res.ok) {
-                throw new Error(data.error || 'Failed to promote to admin');
-            }
-
-            if (!data.success) {
-                toast.error(data.message);
+            if (!res.ok || !data.success) {
+                // Show manual instructions if automatic promotion failed
+                if (data.instructions) {
+                    setManualInstructions(data.instructions);
+                    toast.error('Automatic promotion failed. See instructions below.');
+                } else {
+                    throw new Error(data.error || data.message || 'Failed to promote to admin');
+                }
                 return;
             }
 
@@ -320,6 +323,33 @@ export default function MakeAdmin() {
                         {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Shield className="w-4 h-4 mr-2" />}
                         Become Admin
                     </Button>
+                    {manualInstructions && (
+                        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 space-y-3">
+                            <p className="text-yellow-400 text-sm font-medium">Automatic setup failed. Follow these steps:</p>
+                            <ol className="text-gray-300 text-sm space-y-1 list-decimal list-inside">
+                                {manualInstructions.map((step, i) => (
+                                    <li key={i} className="text-gray-400">{step}</li>
+                                ))}
+                            </ol>
+                            <div className="pt-2">
+                                <p className="text-gray-500 text-xs">Or run this SQL in Supabase SQL Editor:</p>
+                                <code className="block bg-[#0a0a0a] rounded p-2 mt-1 text-green-400 text-xs break-all">
+                                    UPDATE users SET role = 'admin' WHERE id = '{user.id}';
+                                </code>
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(`UPDATE users SET role = 'admin' WHERE id = '${user.id}';`);
+                                    toast.success('SQL copied to clipboard!');
+                                }}
+                            >
+                                Copy SQL Command
+                            </Button>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
         </div>

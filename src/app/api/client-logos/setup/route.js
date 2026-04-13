@@ -3,10 +3,11 @@ import { createClient } from '@supabase/supabase-js';
 function getAdminClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set in .env');
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl) {
+    throw new Error('NEXT_PUBLIC_SUPABASE_URL is not set in .env');
   }
-  return createClient(supabaseUrl, serviceRoleKey);
+  return createClient(supabaseUrl, serviceRoleKey || supabaseAnonKey);
 }
 
 // POST — Run the migration to set up RLS policies and storage bucket
@@ -43,7 +44,7 @@ export async function POST() {
       results.push({ step: 'create_bucket', status: 'skipped', message: 'Storage bucket "client-logos" already exists' });
     }
 
-    // 3. Note about RLS policies — these need to be run in the SQL editor
+    // 2. Note about RLS policies — these need to be run in the SQL editor
     results.push({
       step: 'rls_policies',
       status: 'manual',
