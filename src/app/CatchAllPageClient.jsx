@@ -131,7 +131,15 @@ export default function CatchAllPageClient() {
   const pageName = pathname.startsWith('/') ? pathname.slice(1) : pathname;
   
   // Root path → Home
-  const resolvedPageName = !pageName ? 'Home' : pageName;
+  const rawPageName = !pageName ? 'Home' : pageName;
+  
+  // Case-insensitive lookup: try exact match first, then find by case-insensitive key
+  let resolvedPageName = rawPageName;
+  if (!PAGE_MAP[resolvedPageName]) {
+    const lowerName = rawPageName.toLowerCase();
+    const matchKey = Object.keys(PAGE_MAP).find(k => k.toLowerCase() === lowerName);
+    if (matchKey) resolvedPageName = matchKey;
+  }
   
   const PageComponent = PAGE_MAP[resolvedPageName];
   
