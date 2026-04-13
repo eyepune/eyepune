@@ -1,0 +1,32 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "installCommand": "npm install",
+  "outputDirectory": ".next",
+  "rewrites": [
+    {
+      "source": "/Service_SocialMedia",
+      "destination": "/Service_SocialMedia"
+    },
+    {
+      "source": "/Service_WebDev",
+      "destination": "/Service_WebDev"
+    },
+    {
+      "source": "/Service_AI",
+      "destination": "/Service_AI"
+    },
+    {
+      "source": "/Service_PaidAds",
+      "destination": "/Service_PaidAds"
+    },
+    {
+      "source": "/Service_Branding",
+      "destination": "/Service_Branding"
+    },
+    {
+      "source": "/Service_Funnels",
+      "destination": "/Service_Funnels"
+    }
+  ]
+}

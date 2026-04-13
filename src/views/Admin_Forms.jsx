@@ -1,0 +1,171 @@
+'use client';
+
+import React, { useState } from 'react';
+import AdminGuard from '@/components/admin/AdminGuard';
+import AdminLayout from '@/components/admin/AdminLayout';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { Plus, Pencil, Trash2, Loader2, Upload, Link as LinkIcon, Image as ImageIcon } from 'lucide-react';
+import { toast } from 'sonner';
+
+function Admin_Forms() {
+    const [tab, setTab] = useState('inquiries');
+    const queryClient = useQueryClient();
+
+    const { data: inquiries = [], isLoading: loadingInquiries } = useQuery({
+        queryKey: ['admin-inquiries'],
+        queryFn: async () => {
+            const { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false });
+            if (error) throw error;
+            return data || [];
+        },
+    });
+
+    const { data: assessments = [], isLoading: loadingAssessments } = useQuery({
+        queryKey: ['admin-assessments'],
+        queryFn: async () => {
+            const { data, error } = await supabase.from('ai_assessments').select('*').order('created_at', { ascending: false });
+            if (error) throw error;
+            return data || [];
+        },
+    });
+
+    const deleteInquiryMutation = useMutation({
+        mutationFn: async (id) => { const { error } = await supabase.from('inquiries').delete().eq('id', id); if (error) throw error; },
+        onSuccess: () => { queryClient.invalidateQueries(['admin-inquiries']); toast.success('Deleted'); },
+    });
+
+    const deleteAssessmentMutation = useMutation({
+        mutationFn: async (id) => { const { error } = await supabase.from('ai_assessments').delete().eq('id', id); if (error) throw error; },
+        onSuccess: () => { queryClient.invalidateQueries(['admin-assessments']); toast.success('Deleted'); },
+    });
+
+    return (
+        <div className="p-8">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-white">Forms & Assessments</h1>
+                <p className="text-gray-500 mt-1">View form submissions and AI assessment results</p>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex gap-2 mb-6">
+                <Button variant={tab === 'inquiries' ? 'default' : 'outline'} onClick={() => setTab('inquiries')} className={tab === 'inquiries' ? 'bg-red-600' : 'border-white/[0.06] text-gray-400'}>
+                    Contact Inquiries ({inquiries.length})
+                </Button>
+                <Button variant={tab === 'assessments' ? 'default' : 'outline'} onClick={() => setTab('assessments')} className={tab === 'assessments' ? 'bg-red-600' : 'border-white/[0.06] text-gray-400'}>
+                    AI Assessments ({assessments.length})
+                </Button>
+            </div>
+
+            {tab === 'inquiries' && (
+                <Card className="bg-[#111] border-white/[0.06]">
+                    <CardContent className="p-0">
+                        {loadingInquiries ? (
+                            <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-gray-500" /></div>
+                        ) : inquiries.length === 0 ? (
+                            <div className="text-center py-12 text-gray-500">No inquiries yet</div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b border-white/[0.06]">
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Name</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Email</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Phone</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Service</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Message</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Date</th>
+                                            <th className="text-right px-4 py-3 text-xs text-gray-500 font-medium">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {inquiries.map((inq) => (
+                                            <tr key={inq.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
+                                                <td className="px-4 py-3 text-white text-sm">{inq.full_name}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{inq.email}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{inq.phone || '-'}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{inq.service_interest || '-'}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm max-w-xs truncate">{inq.message || '-'}</td>
+                                                <td className="px-4 py-3 text-gray-500 text-xs">{new Date(inq.created_at).toLocaleDateString()}</td>
+                                                <td className="px-4 py-3 text-right">
+                                                    <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteInquiryMutation.mutate(inq.id); }}>
+                                                        <Trash2 className="w-4 h-4 text-gray-400" />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            )}
+
+            {tab === 'assessments' && (
+                <Card className="bg-[#111] border-white/[0.06]">
+                    <CardContent className="p-0">
+                        {loadingAssessments ? (
+                            <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-gray-500" /></div>
+                        ) : assessments.length === 0 ? (
+                            <div className="text-center py-12 text-gray-500">No assessments yet</div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b border-white/[0.06]">
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Name</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Email</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Business</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Score</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Date</th>
+                                            <th className="text-right px-4 py-3 text-xs text-gray-500 font-medium">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {assessments.map((a) => (
+                                            <tr key={a.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
+                                                <td className="px-4 py-3 text-white text-sm">{a.full_name}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{a.email}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{a.business_name || '-'}</td>
+                                                <td className="px-4 py-3">
+                                                    <span className={`text-xs px-2 py-1 rounded-full ${
+                                                        a.score >= 70 ? 'bg-green-500/10 text-green-400' :
+                                                        a.score >= 40 ? 'bg-yellow-500/10 text-yellow-400' :
+                                                        'bg-red-500/10 text-red-400'
+                                                    }`}>{a.score}/100</span>
+                                                </td>
+                                                <td className="px-4 py-3 text-gray-500 text-xs">{new Date(a.created_at).toLocaleDateString()}</td>
+                                                <td className="px-4 py-3 text-right">
+                                                    <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteAssessmentMutation.mutate(a.id); }}>
+                                                        <Trash2 className="w-4 h-4 text-gray-400" />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            )}
+        </div>
+    );
+}
+
+export default function AdminFormsPage() {
+    return (
+        <AdminGuard>
+            <AdminLayout>
+                <Admin_Forms />
+            </AdminLayout>
+        </AdminGuard>
+    );
+}

@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 84.2% 60.2%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 0 84.2% 60.2%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 84.2% 60.2%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 0 84.2% 60.2%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prose Enhancements */
+.prose {
+  line-height: 1.8;
+}
+
+.prose h2 {
+  @apply text-3xl font-bold mt-12 mb-6 pt-8 border-t;
+}
+
+.prose h3 {
+  @apply text-2xl font-bold mt-8 mb-4;
+}
+
+.prose h4 {
+  @apply text-xl font-semibold mt-6 mb-3;
+}
+
+.prose p {
+  @apply mb-5 leading-relaxed;
+}
+
+.prose ul, .prose ol {
+  @apply my-6 ml-6;
+}
+
+.prose li {
+  @apply mb-3;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-red-600 pl-4 py-2 my-6 italic text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900 px-4 rounded-r;
+}
+
+.prose strong {
+  @apply font-bold text-foreground;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose a {
+  @apply text-red-600 hover:text-red-700 underline;
+}
+
+.prose table {
+  @apply w-full border-collapse my-6;
+}
+
+.prose td, .prose th {
+  @apply border p-3 text-left;
+}
+
+.prose th {
+  @apply bg-gray-100 dark:bg-gray-800 font-bold;
+}
+
+.dark .prose a {
+  @apply text-red-500 hover:text-red-600;
+}
+
+/* Highlight Box */
+.highlight-box {
+  @apply bg-red-50 dark:bg-red-950 border-l-4 border-red-600 p-6 my-6 rounded-r-lg;
+}
+
+.highlight-box h4 {
+  @apply text-red-900 dark:text-red-100 font-bold mb-3 mt-0;
+}
+
+/* Client Profile Card */
+.profile-card {
+  @apply bg-card border rounded-lg p-6 my-6;
+}
+
+.profile-card h3 {
+  @apply mt-0;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  @apply grid md:grid-cols-2 lg:grid-cols-4 gap-4 my-6;
+}
+
+.metric-box {
+  @apply bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 border border-red-200 dark:border-red-800 rounded-lg p-4 text-center;
+}
+
+.metric-box .value {
+  @apply text-3xl font-bold text-red-600 dark:text-red-400 mb-1;
+}
+
+.metric-box .label {
+  @apply text-sm text-muted-foreground font-medium;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out;
+}
