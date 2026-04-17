@@ -112,8 +112,8 @@ export default function Login() {
             <div className="w-full max-w-md relative z-10">
                 <div className="text-center mb-8">
                     <Logo variant="dark" size="md" className="justify-center mb-4" />
-                    <h1 className="text-2xl font-bold text-white">Welcome back</h1>
-                    <p className="text-gray-500 mt-1">Sign in or create an account to continue</p>
+                    <h1 className="text-2xl font-bold text-white">Universal Portal</h1>
+                    <p className="text-gray-500 mt-1">Sign in as Admin, Team, or Client to continue</p>
                 </div>
 
                 <Card className="bg-[#111] border-white/[0.06] shadow-2xl">
@@ -229,7 +229,7 @@ export default function Login() {
                 </Card>
 
                 <p className="text-center text-xs text-gray-600 mt-8">
-                    Secure Authentication Portal • EyE PunE
+                    Secure Client & Admin Authentication • EyE PunE
                 </p>
             </div>
         </div>
