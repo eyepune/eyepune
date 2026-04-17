@@ -2,15 +2,15 @@ import React from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-// Fallback logos when no logos are in the database
+// Fallback logos using actual client names — displayed when DB has no logos
 const FALLBACK_LOGOS = [
-    { id: '1', company_name: 'TechCorp', logo_url: 'https://ui-avatars.com/api/?name=TC&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 1 },
-    { id: '2', company_name: 'InnovateCo', logo_url: 'https://ui-avatars.com/api/?name=IC&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 2 },
-    { id: '3', company_name: 'GrowthLab', logo_url: 'https://ui-avatars.com/api/?name=GL&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 3 },
-    { id: '4', company_name: 'PixelForge', logo_url: 'https://ui-avatars.com/api/?name=PF&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 4 },
-    { id: '5', company_name: 'DataSync', logo_url: 'https://ui-avatars.com/api/?name=DS&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 5 },
-    { id: '6', company_name: 'CloudNine', logo_url: 'https://ui-avatars.com/api/?name=CN&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 6 },
-    { id: '7', company_name: 'NexGen', logo_url: 'https://ui-avatars.com/api/?name=NG&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 7 },
+    { id: '1', company_name: 'Astroden Observatory', logo_url: '/logos/astroden.png', website_url: null, is_active: true, display_order: 1 },
+    { id: '2', company_name: 'Dashes N Hyphens', logo_url: '/logos/dashes-n-hyphens.png', website_url: null, is_active: true, display_order: 2 },
+    { id: '3', company_name: 'Body Perfect & Smile Lounge', logo_url: '/logos/body-perfect.png', website_url: null, is_active: true, display_order: 3 },
+    { id: '4', company_name: 'Beyond Borders', logo_url: 'https://ui-avatars.com/api/?name=BB&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: 'https://www.beyondborders.shop/', is_active: true, display_order: 4 },
+    { id: '5', company_name: 'Lalithya', logo_url: 'https://ui-avatars.com/api/?name=L&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: 'https://www.lalithya.com', is_active: true, display_order: 5 },
+    { id: '6', company_name: 'CloudNine Systems', logo_url: 'https://ui-avatars.com/api/?name=CN&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 6 },
+    { id: '7', company_name: 'NexGen Innovations', logo_url: 'https://ui-avatars.com/api/?name=NG&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 7 },
     { id: '8', company_name: 'SwiftOps', logo_url: 'https://ui-avatars.com/api/?name=SO&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 8 },
 ];
 
@@ -18,16 +18,21 @@ export default function ClientLogos() {
     const { data: logos = [], isLoading } = useQuery({
         queryKey: ['client-logos'],
         queryFn: async () => {
-            const { data, error } = await supabase
-                .from('client_logos')
-                .select('*')
-                .eq('is_active', true)
-                .order('display_order', { ascending: true });
-            if (error) {
-                console.warn('Failed to fetch client logos:', error.message);
+            try {
+                const { data, error } = await supabase
+                    .from('client_logos')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('display_order', { ascending: true });
+                if (error) {
+                    console.warn('Failed to fetch client logos:', error.message);
+                    return [];
+                }
+                return data || [];
+            } catch (err) {
+                console.warn('Client logos fetch error:', err);
                 return [];
             }
-            return data || [];
         },
     });
 
@@ -49,7 +54,7 @@ export default function ClientLogos() {
                 <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#040404] to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#040404] to-transparent z-10 pointer-events-none" />
 
-                <div className="flex animate-scroll">
+                <div className="flex logo-scroll-track">
                     {duplicatedLogos.map((logo, index) => (
                         <div
                             key={`${logo.id}-${index}`}
@@ -89,22 +94,6 @@ export default function ClientLogos() {
                     ))}
                 </div>
             </div>
-            <style jsx>{`
-                @keyframes scroll {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        transform: translateX(-33.333%);
-                    }
-                }
-                .animate-scroll {
-                    animation: scroll 25s linear infinite;
-                }
-                .animate-scroll:hover {
-                    animation-play-state: paused;
-                }
-            `}</style>
         </div>
     );
 }

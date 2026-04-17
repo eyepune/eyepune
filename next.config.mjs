@@ -11,11 +11,19 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'nseaimfpxbegiiiltztp.supabase.co',
+      },
+      {
+        protocol: 'https',
         hostname: 'qtrypzzcjebvfcihiynt.supabase.co',
       },
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ui-avatars.com',
       },
     ],
   },

@@ -20,10 +20,33 @@ export default function Contact() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Honeypot spam protection
+        if (formData.website_url) {
+            console.warn('Bot detected');
+            setIsSuccess(true); // Pretend success to the bot
+            return;
+        }
+
         setIsSubmitting(true);
-        await base44.entities.Inquiry.create({ ...formData, status: 'new' });
-        setIsSubmitting(false);
-        setIsSuccess(true);
+        try {
+            const submissionData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                company: formData.company,
+                service: formData.service_interest,
+                message: formData.message,
+                status: 'new'
+            };
+            await base44.entities.Inquiry.create(submissionData);
+            setIsSuccess(true);
+        } catch (error) {
+            console.error('Submission failed:', error);
+            alert('Failed to send message. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -77,6 +100,17 @@ export default function Contact() {
                                 </div>
                             ) : (
                                 <form onSubmit={handleSubmit} className="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-6 hover:border-red-500/10 transition-all">
+                                    {/* Honeypot field (hidden from users) */}
+                                    <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
+                                        <input
+                                            type="text"
+                                            name="website_url"
+                                            value={formData.website_url || ''}
+                                            onChange={handleChange}
+                                            tabIndex="-1"
+                                            autoComplete="off"
+                                        />
+                                    </div>
                                     <h2 className="text-2xl font-bold text-white mb-2">Send us a Message</h2>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>

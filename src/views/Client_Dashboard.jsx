@@ -330,11 +330,32 @@ export default function Client_Dashboard() {
                 <OnboardingAssistant user={user} />
 
                 {projects.length === 0 ? (
-                    <div className="bg-card border rounded-xl p-12 text-center">
-                        <Folder className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-xl font-bold mb-2">No Projects Yet</h3>
-                        <p className="text-muted-foreground">Your projects will appear here once they're created</p>
-                    </div>
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-card border-2 border-dashed border-white/[0.06] rounded-2xl p-20 text-center"
+                    >
+                        <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
+                            <Folder className="w-10 h-10 text-red-500" />
+                        </div>
+                        <h3 className="text-2xl font-bold mb-3 text-white">Your Workspace is Getting Ready</h3>
+                        <p className="text-muted-foreground max-w-md mx-auto mb-8">
+                            Once your project is kicked off, you'll find your roadmap, metrics, and deliverables right here. 
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <Link href={createPageUrl('Booking')}>
+                                <Button className="bg-red-600 hover:bg-red-700 px-8 h-12">
+                                    <PhoneCall className="w-4 h-4 mr-2" />
+                                    Book Kickoff Call
+                                </Button>
+                            </Link>
+                            <Link href={createPageUrl('Contact')}>
+                                <Button variant="outline" className="border-white/[0.06] px-8 h-12">
+                                    Contact Support
+                                </Button>
+                            </Link>
+                        </div>
+                    </motion.div>
                 ) : (
                     <>
                         {/* Project Selector */}

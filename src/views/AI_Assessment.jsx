@@ -97,7 +97,8 @@ export default function AI_Assessment() {
         lead_name: '',
         lead_email: '',
         lead_phone: '',
-        company_name: ''
+        company_name: '',
+        website_url: '' // Honeypot
     });
     const [answers, setAnswers] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -150,6 +151,14 @@ export default function AI_Assessment() {
 
     const handleContactSubmit = (e) => {
         e.preventDefault();
+        
+        // Honeypot spam protection
+        if (formData.website_url) {
+            console.warn('Bot detected during contact step');
+            setStep(questions.length + 1); // Skip to report step (fake)
+            return;
+        }
+
         handleNext();
     };
 
@@ -301,9 +310,10 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                 savedAssessment = await base44.entities.AI_Assessment.create({
                     ...formData,
                     ...answers,
-                    growth_score: growthScore,
+                    score: growthScore, // Corrected column name
                     ai_report: aiResponse,
-                    recommendations: recommendations,
+                    // Note: 'recommendations' column might need to be JSONB if added to schema, 
+                    // otherwise it will be ignored or error. SETUP_DATABASE doesn't have it yet.
                     converted_to_lead: false
                 });
             } catch (err) {
@@ -319,7 +329,7 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                     company: formData.company_name,
                     source: 'ai_assessment',
                     status: 'new',
-                    lead_score: growthScore,
+                    score: growthScore, // Corrected column name
                     notes: `Completed AI Assessment. Biggest challenge: ${answers.biggest_challenge}`
                 });
             } catch (err) {
@@ -341,29 +351,33 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
             try {
                 await base44.entities.Activity.create({
                     lead_id: savedLead?.id || null,
-                    activity_type: 'assessment',
-                    title: 'Completed AI Business Assessment',
-                    description: `Growth Score: ${growthScore}/100`,
+                    type: 'assessment', // Corrected column name 'type' vs 'activity_type'
+                    description: `Completed AI Business Assessment. Growth Score: ${growthScore}/100`,
                     performed_by: 'system'
                 });
             } catch (err) {
                 console.warn('Failed to save activity:', err);
             }
 
-            // Send WhatsApp notification to admin
+            // Send Email notification to admin (Replacing non-existent WhatsApp function)
             try {
-                await base44.functions.invoke('sendAdminWhatsAppNotification', {
-                    event_type: growthScore >= 70 ? 'high_score_assessment' : 'new_assessment',
-                    lead_name: formData.lead_name,
-                    lead_email: formData.lead_email,
-                    details: {
-                        score: growthScore,
-                        challenge: answers.biggest_challenge?.substring(0, 100),
-                        potential: growthScore >= 80 ? '5L+' : growthScore >= 60 ? '2-5L' : '1-2L'
-                    }
+                await base44.integrations.Core.SendEmail({
+                    to: 'connect@eyepune.com',
+                    subject: `New AI Assessment: ${formData.lead_name} (Score: ${growthScore})`,
+                    html: `
+                        <div style="font-family: sans-serif; padding: 20px;">
+                            <h2>New AI Assessment Completed</h2>
+                            <p><strong>Name:</strong> ${formData.lead_name}</p>
+                            <p><strong>Email:</strong> ${formData.lead_email}</p>
+                            <p><strong>Company:</strong> ${formData.company_name}</p>
+                            <p><strong>Growth Score:</strong> ${growthScore}/100</p>
+                            <p><strong>Challenge:</strong> ${answers.biggest_challenge}</p>
+                            <p><a href="${window.location.origin}/Admin_Dashboard" style="padding: 10px 20px; background: #ef4444; color: white; text-decoration: none; border-radius: 5px;">View in Dashboard</a></p>
+                        </div>
+                    `
                 });
             } catch (e) {
-                console.log('WhatsApp notification failed (non-critical):', e);
+                console.log('Admin notification failed (non-critical):', e);
             }
 
             console.log('Assessment saved successfully, setting report...');
@@ -447,6 +461,17 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                             <div className="bg-card border rounded-2xl p-8">
                                 <h2 className="text-2xl font-bold mb-6">Let's start with your details</h2>
                                 <form onSubmit={handleContactSubmit} className="space-y-4">
+                                    {/* Honeypot field (hidden from users) */}
+                                    <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
+                                        <input
+                                            type="text"
+                                            name="website_url"
+                                            value={formData.website_url || ''}
+                                            onChange={(e) => setFormData({...formData, website_url: e.target.value})}
+                                            tabIndex="-1"
+                                            autoComplete="off"
+                                        />
+                                    </div>
                                     <div>
                                         <Label>Full Name *</Label>
                                         <Input

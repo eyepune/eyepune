@@ -77,10 +77,11 @@ export const AuthProvider = ({ children }) => {
         .eq('id', userId)
         .single();
 
+      const { data: { session } } = await supabase.auth.getSession();
+      const authUser = session?.user;
+
       if (profileError || !userProfile) {
-        // Return basic user info from auth session if profile not found
-        const { data: { session } } = await supabase.auth.getSession();
-        const authUser = session?.user;
+        console.warn('Profile not found, using auth metadata');
         if (authUser) {
           setUser({
             id: authUser.id,
@@ -94,9 +95,6 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const { data: { session } } = await supabase.auth.getSession();
-      const authUser = session?.user;
-
       setUser({
         id: userId,
         email: authUser?.email || userProfile.email,
@@ -109,6 +107,7 @@ export const AuthProvider = ({ children }) => {
       setAuthError(null);
     } catch (error) {
       console.error('Failed to fetch user profile:', error);
+      setAuthError({ type: 'profile_fetch', message: error.message });
     }
   };
 

@@ -82,9 +82,22 @@ function LayoutContent({ children, currentPageName }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
-    // Scroll to top on every page navigation
+    // Scroll to top and update title on every page navigation
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
+        
+        // Dynamic title logic
+        const siteName = 'EyE PunE';
+        if (currentPageName === 'Home') {
+            document.title = `${siteName} — AI-Powered Digital Growth`;
+        } else {
+            const formattedName = currentPageName
+                .replace(/_/g, ' ')
+                .replace('Admin ', 'Admin: ')
+                .replace('Service ', 'Service: ')
+                .replace(/\b\w/g, l => l.toUpperCase());
+            document.title = `${formattedName} | ${siteName}`;
+        }
     }, [currentPageName]);
 
     useEffect(() => {
@@ -215,7 +228,7 @@ function LayoutContent({ children, currentPageName }) {
                                     onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
                                     className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 hover:border-white/25 text-gray-400 hover:text-white text-sm transition-all"
                                 >
-                                    <LogIn className="w-4 h-4" /> Sign In
+                                    <LogIn className="w-4 h-4" /> Sign In / Sign Up
                                 </button>
                             )}
                         </div>
@@ -266,7 +279,7 @@ function LayoutContent({ children, currentPageName }) {
                                         </Button>
                                     ) : (
                                         <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl" onClick={() => { setMobileMenuOpen(false); base44.auth.redirectToLogin(window.location.pathname); }}>
-                                            <LogIn className="w-4 h-4 mr-2" /> Sign In
+                                            <LogIn className="w-4 h-4 mr-2" /> Sign In / Sign Up
                                         </Button>
                                     )}
                                 </div>

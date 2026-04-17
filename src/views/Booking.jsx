@@ -16,7 +16,8 @@ export default function Booking() {
         company: '',
         notes: '',
         scheduled_date: '',
-        selectedSlot: null
+        selectedSlot: null,
+        website_url: '' // Honeypot
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -39,44 +40,36 @@ export default function Booking() {
 
     const fetchAvailableSlots = async (date) => {
         setLoadingSlots(true);
-        try {
-            const response = await base44.functions.invoke('manageCalendarBooking', {
-                action: 'getAvailableSlots',
-                date: date
-            });
-            setAvailableSlots(response.data.availableSlots || []);
-        } catch (error) {
-            console.error('Error fetching slots:', error);
-            setAvailableSlots([]);
-        }
+        // Simulating available slots since Edge Function is missing
+        // In a real app, you'd fetch this from a DB or calendar API
+        const slots = [
+            { start: `${date}T09:00:00`, display: '09:00 AM' },
+            { start: `${date}T10:00:00`, display: '10:00 AM' },
+            { start: `${date}T11:00:00`, display: '11:00 AM' },
+            { start: `${date}T14:00:00`, display: '02:00 PM' },
+            { start: `${date}T15:00:00`, display: '03:00 PM' },
+            { start: `${date}T16:00:00`, display: '04:00 PM' },
+        ];
+        setAvailableSlots(slots);
         setLoadingSlots(false);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Honeypot spam protection
+        if (formData.website_url) {
+            console.warn('Bot detected during booking');
+            setIsSuccess(true); // Pretend success to the bot
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
-            // Create Google Calendar event
-            const calendarResponse = await base44.functions.invoke('manageCalendarBooking', {
-                action: 'createEvent',
-                bookingData: {
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone,
-                    company: formData.company,
-                    notes: formData.notes,
-                    scheduled_date: formData.selectedSlot
-                }
-            });
-
-            if (calendarResponse.data.error) {
-                throw new Error(calendarResponse.data.error);
-            }
-            
-            if (!calendarResponse.data.success) {
-                throw new Error('Failed to create calendar event');
-            }
+            const selectedDate = new Date(formData.selectedSlot);
+            const dateStr = selectedDate.toISOString().split('T')[0];
+            const timeStr = selectedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             // Create booking in database
             const booking = await base44.entities.Booking.create({
@@ -84,13 +77,13 @@ export default function Booking() {
                 email: formData.email,
                 phone: formData.phone,
                 company: formData.company,
-                booking_type: 'consultation',
-                scheduled_date: formData.selectedSlot,
-                duration_minutes: 30,
-                status: 'scheduled',
+                type: 'consultation', // Corrected column name
+                date: dateStr,        // Corrected column name
+                time: timeStr,        // Corrected column name
+                duration: '30 min',   // Corrected column name
+                status: 'pending',    // Status must be in CHECK constraint
                 notes: formData.notes,
-                google_calendar_event_id: calendarResponse.data.eventId,
-                google_meet_link: calendarResponse.data.meetLink
+                meeting_link: 'https://meet.google.com/lookup/eyepune' // Placeholder link
             });
 
             // Create lead
@@ -101,54 +94,59 @@ export default function Booking() {
                 company: formData.company,
                 source: 'booking',
                 status: 'contacted',
-                notes: `Consultation booked for ${new Date(formData.selectedSlot).toLocaleString()}`
+                score: 50,
+                notes: `Consultation booked for ${selectedDate.toLocaleString()}`
             });
 
             // Log activity
-            await base44.entities.Activity.create({
-                lead_id: lead.id,
-                activity_type: 'booking',
-                title: 'Booked free consultation',
-                description: `Scheduled for ${new Date(formData.selectedSlot).toLocaleString()}`,
-                performed_by: 'system'
-            });
-
-            // Send WhatsApp notification to admin
             try {
-                await base44.functions.invoke('sendAdminWhatsAppNotification', {
-                    event_type: 'booking_confirmed',
-                    lead_name: formData.name,
-                    lead_email: formData.email,
-                    details: {
-                        date: new Date(formData.selectedSlot).toLocaleString(),
-                        type: 'Free Consultation'
-                    }
+                await base44.entities.Activity.create({
+                    lead_id: lead.id,
+                    type: 'booking',
+                    description: `Scheduled free consultation for ${selectedDate.toLocaleString()}`,
+                    performed_by: 'system'
+                });
+            } catch (err) { console.warn('Activity log failed:', err); }
+
+            // Send email notifications to admin (Replacing missing Edge Functions)
+            try {
+                await base44.integrations.Core.SendEmail({
+                    to: 'connect@eyepune.com',
+                    subject: `New Booking: ${formData.name}`,
+                    html: `
+                        <div style="font-family: sans-serif; padding: 20px;">
+                            <h2>New Consultation Booked</h2>
+                            <p><strong>Name:</strong> ${formData.name}</p>
+                            <p><strong>Email:</strong> ${formData.email}</p>
+                            <p><strong>Date/Time:</strong> ${selectedDate.toLocaleString()}</p>
+                            <p><strong>Notes:</strong> ${formData.notes}</p>
+                        </div>
+                    `
+                });
+                
+                await base44.integrations.Core.SendEmail({
+                    to: formData.email,
+                    subject: `Consultation Confirmed - EyE PunE`,
+                    html: `
+                        <div style="font-family: sans-serif; padding: 20px;">
+                            <h2>Your Consultation is Confirmed!</h2>
+                            <p>Hi ${formData.name},</p>
+                            <p>We've received your booking for a free consultation.</p>
+                            <p><strong>Date:</strong> ${selectedDate.toLocaleString()}</p>
+                            <p><strong>Meeting Link:</strong> <a href="https://meet.google.com/lookup/eyepune">Join Google Meet</a></p>
+                            <p>Our team will see you then!</p>
+                        </div>
+                    `
                 });
             } catch (e) {
-                console.log('WhatsApp notification failed (non-critical):', e);
+                console.log('Email notifications failed (non-critical):', e);
             }
 
-            // Send email notifications to customer + admin
-            try {
-                await base44.functions.invoke('sendBookingNotification', {
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone,
-                    company: formData.company,
-                    scheduledDate: formData.selectedSlot,
-                    meetLink: calendarResponse.data.meetLink,
-                    notes: formData.notes
-                });
-            } catch (e) {
-                console.log('Email notification failed (non-critical):', e);
-            }
-
-            setMeetLink(calendarResponse.data.meetLink);
+            setMeetLink('https://meet.google.com/lookup/eyepune');
             setIsSuccess(true);
         } catch (error) {
             console.error('Booking error:', error);
-            const errorMessage = error.response?.data?.error || error.message || 'Please try again.';
-            alert(`Failed to create booking: ${errorMessage}`);
+            alert(`Failed to create booking: ${error.message || 'Please try again.'}`);
         }
 
         setIsSubmitting(false);
@@ -213,6 +211,17 @@ export default function Booking() {
                             animate={{ opacity: 1, x: 0 }}
                         >
                             <form onSubmit={handleSubmit} className="bg-card border rounded-2xl p-8 space-y-6">
+                                {/* Honeypot field (hidden from users) */}
+                                <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
+                                    <input
+                                        type="text"
+                                        name="website_url"
+                                        value={formData.website_url || ''}
+                                        onChange={handleChange}
+                                        tabIndex="-1"
+                                        autoComplete="off"
+                                    />
+                                </div>
                                 <div>
                                     <Label>Full Name *</Label>
                                     <Input
