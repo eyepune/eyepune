@@ -308,12 +308,12 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
             let savedAssessment = null;
             try {
                 savedAssessment = await base44.entities.AI_Assessment.create({
-                    ...formData,
+                    full_name: formData.lead_name,
+                    email: formData.lead_email,
+                    business_name: formData.company_name,
                     ...answers,
-                    score: growthScore, // Corrected column name
+                    score: growthScore,
                     ai_report: aiResponse,
-                    // Note: 'recommendations' column might need to be JSONB if added to schema, 
-                    // otherwise it will be ignored or error. SETUP_DATABASE doesn't have it yet.
                     converted_to_lead: false
                 });
             } catch (err) {

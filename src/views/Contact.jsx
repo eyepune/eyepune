@@ -31,11 +31,11 @@ export default function Contact() {
         setIsSubmitting(true);
         try {
             const submissionData = {
-                name: formData.name,
+                full_name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
                 company: formData.company,
-                service: formData.service_interest,
+                service_interest: formData.service_interest,
                 message: formData.message,
                 status: 'new'
             };

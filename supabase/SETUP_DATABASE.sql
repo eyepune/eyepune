@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS user_activities (
 CREATE TABLE IF NOT EXISTS leads (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   full_name TEXT NOT NULL, email TEXT, phone TEXT, company TEXT,
+  service_interest TEXT, message TEXT,
   source TEXT DEFAULT 'website',
   status TEXT DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'qualified', 'proposal_sent', 'negotiation', 'won', 'lost')),
   assigned_to TEXT, score INTEGER DEFAULT 0, tags TEXT[], notes TEXT,
@@ -52,16 +53,20 @@ CREATE TABLE IF NOT EXISTS leads (
 
 CREATE TABLE IF NOT EXISTS inquiries (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT, email TEXT NOT NULL, phone TEXT, company TEXT,
-  service TEXT, message TEXT,
+  name TEXT, full_name TEXT, email TEXT NOT NULL, phone TEXT, company TEXT,
+  service TEXT, service_interest TEXT, message TEXT,
   status TEXT DEFAULT 'new', source TEXT DEFAULT 'website',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS ai_assessments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  full_name TEXT, email TEXT, business_name TEXT,
   lead_name TEXT, lead_email TEXT NOT NULL, company_name TEXT, industry TEXT,
   business_stage TEXT, team_size TEXT, current_challenges TEXT, goals TEXT,
+  business_type TEXT, revenue_range TEXT, lead_generation_method TEXT,
+  sales_process TEXT, marketing_channels TEXT, online_presence TEXT,
+  crm_usage TEXT, biggest_challenge TEXT, growth_goals TEXT,
   budget_range TEXT, timeline TEXT, ai_report TEXT, score INTEGER,
   converted_to_lead BOOLEAN DEFAULT FALSE,
   lead_id UUID REFERENCES leads(id),
@@ -527,52 +532,68 @@ CREATE POLICY "Public read service addons" ON service_addons FOR SELECT USING (i
 DROP POLICY IF EXISTS "Public read service packages" ON service_packages;
 CREATE POLICY "Public read service packages" ON service_packages FOR SELECT USING (is_active = TRUE);
 
+-- 1. Create a SECURITY DEFINER function to check admin role.
+-- This Bypasses RLS, thus breaking the recursion loop.
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.users
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$;
+
 -- Users
 DROP POLICY IF EXISTS "Authenticated users can read own profile" ON users;
-CREATE POLICY "Authenticated users can read own profile" ON users FOR SELECT USING (auth.uid()::text = id::text OR EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Authenticated users can read own profile" ON users FOR SELECT USING (auth.uid() = id OR public.is_admin());
 
 DROP POLICY IF EXISTS "Users can update own profile" ON users;
-CREATE POLICY "Users can update own profile" ON users FOR UPDATE USING (auth.uid()::text = id::text);
+CREATE POLICY "Users can update own profile" ON users FOR UPDATE USING (auth.uid() = id);
 
 DROP POLICY IF EXISTS "Users can insert own row" ON users;
-CREATE POLICY "Users can insert own row" ON users FOR INSERT WITH CHECK (auth.uid()::text = id::text);
+CREATE POLICY "Users can insert own row" ON users FOR INSERT WITH CHECK (auth.uid() = id);
 
 DROP POLICY IF EXISTS "Admins can manage users" ON users;
-CREATE POLICY "Admins can manage users" ON users FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admins can manage users" ON users FOR ALL USING (public.is_admin());
 
 -- Admin full access
 DROP POLICY IF EXISTS "Admin full access leads" ON leads;
-CREATE POLICY "Admin full access leads" ON leads FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access leads" ON leads FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access inquiries" ON inquiries;
-CREATE POLICY "Admin full access inquiries" ON inquiries FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access inquiries" ON inquiries FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access bookings" ON bookings;
-CREATE POLICY "Admin full access bookings" ON bookings FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access bookings" ON bookings FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access projects" ON client_projects;
-CREATE POLICY "Admin full access projects" ON client_projects FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access projects" ON client_projects FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access campaigns" ON campaigns;
-CREATE POLICY "Admin full access campaigns" ON campaigns FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access campaigns" ON campaigns FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access blog" ON blog_posts;
-CREATE POLICY "Admin full access blog" ON blog_posts FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access blog" ON blog_posts FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access contracts" ON contracts;
-CREATE POLICY "Admin full access contracts" ON contracts FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access contracts" ON contracts FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access proposals" ON proposals;
-CREATE POLICY "Admin full access proposals" ON proposals FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access proposals" ON proposals FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access invoices" ON invoices;
-CREATE POLICY "Admin full access invoices" ON invoices FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access invoices" ON invoices FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access assessments" ON ai_assessments;
-CREATE POLICY "Admin full access assessments" ON ai_assessments FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access assessments" ON ai_assessments FOR ALL USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access payments" ON payments;
-CREATE POLICY "Admin full access payments" ON payments FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access payments" ON payments FOR ALL USING (public.is_admin());
 
 -- Public INSERT policies (for forms)
 DROP POLICY IF EXISTS "Public can create inquiries" ON inquiries;
@@ -592,24 +613,76 @@ DROP POLICY IF EXISTS "Users can create own activities" ON user_activities;
 CREATE POLICY "Users can create own activities" ON user_activities FOR INSERT WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Admin read activities" ON user_activities;
-CREATE POLICY "Admin read activities" ON user_activities FOR SELECT USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin read activities" ON user_activities FOR SELECT USING (public.is_admin());
 
 -- Client access
 DROP POLICY IF EXISTS "Clients can read own projects" ON client_projects;
-CREATE POLICY "Clients can read own projects" ON client_projects FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Clients can read own projects" ON client_projects FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR public.is_admin());
 
 DROP POLICY IF EXISTS "Clients can read own proposals" ON proposals;
-CREATE POLICY "Clients can read own proposals" ON proposals FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Clients can read own proposals" ON proposals FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR public.is_admin());
 
 DROP POLICY IF EXISTS "Clients can read own invoices" ON invoices;
-CREATE POLICY "Clients can read own invoices" ON invoices FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Clients can read own invoices" ON invoices FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR public.is_admin());
 
 DROP POLICY IF EXISTS "Clients can read own contracts" ON contracts;
-CREATE POLICY "Clients can read own contracts" ON contracts FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Clients can read own contracts" ON contracts FOR SELECT USING (client_email = auth.jwt() ->> 'email' OR public.is_admin());
 
 -- Client logos admin
 DROP POLICY IF EXISTS "Admin full access client logos" ON client_logos;
-CREATE POLICY "Admin full access client logos" ON client_logos FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin full access client logos" ON client_logos FOR ALL USING (public.is_admin());
+
+-- ── PROJECT ACCESS HELPER (Optional but useful for complex rules) ──
+-- This helps check if a user belongs to a project as a client.
+CREATE OR REPLACE FUNCTION public.client_can_access_project(p_id UUID)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.client_projects
+    WHERE id = p_id AND (client_email = auth.jwt() ->> 'email' OR public.is_admin())
+  );
+END;
+$$;
+
+-- ── EXTENDED CLIENT POLICIES ──────────────────────────────────
+
+-- Milestones
+DROP POLICY IF EXISTS "Clients can read own milestones" ON client_milestones;
+CREATE POLICY "Clients can read own milestones" ON client_milestones FOR SELECT USING (public.client_can_access_project(project_id));
+
+-- Files
+DROP POLICY IF EXISTS "Clients can read own files" ON client_files;
+CREATE POLICY "Clients can read own files" ON client_files FOR SELECT USING (public.client_can_access_project(project_id));
+DROP POLICY IF EXISTS "Clients can delete own files" ON client_files FOR DELETE USING (public.client_can_access_project(project_id));
+DROP POLICY IF EXISTS "Clients can upload files" ON client_files FOR INSERT WITH CHECK (public.client_can_access_project(project_id));
+
+-- Onboarding
+DROP POLICY IF EXISTS "Clients can read own onboarding tasks" ON onboarding_tasks;
+CREATE POLICY "Clients can read own onboarding tasks" ON onboarding_tasks FOR SELECT USING (public.client_can_access_project(project_id));
+DROP POLICY IF EXISTS "Clients can update onboarding tasks" ON onboarding_tasks FOR UPDATE USING (public.client_can_access_project(project_id));
+
+DROP POLICY IF EXISTS "Clients can manage own onboarding progress" ON onboarding_progress;
+CREATE POLICY "Clients can manage own onboarding progress" ON onboarding_progress FOR ALL USING (user_email = auth.jwt() ->> 'email' OR public.is_admin());
+
+-- Dashboard Preferences
+DROP POLICY IF EXISTS "Users can manage own dashboard preferences" ON dashboard_preferences;
+CREATE POLICY "Users can manage own dashboard preferences" ON dashboard_preferences FOR ALL USING (user_email = auth.jwt() ->> 'email' OR public.is_admin());
+
+-- Notifications
+DROP POLICY IF EXISTS "Users can read own notifications" ON client_notifications;
+CREATE POLICY "Users can read own notifications" ON client_notifications FOR SELECT USING (user_email = auth.jwt() ->> 'email' OR public.is_admin());
+
+-- Messages
+DROP POLICY IF EXISTS "Clients can read own messages" ON client_messages;
+CREATE POLICY "Clients can read own messages" ON client_messages FOR SELECT USING (public.client_can_access_project(project_id));
+DROP POLICY IF EXISTS "Clients can send messages" ON client_messages FOR INSERT WITH CHECK (public.client_can_access_project(project_id));
+
+-- Feedback
+DROP POLICY IF EXISTS "Clients can manage own feedback" ON client_feedback;
+CREATE POLICY "Clients can manage own feedback" ON client_feedback FOR ALL USING (created_by = auth.jwt() ->> 'email' OR public.is_admin());
 
 -- ── AUTH TRIGGER ───────────────────────────────────────────────
 
@@ -692,3 +765,63 @@ CREATE INDEX IF NOT EXISTS idx_contracts_client_email ON contracts(client_email)
 CREATE INDEX IF NOT EXISTS idx_payments_customer_email ON payments(customer_email);
 CREATE INDEX IF NOT EXISTS idx_notifications_user_email ON client_notifications(user_email);
 CREATE INDEX IF NOT EXISTS idx_messages_project_id ON client_messages(project_id);
+
+-- ── SCHEMA MAINTENANCE & MIGRATION ────────────────────────────
+
+-- Ensure columns exist for older databases
+ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS full_name TEXT;
+ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS service_interest TEXT;
+
+-- Migration: Copy data if columns were already partially populated
+UPDATE inquiries SET full_name = name WHERE full_name IS NULL AND name IS NOT NULL;
+UPDATE inquiries SET service_interest = service WHERE service_interest IS NULL AND service IS NOT NULL;
+
+-- ai_assessments table extensions
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS business_type TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS revenue_range TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS lead_generation_method TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS sales_process TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS marketing_channels TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS online_presence TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS crm_usage TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS biggest_challenge TEXT;
+ALTER TABLE ai_assessments ADD COLUMN IF NOT EXISTS growth_goals TEXT;
+
+-- Migration for ai_assessments
+UPDATE ai_assessments SET full_name = lead_name WHERE full_name IS NULL AND lead_name IS NOT NULL;
+UPDATE ai_assessments SET email = lead_email WHERE email IS NULL AND lead_email IS NOT NULL;
+UPDATE ai_assessments SET business_name = company_name WHERE business_name IS NULL AND company_name IS NOT NULL;
+UPDATE ai_assessments SET biggest_challenge = current_challenges WHERE biggest_challenge IS NULL AND current_challenges IS NOT NULL;
+UPDATE ai_assessments SET growth_goals = goals WHERE growth_goals IS NULL AND goals IS NOT NULL;
+
+-- leads table
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS service_interest TEXT;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS message TEXT;
+
+-- activities table (ensure type column exists)
+ALTER TABLE activities ADD COLUMN IF NOT EXISTS type TEXT;
+
+-- Final RLS Check & Permissions
+ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ai_assessments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE activities ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public can create inquiries" ON inquiries;
+CREATE POLICY "Public can create inquiries" ON inquiries FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public can create assessments" ON ai_assessments;
+CREATE POLICY "Public can create assessments" ON ai_assessments FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public can create leads" ON leads;
+CREATE POLICY "Public can create leads" ON leads FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public can create activities" ON activities;
+CREATE POLICY "Public can create activities" ON activities FOR INSERT WITH CHECK (true);
+
+-- Re-grant permissions
+GRANT ALL ON inquiries TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ai_assessments TO postgres, anon, authenticated, service_role;
+GRANT ALL ON leads TO postgres, anon, authenticated, service_role;
+GRANT ALL ON activities TO postgres, anon, authenticated, service_role;
+GRANT ALL ON client_projects TO postgres, anon, authenticated, service_role;
