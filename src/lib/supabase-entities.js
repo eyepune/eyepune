@@ -120,6 +120,7 @@ class SupabaseEntity {
    * @param {number} limit - Max records to return
    * @returns {Promise<Array>}
    */
+  async list(sortStr, limit) {
     let query = supabase.from(this.tableName).select('*');
     
     let sort = parseSort(sortStr);
@@ -152,6 +153,7 @@ class SupabaseEntity {
       }
       return camel;
     });
+  }
 
   /**
    * Filter records by query object
