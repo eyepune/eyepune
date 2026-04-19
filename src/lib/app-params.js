@@ -35,16 +35,34 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 }
 
 const getAppParams = () => {
+    // Helper to safely get env vars from either process.env (Next.js) or import.meta.env (Vite)
+    const getEnv = (key) => {
+        if (typeof process !== 'undefined' && process.env && process.env[key]) {
+            return process.env[key];
+        }
+        // In some environments, import.meta.env might be available
+        try {
+            // @ts-ignore
+            if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+                // @ts-ignore
+                return import.meta.env[key];
+            }
+        } catch (e) {
+            // Ignore errors for import.meta
+        }
+        return undefined;
+    };
+
 	if (getAppParamValue("clear_access_token") === 'true') {
 		storage.removeItem('base44_access_token');
 		storage.removeItem('token');
 	}
 	return {
-		appId: getAppParamValue("app_id", { defaultValue: import.meta.env.VITE_BASE44_APP_ID }),
+		appId: getAppParamValue("app_id", { defaultValue: getEnv("VITE_BASE44_APP_ID") || getEnv("NEXT_PUBLIC_BASE44_APP_ID") }),
 		token: getAppParamValue("access_token", { removeFromUrl: true }),
-		fromUrl: getAppParamValue("from_url", { defaultValue: window.location.href }),
-		functionsVersion: getAppParamValue("functions_version", { defaultValue: import.meta.env.VITE_BASE44_FUNCTIONS_VERSION }),
-		appBaseUrl: getAppParamValue("app_base_url", { defaultValue: import.meta.env.VITE_BASE44_APP_BASE_URL }),
+		fromUrl: getAppParamValue("from_url", { defaultValue: typeof window !== 'undefined' ? window.location.href : '' }),
+		functionsVersion: getAppParamValue("functions_version", { defaultValue: getEnv("VITE_BASE44_FUNCTIONS_VERSION") || getEnv("NEXT_PUBLIC_BASE44_FUNCTIONS_VERSION") }),
+		appBaseUrl: getAppParamValue("app_base_url", { defaultValue: getEnv("VITE_BASE44_APP_BASE_URL") || getEnv("NEXT_PUBLIC_BASE44_APP_BASE_URL") }),
 	}
 }
 

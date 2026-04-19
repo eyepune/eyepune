@@ -73,17 +73,17 @@ export default function Booking() {
 
             // Create booking in database
             const booking = await base44.entities.Booking.create({
-                name: formData.name,
+                full_name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
                 company: formData.company,
-                type: 'consultation', // Corrected column name
-                date: dateStr,        // Corrected column name
-                time: timeStr,        // Corrected column name
-                duration: '30 min',   // Corrected column name
-                status: 'pending',    // Status must be in CHECK constraint
+                service_type: 'consultation',
+                booking_date: dateStr,
+                booking_time: timeStr,
+                duration: '30 min',
+                status: 'pending',
                 notes: formData.notes,
-                meeting_link: 'https://meet.google.com/lookup/eyepune' // Placeholder link
+                meeting_link: 'https://meet.google.com/lookup/eyepune'
             });
 
             // Create lead

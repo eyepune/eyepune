@@ -56,6 +56,7 @@ import Testimonials from '@/views/Testimonials';
 import Unsubscribe from '@/views/Unsubscribe';
 import Admin_Forms from '@/views/Admin_Forms';
 import Admin_Outreach from '@/views/Admin_Outreach';
+import SystemStatus from '@/views/SystemStatus';
 import PageNotFound from '@/lib/PageNotFound';
 
 // ── Route → Component mapping ──────────────────────────────────────────
@@ -111,6 +112,7 @@ const PAGE_MAP = {
   Testimonials,
   Unsubscribe,
   Admin_Outreach,
+  SystemStatus,
 };
 
 // Pages that should NOT be wrapped in the Layout

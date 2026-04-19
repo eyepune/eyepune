@@ -12,12 +12,13 @@ function Admin_Dashboard() {
     const { data: stats, isLoading } = useQuery({
         queryKey: ['admin-dashboard-stats'],
         queryFn: async () => {
-            const [leads, inquiries, assessments, testimonials, logos] = await Promise.all([
+            const [leads, inquiries, assessments, testimonials, logos, bookings] = await Promise.all([
                 supabase.from('leads').select('id', { count: 'exact', head: true }),
                 supabase.from('inquiries').select('id', { count: 'exact', head: true }),
                 supabase.from('ai_assessments').select('id', { count: 'exact', head: true }),
                 supabase.from('testimonials').select('id', { count: 'exact', head: true }),
                 supabase.from('client_logos').select('id', { count: 'exact', head: true }).eq('is_active', true),
+                supabase.from('bookings').select('id', { count: 'exact', head: true }),
             ]);
             return {
                 leads: leads.count || 0,
@@ -25,6 +26,7 @@ function Admin_Dashboard() {
                 assessments: assessments.count || 0,
                 testimonials: testimonials.count || 0,
                 logos: logos.count || 0,
+                bookings: bookings.count || 0,
             };
         },
     });
@@ -43,9 +45,9 @@ function Admin_Dashboard() {
 
     const statCards = [
         { title: 'Total Leads', value: stats?.leads || 0, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+        { title: 'Bookings', value: stats?.bookings || 0, icon: Clock, color: 'text-red-500', bg: 'bg-red-500/10' },
         { title: 'AI Assessments', value: stats?.assessments || 0, icon: TrendingUp, color: 'text-orange-500', bg: 'bg-orange-500/10' },
         { title: 'Inquiries', value: stats?.inquiries || 0, icon: Mail, color: 'text-green-500', bg: 'bg-green-500/10' },
-        { title: 'Partner Logos', value: stats?.logos || 0, icon: FileText, color: 'text-purple-500', bg: 'bg-purple-500/10' },
     ];
 
     return (

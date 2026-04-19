@@ -39,6 +39,17 @@ export const AuthProvider = ({ children }) => {
       setIsLoadingAuth(true);
       setAuthError(null);
 
+      // Check if Supabase is even configured
+      const { isSupabaseConfigured } = await import('@/integrations/supabase/client');
+      if (!isSupabaseConfigured) {
+        setAuthError({ 
+          type: 'config_missing', 
+          message: 'Supabase credentials are missing. Please check your .env file.' 
+        });
+        setIsLoadingAuth(false);
+        return;
+      }
+
       // Check if user has an active session
       const { data: { session }, error } = await supabase.auth.getSession();
 

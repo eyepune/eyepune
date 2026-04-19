@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Logo from '@/components/shared/Logo';
 import { Loader2, Mail, Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 export default function Login() {
     const [mode, setMode] = useState('signin');
@@ -228,9 +229,14 @@ export default function Login() {
                     </CardContent>
                 </Card>
 
-                <p className="text-center text-xs text-gray-600 mt-8">
-                    Secure Client & Admin Authentication • EyE PunE
-                </p>
+                <div className="text-center mt-8 space-y-4">
+                    <p className="text-xs text-gray-600">
+                        Secure Client & Admin Authentication • EyE PunE
+                    </p>
+                    <Link href="/SystemStatus" className="block text-[10px] text-gray-700 hover:text-red-500 transition-colors uppercase tracking-widest">
+                        System Troubleshoot
+                    </Link>
+                </div>
             </div>
         </div>
     );

@@ -12,6 +12,8 @@ import Service_Funnels from './views/Service_Funnels';
 import Admin_Outreach from './views/Admin_Outreach';
 import SignProposal from './views/SignProposal';
 import Client_Portal from './views/Client_Portal';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -45,7 +47,35 @@ const AuthenticatedApp = () => {
       // Redirect to login automatically
       navigateToLogin();
       return null;
+    } else if (authError.type === 'config_missing') {
+      return (
+        <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6 text-center">
+          <div className="max-w-md">
+            <h1 className="text-2xl font-bold text-red-500 mb-4">Supabase Not Connected</h1>
+            <p className="text-gray-400 mb-6">{authError.message}</p>
+            <div className="bg-[#111] p-4 rounded border border-white/10 text-xs text-left font-mono text-gray-500 mb-6">
+              Check if <strong>.env</strong> file exists in the root and contains:<br/>
+              NEXT_PUBLIC_SUPABASE_URL=...<br/>
+              NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+            </div>
+            <Link href="/SystemStatus">
+              <Button variant="outline" className="border-red-500/50 text-red-500 hover:bg-red-500/10">
+                Run System Diagnostics
+              </Button>
+            </Link>
+          </div>
+        </div>
+      );
     }
+    // General error fallback
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6 text-center">
+        <div className="max-w-md">
+          <h1 className="text-2xl font-bold text-red-500 mb-4">Authentication Error</h1>
+          <p className="text-gray-400">{authError.message}</p>
+        </div>
+      </div>
+    );
   }
 
   // Render the main app

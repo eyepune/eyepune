@@ -36,6 +36,15 @@ function Admin_Forms() {
         },
     });
 
+    const { data: bookings = [], isLoading: loadingBookings } = useQuery({
+        queryKey: ['admin-bookings'],
+        queryFn: async () => {
+            const { data, error } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+            if (error) throw error;
+            return data || [];
+        },
+    });
+
     const deleteInquiryMutation = useMutation({
         mutationFn: async (id) => { const { error } = await supabase.from('inquiries').delete().eq('id', id); if (error) throw error; },
         onSuccess: () => { queryClient.invalidateQueries(['admin-inquiries']); toast.success('Deleted'); },
@@ -44,6 +53,11 @@ function Admin_Forms() {
     const deleteAssessmentMutation = useMutation({
         mutationFn: async (id) => { const { error } = await supabase.from('ai_assessments').delete().eq('id', id); if (error) throw error; },
         onSuccess: () => { queryClient.invalidateQueries(['admin-assessments']); toast.success('Deleted'); },
+    });
+
+    const deleteBookingMutation = useMutation({
+        mutationFn: async (id) => { const { error } = await supabase.from('bookings').delete().eq('id', id); if (error) throw error; },
+        onSuccess: () => { queryClient.invalidateQueries(['admin-bookings']); toast.success('Deleted'); },
     });
 
     return (
@@ -56,7 +70,10 @@ function Admin_Forms() {
             {/* Tabs */}
             <div className="flex gap-2 mb-6">
                 <Button variant={tab === 'inquiries' ? 'default' : 'outline'} onClick={() => setTab('inquiries')} className={tab === 'inquiries' ? 'bg-red-600' : 'border-white/[0.06] text-gray-400'}>
-                    Contact Inquiries ({inquiries.length})
+                    Inquiries ({inquiries.length})
+                </Button>
+                <Button variant={tab === 'bookings' ? 'default' : 'outline'} onClick={() => setTab('bookings')} className={tab === 'bookings' ? 'bg-red-600' : 'border-white/[0.06] text-gray-400'}>
+                    Bookings ({bookings.length})
                 </Button>
                 <Button variant={tab === 'assessments' ? 'default' : 'outline'} onClick={() => setTab('assessments')} className={tab === 'assessments' ? 'bg-red-600' : 'border-white/[0.06] text-gray-400'}>
                     AI Assessments ({assessments.length})
@@ -87,7 +104,7 @@ function Admin_Forms() {
                                     <tbody>
                                         {inquiries.map((inq) => (
                                             <tr key={inq.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
-                                                <td className="px-4 py-3 text-white text-sm">{inq.full_name}</td>
+                                                <td className="px-4 py-3 text-white text-sm">{inq.full_name || inq.name}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm">{inq.email}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm">{inq.phone || '-'}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm">{inq.service_interest || '-'}</td>
@@ -95,6 +112,55 @@ function Admin_Forms() {
                                                 <td className="px-4 py-3 text-gray-500 text-xs">{new Date(inq.created_at).toLocaleDateString()}</td>
                                                 <td className="px-4 py-3 text-right">
                                                     <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteInquiryMutation.mutate(inq.id); }}>
+                                                        <Trash2 className="w-4 h-4 text-gray-400" />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            )}
+
+            {tab === 'bookings' && (
+                <Card className="bg-[#111] border-white/[0.06]">
+                    <CardContent className="p-0">
+                        {loadingBookings ? (
+                            <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-gray-500" /></div>
+                        ) : bookings.length === 0 ? (
+                            <div className="text-center py-12 text-gray-500">No bookings yet</div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b border-white/[0.06]">
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Name</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Email</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Service</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Date & Time</th>
+                                            <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Status</th>
+                                            <th className="text-right px-4 py-3 text-xs text-gray-500 font-medium">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {bookings.map((b) => (
+                                            <tr key={b.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
+                                                <td className="px-4 py-3 text-white text-sm">{b.full_name}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{b.email}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm capitalize">{b.service_type?.replace('_', ' ')}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">
+                                                    {new Date(b.booking_date).toLocaleDateString()} at {b.booking_time}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <span className={`text-xs px-2 py-1 rounded-full ${
+                                                        b.status === 'confirmed' ? 'bg-green-500/10 text-green-400' : 'bg-blue-500/10 text-blue-400'
+                                                    }`}>{b.status}</span>
+                                                </td>
+                                                <td className="px-4 py-3 text-right">
+                                                    <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteBookingMutation.mutate(b.id); }}>
                                                         <Trash2 className="w-4 h-4 text-gray-400" />
                                                     </Button>
                                                 </td>
@@ -159,6 +225,7 @@ function Admin_Forms() {
         </div>
     );
 }
+
 
 export default function AdminFormsPage() {
     return (

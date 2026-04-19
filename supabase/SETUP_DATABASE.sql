@@ -271,6 +271,7 @@ CREATE TABLE IF NOT EXISTS client_logos (
 CREATE TABLE IF NOT EXISTS service_packages (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL, description TEXT,
+  category TEXT,
   services TEXT[], price DECIMAL(10,2),
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -287,6 +288,7 @@ CREATE TABLE IF NOT EXISTS service_addons (
 CREATE TABLE IF NOT EXISTS pricing_plans (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL, description TEXT,
+  category TEXT,
   price DECIMAL(10,2), currency TEXT DEFAULT 'INR',
   billing_cycle TEXT DEFAULT 'monthly',
   features TEXT[], is_active BOOLEAN DEFAULT TRUE,
@@ -800,6 +802,10 @@ ALTER TABLE leads ADD COLUMN IF NOT EXISTS message TEXT;
 
 -- activities table (ensure type column exists)
 ALTER TABLE activities ADD COLUMN IF NOT EXISTS type TEXT;
+
+-- pricing columns
+ALTER TABLE service_packages ADD COLUMN IF NOT EXISTS category TEXT;
+ALTER TABLE pricing_plans ADD COLUMN IF NOT EXISTS category TEXT;
 
 -- Final RLS Check & Permissions
 ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;

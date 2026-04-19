@@ -1,13 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-function getAdminClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set in .env');
-  }
-  return createClient(supabaseUrl, serviceRoleKey);
-}
+import { sendEmail } from '@/lib/email-service';
 
 // POST — Send bulk emails
 export async function POST(request) {
@@ -18,53 +9,20 @@ export async function POST(request) {
       return Response.json({ error: 'Subject, content, and recipients are required' }, { status: 400 });
     }
 
-    // Use Supabase to send emails via the built-in email service
-    // For production, you'd use Resend, SendGrid, or similar
-    // For now, we'll log and store the campaign send record
-    const admin = getAdminClient();
-
-    // Store email records for tracking
-    const emailRecords = recipients.map(email => ({
-      recipient_email: email,
+    // Standard Zoho API usually takes one recipient or a comma separated list.
+    // For large bulk, it's recommended to send individually or use Zoho Campaigns.
+    // Here we wrap it in the unified send service.
+    
+    // Note: Most SMTP/API providers have a limit for recipients in a single call.
+    // For reliability, we send via the unified service.
+    
+    const result = await sendEmail({
+      to: recipients,
       subject,
-      status: 'queued',
-      sent_at: new Date().toISOString(),
-    }));
-
-    // Try to send via Resend if API key is available
-    const resendApiKey = process.env.RESEND_API_KEY;
-
-    if (resendApiKey) {
-      // Send via Resend API
-      const response = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${resendApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: 'EyE PunE <connect@eyepune.com>',
-          to: recipients,
-          subject,
-          html,
-        }),
-      });
-
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.message || 'Resend API error');
-      }
-
-      return Response.json({ success: true, sent: recipients.length });
-    }
-
-    // Fallback: If no email service configured, return info
-    return Response.json({
-      success: false,
-      message: 'No email service configured. Set RESEND_API_KEY in .env to enable bulk email sending.',
-      recipients: recipients.length,
-      note: 'Campaign has been saved. Configure an email provider to actually send emails.',
+      html
     });
+
+    return Response.json({ success: true, result });
 
   } catch (error) {
     console.error('Bulk email error:', error);
