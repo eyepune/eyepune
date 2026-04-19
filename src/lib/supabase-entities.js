@@ -120,12 +120,18 @@ class SupabaseEntity {
    * @param {number} limit - Max records to return
    * @returns {Promise<Array>}
    */
-  async list(sortStr, limit) {
     let query = supabase.from(this.tableName).select('*');
     
-    const sort = parseSort(sortStr);
+    let sort = parseSort(sortStr);
+    
+    // Sort logic with fallback for created_date
     if (sort) {
-      query = query.order(sort.column, { ascending: sort.ascending });
+      if (sort.column === 'created_date') {
+        // Many tables use created_at but code uses created_date
+        query = query.order('created_at', { ascending: sort.ascending });
+      } else {
+        query = query.order(sort.column, { ascending: sort.ascending });
+      }
     }
     
     if (limit) {
@@ -138,8 +144,14 @@ class SupabaseEntity {
       throw error;
     }
     
-    return (data || []).map(row => toCamelCase(row));
-  }
+    return (data || []).map(row => {
+      const camel = toCamelCase(row);
+      // Ensure created_date exists if created_at is present
+      if (row.created_at && !camel.createdDate) {
+        camel.createdDate = row.created_at;
+      }
+      return camel;
+    });
 
   /**
    * Filter records by query object

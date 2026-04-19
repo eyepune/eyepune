@@ -194,9 +194,83 @@ const integrations = {
   },
 };
 
+// ── Functions API ───────────────────────────────────────────────────────
+const functions = {
+  /**
+   * Invoke various business logic functions
+   */
+  async invoke(functionName, params) {
+    console.log(`[base44.functions] Invoking ${functionName}`, params);
+
+    // 1. Sign Proposal Logic
+    if (functionName === 'signProposal') {
+      const { proposal_id, signature_name, client_ip } = params;
+      
+      const { data: proposal, error: fetchErr } = await supabase
+        .from('proposals')
+        .select('*')
+        .eq('id', proposal_id)
+        .single();
+        
+      if (fetchErr) throw fetchErr;
+
+      const { error: signErr } = await supabase
+        .from('proposals')
+        .update({
+          status: 'accepted',
+          client_signature_name: signature_name,
+          client_signed_at: new Date().toISOString(),
+          client_signed_ip: client_ip
+        })
+        .eq('id', proposal_id);
+        
+      if (signErr) throw signErr;
+
+      // AUTOMATIC INVOICE GENERATION
+      // satisfy USER requirement: "once signed an invoice automatically is generated"
+      const invoiceData = {
+        client_name: proposal.client_name,
+        client_email: proposal.client_email || '',
+        total_amount: proposal.total_amount || proposal.pricing?.total || 0,
+        status: 'pending',
+        invoice_number: `INV-${Date.now().toString().slice(-6)}`,
+        due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        items: proposal.pricing_items || proposal.pricing?.items || [],
+        proposal_id: proposal.id
+      };
+
+      const { data: invoice, error: invErr } = await supabase
+        .from('invoices')
+        .insert(invoiceData)
+        .select()
+        .single();
+
+      if (invErr) {
+        console.error('Invoice auto-generation failed', invErr);
+      } else {
+        await supabase.from('proposals').update({ invoice_id: invoice.id }).eq('id', proposal_id);
+      }
+
+      return { data: { success: true, invoice_id: invoice?.id } };
+    }
+
+    if (functionName === 'getProposalPublic') {
+      const { data, error } = await supabase.from('proposals').select('*').eq('id', params.proposal_id).single();
+      if (error) throw error;
+      return { data: { proposal: data } };
+    }
+
+    // Default: try Supabase Edge Functions
+    const { data, error } = await supabase.functions.invoke(functionName, { body: params });
+    if (error) throw error;
+    return { data };
+  }
+};
+
 // ── Build the base44-compatible export ──────────────────────────────────
 export const base44 = {
   entities: db,
   auth,
   integrations,
+  functions,
 };

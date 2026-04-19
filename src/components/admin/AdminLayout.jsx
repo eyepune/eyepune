@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 const NAV_ITEMS = [
     { name: 'Dashboard', href: '/Admin_Dashboard', icon: LayoutDashboard },
     { name: 'CRM / Leads', href: '/Admin_CRM', icon: Users },
+    { name: 'Documents', href: '/Admin_Documents', icon: FileText },
     { name: 'Email Marketing', href: '/Admin_EmailCampaigns', icon: Mail },
     { name: 'Testimonials', href: '/Admin_Testimonials', icon: Star },
     { name: 'Client Logos', href: '/Admin_ClientLogos', icon: ImageIcon },
