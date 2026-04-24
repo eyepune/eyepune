@@ -58,6 +58,8 @@ import adminClientlogos from './views/Admin_ClientLogos';
 import adminDashboard from './views/Admin_Dashboard';
 import adminDocuments from './views/Admin_Documents';
 import adminEmailcampaigns from './views/Admin_EmailCampaigns';
+import adminEmailtemplates from './views/Admin_EmailTemplates';
+
 import adminFeedback from './views/Admin_Feedback';
 import adminMarketing from './views/Admin_Marketing';
 import adminPackagebuilder from './views/Admin_PackageBuilder';
@@ -102,6 +104,8 @@ export const PAGES = {
     "Admin_Dashboard": adminDashboard,
     "Admin_Documents": adminDocuments,
     "Admin_EmailCampaigns": adminEmailcampaigns,
+    "Admin_EmailTemplates": adminEmailtemplates,
+
     "Admin_Feedback": adminFeedback,
     "Admin_Marketing": adminMarketing,
     "Admin_PackageBuilder": adminPackagebuilder,

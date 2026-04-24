@@ -1,11 +1,11 @@
 export default function sitemap() {
-  const baseUrl = 'https://eyepune.com';
+  const baseUrl = 'https://www.eyepune.com';
   
   const routes = [
     '',
     '/About',
+    '/Services_Detail',
     '/Services',
-    '/Portfolio',
     '/Blog',
     '/Contact',
     '/Pricing',
@@ -24,6 +24,6 @@ export default function sitemap() {
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: route === '' ? 'daily' : 'weekly',
-    priority: route === '' ? 1 : 0.8,
+    priority: route === '' ? 1 : (route.startsWith('/Service_') ? 0.6 : 0.8),
   }));
 }

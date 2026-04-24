@@ -21,12 +21,14 @@ export default function Contact() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Honeypot spam protection
-        if (formData.website_url) {
-            console.warn('Bot detected');
-            setIsSuccess(true); // Pretend success to the bot
+        // Honeypot spam protection (Renamed from website_url to avoid auto-fill)
+        if (formData.verification_token) {
+            console.warn('Bot detected by honeypot');
+            setIsSuccess(true); 
             return;
         }
+
+        console.log('Sending submission for:', formData.name);
 
         setIsSubmitting(true);
         try {
@@ -39,11 +41,52 @@ export default function Contact() {
                 message: formData.message,
                 status: 'new'
             };
-            await base44.entities.Inquiry.create(submissionData);
+            const inquiry = await base44.entities.Inquiry.create(submissionData);
+
+            // Trigger Automations (Managing templates in Dashboard > Email Templates)
+            try {
+                // 1. Send automated response to user (Trigger: new_inquiry)
+                await fetch('/api/automation/trigger', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        trigger: 'new_inquiry',
+                        payload: {
+                            name: formData.name,
+                            email: formData.email,
+                            company: formData.company,
+                            service: formData.service_interest
+                        }
+                    })
+                });
+
+                // 2. Notify Admin (Using a generic notify trigger or direct send)
+                await base44.integrations.Core.SendEmail({
+                    to: 'connect@eyepune.com',
+                    subject: `New Inquiry: ${formData.name}`,
+                    html: `
+                        <div style="font-family: sans-serif; padding: 20px; color: #333; border: 1px solid #eee; border-radius: 12px;">
+                            <h2 style="color: #ef4444;">New Website Inquiry</h2>
+                            <p><strong>Name:</strong> ${formData.name}</p>
+                            <p><strong>Email:</strong> ${formData.email}</p>
+                            <p><strong>Phone:</strong> ${formData.phone || 'Not provided'}</p>
+                            <p><strong>Service:</strong> ${formData.service_interest || 'General'}</p>
+                            <p><strong>Message:</strong></p>
+                            <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">${formData.message}</div>
+                            <p style="margin-top: 25px;">
+                                <a href="${window.location.origin}/Admin_CRM" style="padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Open CRM Dashboard</a>
+                            </p>
+                        </div>
+                    `
+                });
+            } catch (automationErr) {
+                console.warn('Automation trigger failed:', automationErr);
+            }
+
             setIsSuccess(true);
         } catch (error) {
-            console.error('Submission failed:', error);
-            alert('Failed to send message. Please try again.');
+            console.error('Submission failed with error:', error);
+            alert(`Error: ${error.message || 'The server did not respond'}. Please check your internet or try refreshing.`);
         } finally {
             setIsSubmitting(false);
         }
@@ -104,8 +147,8 @@ export default function Contact() {
                                     <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
                                         <input
                                             type="text"
-                                            name="website_url"
-                                            value={formData.website_url || ''}
+                                            name="verification_token"
+                                            value={formData.verification_token || ''}
                                             onChange={handleChange}
                                             tabIndex="-1"
                                             autoComplete="off"

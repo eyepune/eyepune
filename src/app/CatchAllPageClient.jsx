@@ -17,6 +17,8 @@ import Admin_ClientLogos from '@/views/Admin_ClientLogos';
 import Admin_Dashboard from '@/views/Admin_Dashboard';
 import Admin_Documents from '@/views/Admin_Documents';
 import Admin_EmailCampaigns from '@/views/Admin_EmailCampaigns';
+import Admin_EmailTemplates from '@/views/Admin_EmailTemplates';
+
 import Admin_Feedback from '@/views/Admin_Feedback';
 import Admin_Marketing from '@/views/Admin_Marketing';
 import Admin_PackageBuilder from '@/views/Admin_PackageBuilder';
@@ -73,6 +75,8 @@ const PAGE_MAP = {
   Admin_Dashboard,
   Admin_Documents,
   Admin_EmailCampaigns,
+  Admin_EmailTemplates,
+
   Admin_Feedback,
   Admin_Forms,
   Admin_Marketing,

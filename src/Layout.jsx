@@ -43,6 +43,7 @@ const adminNavLinks = [
     { name: 'Reports', page: 'Admin_Reports' },
     { name: 'CMS', page: 'Admin_CMS' },
     { name: 'Marketing', page: 'Admin_Marketing' },
+    { name: 'Email Templates', page: 'Admin_EmailTemplates' },
     { name: 'Analytics', page: 'Admin_Analytics' },
     { name: 'SEO', page: 'Admin_SEO' },
     { name: 'Client Logos', page: 'Admin_ClientLogos' },

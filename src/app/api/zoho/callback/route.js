@@ -28,6 +28,9 @@ export async function GET(request) {
     });
   }
 
+  const origin = request.nextUrl.origin.replace('http://', 'https://');
+  const redirectUri = `${origin}/api/zoho/callback`;
+
   try {
     // Exchange code for tokens
     const tokenResponse = await fetch('https://accounts.zoho.in/oauth/v2/token', {
@@ -37,7 +40,7 @@ export async function GET(request) {
         code,
         client_id: ZOHO_CLIENT_ID,
         client_secret: ZOHO_CLIENT_SECRET,
-        redirect_uri: 'https://eyepune.com/api/zoho/callback',
+        redirect_uri: redirectUri,
         grant_type: 'authorization_code',
       }),
     });

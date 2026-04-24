@@ -18,20 +18,32 @@ const DEFAULT_FROM = process.env.EMAIL_FROM || `EyE PunE <${ZOHO_USERNAME}>`;
 async function getZohoAccessToken() {
   if (!ZOHO_REFRESH_TOKEN) throw new Error('ZOHO_REFRESH_TOKEN is missing');
   
-  const response = await fetch('https://accounts.zoho.in/oauth/v2/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      refresh_token: ZOHO_REFRESH_TOKEN,
-      client_id: ZOHO_CLIENT_ID,
-      client_secret: ZOHO_CLIENT_SECRET,
-      grant_type: 'refresh_token',
-    }),
-  });
+  // Try .in first (common for Pune/India), then .com as fallback if needed
+  const domains = ['zoho.in', 'zoho.com'];
+  let lastError = null;
+
+  for (const domain of domains) {
+    try {
+      const response = await fetch(`https://accounts.${domain}/oauth/v2/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          refresh_token: ZOHO_REFRESH_TOKEN,
+          client_id: ZOHO_CLIENT_ID,
+          client_secret: ZOHO_CLIENT_SECRET,
+          grant_type: 'refresh_token',
+        }),
+      });
+      
+      const data = await response.json();
+      if (data.access_token) return { token: data.access_token, domain };
+      if (data.error) lastError = `Zoho (${domain}) Error: ${data.error}`;
+    } catch (e) {
+      lastError = e.message;
+    }
+  }
   
-  const data = await response.json();
-  if (data.error) throw new Error(`Zoho Token Error: ${data.error}`);
-  return data.access_token;
+  throw new Error(`Zoho Token Refresh Failed: ${lastError}`);
 }
 
 /**
@@ -40,11 +52,11 @@ async function getZohoAccessToken() {
 export async function sendViaZoho({ to, subject, html, text }) {
   if (!ZOHO_ACCOUNT_ID) throw new Error('ZOHO_MAIL_ACCOUNT_ID is missing');
   
-  const accessToken = await getZohoAccessToken();
-  const response = await fetch(`https://mail.zoho.in/api/accounts/${ZOHO_ACCOUNT_ID}/messages`, {
+  const { token, domain } = await getZohoAccessToken();
+  const response = await fetch(`https://mail.${domain}/api/accounts/${ZOHO_ACCOUNT_ID}/messages`, {
     method: 'POST',
     headers: {
-      'Authorization': `Zoho-oauthtoken ${accessToken}`,
+      'Authorization': `Zoho-oauthtoken ${token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -55,11 +67,11 @@ export async function sendViaZoho({ to, subject, html, text }) {
     }),
   });
   
+  const result = await response.json();
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Zoho API Error: ${response.status} - ${error}`);
+    throw new Error(`Zoho API Error (${response.status}): ${JSON.stringify(result)}`);
   }
-  return await response.json();
+  return result;
 }
 
 /**
