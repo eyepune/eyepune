@@ -359,14 +359,30 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                 console.warn('Failed to save activity:', err);
             }
 
-            // Send Email notification to admin (Replacing non-existent WhatsApp function)
+            // Send Email notification to admin and trigger automation
             try {
+                // 1. Trigger Automation for the lead (Trigger: new_assessment)
+                await fetch('/api/automation/trigger', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        trigger: 'new_assessment',
+                        payload: {
+                            name: formData.lead_name,
+                            email: formData.lead_email,
+                            business: formData.company_name,
+                            score: growthScore
+                        }
+                    })
+                });
+
+                // 2. Notify Admin
                 await base44.integrations.Core.SendEmail({
                     to: 'connect@eyepune.com',
                     subject: `New AI Assessment: ${formData.lead_name} (Score: ${growthScore})`,
                     html: `
                         <div style="font-family: sans-serif; padding: 20px;">
-                            <h2>New AI Assessment Completed</h2>
+                            <h2>New AI Business Assessment</h2>
                             <p><strong>Name:</strong> ${formData.lead_name}</p>
                             <p><strong>Email:</strong> ${formData.lead_email}</p>
                             <p><strong>Company:</strong> ${formData.company_name}</p>
@@ -377,7 +393,7 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                     `
                 });
             } catch (e) {
-                console.log('Admin notification failed (non-critical):', e);
+                console.log('Automations/Notifications failed (non-critical):', e);
             }
 
             console.log('Assessment saved successfully, setting report...');

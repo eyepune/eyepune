@@ -16,7 +16,9 @@ const DEFAULT_FROM = process.env.EMAIL_FROM || `EyE PunE <${ZOHO_USERNAME}>`;
  * Refreshes the Zoho OAuth access token
  */
 async function getZohoAccessToken() {
-  if (!ZOHO_REFRESH_TOKEN) throw new Error('ZOHO_REFRESH_TOKEN is missing');
+  if (!ZOHO_REFRESH_TOKEN) {
+    throw new Error('ZOHO_REFRESH_TOKEN is missing. Please visit /api/zoho/auth to authorize the application.');
+  }
   
   // Try .in first (common for Pune/India), then .com as fallback if needed
   const domains = ['zoho.in', 'zoho.com'];

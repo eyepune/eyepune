@@ -108,8 +108,25 @@ export default function Booking() {
                 });
             } catch (err) { console.warn('Activity log failed:', err); }
 
-            // Send email notifications to admin (Replacing missing Edge Functions)
+            // Send email notifications to admin and trigger automation
             try {
+                // 1. Trigger Automation for the lead (Trigger: new_booking)
+                await fetch('/api/automation/trigger', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        trigger: 'new_booking',
+                        payload: {
+                            name: formData.name,
+                            email: formData.email,
+                            date: selectedDate.toLocaleDateString(),
+                            time: timeStr,
+                            company: formData.company
+                        }
+                    })
+                });
+
+                // 2. Notify Admin
                 await base44.integrations.Core.SendEmail({
                     to: 'connect@eyepune.com',
                     subject: `New Booking: ${formData.name}`,
@@ -123,23 +140,8 @@ export default function Booking() {
                         </div>
                     `
                 });
-                
-                await base44.integrations.Core.SendEmail({
-                    to: formData.email,
-                    subject: `Consultation Confirmed - EyE PunE`,
-                    html: `
-                        <div style="font-family: sans-serif; padding: 20px;">
-                            <h2>Your Consultation is Confirmed!</h2>
-                            <p>Hi ${formData.name},</p>
-                            <p>We've received your booking for a free consultation.</p>
-                            <p><strong>Date:</strong> ${selectedDate.toLocaleString()}</p>
-                            <p><strong>Meeting Link:</strong> <a href="https://meet.google.com/lookup/eyepune">Join Google Meet</a></p>
-                            <p>Our team will see you then!</p>
-                        </div>
-                    `
-                });
             } catch (e) {
-                console.log('Email notifications failed (non-critical):', e);
+                console.log('Automations/Notifications failed (non-critical):', e);
             }
 
             setMeetLink('https://meet.google.com/lookup/eyepune');

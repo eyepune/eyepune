@@ -38,6 +38,10 @@ export async function POST(request) {
   }
 }
 
+export async function PUT(request) {
+  return PATCH(request);
+}
+
 export async function PATCH(request) {
   try {
     const body = await request.json();

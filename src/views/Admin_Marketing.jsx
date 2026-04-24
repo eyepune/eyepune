@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -46,6 +47,14 @@ function Admin_Marketing() {
         queryKey: ['admin-email-templates'],
         queryFn: async () => {
             const res = await fetch('/api/email/templates');
+            return res.json();
+        }
+    });
+
+    const { data: systemStatus } = useQuery({
+        queryKey: ['system-status'],
+        queryFn: async () => {
+            const res = await fetch('/api/system/status');
             return res.json();
         }
     });
@@ -143,6 +152,39 @@ function Admin_Marketing() {
                             <Plus className="w-4 h-4 mr-2" /> New Automation
                         </Button>
                     </div>
+                </div>
+
+                {/* System Status Banner */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <Card className="bg-[#111] border-white/[0.06] overflow-hidden">
+                        <CardContent className="p-6 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${systemStatus?.zoho?.configured ? 'bg-green-500/10' : 'bg-yellow-500/10'}`}>
+                                    <Mail className={`w-5 h-5 ${systemStatus?.zoho?.configured ? 'text-green-500' : 'text-yellow-500'}`} />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold text-white">Zoho Mail Status</p>
+                                    <p className="text-xs text-gray-500">
+                                        {systemStatus?.zoho?.configured ? 'Connected & Ready' : 'Authorization Required'}
+                                    </p>
+                                </div>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={() => window.open('/api/zoho/auth', '_blank')} className="border-white/[0.06] text-xs text-white">
+                                {systemStatus?.zoho?.configured ? 'Re-authorize' : 'Authorize Now'}
+                            </Button>
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-[#111] border-white/[0.06]">
+                        <CardContent className="p-6 flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                <Bot className="w-5 h-5 text-blue-500" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-bold text-white">Automation Engine</p>
+                                <p className="text-xs text-gray-500">Watching {automations.length} active rules</p>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 <Tabs defaultValue="campaigns" className="mb-6">
