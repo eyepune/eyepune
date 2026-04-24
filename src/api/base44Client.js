@@ -91,9 +91,12 @@ const auth = {
    */
   async logout(returnUrl) {
     await supabase.auth.signOut();
-    if (returnUrl && typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       // Redirect to login page after sign out
-      window.location.href = `/login?redirect=${encodeURIComponent(returnUrl)}`;
+      const loginUrl = returnUrl 
+        ? `/login?redirect=${encodeURIComponent(returnUrl)}`
+        : '/login';
+      window.location.href = loginUrl;
     }
   },
 

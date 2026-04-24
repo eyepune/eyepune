@@ -22,11 +22,16 @@ export default function Login() {
 
     React.useEffect(() => {
         const checkExistingSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session?.user) {
-                await checkRoleAndRedirect(session.user.id);
+            try {
+                const { data, error } = await supabase.auth.getSession();
+                if (data?.session?.user) {
+                    await checkRoleAndRedirect(data.session.user.id);
+                }
+            } catch (err) {
+                console.error("Session check error:", err);
+            } finally {
+                setIsCheckingSession(false);
             }
-            setIsCheckingSession(false);
         };
         checkExistingSession();
     }, []);
