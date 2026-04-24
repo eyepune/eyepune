@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,7 +32,8 @@ export default function Contact() {
 
         setIsSubmitting(true);
         try {
-            const submissionData = {
+            // 1. Save inquiry to Supabase
+            const { error: dbError } = await supabase.from('inquiries').insert([{
                 full_name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
@@ -40,53 +41,55 @@ export default function Contact() {
                 service_interest: formData.service_interest,
                 message: formData.message,
                 status: 'new'
-            };
-            const inquiry = await base44.entities.Inquiry.create(submissionData);
+            }]);
+            if (dbError) throw dbError;
 
-            // Trigger Automations (Managing templates in Dashboard > Email Templates)
-            try {
-                // 1. Send automated response to user (Trigger: new_inquiry)
-                await fetch('/api/automation/trigger', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        trigger: 'new_inquiry',
-                        payload: {
-                            name: formData.name,
-                            email: formData.email,
-                            company: formData.company,
-                            service: formData.service_interest
-                        }
-                    })
-                });
+            // 2. Trigger automation (sends welcome email to lead)
+            // Non-blocking — failure does not interrupt the user flow
+            fetch('/api/automation/trigger', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    trigger: 'new_inquiry',
+                    payload: {
+                        name: formData.name,
+                        email: formData.email,
+                        company: formData.company || 'their business',
+                        service: formData.service_interest || 'General Inquiry'
+                    }
+                })
+            }).catch(err => console.warn('[Contact] Automation trigger failed:', err));
 
-                // 2. Notify Admin (Using a generic notify trigger or direct send)
-                await base44.integrations.Core.SendEmail({
+            // 3. Send admin notification email
+            fetch('/api/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
                     to: 'connect@eyepune.com',
-                    subject: `New Inquiry: ${formData.name}`,
+                    subject: `🔔 New Inquiry: ${formData.name} — ${formData.service_interest || 'General'}`,
                     html: `
-                        <div style="font-family: sans-serif; padding: 20px; color: #333; border: 1px solid #eee; border-radius: 12px;">
-                            <h2 style="color: #ef4444;">New Website Inquiry</h2>
-                            <p><strong>Name:</strong> ${formData.name}</p>
-                            <p><strong>Email:</strong> ${formData.email}</p>
-                            <p><strong>Phone:</strong> ${formData.phone || 'Not provided'}</p>
-                            <p><strong>Service:</strong> ${formData.service_interest || 'General'}</p>
-                            <p><strong>Message:</strong></p>
-                            <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">${formData.message}</div>
-                            <p style="margin-top: 25px;">
-                                <a href="${window.location.origin}/Admin_CRM" style="padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Open CRM Dashboard</a>
-                            </p>
+                        <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px;">
+                            <h2 style="color: #ef4444; margin-top: 0;">🔔 New Website Inquiry</h2>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr><td style="padding: 8px 0; color: #6b7280; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: 600; color: #111827;">${formData.name}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Email</td><td style="padding: 8px 0; color: #111827;"><a href="mailto:${formData.email}">${formData.email}</a></td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Phone</td><td style="padding: 8px 0; color: #111827;">${formData.phone || '—'}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Company</td><td style="padding: 8px 0; color: #111827;">${formData.company || '—'}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Service</td><td style="padding: 8px 0; color: #111827;">${formData.service_interest || 'General'}</td></tr>
+                            </table>
+                            <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #ef4444; margin: 16px 0;">
+                                <p style="margin: 0; color: #374151;">${formData.message}</p>
+                            </div>
+                            <a href="https://eyepune.com/Admin_CRM" style="display: inline-block; padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Open CRM Dashboard →</a>
                         </div>
                     `
-                });
-            } catch (automationErr) {
-                console.warn('Automation trigger failed:', automationErr);
-            }
+                })
+            }).catch(err => console.warn('[Contact] Admin notification failed:', err));
 
             setIsSuccess(true);
         } catch (error) {
-            console.error('Submission failed with error:', error);
-            alert(`Error: ${error.message || 'The server did not respond'}. Please check your internet or try refreshing.`);
+            console.error('Contact form submission failed:', error);
+            alert(`Error: ${error.message || 'The server did not respond. Please try again.'}`);
         } finally {
             setIsSubmitting(false);
         }

@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
-import { sendEmail } from '@/lib/email-service';
+
+/**
+ * POST /api/email
+ * Unified endpoint for sending single emails (admin notifications, manual sends, etc.)
+ * Uses the shared email-service which auto-selects Zoho → Resend as fallback.
+ */
 
 // Simple in-memory rate limiter
 const rateLimiter = new Map();
-const RATE_LIMIT_WINDOW = 60 * 1000;
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const RATE_LIMIT_MAX = 10;
 
 function checkRateLimit(ip) {
@@ -21,7 +26,7 @@ function checkRateLimit(ip) {
 export async function POST(request) {
   const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
   if (!checkRateLimit(clientIp)) {
-    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+    return NextResponse.json({ error: 'Rate limit exceeded. Please wait a moment.' }, { status: 429 });
   }
 
   try {
@@ -29,13 +34,14 @@ export async function POST(request) {
     const { to, subject } = payload;
 
     if (!to || !subject) {
-      return NextResponse.json({ error: 'Missing required fields (to, subject)' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing required fields: to, subject' }, { status: 400 });
     }
 
+    const { sendEmail } = await import('@/lib/email-service');
     const result = await sendEmail(payload);
     return NextResponse.json({ success: true, result });
   } catch (error) {
     console.error('[Email API] Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal error' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -71,8 +71,8 @@ export default function Booking() {
             const dateStr = selectedDate.toISOString().split('T')[0];
             const timeStr = selectedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            // Create booking in database
-            const booking = await base44.entities.Booking.create({
+            // 1. Create booking in Supabase
+            const { error: bookingError } = await supabase.from('bookings').insert([{
                 full_name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
@@ -84,10 +84,11 @@ export default function Booking() {
                 status: 'pending',
                 notes: formData.notes,
                 meeting_link: 'https://meet.google.com/lookup/eyepune'
-            });
+            }]);
+            if (bookingError) throw bookingError;
 
-            // Create lead
-            const lead = await base44.entities.Lead.create({
+            // 2. Create lead in Supabase
+            await supabase.from('leads').insert([{
                 full_name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
@@ -96,53 +97,47 @@ export default function Booking() {
                 status: 'contacted',
                 score: 50,
                 notes: `Consultation booked for ${selectedDate.toLocaleString()}`
-            });
+            }]).then(({ error }) => { if (error) console.warn('Lead creation failed:', error); });
 
-            // Log activity
-            try {
-                await base44.entities.Activity.create({
-                    lead_id: lead.id,
-                    type: 'booking',
-                    description: `Scheduled free consultation for ${selectedDate.toLocaleString()}`,
-                    performed_by: 'system'
-                });
-            } catch (err) { console.warn('Activity log failed:', err); }
+            // 3. Trigger booking confirmation automation (sends email to lead) — non-blocking
+            fetch('/api/automation/trigger', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    trigger: 'new_booking',
+                    payload: {
+                        name: formData.name,
+                        email: formData.email,
+                        date: selectedDate.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+                        time: timeStr,
+                        company: formData.company || 'their business'
+                    }
+                })
+            }).catch(err => console.warn('[Booking] Automation trigger failed:', err));
 
-            // Send email notifications to admin and trigger automation
-            try {
-                // 1. Trigger Automation for the lead (Trigger: new_booking)
-                await fetch('/api/automation/trigger', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        trigger: 'new_booking',
-                        payload: {
-                            name: formData.name,
-                            email: formData.email,
-                            date: selectedDate.toLocaleDateString(),
-                            time: timeStr,
-                            company: formData.company
-                        }
-                    })
-                });
-
-                // 2. Notify Admin
-                await base44.integrations.Core.SendEmail({
+            // 4. Admin notification email — non-blocking
+            fetch('/api/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
                     to: 'connect@eyepune.com',
-                    subject: `New Booking: ${formData.name}`,
+                    subject: `📅 New Booking: ${formData.name} — ${dateStr} at ${timeStr}`,
                     html: `
-                        <div style="font-family: sans-serif; padding: 20px;">
-                            <h2>New Consultation Booked</h2>
-                            <p><strong>Name:</strong> ${formData.name}</p>
-                            <p><strong>Email:</strong> ${formData.email}</p>
-                            <p><strong>Date/Time:</strong> ${selectedDate.toLocaleString()}</p>
-                            <p><strong>Notes:</strong> ${formData.notes}</p>
+                        <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px;">
+                            <h2 style="color: #ef4444; margin-top: 0;">📅 New Consultation Booked</h2>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr><td style="padding: 8px 0; color: #6b7280; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: 600; color: #111827;">${formData.name}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Email</td><td style="padding: 8px 0; color: #111827;"><a href="mailto:${formData.email}">${formData.email}</a></td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Phone</td><td style="padding: 8px 0; color: #111827;">${formData.phone || '—'}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Date</td><td style="padding: 8px 0; font-weight: 600; color: #111827;">${dateStr}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Time</td><td style="padding: 8px 0; font-weight: 600; color: #111827;">${timeStr}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Notes</td><td style="padding: 8px 0; color: #111827;">${formData.notes || '—'}</td></tr>
+                            </table>
+                            <a href="https://eyepune.com/Admin_Forms" style="display: inline-block; padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 16px;">View Bookings Dashboard →</a>
                         </div>
                     `
-                });
-            } catch (e) {
-                console.log('Automations/Notifications failed (non-critical):', e);
-            }
+                })
+            }).catch(err => console.warn('[Booking] Admin notification failed:', err));
 
             setMeetLink('https://meet.google.com/lookup/eyepune');
             setIsSuccess(true);

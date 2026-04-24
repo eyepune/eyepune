@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -304,10 +304,10 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                 benefit: 'Cut operational costs by 25%'
             });
 
-            // Save to database (each write is individually wrapped so failures don't block the report)
+            // Save to database via Supabase (each write is individually wrapped so failures don't block the report)
             let savedAssessment = null;
             try {
-                savedAssessment = await base44.entities.AI_Assessment.create({
+                const { data, error } = await supabase.from('ai_assessments').insert([{
                     full_name: formData.lead_name,
                     email: formData.lead_email,
                     business_name: formData.company_name,
@@ -315,37 +315,37 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                     score: growthScore,
                     ai_report: aiResponse,
                     converted_to_lead: false
-                });
+                }]).select().single();
+                if (error) console.warn('Failed to save assessment:', error);
+                else savedAssessment = data;
             } catch (err) {
                 console.warn('Failed to save assessment:', err);
             }
 
             let savedLead = null;
             try {
-                savedLead = await base44.entities.Lead.create({
+                const { data, error } = await supabase.from('leads').insert([{
                     full_name: formData.lead_name,
                     email: formData.lead_email,
                     phone: formData.lead_phone,
                     company: formData.company_name,
                     source: 'ai_assessment',
                     status: 'new',
-                    score: growthScore, // Corrected column name
+                    score: growthScore,
                     notes: `Completed AI Assessment. Biggest challenge: ${answers.biggest_challenge}`
-                });
+                }]).select().single();
+                if (error) console.warn('Failed to save lead:', error);
+                else savedLead = data;
             } catch (err) {
                 console.warn('Failed to save lead:', err);
             }
 
-            // Link assessment ↔ lead if both were saved
-            if (savedAssessment && savedLead) {
-                try {
-                    await base44.entities.AI_Assessment.update(savedAssessment.id, {
-                        converted_to_lead: true,
-                        lead_id: savedLead.id
-                    });
-                } catch (err) {
-                    console.warn('Failed to link assessment to lead:', err);
-                }
+            // Link assessment to lead if both were saved
+            if (savedAssessment?.id && savedLead?.id) {
+                supabase.from('ai_assessments')
+                    .update({ converted_to_lead: true, lead_id: savedLead.id })
+                    .eq('id', savedAssessment.id)
+                    .then(({ error }) => { if (error) console.warn('Failed to link assessment:', error); });
             }
 
             try {
@@ -360,41 +360,49 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
             }
 
             // Send Email notification to admin and trigger automation
-            try {
-                // 1. Trigger Automation for the lead (Trigger: new_assessment)
-                await fetch('/api/automation/trigger', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        trigger: 'new_assessment',
-                        payload: {
-                            name: formData.lead_name,
-                            email: formData.lead_email,
-                            business: formData.company_name,
-                            score: growthScore
-                        }
-                    })
-                });
+            // Non-blocking — failures do not affect the user experience
 
-                // 2. Notify Admin
-                await base44.integrations.Core.SendEmail({
+            // 1. Trigger automation (sends assessment report email to lead)
+            fetch('/api/automation/trigger', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    trigger: 'new_assessment',
+                    payload: {
+                        name: formData.lead_name,
+                        email: formData.lead_email,
+                        business: formData.company_name || 'their business',
+                        score: growthScore
+                    }
+                })
+            }).catch(err => console.warn('[Assessment] Automation trigger failed:', err));
+
+            // 2. Admin notification email
+            fetch('/api/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
                     to: 'connect@eyepune.com',
-                    subject: `New AI Assessment: ${formData.lead_name} (Score: ${growthScore})`,
+                    subject: `🤖 New AI Assessment: ${formData.lead_name} (Score: ${growthScore}/100)`,
                     html: `
-                        <div style="font-family: sans-serif; padding: 20px;">
-                            <h2>New AI Business Assessment</h2>
-                            <p><strong>Name:</strong> ${formData.lead_name}</p>
-                            <p><strong>Email:</strong> ${formData.lead_email}</p>
-                            <p><strong>Company:</strong> ${formData.company_name}</p>
-                            <p><strong>Growth Score:</strong> ${growthScore}/100</p>
-                            <p><strong>Challenge:</strong> ${answers.biggest_challenge}</p>
-                            <p><a href="${window.location.origin}/Admin_Dashboard" style="padding: 10px 20px; background: #ef4444; color: white; text-decoration: none; border-radius: 5px;">View in Dashboard</a></p>
+                        <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px;">
+                            <h2 style="color: #ef4444; margin-top: 0;">🤖 New AI Business Assessment</h2>
+                            <div style="background: linear-gradient(135deg, #ef4444, #f97316); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px; color: white;">
+                                <p style="margin: 0 0 4px; font-size: 13px; opacity: 0.85;">Growth Score</p>
+                                <div style="font-size: 48px; font-weight: 900; line-height: 1;">${growthScore}</div>
+                                <p style="margin: 4px 0 0; opacity: 0.9; font-size: 14px;">out of 100</p>
+                            </div>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr><td style="padding: 8px 0; color: #6b7280; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: 600; color: #111827;">${formData.lead_name}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Email</td><td style="padding: 8px 0; color: #111827;"><a href="mailto:${formData.lead_email}">${formData.lead_email}</a></td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Company</td><td style="padding: 8px 0; color: #111827;">${formData.company_name || '—'}</td></tr>
+                                <tr><td style="padding: 8px 0; color: #6b7280;">Challenge</td><td style="padding: 8px 0; color: #111827;">${answers.biggest_challenge || '—'}</td></tr>
+                            </table>
+                            <a href="https://eyepune.com/Admin_Dashboard" style="display: inline-block; padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 16px;">View in Dashboard →</a>
                         </div>
                     `
-                });
-            } catch (e) {
-                console.log('Automations/Notifications failed (non-critical):', e);
-            }
+                })
+            }).catch(err => console.warn('[Assessment] Admin notification failed:', err));
 
             console.log('Assessment saved successfully, setting report...');
             
