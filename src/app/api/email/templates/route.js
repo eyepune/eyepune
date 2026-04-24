@@ -1,18 +1,24 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/integrations/supabase/client';
 
-// GET — List templates
 export async function GET() {
-  const { data, error } = await supabase
-    .from('email_templates')
-    .select('*')
-    .order('created_at', { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from('email_templates')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+    if (error) {
+      console.error('[API Templates] GET Error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json(data);
+  } catch (err) {
+    console.error('[API Templates] GET Exception:', err);
+    return NextResponse.json({ error: err.message }, { status: 400 });
+  }
 }
 
-// POST — Create template
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -22,47 +28,35 @@ export async function POST(request) {
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      console.error('[API Templates] POST Error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
     return NextResponse.json(data);
   } catch (err) {
+    console.error('[API Templates] POST Exception:', err);
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
 
-// PUT — Update template
-export async function PUT(request) {
-  try {
-    const body = await request.json();
-    const { id, ...updateData } = body;
-    
-    if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
-
-    const { data, error } = await supabase
-      .from('email_templates')
-      .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json(data);
-  } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
-  }
-}
-
-// DELETE — Delete template
 export async function DELETE(request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
-  if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
+    const { error } = await supabase
+      .from('email_templates')
+      .delete()
+      .eq('id', id);
 
-  const { error } = await supabase
-    .from('email_templates')
-    .delete()
-    .eq('id', id);
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ success: true });
+    if (error) {
+      console.error('[API Templates] DELETE Error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error('[API Templates] DELETE Exception:', err);
+    return NextResponse.json({ error: err.message }, { status: 400 });
+  }
 }
