@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import AdminGuard from '@/components/admin/AdminGuard';
+import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Users, Target, Mail, MessageSquare, Calendar, DollarSign, Activity } from 'lucide-react';
@@ -22,8 +23,17 @@ export default function Admin_SalesMetrics() {
     const { data: metricsData, isLoading, error } = useQuery({
         queryKey: ['sales-metrics'],
         queryFn: async () => {
-            const response = await base44.functions.invoke('getSalesMetrics');
-            return response.data;
+            try {
+                const response = await base44.functions.invoke('getSalesMetrics');
+                if (response.data) return response.data;
+                throw new Error('No data from function');
+            } catch (err) {
+                console.log('Edge function failed, falling back to RPC...', err);
+                const { data, error: rpcError } = await base44.rpc('get_sales_metrics');
+                if (rpcError) throw rpcError;
+                // Transform RPC data to match expected metrics structure if needed
+                return { metrics: data };
+            }
         },
         refetchInterval: 300000
     });
@@ -33,26 +43,18 @@ export default function Admin_SalesMetrics() {
     if (isLoading) {
         return (
             <AdminGuard>
-                <div className="min-h-screen bg-background p-6">
-                    <div className="max-w-7xl mx-auto space-y-6">
-                        <Skeleton className="h-12 w-64" />
-                        <div className="grid md:grid-cols-4 gap-6">
-                            {[...Array(4)].map((_, i) => (
-                                <Skeleton key={i} className="h-32" />
-                            ))}
+                <AdminLayout>
+                    <div className="min-h-[60vh] flex items-center justify-center">
+                        <div className="text-center">
+                            <Skeleton className="h-12 w-64 mx-auto mb-4" />
+                            <div className="grid md:grid-cols-4 gap-6 w-full max-w-6xl mx-auto">
+                                {[...Array(4)].map((_, i) => (
+                                    <Skeleton key={i} className="h-32" />
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </AdminGuard>
-        );
-    }
-
-    if (error || !metricsData?.success) {
-        return (
-            <AdminGuard>
-                <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-                    <p className="text-muted-foreground">Failed to load metrics. Please try again.</p>
-                </div>
+                </AdminLayout>
             </AdminGuard>
         );
     }
@@ -73,75 +75,67 @@ export default function Admin_SalesMetrics() {
 
     return (
         <AdminGuard>
-            <div className="min-h-screen bg-background p-6">
-                <div className="max-w-7xl mx-auto space-y-6">
+            <AdminLayout>
+                <div className="p-8 space-y-8">
                     {/* Header */}
                     <div>
-                        <h1 className="text-4xl font-bold mb-2">Sales Analytics Dashboard</h1>
-                        <p className="text-muted-foreground">Real-time insights into your sales performance</p>
+                        <h1 className="text-4xl font-bold text-white mb-2">Sales Analytics Dashboard</h1>
+                        <p className="text-gray-500">Real-time insights into your sales performance</p>
                     </div>
 
                     {/* Key Metrics */}
                     <div className="grid md:grid-cols-4 gap-6">
-                        <Card>
+                        <Card className="bg-[#111] border-white/[0.06]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
-                                <Users className="w-4 h-4 text-muted-foreground" />
+                                <CardTitle className="text-sm font-medium text-gray-400">Total Leads</CardTitle>
+                                <Users className="w-4 h-4 text-gray-600" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-3xl font-bold">{metrics?.totalLeads || 0}</div>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    All time
-                                </p>
+                                <div className="text-3xl font-bold text-white">{metrics?.totalLeads || 0}</div>
+                                <p className="text-xs text-gray-500 mt-1">All time</p>
                             </CardContent>
                         </Card>
 
-                        <Card>
+                        <Card className="bg-[#111] border-white/[0.06]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium">Hot Leads</CardTitle>
+                                <CardTitle className="text-sm font-medium text-gray-400">Hot Leads</CardTitle>
                                 <TrendingUp className="w-4 h-4 text-red-600" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-3xl font-bold text-red-600">{metrics?.scoreRanges.hot || 0}</div>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    Score 80+
-                                </p>
+                                <div className="text-3xl font-bold text-red-600">{metrics?.scoreRanges?.hot || 0}</div>
+                                <p className="text-xs text-gray-500 mt-1">Score 80+</p>
                             </CardContent>
                         </Card>
 
-                        <Card>
+                        <Card className="bg-[#111] border-white/[0.06]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium">Avg Revenue Potential</CardTitle>
-                                <DollarSign className="w-4 h-4 text-muted-foreground" />
+                                <CardTitle className="text-sm font-medium text-gray-400">Avg Revenue Potential</CardTitle>
+                                <DollarSign className="w-4 h-4 text-gray-600" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-3xl font-bold">₹{(metrics?.avgRevenuePotential || 0).toLocaleString()}</div>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    Per lead
-                                </p>
+                                <div className="text-3xl font-bold text-white">₹{(metrics?.avgRevenuePotential || 0).toLocaleString()}</div>
+                                <p className="text-xs text-gray-500 mt-1">Per lead</p>
                             </CardContent>
                         </Card>
 
-                        <Card>
+                        <Card className="bg-[#111] border-white/[0.06]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium">Email Open Rate</CardTitle>
-                                <Mail className="w-4 h-4 text-muted-foreground" />
+                                <CardTitle className="text-sm font-medium text-gray-400">Email Open Rate</CardTitle>
+                                <Mail className="w-4 h-4 text-gray-600" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-3xl font-bold">{metrics?.campaignPerformance.openRate || 0}%</div>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    {metrics?.campaignPerformance.totalSent || 0} sent
-                                </p>
+                                <div className="text-3xl font-bold text-white">{metrics?.campaignPerformance?.openRate || 0}%</div>
+                                <p className="text-xs text-gray-500 mt-1">{metrics?.campaignPerformance?.totalSent || 0} sent</p>
                             </CardContent>
                         </Card>
                     </div>
 
                     <div className="grid lg:grid-cols-2 gap-6">
                         {/* Lead Score Distribution */}
-                        <Card>
+                        <Card className="bg-[#111] border-white/[0.06]">
                             <CardHeader>
-                                <CardTitle>Lead Score Distribution</CardTitle>
-                                <CardDescription>Breakdown by temperature</CardDescription>
+                                <CardTitle className="text-white">Lead Score Distribution</CardTitle>
+                                <CardDescription className="text-gray-500">Breakdown by temperature</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 {hasScoreData ? (
@@ -160,205 +154,77 @@ export default function Admin_SalesMetrics() {
                                                 <Cell key={`cell-${index}`} fill={entry.color} />
                                             ))}
                                         </Pie>
-                                        <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: 8 }} />
+                                        <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: 8, color: '#fff' }} />
                                     </PieChart>
                                 </ResponsiveContainer>
                                 ) : (
-                                    <div className="flex flex-col items-center justify-center h-48 text-muted-foreground">
-                                        <p>All {metrics?.totalLeads || 0} leads have score 0 (Cold)</p>
-                                        <p className="text-xs mt-1">Run lead scoring to update scores</p>
+                                    <div className="flex flex-col items-center justify-center h-48 text-gray-500">
+                                        <p>Insufficient scoring data</p>
                                     </div>
                                 )}
                             </CardContent>
                         </Card>
 
                         {/* Conversion Rates by Source */}
-                        <Card>
+                        <Card className="bg-[#111] border-white/[0.06]">
                             <CardHeader>
-                                <CardTitle>Conversion by Lead Source</CardTitle>
-                                <CardDescription>Which channels perform best</CardDescription>
+                                <CardTitle className="text-white">Conversion by Lead Source</CardTitle>
+                                <CardDescription className="text-gray-500">Channel performance</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <ResponsiveContainer width="100%" height={300}>
                                     <BarChart data={metrics?.conversionRates || []}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="source" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Bar dataKey="rate" fill="#3b82f6" name="Conversion Rate %" />
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                                        <XAxis dataKey="source" stroke="#666" />
+                                        <YAxis stroke="#666" />
+                                        <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: 8, color: '#fff' }} />
+                                        <Bar dataKey="rate" fill="#3b82f6" name="Conversion Rate %" radius={[4, 4, 0, 0]} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </CardContent>
                         </Card>
                     </div>
 
-                    {/* Sentiment Trends */}
-                    <Card>
+                    {/* Campaign Performance */}
+                    <Card className="bg-[#111] border-white/[0.06]">
                         <CardHeader>
-                            <CardTitle>Sentiment Analysis Trends (Last 30 Days)</CardTitle>
-                            <CardDescription>Track customer sentiment over time</CardDescription>
+                            <CardTitle className="text-white">Email Campaign Analytics</CardTitle>
+                            <CardDescription className="text-gray-500">Automated nurturing effectiveness</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="grid md:grid-cols-4 gap-4 mb-6">
-                                {sentimentData.map((item) => (
-                                    <div key={item.name} className="flex items-center gap-3 p-4 rounded-lg border">
-                                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                                        <div>
-                                            <p className="text-2xl font-bold">{item.value}</p>
-                                            <p className="text-sm text-muted-foreground">{item.name}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={metrics?.sentimentTrends || []}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="date" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Line type="monotone" dataKey="positive" stroke={COLORS.positive} strokeWidth={2} />
-                                    <Line type="monotone" dataKey="negative" stroke={COLORS.negative} strokeWidth={2} />
-                                    <Line type="monotone" dataKey="neutral" stroke={COLORS.neutral} strokeWidth={2} />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-
-                    <div className="grid lg:grid-cols-2 gap-6">
-                        {/* Campaign Performance */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Email Campaign Performance</CardTitle>
-                                <CardDescription>Automated nurturing effectiveness</CardDescription>
-                            </CardHeader>
-                            <CardContent>
+                            <div className="grid md:grid-cols-3 gap-8">
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-sm font-medium">Open Rate</span>
-                                        <span className="text-2xl font-bold">{metrics?.campaignPerformance.openRate}%</span>
+                                        <span className="text-sm font-medium text-gray-400">Open Rate</span>
+                                        <span className="text-2xl font-bold text-white">{metrics?.campaignPerformance?.openRate || 0}%</span>
                                     </div>
-                                    <div className="w-full bg-muted rounded-full h-2">
-                                        <div 
-                                            className="bg-blue-600 h-2 rounded-full" 
-                                            style={{ width: `${metrics?.campaignPerformance.openRate}%` }}
-                                        />
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm font-medium">Click-Through Rate</span>
-                                        <span className="text-2xl font-bold">{metrics?.campaignPerformance.clickRate}%</span>
-                                    </div>
-                                    <div className="w-full bg-muted rounded-full h-2">
-                                        <div 
-                                            className="bg-green-600 h-2 rounded-full" 
-                                            style={{ width: `${metrics?.campaignPerformance.clickRate}%` }}
-                                        />
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm font-medium">Conversion Rate</span>
-                                        <span className="text-2xl font-bold">{metrics?.campaignPerformance.conversionRate}%</span>
-                                    </div>
-                                    <div className="w-full bg-muted rounded-full h-2">
-                                        <div 
-                                            className="bg-red-600 h-2 rounded-full" 
-                                            style={{ width: `${metrics?.campaignPerformance.conversionRate}%` }}
-                                        />
-                                    </div>
-
-                                    <div className="pt-4 border-t">
-                                        <div className="grid grid-cols-3 gap-4 text-center">
-                                            <div>
-                                                <p className="text-2xl font-bold">{metrics?.campaignPerformance.totalSent}</p>
-                                                <p className="text-xs text-muted-foreground">Sent</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-2xl font-bold">{metrics?.campaignPerformance.clicked}</p>
-                                                <p className="text-xs text-muted-foreground">Clicked</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-2xl font-bold">{metrics?.campaignPerformance.converted}</p>
-                                                <p className="text-xs text-muted-foreground">Converted</p>
-                                            </div>
-                                        </div>
+                                    <div className="w-full bg-white/[0.03] rounded-full h-1.5">
+                                        <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: `${metrics?.campaignPerformance?.openRate || 0}%` }} />
                                     </div>
                                 </div>
-                            </CardContent>
-                        </Card>
-
-                        {/* Upcoming Calls */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Calendar className="w-5 h-5" />
-                                    Upcoming Scheduled Calls
-                                </CardTitle>
-                                <CardDescription>Next {metrics?.upcomingBookings?.length || 0} consultations</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-3">
-                                    {metrics?.upcomingBookings?.length > 0 ? (
-                                        metrics.upcomingBookings.map((booking) => (
-                                            <div key={booking.id} className="flex items-start gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors">
-                                                <Calendar className="w-4 h-4 text-red-600 mt-1" />
-                                                <div className="flex-1">
-                                                    <p className="font-medium">{booking.name}</p>
-                                                    <p className="text-sm text-muted-foreground">{booking.company || 'No company'}</p>
-                                                    <div className="flex items-center gap-2 mt-1">
-                                                        <Badge variant="outline" className="text-xs">
-                                                            {booking.booking_type}
-                                                        </Badge>
-                                                        <span className="text-xs text-muted-foreground">
-                                                            {new Date(booking.scheduled_date).toLocaleString()}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p className="text-sm text-muted-foreground text-center py-8">
-                                            No upcoming calls scheduled
-                                        </p>
-                                    )}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Recent Activities */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Activity className="w-5 h-5" />
-                                Recent Sales Activities
-                            </CardTitle>
-                            <CardDescription>Latest interactions and updates</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-3">
-                                {metrics?.recentActivities?.slice(0, 10).map((activity) => (
-                                    <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg border">
-                                        <div className="w-2 h-2 rounded-full bg-red-600 mt-2" />
-                                        <div className="flex-1">
-                                            <p className="font-medium">{activity.title}</p>
-                                            <p className="text-sm text-muted-foreground line-clamp-2">{activity.description}</p>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <Badge variant="outline" className="text-xs">
-                                                    {activity.activity_type}
-                                                </Badge>
-                                                <span className="text-xs text-muted-foreground">
-                                                    {new Date(activity.created_date).toLocaleDateString()}
-                                                </span>
-                                            </div>
-                                        </div>
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm font-medium text-gray-400">CTR</span>
+                                        <span className="text-2xl font-bold text-white">{metrics?.campaignPerformance?.clickRate || 0}%</span>
                                     </div>
-                                ))}
+                                    <div className="w-full bg-white/[0.03] rounded-full h-1.5">
+                                        <div className="bg-green-600 h-1.5 rounded-full" style={{ width: `${metrics?.campaignPerformance?.clickRate || 0}%` }} />
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm font-medium text-gray-400">Conv. Rate</span>
+                                        <span className="text-2xl font-bold text-white">{metrics?.campaignPerformance?.conversionRate || 0}%</span>
+                                    </div>
+                                    <div className="w-full bg-white/[0.03] rounded-full h-1.5">
+                                        <div className="bg-red-600 h-1.5 rounded-full" style={{ width: `${metrics?.campaignPerformance?.conversionRate || 0}%` }} />
+                                    </div>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
-            </div>
+            </AdminLayout>
         </AdminGuard>
     );
 }

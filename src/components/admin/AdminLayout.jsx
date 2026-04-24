@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import Logo from '@/components/shared/Logo';
 import {
     LayoutDashboard, Users, UserPlus, Mail, Star, Image as ImageIcon,
-    FileText, LogOut, ChevronLeft, ChevronRight, MessageSquare
+    FileText, LogOut, ChevronLeft, ChevronRight, MessageSquare, Search, ShieldAlert
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -15,12 +15,14 @@ import { cn } from '@/lib/utils';
 const NAV_ITEMS = [
     { name: 'Dashboard', href: '/Admin_Dashboard', icon: LayoutDashboard },
     { name: 'CRM / Leads', href: '/Admin_CRM', icon: Users },
+    { name: 'Marketing & Automation', href: '/Admin_Marketing', icon: Mail },
     { name: 'Documents', href: '/Admin_Documents', icon: FileText },
-    { name: 'Email Marketing', href: '/Admin_EmailCampaigns', icon: Mail },
     { name: 'Testimonials', href: '/Admin_Testimonials', icon: Star },
     { name: 'Client Logos', href: '/Admin_ClientLogos', icon: ImageIcon },
     { name: 'Forms & Assessments', href: '/Admin_Forms', icon: FileText },
+    { name: 'SEO Management', href: '/Admin_SEO', icon: Search },
     { name: 'Admin Users', href: '/Admin_Users', icon: UserPlus },
+    { name: 'System Status', href: '/SystemStatus', icon: ShieldAlert },
 ];
 
 export default function AdminLayout({ children }) {

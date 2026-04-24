@@ -104,12 +104,12 @@ function Admin_Forms() {
                                     <tbody>
                                         {inquiries.map((inq) => (
                                             <tr key={inq.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
-                                                <td className="px-4 py-3 text-white text-sm">{inq.full_name || inq.name}</td>
-                                                <td className="px-4 py-3 text-gray-400 text-sm">{inq.email}</td>
+                                                <td className="px-4 py-3 text-white text-sm">{inq.full_name || inq.name || 'Anonymous'}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{inq.email || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm">{inq.phone || '-'}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm">{inq.service_interest || '-'}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm max-w-xs truncate">{inq.message || '-'}</td>
-                                                <td className="px-4 py-3 text-gray-500 text-xs">{new Date(inq.created_at).toLocaleDateString()}</td>
+                                                <td className="px-4 py-3 text-gray-500 text-xs">{inq.created_at ? new Date(inq.created_at).toLocaleDateString() : 'N/A'}</td>
                                                 <td className="px-4 py-3 text-right">
                                                     <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteInquiryMutation.mutate(inq.id); }}>
                                                         <Trash2 className="w-4 h-4 text-gray-400" />
@@ -148,16 +148,16 @@ function Admin_Forms() {
                                     <tbody>
                                         {bookings.map((b) => (
                                             <tr key={b.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
-                                                <td className="px-4 py-3 text-white text-sm">{b.full_name}</td>
-                                                <td className="px-4 py-3 text-gray-400 text-sm">{b.email}</td>
-                                                <td className="px-4 py-3 text-gray-400 text-sm capitalize">{b.service_type?.replace('_', ' ')}</td>
+                                                <td className="px-4 py-3 text-white text-sm">{b.full_name || b.name || 'Anonymous'}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{b.email || 'N/A'}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm capitalize">{b.service_type?.replace('_', ' ') || '-'}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm">
-                                                    {new Date(b.booking_date).toLocaleDateString()} at {b.booking_time}
+                                                    {b.booking_date ? new Date(b.booking_date).toLocaleDateString() : 'N/A'} at {b.booking_time || 'N/A'}
                                                 </td>
                                                 <td className="px-4 py-3">
                                                     <span className={`text-xs px-2 py-1 rounded-full ${
                                                         b.status === 'confirmed' ? 'bg-green-500/10 text-green-400' : 'bg-blue-500/10 text-blue-400'
-                                                    }`}>{b.status}</span>
+                                                    }`}>{b.status || 'pending'}</span>
                                                 </td>
                                                 <td className="px-4 py-3 text-right">
                                                     <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteBookingMutation.mutate(b.id); }}>
@@ -197,17 +197,17 @@ function Admin_Forms() {
                                     <tbody>
                                         {assessments.map((a) => (
                                             <tr key={a.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
-                                                <td className="px-4 py-3 text-white text-sm">{a.full_name}</td>
-                                                <td className="px-4 py-3 text-gray-400 text-sm">{a.email}</td>
+                                                <td className="px-4 py-3 text-white text-sm">{a.full_name || a.name || 'Anonymous'}</td>
+                                                <td className="px-4 py-3 text-gray-400 text-sm">{a.email || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-400 text-sm">{a.business_name || '-'}</td>
                                                 <td className="px-4 py-3">
                                                     <span className={`text-xs px-2 py-1 rounded-full ${
-                                                        a.score >= 70 ? 'bg-green-500/10 text-green-400' :
-                                                        a.score >= 40 ? 'bg-yellow-500/10 text-yellow-400' :
+                                                        (a.score || 0) >= 70 ? 'bg-green-500/10 text-green-400' :
+                                                        (a.score || 0) >= 40 ? 'bg-yellow-500/10 text-yellow-400' :
                                                         'bg-red-500/10 text-red-400'
-                                                    }`}>{a.score}/100</span>
+                                                    }`}>{a.score || 0}/100</span>
                                                 </td>
-                                                <td className="px-4 py-3 text-gray-500 text-xs">{new Date(a.created_at).toLocaleDateString()}</td>
+                                                <td className="px-4 py-3 text-gray-500 text-xs">{a.created_at ? new Date(a.created_at).toLocaleDateString() : 'N/A'}</td>
                                                 <td className="px-4 py-3 text-right">
                                                     <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteAssessmentMutation.mutate(a.id); }}>
                                                         <Trash2 className="w-4 h-4 text-gray-400" />

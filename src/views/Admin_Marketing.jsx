@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import AdminGuard from "@/components/admin/AdminGuard";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { motion } from 'framer-motion';
-import { Plus, Send, Pause, Play, BarChart3, Bot, Pencil, Loader2 } from 'lucide-react';
+import { Plus, Send, Pause, Play, BarChart3, Bot, Pencil, Loader2, Mail } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,24 +34,27 @@ function Admin_Marketing() {
         },
     });
 
-    const { data: automations = [], isLoading: isLoadingAutomations } = useQuery({
+    const { data: automations = [], isLoading: isLoadingAutomations, error: automationError } = useQuery({
         queryKey: ['admin-automations'],
         queryFn: async () => {
             const res = await fetch('/api/email/automations');
-            if (!res.ok) throw new Error('Failed to fetch automations');
-            return res.json();
+            const data = await res.json();
+            if (!res.ok || data.error) throw new Error(data.error || 'Failed to fetch automations');
+            return Array.isArray(data) ? data : [];
         }
     });
 
-    const { data: templates = [] } = useQuery({
+    const { data: templates = [], isLoading: isLoadingTemplates } = useQuery({
         queryKey: ['admin-email-templates'],
         queryFn: async () => {
             const res = await fetch('/api/email/templates');
-            return res.json();
+            const data = await res.json();
+            if (!res.ok || data.error) throw new Error(data.error || 'Failed to fetch templates');
+            return Array.isArray(data) ? data : [];
         }
     });
 
-    const { data: systemStatus } = useQuery({
+    const { data: systemStatus, isLoading: isLoadingStatus } = useQuery({
         queryKey: ['system-status'],
         queryFn: async () => {
             const res = await fetch('/api/system/verify');
@@ -150,6 +153,21 @@ function Admin_Marketing() {
         paused: 'bg-yellow-500/10 text-yellow-600'
     };
 
+    const isLoadingAny = isLoadingCampaigns || isLoadingAutomations || isLoadingTemplates || isLoadingStatus;
+
+    if (isLoadingAny && campaigns.length === 0 && automations.length === 0) {
+        return (
+            <AdminLayout>
+                <div className="min-h-screen bg-background flex items-center justify-center">
+                    <div className="text-center space-y-4">
+                        <Loader2 className="w-12 h-12 animate-spin text-red-500 mx-auto" />
+                        <p className="text-gray-500 animate-pulse">Initializing Marketing Engine...</p>
+                    </div>
+                </div>
+            </AdminLayout>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-background p-8">
             <div className="max-w-7xl mx-auto">
@@ -189,8 +207,13 @@ function Admin_Marketing() {
                                     </p>
                                 </div>
                             </div>
-                            <Button variant="outline" size="sm" onClick={() => window.open('/api/zoho/auth', '_blank')} className="border-white/[0.06] text-xs text-white">
-                                {systemStatus?.zoho?.configured ? 'Re-authorize' : 'Authorize Now'}
+                            <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={() => window.open('/api/zoho/auth', '_blank')} 
+                                className="bg-red-600 hover:bg-red-700 text-white border-none text-xs h-9 px-4"
+                            >
+                                {systemStatus?.zoho?.configured ? 'Re-authorize Zoho Mail' : 'Authorize Zoho Now'}
                             </Button>
                         </CardContent>
                     </Card>

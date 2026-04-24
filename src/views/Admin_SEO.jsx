@@ -413,7 +413,9 @@ function AdminSEO() {
 export default function AdminSEOPage() {
     return (
         <AdminGuard>
-            <AdminSEO />
+            <AdminLayout>
+                <AdminSEO />
+            </AdminLayout>
         </AdminGuard>
     );
 }
