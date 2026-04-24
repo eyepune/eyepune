@@ -86,7 +86,7 @@ export default function SystemStatus() {
                                 {!allTablesExist && (
                                     <div className="mt-4 p-3 bg-red-500/5 border border-red-500/20 rounded-lg">
                                         <p className="text-red-500 text-[10px] font-bold uppercase tracking-wider mb-1">Critical Action</p>
-                                        <p className="text-gray-400 text-[10px]">Execute <strong>FINAL_DATABASE_SYNC.sql</strong> to fix missing tables.</p>
+                                        <p className="text-gray-400 text-[10px]">Execute <strong>MASTER_EYEPUNE_DB.sql</strong> to fix missing tables.</p>
                                     </div>
                                 )}
                             </CardContent>
@@ -165,7 +165,7 @@ export default function SystemStatus() {
                             </div>
                             <div className="space-y-2">
                                 <h4 className="text-white text-xs font-bold flex items-center gap-2"><Database className="w-3 h-3 text-green-500" /> Database Sync</h4>
-                                <p className="text-gray-500 text-[10px] leading-relaxed">Always run the <strong>FINAL_DATABASE_SYNC.sql</strong> script after any major update to ensure RLS policies are up to date.</p>
+                                <p className="text-gray-500 text-[10px] leading-relaxed">Always run the <strong>MASTER_EYEPUNE_DB.sql</strong> script after any major update to ensure RLS policies are up to date.</p>
                             </div>
                         </div>
                     </div>

@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS public.ai_assessments (
 -- 4. MARKETING & AUTOMATION
 CREATE TABLE IF NOT EXISTS public.email_templates (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
+  name TEXT UNIQUE NOT NULL,
   subject TEXT NOT NULL,
   content TEXT NOT NULL,
   category TEXT DEFAULT 'marketing',
@@ -127,8 +127,10 @@ END $$;
 
 CREATE TABLE IF NOT EXISTS public.email_sequences (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
+  name TEXT UNIQUE NOT NULL,
   trigger_type TEXT,
+  template_id UUID REFERENCES public.email_templates(id) ON DELETE CASCADE,
+  status TEXT DEFAULT 'active',
   is_active BOOLEAN DEFAULT TRUE,
   steps JSONB DEFAULT '[]',
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -138,8 +140,13 @@ CREATE TABLE IF NOT EXISTS public.campaigns (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   type TEXT,
-  status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'active', 'paused', 'completed')),
+  subject TEXT,
+  content TEXT,
+  target_audience TEXT DEFAULT 'all',
+  status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'active', 'paused', 'completed', 'sent')),
   metrics JSONB DEFAULT '{}',
+  sent_at TIMESTAMPTZ,
+  recipient_count INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

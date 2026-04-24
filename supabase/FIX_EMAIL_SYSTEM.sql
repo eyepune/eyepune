@@ -16,7 +16,25 @@ ALTER TABLE email_templates ADD COLUMN IF NOT EXISTS variables JSONB DEFAULT '[]
 
 -- 2. Fix email_sequences table
 ALTER TABLE email_sequences ADD COLUMN IF NOT EXISTS trigger_type TEXT;
+ALTER TABLE email_sequences ADD COLUMN IF NOT EXISTS template_id UUID REFERENCES email_templates(id) ON DELETE CASCADE;
+ALTER TABLE email_sequences ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'active';
 ALTER TABLE email_sequences ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+ALTER TABLE email_sequences DROP CONSTRAINT IF EXISTS email_sequences_name_key;
+ALTER TABLE email_sequences ADD CONSTRAINT email_sequences_name_key UNIQUE (name);
+
+-- 2.1 Fix email_templates table unique constraint
+ALTER TABLE email_templates DROP CONSTRAINT IF EXISTS email_templates_name_key;
+ALTER TABLE email_templates ADD CONSTRAINT email_templates_name_key UNIQUE (name);
+
+-- 2.5 Fix campaigns table
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS subject TEXT;
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS content TEXT;
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS target_audience TEXT DEFAULT 'all';
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS sent_at TIMESTAMPTZ;
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS recipient_count INTEGER DEFAULT 0;
+-- Add 'sent' to the status check constraint if necessary, but altering check constraints is tricky. We can drop and recreate it:
+ALTER TABLE campaigns DROP CONSTRAINT IF EXISTS campaigns_status_check;
+ALTER TABLE campaigns ADD CONSTRAINT campaigns_status_check CHECK (status IN ('draft', 'active', 'paused', 'completed', 'sent'));
 
 -- 3. Ensure leads table has correct columns for automation
 ALTER TABLE leads ADD COLUMN IF NOT EXISTS score INTEGER DEFAULT 0;

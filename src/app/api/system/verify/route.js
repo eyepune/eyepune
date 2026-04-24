@@ -23,7 +23,7 @@ export async function GET() {
     };
 
     // Check tables
-    const tablesToCheck = ['users', 'leads', 'inquiries', 'ai_assessments', 'bookings'];
+    const tablesToCheck = ['users', 'leads', 'inquiries', 'ai_assessments', 'bookings', 'email_templates', 'email_sequences', 'campaigns'];
     
     for (const table of tablesToCheck) {
       const { error } = await supabase.from(table).select('id').limit(1);
