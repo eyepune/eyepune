@@ -13,17 +13,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail, Users, Target, Activity, Filter, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 const STATUS_COLORS = {
-    new: 'bg-blue-500/10 text-blue-400',
-    contacted: 'bg-yellow-500/10 text-yellow-400',
-    qualified: 'bg-orange-500/10 text-orange-400',
-    proposal_sent: 'bg-purple-500/10 text-purple-400',
-    negotiation: 'bg-pink-500/10 text-pink-400',
-    won: 'bg-green-500/10 text-green-400',
-    lost: 'bg-red-500/10 text-red-400',
+    new: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+    contacted: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+    qualified: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+    proposal_sent: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+    negotiation: 'bg-pink-500/10 text-pink-400 border-pink-500/20',
+    won: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    lost: 'bg-red-500/10 text-red-400 border-red-500/20',
 };
 
 function Admin_CRM() {
@@ -55,13 +56,19 @@ function Admin_CRM() {
         l.company?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    // Derived stats
+    const totalLeads = leads.length;
+    const wonLeads = leads.filter(l => l.status === 'won').length;
+    const newLeads = leads.filter(l => l.status === 'new').length;
+    const winRate = totalLeads > 0 ? ((wonLeads / totalLeads) * 100).toFixed(1) : 0;
+
     const createMutation = useMutation({
         mutationFn: async (data) => {
             const { data: result, error } = await supabase.from('leads').insert([data]).select().single();
             if (error) throw error;
             return result;
         },
-        onSuccess: () => { queryClient.invalidateQueries(['admin-leads']); resetForm(); toast.success('Lead added'); },
+        onSuccess: () => { queryClient.invalidateQueries(['admin-leads']); resetForm(); toast.success('Lead added successfully'); },
         onError: (e) => toast.error(e.message),
     });
 
@@ -71,7 +78,7 @@ function Admin_CRM() {
             if (error) throw error;
             return result;
         },
-        onSuccess: () => { queryClient.invalidateQueries(['admin-leads']); resetForm(); toast.success('Lead updated'); },
+        onSuccess: () => { queryClient.invalidateQueries(['admin-leads']); resetForm(); toast.success('Lead updated successfully'); },
         onError: (e) => toast.error(e.message),
     });
 
@@ -110,89 +117,196 @@ function Admin_CRM() {
     };
 
     return (
-        <div className="p-8">
-            <div className="flex items-center justify-between mb-8">
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 relative z-10">
                 <div>
-                    <h1 className="text-3xl font-bold text-white">CRM / Leads</h1>
-                    <p className="text-gray-500 mt-1">Manage your leads and pipeline</p>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4">
+                        <Users className="w-3.5 h-3.5 text-blue-500" />
+                        <span className="text-xs font-medium text-gray-300">Customer Relationship Management</span>
+                    </div>
+                    <h1 className="text-4xl font-bold text-white tracking-tight">Lead Pipeline</h1>
+                    <p className="text-gray-400 mt-2 text-sm max-w-xl">
+                        Track, manage, and convert your incoming leads into successful clients.
+                    </p>
                 </div>
-                <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="bg-red-600 hover:bg-red-700">
-                    <Plus className="w-4 h-4 mr-2" /> Add Lead
+                <Button 
+                    onClick={() => { resetForm(); setIsDialogOpen(true); }} 
+                    className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white shadow-lg shadow-blue-500/20 border-0 h-10"
+                >
+                    <Plus className="w-4 h-4 mr-2" /> Add New Lead
                 </Button>
             </div>
 
-            {/* Filters */}
-            <div className="flex gap-4 mb-6">
-                <div className="relative flex-1 max-w-sm">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <Input
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Search leads..."
-                        className="pl-10 bg-[#111] border-white/[0.06] text-white"
-                    />
-                </div>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-44 bg-[#111] border-white/[0.06] text-white">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Status</SelectItem>
-                        <SelectItem value="new">New</SelectItem>
-                        <SelectItem value="contacted">Contacted</SelectItem>
-                        <SelectItem value="qualified">Qualified</SelectItem>
-                        <SelectItem value="proposal_sent">Proposal Sent</SelectItem>
-                        <SelectItem value="negotiation">Negotiation</SelectItem>
-                        <SelectItem value="won">Won</SelectItem>
-                        <SelectItem value="lost">Lost</SelectItem>
-                    </SelectContent>
-                </Select>
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <CardContent className="p-6 flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-400">Total Leads</p>
+                            <h3 className="text-3xl font-bold text-white mt-1">{totalLeads}</h3>
+                        </div>
+                        <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                            <Users className="w-6 h-6 text-blue-500" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <CardContent className="p-6 flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-400">Won Accounts</p>
+                            <h3 className="text-3xl font-bold text-white mt-1">{wonLeads}</h3>
+                        </div>
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                            <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <CardContent className="p-6 flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-400">Win Rate</p>
+                            <h3 className="text-3xl font-bold text-white mt-1">{winRate}%</h3>
+                        </div>
+                        <div className="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                            <Target className="w-6 h-6 text-orange-500" />
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
 
-            {/* Leads Table */}
-            <Card className="bg-[#111] border-white/[0.06]">
+            {/* Filters & Table */}
+            <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 flex flex-col relative z-10 overflow-hidden">
+                <CardHeader className="border-b border-white/5 bg-white/[0.01] px-6 py-5">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <CardTitle className="text-white text-lg font-semibold flex items-center gap-2.5">
+                            <Activity className="w-5 h-5 text-gray-400" /> Pipeline Database
+                        </CardTitle>
+                        
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <div className="relative group w-full sm:w-64">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
+                                <Input
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    placeholder="Search by name, email, company..."
+                                    className="pl-10 bg-[#111] border-white/10 focus:border-blue-500/50 text-white placeholder:text-gray-600 transition-all"
+                                />
+                            </div>
+                            <div className="relative group w-full sm:w-44">
+                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
+                                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                    <SelectTrigger className="pl-10 bg-[#111] border-white/10 focus:border-blue-500/50 text-white transition-all">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-[#111] border-white/10 text-white">
+                                        <SelectItem value="all">All Statuses</SelectItem>
+                                        <SelectItem value="new">New</SelectItem>
+                                        <SelectItem value="contacted">Contacted</SelectItem>
+                                        <SelectItem value="qualified">Qualified</SelectItem>
+                                        <SelectItem value="proposal_sent">Proposal Sent</SelectItem>
+                                        <SelectItem value="negotiation">Negotiation</SelectItem>
+                                        <SelectItem value="won">Won</SelectItem>
+                                        <SelectItem value="lost">Lost</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                </CardHeader>
+                
                 <CardContent className="p-0">
                     {isLoading ? (
-                        <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-gray-500" /></div>
+                        <div className="flex flex-col items-center justify-center py-20">
+                            <Loader2 className="w-8 h-8 animate-spin text-blue-500 mb-4" />
+                            <p className="text-gray-400 text-sm">Loading pipeline data...</p>
+                        </div>
                     ) : filteredLeads.length === 0 ? (
-                        <div className="text-center py-12 text-gray-500">No leads found</div>
+                        <div className="flex flex-col items-center justify-center py-20 text-center px-4">
+                            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+                                <Search className="w-8 h-8 text-gray-600" />
+                            </div>
+                            <h3 className="text-lg font-medium text-white">No leads found</h3>
+                            <p className="text-gray-500 text-sm mt-1 max-w-sm">Try adjusting your search or filter parameters to find what you're looking for.</p>
+                            <Button variant="outline" onClick={() => { setSearchTerm(''); setStatusFilter('all'); }} className="mt-4 border-white/10 text-gray-300 hover:bg-white/5">
+                                Clear Filters
+                            </Button>
+                        </div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="border-b border-white/[0.06]">
-                                        <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Name</th>
-                                        <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Contact</th>
-                                        <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Company</th>
-                                        <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Source</th>
-                                        <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Status</th>
-                                        <th className="text-right px-4 py-3 text-xs text-gray-500 font-medium">Actions</th>
+                        <div className="overflow-x-auto custom-scrollbar">
+                            <table className="w-full text-sm text-left">
+                                <thead className="bg-white/[0.02] text-gray-400 text-xs uppercase tracking-wider">
+                                    <tr>
+                                        <th className="px-6 py-4 font-medium border-b border-white/5">Lead Details</th>
+                                        <th className="px-6 py-4 font-medium border-b border-white/5">Contact Info</th>
+                                        <th className="px-6 py-4 font-medium border-b border-white/5">Source</th>
+                                        <th className="px-6 py-4 font-medium border-b border-white/5">Status</th>
+                                        <th className="px-6 py-4 font-medium border-b border-white/5 text-right">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="divide-y divide-white/5">
                                     {filteredLeads.map((lead) => (
-                                        <tr key={lead.id} className="border-b border-white/[0.03] hover:bg-white/[0.02]">
-                                            <td className="px-4 py-3 text-white font-medium">{lead.full_name}</td>
-                                            <td className="px-4 py-3">
-                                                <div className="flex flex-col gap-0.5">
-                                                    {lead.email && <span className="text-xs text-gray-400 flex items-center gap-1"><Mail className="w-3 h-3" />{lead.email}</span>}
-                                                    {lead.phone && <span className="text-xs text-gray-400 flex items-center gap-1"><Phone className="w-3 h-3" />{lead.phone}</span>}
+                                        <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors group">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-bold border border-white/10 shadow-inner flex-shrink-0">
+                                                        {lead.full_name?.charAt(0) || 'U'}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-white font-medium group-hover:text-blue-400 transition-colors">{lead.full_name}</p>
+                                                        {lead.company && <p className="text-xs text-gray-500 mt-0.5">{lead.company}</p>}
+                                                    </div>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3 text-gray-400 text-sm">{lead.company || '-'}</td>
-                                            <td className="px-4 py-3 text-gray-400 text-sm capitalize">{lead.source?.replace('_', ' ')}</td>
-                                            <td className="px-4 py-3">
-                                                <span className={`text-xs px-2 py-1 rounded-full ${STATUS_COLORS[lead.status] || 'bg-gray-500/10 text-gray-400'}`}>
-                                                    {lead.status?.replace('_', ' ')}
-                                                </span>
+                                            <td className="px-6 py-4">
+                                                <div className="flex flex-col gap-1.5">
+                                                    {lead.email && (
+                                                        <a href={`mailto:${lead.email}`} className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 transition-colors">
+                                                            <Mail className="w-3.5 h-3.5" /> <span className="truncate max-w-[150px]">{lead.email}</span>
+                                                        </a>
+                                                    )}
+                                                    {lead.phone && (
+                                                        <a href={`tel:${lead.phone}`} className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 transition-colors">
+                                                            <Phone className="w-3.5 h-3.5" /> <span>{lead.phone}</span>
+                                                        </a>
+                                                    )}
+                                                </div>
                                             </td>
-                                            <td className="px-4 py-3 text-right">
-                                                <div className="flex justify-end gap-1">
-                                                    <Button variant="ghost" size="icon" onClick={() => handleEdit(lead)}>
-                                                        <Pencil className="w-4 h-4 text-gray-400" />
+                                            <td className="px-6 py-4">
+                                                <Badge variant="outline" className="bg-white/[0.03] text-gray-400 border-white/10 uppercase tracking-wide text-[10px] font-medium">
+                                                    {lead.source?.replace('_', ' ')}
+                                                </Badge>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <Badge className={cn(
+                                                    "border font-medium px-2.5 py-1 text-[10px] uppercase tracking-wider",
+                                                    STATUS_COLORS[lead.status] || 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+                                                )}>
+                                                    {lead.status?.replace('_', ' ')}
+                                                </Badge>
+                                            </td>
+                                            <td className="px-6 py-4 text-right">
+                                                <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <Button 
+                                                        variant="ghost" 
+                                                        size="icon" 
+                                                        onClick={() => handleEdit(lead)}
+                                                        className="h-8 w-8 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-md"
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
                                                     </Button>
-                                                    <Button variant="ghost" size="icon" onClick={() => { if (confirm('Delete?')) deleteMutation.mutate(lead.id); }}>
-                                                        <Trash2 className="w-4 h-4 text-gray-400" />
+                                                    <Button 
+                                                        variant="ghost" 
+                                                        size="icon" 
+                                                        onClick={() => { if (confirm('Are you sure you want to delete this lead?')) deleteMutation.mutate(lead.id); }}
+                                                        className="h-8 w-8 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-md"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
                                                     </Button>
                                                 </div>
                                             </td>
@@ -207,37 +321,69 @@ function Admin_CRM() {
 
             {/* Add/Edit Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={(open) => !open && resetForm()}>
-                <DialogContent className="bg-[#111] border-white/[0.06] text-white max-w-lg">
-                    <DialogHeader>
-                        <DialogTitle>{editingLead ? 'Edit Lead' : 'Add Lead'}</DialogTitle>
+                <DialogContent className="bg-[#0c0c0c]/95 backdrop-blur-2xl border-white/10 text-white max-w-2xl p-0 overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
+                    
+                    <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-white/[0.01]">
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            {editingLead ? <Pencil className="w-5 h-5 text-blue-500" /> : <Plus className="w-5 h-5 text-blue-500" />}
+                            {editingLead ? 'Edit Lead Profile' : 'Create New Lead'}
+                        </DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label className="text-gray-400">Full Name *</Label>
-                                <Input value={formData.full_name} onChange={(e) => setFormData({...formData, full_name: e.target.value})} required className="bg-[#1a1a1a] border-white/[0.06]" />
+                    
+                    <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Full Name <span className="text-red-500">*</span></Label>
+                                <Input 
+                                    value={formData.full_name} 
+                                    onChange={(e) => setFormData({...formData, full_name: e.target.value})} 
+                                    required 
+                                    placeholder="Jane Doe"
+                                    className="bg-[#111] border-white/10 focus:border-blue-500/50 transition-colors h-11" 
+                                />
                             </div>
-                            <div>
-                                <Label className="text-gray-400">Email</Label>
-                                <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="bg-[#1a1a1a] border-white/[0.06]" />
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Email Address</Label>
+                                <Input 
+                                    type="email" 
+                                    value={formData.email} 
+                                    onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                                    placeholder="jane@company.com"
+                                    className="bg-[#111] border-white/10 focus:border-blue-500/50 transition-colors h-11" 
+                                />
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label className="text-gray-400">Phone</Label>
-                                <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="bg-[#1a1a1a] border-white/[0.06]" />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Phone Number</Label>
+                                <Input 
+                                    value={formData.phone} 
+                                    onChange={(e) => setFormData({...formData, phone: e.target.value})} 
+                                    placeholder="+1 (555) 000-0000"
+                                    className="bg-[#111] border-white/10 focus:border-blue-500/50 transition-colors h-11" 
+                                />
                             </div>
-                            <div>
-                                <Label className="text-gray-400">Company</Label>
-                                <Input value={formData.company} onChange={(e) => setFormData({...formData, company: e.target.value})} className="bg-[#1a1a1a] border-white/[0.06]" />
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Company</Label>
+                                <Input 
+                                    value={formData.company} 
+                                    onChange={(e) => setFormData({...formData, company: e.target.value})} 
+                                    placeholder="Acme Corp"
+                                    className="bg-[#111] border-white/10 focus:border-blue-500/50 transition-colors h-11" 
+                                />
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label className="text-gray-400">Source</Label>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Lead Source</Label>
                                 <Select value={formData.source} onValueChange={(v) => setFormData({...formData, source: v})}>
-                                    <SelectTrigger className="bg-[#1a1a1a] border-white/[0.06]"><SelectValue /></SelectTrigger>
-                                    <SelectContent>
+                                    <SelectTrigger className="bg-[#111] border-white/10 h-11">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-[#111] border-white/10 text-white">
                                         <SelectItem value="website">Website</SelectItem>
                                         <SelectItem value="referral">Referral</SelectItem>
                                         <SelectItem value="social_media">Social Media</SelectItem>
@@ -246,11 +392,13 @@ function Admin_CRM() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div>
-                                <Label className="text-gray-400">Status</Label>
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Pipeline Status</Label>
                                 <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
-                                    <SelectTrigger className="bg-[#1a1a1a] border-white/[0.06]"><SelectValue /></SelectTrigger>
-                                    <SelectContent>
+                                    <SelectTrigger className="bg-[#111] border-white/10 h-11">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-[#111] border-white/10 text-white">
                                         <SelectItem value="new">New</SelectItem>
                                         <SelectItem value="contacted">Contacted</SelectItem>
                                         <SelectItem value="qualified">Qualified</SelectItem>
@@ -262,16 +410,35 @@ function Admin_CRM() {
                                 </Select>
                             </div>
                         </div>
-                        <div>
-                            <Label className="text-gray-400">Notes</Label>
-                            <Textarea value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} rows={3} className="bg-[#1a1a1a] border-white/[0.06]" />
+
+                        <div className="space-y-2">
+                            <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Internal Notes</Label>
+                            <Textarea 
+                                value={formData.notes} 
+                                onChange={(e) => setFormData({...formData, notes: e.target.value})} 
+                                rows={4} 
+                                placeholder="Add any relevant context, next steps, or conversation notes here..."
+                                className="bg-[#111] border-white/10 focus:border-blue-500/50 transition-colors resize-none custom-scrollbar" 
+                            />
                         </div>
-                        <div className="flex gap-2 pt-2">
-                            <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending} className="flex-1 bg-red-600 hover:bg-red-700">
-                                {(createMutation.isPending || updateMutation.isPending) ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                                {editingLead ? 'Update' : 'Add'} Lead
+
+                        <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+                            <Button 
+                                type="button" 
+                                variant="outline" 
+                                onClick={resetForm} 
+                                className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
+                            >
+                                Cancel
                             </Button>
-                            <Button type="button" variant="outline" onClick={resetForm} className="border-white/[0.06]">Cancel</Button>
+                            <Button 
+                                type="submit" 
+                                disabled={createMutation.isPending || updateMutation.isPending} 
+                                className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white shadow-lg shadow-blue-500/20 border-0 px-8"
+                            >
+                                {(createMutation.isPending || updateMutation.isPending) ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                                {editingLead ? 'Save Changes' : 'Create Lead'}
+                            </Button>
                         </div>
                     </form>
                 </DialogContent>
