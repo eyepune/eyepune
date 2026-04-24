@@ -46,21 +46,34 @@ export default function ChatbotWidget() {
         setIsLoading(true);
 
         try {
-            // Prepare conversation history for context
-            const conversationHistory = messages.map(msg => ({
-                role: msg.role,
-                content: msg.content,
-            }));
+            const systemPrompt = `You are the EyE PunE AI Assistant. EyE PunE is an AI-powered Digital Growth Agency based in Pune, India. 
+            We specialize in:
+            - AI Automation & Workflows
+            - Web Development & Sales Funnels
+            - Social Media Management
+            - Paid Ads (Google/Meta)
+            - Branding & Performance Marketing
+            
+            Be professional, helpful, and concise. If the user asks about specific services, encourage them to book a consultation or take our Free AI Assessment.
+            User's message: ${input}`;
 
-            const response = await base44.functions.invoke('chatbotAssistant', {
-                message: input,
-                conversationHistory,
+            const response = await fetch('/api/llm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    prompt: systemPrompt,
+                    temperature: 0.7
+                }),
             });
+
+            if (!response.ok) throw new Error('API failed');
+            
+            const data = await response.json();
 
             const assistantMessage = {
                 id: messageId.current++,
                 role: 'assistant',
-                content: response.data.reply,
+                content: data.content,
                 timestamp: new Date(),
             };
 
