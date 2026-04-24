@@ -54,8 +54,9 @@ function Admin_Marketing() {
     const { data: systemStatus } = useQuery({
         queryKey: ['system-status'],
         queryFn: async () => {
-            const res = await fetch('/api/system/status');
-            return res.json();
+            const res = await fetch('/api/system/verify');
+            const data = await res.json();
+            return data.report;
         }
     });
 

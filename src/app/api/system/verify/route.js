@@ -38,6 +38,12 @@ export async function GET() {
     const { count: adminCount } = await supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'admin');
     report.auth.has_admin = (adminCount || 0) > 0;
 
+    // Check Zoho Configuration
+    report.zoho = {
+      configured: !!(process.env.ZOHO_REFRESH_TOKEN && process.env.ZOHO_MAIL_ACCOUNT_ID),
+      username: process.env.ZOHO_MAIL_USERNAME || 'connect@eyepune.com'
+    };
+
     return Response.json({ success: true, report });
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 500 });
