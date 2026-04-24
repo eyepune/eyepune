@@ -78,6 +78,19 @@ function Admin_Marketing() {
         }
     });
 
+    const seedMutation = useMutation({
+        mutationFn: async () => {
+            const res = await fetch('/api/email/seed', { method: 'POST' });
+            if (!res.ok) throw new Error('Failed to install defaults');
+            return res.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['admin-email-templates']);
+            queryClient.invalidateQueries(['admin-automations']);
+            toast.success('Professional marketing suite installed!');
+        }
+    });
+
     const automationMutation = useMutation({
         mutationFn: async (data) => {
             const method = data.id ? 'PUT' : 'POST';
@@ -146,7 +159,13 @@ function Admin_Marketing() {
                         <p className="text-gray-500 mt-1">Manage bulk campaigns and automated email triggers</p>
                     </div>
                     <div className="flex gap-3">
-                        <Button onClick={() => { setSelectedCampaign(null); setIsEditing(true); }} className="bg-red-600 hover:bg-red-700">
+                        {templates.length === 0 && (
+                            <Button onClick={() => seedMutation.mutate()} disabled={seedMutation.isPending} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
+                                {seedMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Bot className="w-4 h-4 mr-2" />}
+                                Install Defaults
+                            </Button>
+                        )}
+                        <Button onClick={() => { setSelectedCampaign(null); setIsEditing(true); }} className="bg-red-600 hover:bg-red-700 text-white">
                             <Plus className="w-4 h-4 mr-2" /> New Campaign
                         </Button>
                         <Button variant="outline" onClick={() => { setSelectedAutomation(null); setIsEditingAutomation(true); }} className="border-white/[0.06] hover:bg-white/[0.04] text-white">
