@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 function Admin_Dashboard() {
     const { data: stats, isLoading } = useQuery({
