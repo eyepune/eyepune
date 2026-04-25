@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/integrations/supabase/client";
 import { motion } from 'framer-motion';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Megaphone, Code2, Bot, Palette, Package } from 'lucide-react';
@@ -21,7 +21,11 @@ export default function Services() {
 
     const { data: packages = [], isLoading } = useQuery({
         queryKey: ['packages'],
-        queryFn: () => base44.entities.ServicePackage.list(),
+        queryFn: async () => {
+            const { data, error } = await supabase.from('service_packages').select('*').order('created_at');
+            if (error) { console.warn('[Services] fetch error:', error.message); return []; }
+            return data || [];
+        },
     });
 
     const filteredPackages = activeCategory === 'all' 

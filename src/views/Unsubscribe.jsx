@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Mail } from 'lucide-react';
@@ -25,9 +25,15 @@ export default function Unsubscribe() {
     const handleUnsubscribe = async (emailAddress) => {
         try {
             // Find lead by email
-            const leads = await base44.entities.Lead.filter({ email: emailAddress });
+            const { data: leads, error: findErr } = await supabase
+                .from('leads')
+                .select('id, tags, notes')
+                .eq('email', emailAddress)
+                .limit(1);
+
+            if (findErr) throw findErr;
             
-            if (leads.length === 0) {
+            if (!leads || leads.length === 0) {
                 setStatus('error');
                 setMessage('Email address not found in our system.');
                 return;
@@ -44,23 +50,15 @@ export default function Unsubscribe() {
 
             // Update lead with unsubscribed tag
             const updatedTags = [...(lead.tags || []), 'unsubscribed'];
-            await base44.entities.Lead.update(lead.id, {
-                tags: updatedTags,
-                notes: (lead.notes || '') + `\n[${new Date().toLocaleDateString()}] Unsubscribed from email communications`
-            });
+            const { error: updateErr } = await supabase
+                .from('leads')
+                .update({
+                    tags: updatedTags,
+                    notes: (lead.notes || '') + `\n[${new Date().toLocaleDateString()}] Unsubscribed from email communications`
+                })
+                .eq('id', lead.id);
 
-            // Log activity
-            await base44.entities.Activity.create({
-                lead_id: lead.id,
-                activity_type: 'note',
-                title: 'Unsubscribed from Emails',
-                description: 'Lead opted out of email communications via unsubscribe link',
-                performed_by: 'System',
-                metadata: {
-                    unsubscribe_date: new Date().toISOString(),
-                    method: 'link'
-                }
-            });
+            if (updateErr) throw updateErr;
 
             setStatus('success');
             setMessage('You have been successfully unsubscribed from our emails.');

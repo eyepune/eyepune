@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/integrations/supabase/client";
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from "@/utils";
@@ -16,7 +16,16 @@ export default function Blog() {
 
     const { data: posts = [], isLoading } = useQuery({
         queryKey: ['blog-posts'],
-        queryFn: () => base44.entities.BlogPost.filter({ status: 'published' }, '-published_date', 50),
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('*')
+                .eq('status', 'published')
+                .order('published_date', { ascending: false })
+                .limit(50);
+            if (error) { console.warn('[Blog] fetch error:', error.message); return []; }
+            return data || [];
+        },
     });
 
     const categories = [
