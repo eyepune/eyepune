@@ -1,6 +1,7 @@
 import '@/globals.css';
 import '@/index.css';
 import { Providers } from './providers';
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 
 export const metadata = {
   title: 'EyE PunE — AI-Powered Digital Growth',
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-[#040404] text-white antialiased">
+        <GoogleAnalytics />
         <Providers>
           {children}
         </Providers>
@@ -27,3 +29,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/integrations/supabase/client";
 import { motion } from 'framer-motion';
 import { 
     Folder, TrendingUp, Calendar, Upload, CheckCircle2, 
@@ -66,41 +66,60 @@ export default function Client_Dashboard() {
 
     const { data: user } = useQuery({
         queryKey: ['current-user'],
-        queryFn: () => base44.auth.me(),
+        queryFn: async () => {
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+            if (!authUser) return null;
+            const { data } = await supabase.from('users').select('*').eq('email', authUser.email).single();
+            return data || { email: authUser.email, full_name: authUser.user_metadata?.full_name || authUser.email };
+        },
     });
 
     const { data: projects = [] } = useQuery({
         queryKey: ['client-projects', user?.email],
-        queryFn: () => base44.entities.ClientProject.filter({ client_email: user?.email }),
+        queryFn: async () => {
+            const { data, error } = await supabase.from('client_projects').select('*').eq('client_email', user.email);
+            if (error) { console.warn('[ClientDash] projects:', error.message); return []; }
+            return data || [];
+        },
         enabled: !!user?.email,
     });
 
     const { data: milestones = [] } = useQuery({
         queryKey: ['milestones', selectedProject?.id],
-        queryFn: () => base44.entities.ClientMilestone.filter({ project_id: selectedProject.id }),
+        queryFn: async () => {
+            const { data, error } = await supabase.from('client_milestones').select('*').eq('project_id', selectedProject.id);
+            if (error) { console.warn('[ClientDash] milestones:', error.message); return []; }
+            return data || [];
+        },
         enabled: !!selectedProject?.id,
     });
 
     const { data: files = [] } = useQuery({
         queryKey: ['client-files', selectedProject?.id],
-        queryFn: () => base44.entities.ClientFile.filter({ project_id: selectedProject.id }),
+        queryFn: async () => {
+            const { data, error } = await supabase.from('client_files').select('*').eq('project_id', selectedProject.id);
+            if (error) { console.warn('[ClientDash] files:', error.message); return []; }
+            return data || [];
+        },
         enabled: !!selectedProject?.id,
     });
 
     const { data: tasks = [] } = useQuery({
         queryKey: ['onboarding-tasks', selectedProject?.id],
-        queryFn: () => base44.entities.OnboardingTask.filter({ 
-            project_id: selectedProject.id,
-            task_type: 'client'
-        }),
+        queryFn: async () => {
+            const { data, error } = await supabase.from('onboarding_tasks').select('*').eq('project_id', selectedProject.id).eq('task_type', 'client');
+            if (error) { console.warn('[ClientDash] tasks:', error.message); return []; }
+            return data || [];
+        },
         enabled: !!selectedProject?.id,
     });
 
     const { data: projectTasks = [] } = useQuery({
         queryKey: ['project-tasks', selectedProject?.id],
         queryFn: async () => {
-            const all = await base44.entities.ProjectTask.list();
-            return all.filter(t => t.project_id === selectedProject.id);
+            const { data, error } = await supabase.from('project_tasks').select('*').eq('project_id', selectedProject.id);
+            if (error) { console.warn('[ClientDash] projectTasks:', error.message); return []; }
+            return data || [];
         },
         enabled: !!selectedProject?.id,
     });
@@ -108,8 +127,9 @@ export default function Client_Dashboard() {
     const { data: deliverables = [] } = useQuery({
         queryKey: ['deliverable-approvals', selectedProject?.id],
         queryFn: async () => {
-            const all = await base44.entities.DeliverableApproval.list('-created_date', 100);
-            return all.filter(d => d.project_id === selectedProject.id);
+            const { data, error } = await supabase.from('deliverable_approvals').select('*').eq('project_id', selectedProject.id).order('created_at', { ascending: false }).limit(100);
+            if (error) { console.warn('[ClientDash] deliverables:', error.message); return []; }
+            return data || [];
         },
         enabled: !!selectedProject?.id,
     });
@@ -117,8 +137,9 @@ export default function Client_Dashboard() {
     const { data: timeLogs = [] } = useQuery({
         queryKey: ['time-logs', selectedProject?.id],
         queryFn: async () => {
-            const all = await base44.entities.TimeLog.list();
-            return all.filter(log => log.project_id === selectedProject.id);
+            const { data, error } = await supabase.from('time_logs').select('*').eq('project_id', selectedProject.id);
+            if (error) { console.warn('[ClientDash] timeLogs:', error.message); return []; }
+            return data || [];
         },
         enabled: !!selectedProject?.id,
     });
@@ -126,8 +147,8 @@ export default function Client_Dashboard() {
     const { data: preferences } = useQuery({
         queryKey: ['dashboard-preferences', user?.email],
         queryFn: async () => {
-            const prefs = await base44.entities.DashboardPreference.list();
-            return prefs.find(p => p.user_email === user.email);
+            const { data } = await supabase.from('dashboard_preferences').select('*').eq('user_email', user.email).single();
+            return data;
         },
         enabled: !!user?.email,
     });
@@ -135,8 +156,9 @@ export default function Client_Dashboard() {
     const { data: clientFeedback = [] } = useQuery({
         queryKey: ['client-feedback', selectedProject?.id],
         queryFn: async () => {
-            const all = await base44.entities.ClientFeedback.list('-created_date', 100);
-            return all.filter(f => f.project_id === selectedProject.id && f.created_by === user.email);
+            const { data, error } = await supabase.from('client_feedback').select('*').eq('project_id', selectedProject.id).eq('created_by', user.email).order('created_at', { ascending: false }).limit(100);
+            if (error) { console.warn('[ClientDash] feedback:', error.message); return []; }
+            return data || [];
         },
         enabled: !!selectedProject?.id && !!user?.email,
     });
@@ -144,8 +166,8 @@ export default function Client_Dashboard() {
     const { data: onboardingProgress } = useQuery({
         queryKey: ['onboarding-progress', user?.email],
         queryFn: async () => {
-            const results = await base44.entities.OnboardingProgress.filter({ user_email: user.email });
-            return results[0];
+            const { data } = await supabase.from('onboarding_progress').select('*').eq('user_email', user.email).single();
+            return data;
         },
         enabled: !!user
     });
@@ -184,35 +206,37 @@ export default function Client_Dashboard() {
     const handleFileUpload = async (e) => {
         e.preventDefault();
         setIsUploading(true);
-
-        const formData = new FormData(e.target);
-        formData.append('project_id', selectedProject.id);
-
+        const file = e.target.querySelector('input[type=file]')?.files?.[0];
+        if (!file) { setIsUploading(false); return; }
         try {
-            const response = await base44.functions.invoke('uploadClientFile', formData);
+            const fileExt = file.name.split('.').pop();
+            const filePath = `client-files/${selectedProject.id}/${Date.now()}.${fileExt}`;
+            const { error: uploadError } = await supabase.storage.from('eyepune-files').upload(filePath, file);
+            if (uploadError) throw uploadError;
+            const { data: { publicUrl } } = supabase.storage.from('eyepune-files').getPublicUrl(filePath);
+            await supabase.from('client_files').insert([{ project_id: selectedProject.id, name: file.name, url: publicUrl, size: file.size, uploaded_by: user?.email }]);
             queryClient.invalidateQueries({ queryKey: ['client-files'] });
             setUploadDialogOpen(false);
             e.target.reset();
         } catch (error) {
             console.error('Upload error:', error);
-            alert('Failed to upload file');
+            alert('Failed to upload file: ' + error.message);
         }
-
         setIsUploading(false);
     };
 
     const updateTaskStatus = useMutation({
-        mutationFn: ({ taskId, status }) => base44.entities.OnboardingTask.update(taskId, { 
+        mutationFn: ({ taskId, status }) => supabase.from('onboarding_tasks').update({ 
             status,
             completed_date: status === 'completed' ? new Date().toISOString() : null
-        }),
+        }).eq('id', taskId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['onboarding-tasks'] });
         },
     });
 
     const deleteFileMutation = useMutation({
-        mutationFn: (fileId) => base44.entities.ClientFile.delete(fileId),
+        mutationFn: (fileId) => supabase.from('client_files').delete().eq('id', fileId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['client-files'] });
         },
@@ -220,20 +244,15 @@ export default function Client_Dashboard() {
 
     const submitFeedbackMutation = useMutation({
         mutationFn: async (feedbackData) => {
-            const feedback = await base44.entities.ClientFeedback.create(feedbackData);
-            // Trigger communication
-            await base44.functions.invoke('sendClientCommunication', {
-                event_type: 'feedback_submitted',
-                project_id: selectedProject?.id,
-                recipient_email: user.email,
-                recipient_name: user.full_name
-            });
-            return feedback;
+            const { data, error } = await supabase.from('client_feedback').insert([feedbackData]).select().single();
+            if (error) throw error;
+            return data;
         },
         onSuccess: () => {
             alert('Thank you for your feedback!');
         },
     });
+
 
     // Sample data for visualizations
     const trafficData = [

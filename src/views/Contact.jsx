@@ -86,6 +86,19 @@ export default function Contact() {
                 })
             }).catch(err => console.warn('[Contact] Admin notification failed:', err));
 
+            // 4. WhatsApp instant ping — non-blocking
+            fetch('/api/whatsapp/notify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'contact',
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    message: formData.message
+                })
+            }).catch(() => {});
+
             setIsSuccess(true);
         } catch (error) {
             console.error('Contact form submission failed:', error);
