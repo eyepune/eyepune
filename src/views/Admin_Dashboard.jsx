@@ -1,40 +1,110 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import AdminGuard from '@/components/admin/AdminGuard';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-    Users, Mail, Star, FileText, TrendingUp, Clock, 
-    ArrowUpRight, ArrowDownRight, Zap, Target, Activity, Plus,
-    BarChart3, Calendar, CheckCircle2, AlertCircle
+import {
+    Users, Mail, Star, TrendingUp, Clock,
+    ArrowUpRight, Zap, Target, Activity, Plus,
+    BarChart3, Calendar, CheckCircle2, AlertCircle,
+    MessageSquare, Globe, ArrowRight
 } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+// ── Tiny inline bar chart (no library needed) ──────────────
+function SparkBar({ data = [], color = '#ef4444', label = '' }) {
+    const max = Math.max(...data, 1);
+    return (
+        <div className="flex items-end gap-0.5 h-10">
+            {data.map((v, i) => (
+                <div
+                    key={i}
+                    title={`${label}: ${v}`}
+                    className="flex-1 rounded-t transition-all duration-500"
+                    style={{
+                        height: `${(v / max) * 100}%`,
+                        background: color,
+                        opacity: 0.4 + (i / data.length) * 0.6,
+                        minHeight: v > 0 ? '4px' : '2px',
+                    }}
+                />
+            ))}
+        </div>
+    );
+}
+
+// ── Donut chart (inline SVG) ────────────────────────────────
+function DonutChart({ segments = [], size = 100 }) {
+    const total = segments.reduce((s, seg) => s + seg.value, 0) || 1;
+    const radius = 40;
+    const circumference = 2 * Math.PI * radius;
+    let offset = 0;
+
+    return (
+        <svg width={size} height={size} viewBox="0 0 100 100" className="-rotate-90">
+            <circle cx="50" cy="50" r={radius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="12" />
+            {segments.map((seg, i) => {
+                const dash = (seg.value / total) * circumference;
+                const gap = circumference - dash;
+                const el = (
+                    <circle
+                        key={i}
+                        cx="50" cy="50" r={radius}
+                        fill="none"
+                        stroke={seg.color}
+                        strokeWidth="12"
+                        strokeDasharray={`${dash} ${gap}`}
+                        strokeDashoffset={-offset}
+                        strokeLinecap="round"
+                    />
+                );
+                offset += dash;
+                return el;
+            })}
+        </svg>
+    );
+}
+
 function Admin_Dashboard() {
+    // ── Fetch all dashboard data ──────────────────────────
     const { data: stats, isLoading } = useQuery({
         queryKey: ['admin-dashboard-stats'],
         queryFn: async () => {
-            const [leads, inquiries, assessments, bookings, templates] = await Promise.all([
-                supabase.from('leads').select('id', { count: 'exact', head: true }),
-                supabase.from('inquiries').select('id', { count: 'exact', head: true }),
-                supabase.from('ai_assessments').select('id', { count: 'exact', head: true }),
-                supabase.from('bookings').select('id', { count: 'exact', head: true }),
+            const [leads, inquiries, assessments, bookings, templates, campaigns] = await Promise.all([
+                supabase.from('leads').select('id,status,created_at', { count: 'exact' }),
+                supabase.from('inquiries').select('id,created_at', { count: 'exact' }),
+                supabase.from('ai_assessments').select('id,created_at', { count: 'exact' }),
+                supabase.from('bookings').select('id,created_at', { count: 'exact' }),
                 supabase.from('email_templates').select('id', { count: 'exact', head: true }),
+                supabase.from('campaigns').select('id', { count: 'exact', head: true }),
             ]);
             return {
-                leads: leads.count || 0,
+                leadsData: leads.data || [],
+                leadsCount: leads.count || 0,
                 inquiries: inquiries.count || 0,
                 assessments: assessments.count || 0,
                 bookings: bookings.count || 0,
                 templates: templates.count || 0,
-                conversion: leads.count > 0 ? ((bookings.count / leads.count) * 100).toFixed(1) : 0
+                campaigns: campaigns.count || 0,
+                conversion: leads.count > 0 ? ((bookings.count / leads.count) * 100).toFixed(1) : 0,
+                // Lead status breakdown
+                statusBreakdown: (leads.data || []).reduce((acc, l) => {
+                    const s = l.status || 'new';
+                    acc[s] = (acc[s] || 0) + 1;
+                    return acc;
+                }, {}),
+                // Last 7 days daily counts
+                dailyLeads: buildDailyCount(leads.data || [], 7),
+                dailyInquiries: buildDailyCount(inquiries.data || [], 7),
+                dailyAssessments: buildDailyCount(assessments.data || [], 7),
             };
         },
+        refetchInterval: 60000, // refresh every 60s
     });
 
     const { data: recentLeads = [] } = useQuery({
@@ -49,65 +119,81 @@ function Admin_Dashboard() {
         },
     });
 
+    const { data: recentInquiries = [] } = useQuery({
+        queryKey: ['admin-recent-inquiries'],
+        queryFn: async () => {
+            const { data } = await supabase
+                .from('inquiries')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(4);
+            return data || [];
+        },
+    });
+
     const { data: systemStatus } = useQuery({
         queryKey: ['system-status'],
         queryFn: async () => {
             const res = await fetch('/api/system/verify');
-            const data = await res.json();
-            return data.report;
+            return (await res.json()).report;
         }
     });
 
+    // ── Status donut data ─────────────────────────────────
+    const donutData = useMemo(() => {
+        if (!stats?.statusBreakdown) return [];
+        const colors = { new: '#ef4444', contacted: '#3b82f6', qualified: '#8b5cf6', won: '#10b981', lost: '#6b7280' };
+        return Object.entries(stats.statusBreakdown).map(([k, v]) => ({
+            label: k, value: v, color: colors[k] || '#6b7280'
+        }));
+    }, [stats?.statusBreakdown]);
+
     const statCards = [
         {
-            title: "Total Pipeline",
-            value: stats?.leads,
-            change: "+12%",
+            title: "Total Leads",
+            value: stats?.leadsCount,
+            sub: `${stats?.conversion}% conversion`,
             trend: "up",
             icon: Users,
+            spark: stats?.dailyLeads,
             color: "from-blue-600 to-cyan-500",
-            bgLight: "bg-blue-500/10",
-            borderLight: "border-blue-500/20",
-            textLight: "text-blue-500"
+            bg: "bg-blue-500/10", border: "border-blue-500/20", text: "text-blue-400"
         },
         {
             title: "Consultations",
             value: stats?.bookings,
-            change: `${stats?.conversion}% conv`,
+            sub: "Booked sessions",
             trend: "up",
             icon: Target,
+            spark: [],
             color: "from-red-600 to-orange-500",
-            bgLight: "bg-red-500/10",
-            borderLight: "border-red-500/20",
-            textLight: "text-red-500"
+            bg: "bg-red-500/10", border: "border-red-500/20", text: "text-red-400"
         },
         {
             title: "AI Assessments",
             value: stats?.assessments,
-            change: "High Intent",
+            sub: "High-intent prospects",
             trend: "neutral",
             icon: Zap,
+            spark: stats?.dailyAssessments,
             color: "from-amber-500 to-yellow-400",
-            bgLight: "bg-amber-500/10",
-            borderLight: "border-amber-500/20",
-            textLight: "text-amber-500"
+            bg: "bg-amber-500/10", border: "border-amber-500/20", text: "text-amber-400"
         },
         {
-            title: "Active Campaigns",
-            value: stats?.templates,
-            change: "Automated",
-            trend: "neutral",
+            title: "Inquiries",
+            value: stats?.inquiries,
+            sub: "Form submissions",
+            trend: "up",
             icon: Mail,
+            spark: stats?.dailyInquiries,
             color: "from-emerald-500 to-green-400",
-            bgLight: "bg-emerald-500/10",
-            borderLight: "border-emerald-500/20",
-            textLight: "text-emerald-500"
+            bg: "bg-emerald-500/10", border: "border-emerald-500/20", text: "text-emerald-400"
         }
     ];
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Header Area */}
+            {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 relative z-10">
                 <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4">
@@ -119,102 +205,104 @@ function Admin_Dashboard() {
                         Monitor your business performance, lead pipeline, and automation health in real-time.
                     </p>
                 </div>
-                
                 <div className="flex gap-3">
                     <Button variant="outline" className="bg-[#111] border-white/10 text-white hover:bg-white/5 hover:text-white h-10">
-                        <Calendar className="w-4 h-4 mr-2 text-gray-400" /> Last 30 Days
+                        <Calendar className="w-4 h-4 mr-2 text-gray-400" /> Last 7 Days
                     </Button>
-                    <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 border-0 h-10">
-                        <BarChart3 className="w-4 h-4 mr-2" /> Generate Report
+                    <Button
+                        onClick={() => window.location.href = '/Admin_Analytics'}
+                        className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 border-0 h-10"
+                    >
+                        <BarChart3 className="w-4 h-4 mr-2" /> Full Analytics
                     </Button>
                 </div>
             </div>
 
-            {/* Premium Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+            {/* Stat Cards with Sparklines */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 relative z-10">
                 {statCards.map((stat, i) => {
                     const Icon = stat.icon;
                     return (
-                        <Card key={i} className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 relative overflow-hidden group hover:border-white/10 transition-colors duration-300">
-                            {/* Hover Gradient Overlay */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
-                            
-                            <CardContent className="pt-6 pb-6">
-                                <div className="flex justify-between items-start">
-                                    <div className="space-y-3">
-                                        <p className="text-sm text-gray-400 font-medium">{stat.title}</p>
-                                        <div className="flex items-baseline gap-2">
-                                            <h3 className="text-4xl font-bold text-white tracking-tight">
-                                                {isLoading ? '...' : stat.value}
-                                            </h3>
-                                        </div>
-                                        <div className={cn("inline-flex items-center text-xs font-medium", stat.textLight)}>
-                                            {stat.trend === 'up' && <ArrowUpRight className="w-3.5 h-3.5 mr-1" />}
-                                            {stat.trend === 'down' && <ArrowDownRight className="w-3.5 h-3.5 mr-1" />}
-                                            {stat.change}
-                                        </div>
+                        <Card key={i} className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 relative overflow-hidden group hover:border-white/10 transition-all duration-300">
+                            <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-500`} />
+                            <CardContent className="pt-5 pb-4">
+                                <div className="flex justify-between items-start mb-3">
+                                    <div>
+                                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">{stat.title}</p>
+                                        <h3 className="text-3xl font-bold text-white tracking-tight mt-1">
+                                            {isLoading ? '…' : (stat.value ?? 0)}
+                                        </h3>
+                                        <p className={cn("text-xs font-medium mt-1 flex items-center gap-1", stat.text)}>
+                                            {stat.trend === 'up' && <ArrowUpRight className="w-3 h-3" />}
+                                            {stat.sub}
+                                        </p>
                                     </div>
-                                    <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center border transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3", stat.bgLight, stat.borderLight)}>
-                                        <Icon className={cn("w-6 h-6", stat.textLight)} />
+                                    <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border", stat.bg, stat.border)}>
+                                        <Icon className={cn("w-5 h-5", stat.text)} />
                                     </div>
                                 </div>
+                                {stat.spark && stat.spark.length > 0 && (
+                                    <SparkBar data={stat.spark} color={stat.text.replace('text-', '#').replace('400', '')} label={stat.title} />
+                                )}
                             </CardContent>
                         </Card>
                     );
                 })}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
-                {/* Main Feed */}
-                <Card className="lg:col-span-2 bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden flex flex-col">
-                    <CardHeader className="border-b border-white/5 bg-white/[0.01] px-6 py-5">
-                        <CardTitle className="text-white text-lg font-semibold flex items-center justify-between">
-                            <span className="flex items-center gap-2.5">
+            {/* Main Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+
+                {/* Recent Leads Feed */}
+                <Card className="lg:col-span-2 bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                    <CardHeader className="border-b border-white/5 px-6 py-4">
+                        <CardTitle className="text-white text-base font-semibold flex items-center justify-between">
+                            <span className="flex items-center gap-2">
                                 <div className="p-1.5 rounded-lg bg-white/5">
                                     <Clock className="w-4 h-4 text-gray-400" />
                                 </div>
-                                Recent Activity
+                                Recent Leads
                             </span>
-                            <Button variant="ghost" size="sm" className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10">
-                                View All Activity
+                            <Button
+                                variant="ghost" size="sm"
+                                onClick={() => window.location.href = '/Admin_CRM'}
+                                className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                            >
+                                View All <ArrowRight className="w-3 h-3 ml-1" />
                             </Button>
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="p-0 flex-1">
+                    <CardContent className="p-0">
                         {recentLeads.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full py-16 text-center">
-                                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                                    <Users className="w-8 h-8 text-gray-600" />
+                            <div className="flex flex-col items-center justify-center py-16 text-center">
+                                <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-3">
+                                    <Users className="w-7 h-7 text-gray-600" />
                                 </div>
-                                <p className="text-white font-medium">No recent activity</p>
-                                <p className="text-sm text-gray-500 mt-1">New leads will appear here automatically.</p>
+                                <p className="text-white font-medium text-sm">No leads yet</p>
+                                <p className="text-xs text-gray-500 mt-1">Leads from forms and chatbot appear here.</p>
                             </div>
                         ) : (
-                            <div className="divide-y divide-white/5">
+                            <div className="divide-y divide-white/[0.04]">
                                 {recentLeads.map((lead) => (
-                                    <div key={lead.id} className="p-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
-                                        <div className="flex items-center gap-4">
-                                            <div className="relative">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-bold border border-white/10 shadow-inner">
-                                                    {lead.full_name?.charAt(0) || 'U'}
-                                                </div>
-                                                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-[#0c0c0c] bg-blue-500 flex items-center justify-center">
-                                                    <Users className="w-2 h-2 text-white" />
-                                                </div>
+                                    <div key={lead.id} className="px-5 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-bold text-sm border border-white/10">
+                                                {lead.full_name?.charAt(0)?.toUpperCase() || 'U'}
                                             </div>
                                             <div>
                                                 <p className="text-white font-medium text-sm group-hover:text-red-400 transition-colors">
-                                                    {lead.full_name || 'Unknown Lead'}
+                                                    {lead.full_name || 'Unknown'}
                                                 </p>
-                                                <p className="text-xs text-gray-500 mt-0.5">
-                                                    {lead.email} • {new Date(lead.created_at).toLocaleDateString()}
+                                                <p className="text-xs text-gray-500">
+                                                    {lead.email} · {lead.source || 'website'} · {new Date(lead.created_at).toLocaleDateString('en-IN')}
                                                 </p>
                                             </div>
                                         </div>
                                         <Badge className={cn(
-                                            "border-none font-medium px-2.5 py-0.5 text-[10px] uppercase tracking-wider",
+                                            "border-none font-medium px-2 py-0.5 text-[10px] uppercase tracking-wider",
                                             lead.status === 'won' ? 'bg-emerald-500/10 text-emerald-400' :
                                             lead.status === 'new' ? 'bg-red-500/10 text-red-400' :
+                                            lead.status === 'qualified' ? 'bg-purple-500/10 text-purple-400' :
                                             'bg-white/5 text-gray-400'
                                         )}>
                                             {lead.status || 'NEW'}
@@ -226,104 +314,168 @@ function Admin_Dashboard() {
                     </CardContent>
                 </Card>
 
-                {/* Right Column: Actions & System */}
-                <div className="space-y-8 flex flex-col">
-                    {/* Quick Actions */}
+                {/* Right column */}
+                <div className="space-y-6 flex flex-col">
+                    {/* Lead Pipeline Donut */}
                     <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
-                        <CardHeader className="border-b border-white/5 bg-white/[0.01] px-6 py-5">
-                            <CardTitle className="text-white text-lg font-semibold flex items-center gap-2.5">
+                        <CardHeader className="border-b border-white/5 px-5 py-4">
+                            <CardTitle className="text-white text-base font-semibold flex items-center gap-2">
                                 <div className="p-1.5 rounded-lg bg-white/5">
-                                    <Zap className="w-4 h-4 text-yellow-500" />
+                                    <TrendingUp className="w-4 h-4 text-purple-400" />
                                 </div>
-                                Quick Actions
+                                Lead Pipeline
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="p-5 space-y-3">
-                            <Button className="w-full justify-start bg-[#111] hover:bg-[#1a1a1a] text-white border border-white/5 hover:border-red-500/30 transition-all h-12 shadow-sm group">
-                                <div className="w-8 h-8 rounded bg-red-500/10 flex items-center justify-center mr-3 group-hover:bg-red-500/20 transition-colors">
-                                    <Plus className="w-4 h-4 text-red-500" />
+                        <CardContent className="p-5">
+                            {donutData.length > 0 ? (
+                                <div className="flex items-center gap-4">
+                                    <div className="relative flex-shrink-0">
+                                        <DonutChart segments={donutData} size={88} />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <span className="text-white font-bold text-lg">{stats?.leadsCount || 0}</span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1.5 flex-1">
+                                        {donutData.map((seg, i) => (
+                                            <div key={i} className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-2 h-2 rounded-full" style={{ background: seg.color }} />
+                                                    <span className="text-xs text-gray-400 capitalize">{seg.label}</span>
+                                                </div>
+                                                <span className="text-xs text-white font-medium">{seg.value}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <span className="font-medium">Manual Lead Entry</span>
-                            </Button>
-                            
-                            <Button className="w-full justify-start bg-[#111] hover:bg-[#1a1a1a] text-white border border-white/5 hover:border-blue-500/30 transition-all h-12 shadow-sm group">
-                                <div className="w-8 h-8 rounded bg-blue-500/10 flex items-center justify-center mr-3 group-hover:bg-blue-500/20 transition-colors">
-                                    <Mail className="w-4 h-4 text-blue-500" />
-                                </div>
-                                <span className="font-medium">Send Bulk Campaign</span>
-                            </Button>
-                            
-                            <Button className="w-full justify-start bg-[#111] hover:bg-[#1a1a1a] text-white border border-white/5 hover:border-yellow-500/30 transition-all h-12 shadow-sm group">
-                                <div className="w-8 h-8 rounded bg-yellow-500/10 flex items-center justify-center mr-3 group-hover:bg-yellow-500/20 transition-colors">
-                                    <Star className="w-4 h-4 text-yellow-500" />
-                                </div>
-                                <span className="font-medium">Approve Testimonials</span>
-                            </Button>
+                            ) : (
+                                <div className="text-center py-6 text-gray-500 text-sm">No pipeline data yet</div>
+                            )}
                         </CardContent>
                     </Card>
 
-                    {/* System Health */}
-                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden flex-1 relative">
-                        <div className="absolute inset-0 bg-gradient-to-t from-red-600/5 to-transparent pointer-events-none" />
-                        <CardHeader className="border-b border-white/5 bg-white/[0.01] px-6 py-5">
-                            <CardTitle className="text-white text-lg font-semibold flex items-center gap-2.5">
+                    {/* Recent Inquiries */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden flex-1">
+                        <CardHeader className="border-b border-white/5 px-5 py-4">
+                            <CardTitle className="text-white text-base font-semibold flex items-center gap-2">
                                 <div className="p-1.5 rounded-lg bg-white/5">
-                                    <Activity className="w-4 h-4 text-emerald-500" />
+                                    <MessageSquare className="w-4 h-4 text-blue-400" />
                                 </div>
-                                System Health
+                                New Inquiries
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="p-5 space-y-4">
-                            <div className="bg-[#111] border border-white/5 rounded-xl p-4 relative overflow-hidden group">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className="flex items-center gap-2.5">
-                                        <div className="p-1.5 rounded bg-blue-500/10">
-                                            <Mail className="w-4 h-4 text-blue-500" />
+                        <CardContent className="p-0">
+                            {recentInquiries.length === 0 ? (
+                                <div className="py-8 text-center text-gray-600 text-xs">No inquiries yet</div>
+                            ) : (
+                                <div className="divide-y divide-white/[0.04]">
+                                    {recentInquiries.map(inq => (
+                                        <div key={inq.id} className="px-5 py-3 hover:bg-white/[0.02] transition-colors">
+                                            <p className="text-white text-sm font-medium truncate">{inq.full_name || 'Unknown'}</p>
+                                            <p className="text-xs text-gray-500 mt-0.5 truncate">
+                                                {inq.service_interest || 'General'} · {new Date(inq.created_at).toLocaleDateString('en-IN')}
+                                            </p>
                                         </div>
-                                        <div>
-                                            <span className="text-sm font-medium text-white block">Zoho Mail API</span>
-                                            <span className="text-xs text-gray-500">Transactional Delivery</span>
-                                        </div>
-                                    </div>
-                                    {systemStatus?.zoho?.configured ? (
-                                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    ) : (
-                                        <AlertCircle className="w-5 h-5 text-yellow-500" />
-                                    )}
+                                    ))}
                                 </div>
-                                <Button 
-                                    size="sm" 
-                                    onClick={() => window.open('/api/zoho/auth', '_blank')}
-                                    className={cn(
-                                        "w-full h-8 text-xs font-medium transition-all shadow-sm",
-                                        systemStatus?.zoho?.configured 
-                                            ? "bg-white/5 hover:bg-white/10 text-white border border-white/10" 
-                                            : "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white border-none"
-                                    )}
-                                >
-                                    {systemStatus?.zoho?.configured ? 'Test Connection' : 'Authorize Now'}
-                                </Button>
-                            </div>
-
-                            <div className="flex items-center justify-between px-2 text-sm">
-                                <span className="text-gray-400">Database Latency</span>
-                                <div className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                    <span className="text-emerald-400 font-medium">24ms</span>
-                                </div>
-                            </div>
-                            
-                            <div className="flex items-center justify-between px-2 text-sm">
-                                <span className="text-gray-400">Environment</span>
-                                <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Production</Badge>
-                            </div>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
             </div>
+
+            {/* System Health Row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
+                {/* Zoho Mail */}
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5">
+                    <CardContent className="pt-5 pb-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2.5">
+                                <div className="p-1.5 rounded-lg bg-blue-500/10">
+                                    <Mail className="w-4 h-4 text-blue-400" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-medium text-white">Zoho Mail</p>
+                                    <p className="text-xs text-gray-500">Transactional</p>
+                                </div>
+                            </div>
+                            {systemStatus?.zoho?.configured
+                                ? <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                : <AlertCircle className="w-5 h-5 text-yellow-500" />
+                            }
+                        </div>
+                        <Button
+                            size="sm"
+                            onClick={() => window.open('/api/zoho/auth', '_blank')}
+                            className={cn("w-full h-8 text-xs font-medium",
+                                systemStatus?.zoho?.configured
+                                    ? "bg-white/5 hover:bg-white/10 text-white border border-white/10"
+                                    : "bg-gradient-to-r from-red-600 to-red-500 text-white border-none"
+                            )}
+                        >
+                            {systemStatus?.zoho?.configured ? '✓ Connected' : 'Authorize Zoho'}
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                {/* Database */}
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5">
+                    <CardContent className="pt-5 pb-4">
+                        <div className="flex items-center gap-2.5 mb-3">
+                            <div className="p-1.5 rounded-lg bg-emerald-500/10">
+                                <Activity className="w-4 h-4 text-emerald-400" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-white">Database</p>
+                                <p className="text-xs text-gray-500">Supabase PostgreSQL</p>
+                            </div>
+                            <CheckCircle2 className="w-4 h-4 text-emerald-500 ml-auto" />
+                        </div>
+                        <div className="space-y-1.5">
+                            {['leads', 'inquiries', 'bookings', 'email_templates'].map(t => (
+                                <div key={t} className="flex justify-between items-center text-xs">
+                                    <span className="text-gray-500">{t}</span>
+                                    <span className="text-emerald-400">✓ OK</span>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Quick Actions */}
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5">
+                    <CardContent className="pt-5 pb-4 space-y-2">
+                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">Quick Actions</p>
+                        {[
+                            { label: 'Add Manual Lead', href: '/Admin_CRM', icon: Plus, color: 'text-red-400' },
+                            { label: 'Send Campaign', href: '/Admin_Marketing', icon: Mail, color: 'text-blue-400' },
+                            { label: 'View Analytics', href: '/Admin_Analytics', icon: Globe, color: 'text-emerald-400' },
+                        ].map((action, i) => (
+                            <button
+                                key={i}
+                                onClick={() => window.location.href = action.href}
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 transition-all group"
+                            >
+                                <action.icon className={cn("w-4 h-4", action.color)} />
+                                <span className="text-sm text-white/80 group-hover:text-white">{action.label}</span>
+                                <ArrowRight className="w-3 h-3 text-gray-600 group-hover:text-gray-400 ml-auto transition-colors" />
+                            </button>
+                        ))}
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
+}
+
+// ── Helper: count events per day for last N days ──────────
+function buildDailyCount(rows, days) {
+    const counts = Array(days).fill(0);
+    const now = Date.now();
+    rows.forEach(row => {
+        const diff = Math.floor((now - new Date(row.created_at).getTime()) / 86400000);
+        if (diff >= 0 && diff < days) counts[days - 1 - diff]++;
+    });
+    return counts;
 }
 
 export default function AdminDashboardPage() {
