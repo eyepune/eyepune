@@ -134,8 +134,15 @@ function Admin_Dashboard() {
     const { data: systemStatus } = useQuery({
         queryKey: ['system-status'],
         queryFn: async () => {
-            const res = await fetch('/api/system/verify');
-            return (await res.json()).report;
+            try {
+                const res = await fetch('/api/system/verify');
+                if (!res.ok) return {};
+                const data = await res.json();
+                return data.report || {};
+            } catch (e) {
+                console.warn('System status check failed', e);
+                return {};
+            }
         }
     });
 

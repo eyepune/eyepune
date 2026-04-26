@@ -2,6 +2,7 @@ import React from 'react';
 
 export default function Logo({ variant = 'dark', size = 'md', className = '' }) {
     const sizes = {
+        xs: { container: 'w-8 h-8', text: 'hidden' },
         sm: { container: 'w-10 h-10', text: 'text-xl' },
         md: { container: 'w-14 h-14', text: 'text-2xl' },
         lg: { container: 'w-24 h-24', text: 'text-4xl' }
