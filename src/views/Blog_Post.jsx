@@ -104,6 +104,17 @@ export default function BlogPost() {
         }
     }, [post?.id]);
 
+    const commentMutation = useMutation({
+        mutationFn: async (data) => {
+            const { error } = await supabase.from('blog_comments').insert([data]);
+            if (error) throw error;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['blog-comments', post?.id]);
+            setCommentForm({ commenter_name: '', commenter_email: '', comment_text: '' });
+        }
+    });
+
     const handleShare = (platform) => {
         const url = window.location.href;
         if (platform === 'copy') {
