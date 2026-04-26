@@ -273,9 +273,16 @@ function LayoutContent({ children, currentPageName }) {
                                         </Link>
                                     )}
                                     {user ? (
-                                        <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl" onClick={() => { setMobileMenuOpen(false); base44.auth.logout(); }}>
-                                            <LogOut className="w-4 h-4 mr-2" /> Sign Out
-                                        </Button>
+                                        <>
+                                            <Link href={createPageUrl(user.role === 'admin' ? "Admin_Dashboard" : "Client_Dashboard")} onClick={() => setMobileMenuOpen(false)}>
+                                                <Button className="w-full bg-white/[0.07] hover:bg-white/[0.1] text-white rounded-xl py-5 font-bold mb-3">
+                                                    <LayoutDashboard className="w-4 h-4 mr-2" /> Dashboard
+                                                </Button>
+                                            </Link>
+                                            <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl py-5" onClick={() => { setMobileMenuOpen(false); base44.auth.logout(); }}>
+                                                <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                                            </Button>
+                                        </>
                                     ) : (
                                         <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl" onClick={() => { setMobileMenuOpen(false); base44.auth.redirectToLogin(window.location.pathname); }}>
                                             <LogIn className="w-4 h-4 mr-2" /> Sign In / Sign Up
