@@ -181,11 +181,9 @@ function LayoutContent({ children, currentPageName }) {
                             {isPublicPage && (
                                 <>
                                     {user && (
-                                        <>
-                                            <Link href={createPageUrl("Client_Dashboard")}>
-                                                <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white rounded-full text-sm">Dashboard</Button>
-                                            </Link>
-                                        </>
+                                        <Link href={createPageUrl(user.role === 'admin' ? "Admin_Dashboard" : "Client_Dashboard")}>
+                                            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white rounded-full text-sm">Dashboard</Button>
+                                        </Link>
                                     )}
                                     {user?.role === 'admin' && (
                                         <Link href={createPageUrl("Admin_Dashboard")}>
