@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { Calendar, User, ArrowLeft, MessageCircle, Clock, Share2, Facebook, Twitter, Linkedin, Copy, Check } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,9 +15,9 @@ import rehypeRaw from 'rehype-raw';
 import SEOHead from "@/components/seo/SEOHead";
 
 export default function BlogPost() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('id');
-    const postSlug = urlParams.get('slug');
+    const [searchParams] = useSearchParams();
+    const postId = searchParams.get('id');
+    const postSlug = searchParams.get('slug');
     const queryClient = useQueryClient();
     const [copied, setCopied] = useState(false);
 
