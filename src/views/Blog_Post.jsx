@@ -38,23 +38,44 @@ export default function BlogPost() {
         queryKey: ['blog-post', postId, postSlug],
         queryFn: async () => {
             console.group('🔍 Blog_Post Lookup');
-            let query = supabase.from('blog_posts').select('*');
-            if (postSlug) query = query.eq('slug', postSlug);
-            else if (postId && postId !== 'undefined') query = query.eq('id', postId);
-            else return null;
+            try {
+                let query = supabase.from('blog_posts').select('*');
+                
+                if (postSlug && postSlug !== 'undefined') {
+                    console.log('Fetching by slug:', postSlug);
+                    query = query.eq('slug', postSlug);
+                } else if (postId && postId !== 'undefined') {
+                    console.log('Fetching by id:', postId);
+                    query = query.eq('id', postId);
+                } else {
+                    console.warn('No valid slug or ID provided');
+                    console.groupEnd();
+                    return null;
+                }
 
-            const { data, error } = await query.maybeSingle();
-            console.log('Result:', data);
-            console.groupEnd();
-            return data;
+                const { data, error } = await query.maybeSingle();
+                if (error) {
+                    console.error('Supabase Query Error:', error);
+                    console.groupEnd();
+                    return null;
+                }
+                
+                console.log('Success:', data);
+                console.groupEnd();
+                return data;
+            } catch (e) {
+                console.error('Fetch Crash:', e);
+                console.groupEnd();
+                return null;
+            }
         },
         enabled: !!(postId || postSlug)
     });
 
     const { data: relatedPosts = [] } = useQuery({
-        queryKey: ['related-posts', post?.category],
+        queryKey: ['related-posts', post?.category, post?.id],
         queryFn: async () => {
-            if (!post?.category) return [];
+            if (!post?.category || !post?.id) return [];
             const { data, error } = await supabase
                 .from('blog_posts')
                 .select('*')
@@ -69,6 +90,7 @@ export default function BlogPost() {
     const { data: comments = [] } = useQuery({
         queryKey: ['blog-comments', post?.id],
         queryFn: async () => {
+            if (!post?.id) return [];
             const { data, error } = await supabase
                 .from('blog_comments')
                 .select('*')
@@ -88,22 +110,9 @@ export default function BlogPost() {
     const formatDate = (dateString) => {
         if (!dateString) return 'Recently Published';
         try {
-            // Remove any trailing characters that might break the parser
             const cleanString = String(dateString).trim().replace(' ', 'T');
             const date = new Date(cleanString);
-            
-            if (isNaN(date.getTime())) {
-                // Try one more fallback for DD/MM/YYYY formats
-                const parts = cleanString.split(/[-/T]/);
-                if (parts.length >= 3) {
-                    const fallbackDate = new Date(parts[0], parts[1] - 1, parts[2]);
-                    if (!isNaN(fallbackDate.getTime())) {
-                        return fallbackDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-                    }
-                }
-                return 'Recently Published';
-            }
-
+            if (isNaN(date.getTime())) return 'Recently Published';
             return date.toLocaleDateString('en-IN', {
                 day: 'numeric', month: 'long', year: 'numeric'
             });
@@ -113,10 +122,17 @@ export default function BlogPost() {
     };
 
     useEffect(() => {
-        if (post?.id) {
-            supabase.rpc('increment_post_views', { post_id: post.id })
-                .catch(err => console.warn('Could not increment views:', err));
+        async function trackView() {
+            if (post?.id) {
+                try {
+                    const { error } = await supabase.rpc('increment_post_views', { post_id: post.id });
+                    if (error) console.warn('View tracking error:', error.message);
+                } catch (e) {
+                    console.warn('View tracking crashed (likely function missing)');
+                }
+            }
         }
+        trackView();
     }, [post?.id]);
 
     const commentMutation = useMutation({
@@ -176,44 +192,38 @@ export default function BlogPost() {
             {/* Reading Progress Bar */}
             <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-red-600 z-[100] origin-left" style={{ scaleX }} />
 
-            {/* Immersive Hero Section */}
-            <header className="relative w-full overflow-hidden">
+            {/* Hero Section */}
+            <header className="relative w-full overflow-hidden min-h-[60vh] flex items-end">
                 <div className="absolute inset-0 z-0">
-                    <motion.div 
-                        initial={{ scale: 1.1 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 1.5 }}
-                        className="w-full h-full"
-                    >
+                    <motion.div initial={{ scale: 1.05 }} animate={{ scale: 1 }} transition={{ duration: 1.2 }} className="w-full h-full">
                         <img 
                             src={featuredImg} 
-                            className="w-full h-full object-cover brightness-50"
-                            alt={post.title}
+                            className="w-full h-full object-cover brightness-[0.6]"
+                            alt=""
                             onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000' }}
                         />
                     </motion.div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#040404] via-[#040404]/80 to-transparent" />
                 </div>
 
-                <div className="max-w-5xl mx-auto px-6 relative z-10 pt-32 pb-24">
+                <div className="max-w-5xl mx-auto px-6 relative z-10 py-24 w-full">
                     <Link to={createPageUrl("Blog")}>
-                        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-2 text-red-500 font-bold mb-12 hover:text-red-400 transition-colors cursor-pointer group">
+                        <div className="inline-flex items-center gap-2 text-red-500 font-bold mb-10 hover:text-red-400 transition-colors cursor-pointer group">
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Feed
-                        </motion.div>
+                        </div>
                     </Link>
 
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                        <Badge className="bg-red-600 text-white mb-8 px-5 py-2 text-xs uppercase font-black tracking-widest border-none rounded-full">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                        <Badge className="bg-red-600 text-white mb-6 px-4 py-1.5 text-xs uppercase font-black tracking-widest border-none rounded-full">
                             {post.category?.replace('_', ' ')}
                         </Badge>
-                        <h1 className="text-4xl md:text-7xl font-black mb-10 leading-[1.1] tracking-tight">
+                        <h1 className="text-4xl md:text-7xl font-black mb-8 leading-[1.1] tracking-tight">
                             {post.title}
                         </h1>
-                        
-                        <div className="flex flex-wrap items-center gap-y-4 gap-x-8 text-gray-400 text-sm font-bold tracking-tight">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-orange-500 flex items-center justify-center text-white font-black text-xs">E</div>
-                                <span>{post.author || 'EyE PunE Team'}</span>
+                        <div className="flex flex-wrap items-center gap-6 text-gray-400 text-sm font-bold">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white font-black text-[10px]">E</div>
+                                <span>{post.author || 'EyE PunE'}</span>
                             </div>
                             <div className="flex items-center gap-2"><Calendar className="w-4 h-4 text-red-600" /> {formatDate(post.published_date)}</div>
                             <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-red-600" /> {getReadingTime(post.content)} min read</div>
@@ -224,90 +234,86 @@ export default function BlogPost() {
             </header>
 
             <main className="max-w-5xl mx-auto px-6 py-24">
-                <div className="flex flex-col lg:flex-row gap-20">
-                    {/* Share Sidebar (Desktop Only) */}
+                <div className="flex flex-col lg:flex-row gap-16">
                     <aside className="hidden lg:block w-12 flex-shrink-0">
                         <div className="sticky top-32 space-y-6">
-                            <button onClick={() => handleShare('facebook')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-blue-600 hover:border-blue-500 transition-all group"><Facebook className="w-5 h-5" /></button>
-                            <button onClick={() => handleShare('twitter')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-sky-500 hover:border-sky-400 transition-all"><Twitter className="w-5 h-5" /></button>
-                            <button onClick={() => handleShare('linkedin')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-blue-700 hover:border-blue-600 transition-all"><Linkedin className="w-5 h-5" /></button>
-                            <button onClick={() => handleShare('copy')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-red-600 hover:border-red-500 transition-all">
+                            <button onClick={() => handleShare('facebook')} className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-blue-600 transition-all"><Facebook className="w-5 h-5" /></button>
+                            <button onClick={() => handleShare('twitter')} className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-sky-500 transition-all"><Twitter className="w-5 h-5" /></button>
+                            <button onClick={() => handleShare('linkedin')} className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-blue-700 transition-all"><Linkedin className="w-5 h-5" /></button>
+                            <button onClick={() => handleShare('copy')} className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-red-600 transition-all">
                                 {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                             </button>
                         </div>
                     </aside>
 
-                    {/* Article Content */}
                     <article className="flex-1 max-w-3xl">
                         {post.excerpt && (
-                            <div className="text-2xl text-gray-400 font-medium leading-relaxed italic mb-20 pl-8 border-l-4 border-red-600">
+                            <div className="text-xl md:text-2xl text-gray-400 font-medium leading-relaxed italic mb-16 pl-8 border-l-4 border-red-600">
                                 {post.excerpt}
                             </div>
                         )}
 
-                        <div className="prose prose-invert prose-xl max-w-none 
+                        <div className="prose prose-invert prose-lg md:prose-xl max-w-none 
                             prose-headings:font-black prose-headings:tracking-tighter prose-headings:text-white
-                            prose-h2:text-4xl prose-h2:mt-20 prose-h2:mb-10 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5
-                            prose-p:text-gray-300 prose-p:leading-[1.9] prose-p:mb-10
-                            prose-strong:text-red-500 prose-strong:font-black
-                            prose-img:rounded-[2.5rem] prose-img:shadow-2xl prose-img:my-16
-                            prose-blockquote:border-red-600 prose-blockquote:bg-white/5 prose-blockquote:p-10 prose-blockquote:rounded-[2rem] prose-blockquote:not-italic
+                            prose-h2:text-3xl md:text-4xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5
+                            prose-p:text-gray-300 prose-p:leading-[1.8] prose-p:mb-8
+                            prose-img:rounded-3xl prose-img:shadow-2xl prose-img:my-12
+                            prose-blockquote:border-red-600 prose-blockquote:bg-white/5 prose-blockquote:p-8 prose-blockquote:rounded-3xl
                         ">
                             <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                                 {post.content}
                             </ReactMarkdown>
                         </div>
 
-                        {/* Mobile Share */}
-                        <div className="lg:hidden mt-24 pt-12 border-t border-white/10">
-                            <h3 className="text-xs font-black uppercase tracking-widest mb-8 text-gray-500 text-center">Share Insight</h3>
-                            <div className="flex gap-4">
-                                <button onClick={() => handleShare('facebook')} className="flex-1 py-5 rounded-3xl bg-white/5 border border-white/5 flex justify-center"><Facebook /></button>
-                                <button onClick={() => handleShare('twitter')} className="flex-1 py-5 rounded-3xl bg-white/5 border border-white/5 flex justify-center"><Twitter /></button>
-                                <button onClick={() => handleShare('linkedin')} className="flex-1 py-5 rounded-3xl bg-white/5 border border-white/5 flex justify-center"><Linkedin /></button>
-                            </div>
-                        </div>
+                        {/* Related Articles */}
+                        {relatedPosts.length > 0 && (
+                            <section className="mt-32 pt-20 border-t border-white/10">
+                                <h2 className="text-3xl font-black mb-12">Related Vision Insights</h2>
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    {relatedPosts.map((relatedPost) => (
+                                        <Link key={relatedPost.id} to={createPageUrl(`Blog_Post?slug=${relatedPost.slug}`)} className="group block">
+                                            <div className="bg-white/5 border border-white/5 rounded-3xl p-6 hover:bg-white/10 transition-all h-full flex flex-col">
+                                                <div className="aspect-video rounded-2xl overflow-hidden mb-6">
+                                                    <img src={relatedPost.featured_image || featuredImg} className="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="" />
+                                                </div>
+                                                <h3 className="text-xl font-bold group-hover:text-red-500 transition-colors line-clamp-2">{relatedPost.title}</h3>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
 
                         {/* Comments */}
-                        <section className="mt-40 pt-24 border-t border-white/10">
-                            <h2 className="text-4xl font-black mb-16 flex items-center gap-5">
-                                <MessageCircle className="w-12 h-12 text-red-600" />
-                                Comments ({comments.length})
+                        <section className="mt-32 pt-20 border-t border-white/10">
+                            <h2 className="text-3xl font-black mb-12 flex items-center gap-4">
+                                <MessageCircle className="w-10 h-10 text-red-600" />
+                                Community Discussions ({comments.length})
                             </h2>
 
-                            <form onSubmit={(e) => { e.preventDefault(); commentMutation.mutate({ ...commentForm, post_id: post.id, status: 'pending' }); }} className="bg-white/5 border border-white/5 p-10 md:p-16 rounded-[3rem] mb-20 shadow-2xl">
-                                <h3 className="text-2xl font-black mb-10">Join the Conversation</h3>
-                                <div className="grid md:grid-cols-2 gap-8 mb-8">
-                                    <div className="space-y-3">
-                                        <Label className="text-gray-400 font-bold ml-2">Display Name</Label>
-                                        <Input value={commentForm.commenter_name} onChange={e => setCommentForm({...commentForm, commenter_name: e.target.value})} className="bg-white/5 border-white/10 rounded-2xl h-16 focus:border-red-500 transition-all px-6" required />
-                                    </div>
-                                    <div className="space-y-3">
-                                        <Label className="text-gray-400 font-bold ml-2">Email (Private)</Label>
-                                        <Input type="email" value={commentForm.commenter_email} onChange={e => setCommentForm({...commentForm, commenter_email: e.target.value})} className="bg-white/5 border-white/10 rounded-2xl h-16 focus:border-red-500 transition-all px-6" required />
-                                    </div>
+                            <form onSubmit={(e) => { e.preventDefault(); commentMutation.mutate({ ...commentForm, post_id: post.id, status: 'pending' }); }} className="bg-white/5 border border-white/5 p-8 md:p-12 rounded-[2.5rem] mb-16">
+                                <h3 className="text-xl font-bold mb-8 text-red-500 uppercase tracking-widest text-xs">Post a Comment</h3>
+                                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                                    <Input value={commentForm.commenter_name} onChange={e => setCommentForm({...commentForm, commenter_name: e.target.value})} placeholder="Name" className="bg-white/5 border-white/10 rounded-xl h-14" required />
+                                    <Input type="email" value={commentForm.commenter_email} onChange={e => setCommentForm({...commentForm, commenter_email: e.target.value})} placeholder="Email" className="bg-white/5 border-white/10 rounded-xl h-14" required />
                                 </div>
-                                <div className="space-y-3 mb-12">
-                                    <Label className="text-gray-400 font-bold ml-2">Your Thoughts</Label>
-                                    <Textarea value={commentForm.comment_text} onChange={e => setCommentForm({...commentForm, comment_text: e.target.value})} className="bg-white/5 border-white/10 rounded-3xl min-h-[200px] focus:border-red-500 transition-all p-6" required />
-                                </div>
-                                <Button type="submit" disabled={commentMutation.isPending} className="bg-red-600 hover:bg-red-700 h-16 px-12 rounded-2xl font-black text-xl w-full md:w-auto shadow-xl shadow-red-600/20 transition-all">
-                                    {commentMutation.isPending ? 'Publishing...' : 'Post Comment'}
+                                <Textarea value={commentForm.comment_text} onChange={e => setCommentForm({...commentForm, comment_text: e.target.value})} placeholder="Join the discussion..." className="bg-white/5 border-white/10 rounded-2xl min-h-[150px] mb-8" required />
+                                <Button type="submit" disabled={commentMutation.isPending} className="bg-red-600 hover:bg-red-700 h-14 px-10 rounded-xl font-black">
+                                    {commentMutation.isPending ? 'Publishing...' : 'Post Insight'}
                                 </Button>
-                                {commentMutation.isSuccess && <p className="text-green-500 font-bold mt-6 ml-2 italic">Insight shared! Awaiting review.</p>}
                             </form>
 
-                            <div className="space-y-10">
+                            <div className="space-y-6">
                                 {comments.map((comment) => (
-                                    <div key={comment.id} className="p-10 bg-white/5 border border-white/5 rounded-[2.5rem]">
-                                        <div className="flex items-center gap-5 mb-6">
-                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-600 to-orange-500 flex items-center justify-center font-black text-white text-lg">{comment.commenter_name[0]}</div>
+                                    <div key={comment.id} className="p-8 bg-white/5 border border-white/5 rounded-2xl">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center font-black text-white">{comment.commenter_name[0]}</div>
                                             <div>
-                                                <div className="font-bold text-lg text-white">{comment.commenter_name}</div>
-                                                <div className="text-xs text-gray-500 font-bold uppercase tracking-widest">{formatDate(comment.created_at)}</div>
+                                                <div className="font-bold">{comment.commenter_name}</div>
+                                                <div className="text-xs text-gray-500">{formatDate(comment.created_at)}</div>
                                             </div>
                                         </div>
-                                        <p className="text-gray-400 leading-relaxed text-lg">{comment.comment_text}</p>
+                                        <p className="text-gray-400">{comment.comment_text}</p>
                                     </div>
                                 ))}
                             </div>
