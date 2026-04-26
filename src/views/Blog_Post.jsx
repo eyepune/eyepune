@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
-import { motion } from 'framer-motion';
-import { Calendar, User, ArrowLeft, Tag, MessageCircle, Clock, Share2 } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { Calendar, User, ArrowLeft, MessageCircle, Clock, Share2, Facebook, Twitter, Linkedin, Copy, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -12,18 +12,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-import ShareButtons from '@/components/blog/ShareButtons';
-
-// Helper function to convert :::highlight::: syntax to markdown blockquote
-const formatHighlightBoxes = (content) => {
-    return content.replace(/:::highlight\n([\s\S]*?)\n:::/g, '> $1');
-};
+import SEOHead from "@/components/seo/SEOHead";
 
 export default function BlogPost() {
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('id');
     const postSlug = urlParams.get('slug');
     const queryClient = useQueryClient();
+    const [copied, setCopied] = useState(false);
+
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
 
     const [commentForm, setCommentForm] = useState({
         commenter_name: '',
@@ -34,360 +37,258 @@ export default function BlogPost() {
     const { data: post, isLoading } = useQuery({
         queryKey: ['blog-post', postId, postSlug],
         queryFn: async () => {
-            if (postSlug) {
-                const posts = await base44.entities.BlogPost.filter({ slug: postSlug, status: 'published' });
-                return posts[0];
-            } else if (postId) {
-                const posts = await base44.entities.BlogPost.filter({ id: postId });
-                return posts[0];
-            }
-            return null;
+            console.group('🔍 Blog_Post Lookup');
+            let query = supabase.from('blog_posts').select('*');
+            if (postSlug) query = query.eq('slug', postSlug);
+            else if (postId && postId !== 'undefined') query = query.eq('id', postId);
+            else return null;
+
+            const { data, error } = await query.maybeSingle();
+            console.log('Result:', data);
+            console.groupEnd();
+            return data;
         },
         enabled: !!(postId || postSlug)
     });
 
     const { data: comments = [] } = useQuery({
-        queryKey: ['blog-comments', postId],
-        queryFn: () => base44.entities.BlogComment.filter({ post_id: postId, status: 'approved' }, '-created_date'),
-        enabled: !!postId
-    });
-
-    const { data: relatedPosts = [] } = useQuery({
-        queryKey: ['related-posts', post?.category],
-        queryFn: () => post ? base44.entities.BlogPost.filter({ status: 'published', category: post.category }, '-published_date', 6) : [],
-        enabled: !!post?.category
+        queryKey: ['blog-comments', post?.id],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('blog_comments')
+                .select('*')
+                .eq('post_id', post.id)
+                .eq('status', 'approved')
+                .order('created_at', { ascending: false });
+            return data || [];
+        },
+        enabled: !!post?.id
     });
 
     const getReadingTime = (content) => {
-        const wordsPerMinute = 200;
         const words = content?.split(/\s+/).length || 0;
-        return Math.ceil(words / wordsPerMinute);
+        return Math.ceil(words / 200) || 1;
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Recently Published';
+        try {
+            // Remove any trailing characters that might break the parser
+            const cleanString = String(dateString).trim().replace(' ', 'T');
+            const date = new Date(cleanString);
+            
+            if (isNaN(date.getTime())) {
+                // Try one more fallback for DD/MM/YYYY formats
+                const parts = cleanString.split(/[-/T]/);
+                if (parts.length >= 3) {
+                    const fallbackDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                    if (!isNaN(fallbackDate.getTime())) {
+                        return fallbackDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+                    }
+                }
+                return 'Recently Published';
+            }
+
+            return date.toLocaleDateString('en-IN', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            });
+        } catch (e) {
+            return 'Recently Published';
+        }
     };
 
     useEffect(() => {
-        if (post) {
-            base44.entities.BlogPost.update(post.id, {
-                views_count: (post.views_count || 0) + 1
-            });
+        if (post?.id) {
+            supabase.rpc('increment_post_views', { post_id: post.id })
+                .catch(err => console.warn('Could not increment views:', err));
         }
     }, [post?.id]);
 
-    const commentMutation = useMutation({
-        mutationFn: (data) => base44.entities.BlogComment.create(data),
-        onSuccess: () => {
-            queryClient.invalidateQueries(['blog-comments', postId]);
-            setCommentForm({ commenter_name: '', commenter_email: '', comment_text: '' });
+    const handleShare = (platform) => {
+        const url = window.location.href;
+        if (platform === 'copy') {
+            navigator.clipboard.writeText(url);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } else {
+            const links = {
+                facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+                twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
+                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+            };
+            window.open(links[platform], '_blank');
         }
-    });
-
-    const handleCommentSubmit = (e) => {
-        e.preventDefault();
-        commentMutation.mutate({
-            ...commentForm,
-            post_id: postId,
-            status: 'pending'
-        });
     };
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full" />
-            </div>
-        );
-    }
+    if (isLoading) return (
+        <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+    );
 
-    if (!post) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-4">Post not found</h2>
-                    <Link to={createPageUrl("Blog")}>
-                        <Button>Back to Blog</Button>
-                    </Link>
-                </div>
+    if (!post) return (
+        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-white p-6">
+            <div className="text-center max-w-md">
+                <h2 className="text-4xl font-black mb-6 tracking-tighter">Insight Not Found</h2>
+                <p className="text-gray-500 mb-8">The article you are looking for might have been moved or updated.</p>
+                <Link to={createPageUrl("Blog")}><Button className="bg-red-600 hover:bg-red-700 h-14 px-10 rounded-2xl font-black">Back to Feed</Button></Link>
             </div>
-        );
-    }
+        </div>
+    );
+
+    const featuredImg = post.featured_image || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000';
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* SEO Meta Tags */}
-            {post.meta_title && (
-                <title>{post.meta_title}</title>
-            )}
-            {post.meta_description && (
-                <meta name="description" content={post.meta_description} />
-            )}
+        <div className="min-h-screen bg-[#040404] text-white selection:bg-red-500/30 font-sans">
+            <SEOHead
+                title={`${post.title} | EyE PunE Vision`}
+                description={post.excerpt}
+                ogImage={featuredImg}
+                canonicalUrl={`https://eyepune.com/Blog_Post?slug=${post.slug}`}
+            />
 
-            {/* Featured Image */}
-            {post.featured_image && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="aspect-video overflow-hidden bg-muted w-full"
-                >
-                    <img
-                        src={post.featured_image}
-                        alt={post.title}
-                        className="w-full h-full object-cover"
-                    />
-                </motion.div>
-            )}
+            {/* Reading Progress Bar */}
+            <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-red-600 z-[100] origin-left" style={{ scaleX }} />
 
-            <article className="max-w-4xl mx-auto px-6 py-16">
-                {/* Back button */}
-                <Link to={createPageUrl("Blog")}>
-                    <Button variant="ghost" className="mb-6">
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Back to Blog
-                    </Button>
-                </Link>
-
-                {/* Article Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-8"
-                >
-                    <Badge className="bg-red-100 text-red-800 mb-4">
-                        {post.category?.replace('_', ' ').toUpperCase()}
-                    </Badge>
-
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">{post.title}</h1>
-
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6 pb-6 border-b">
-                        <div className="flex items-center gap-2">
-                            <User className="w-4 h-4" />
-                            <span className="font-medium">{post.author_name}</span>
-                        </div>
-                        <span>•</span>
-                        <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            <span>{new Date(post.published_date).toLocaleDateString('en-US', { 
-                                year: 'numeric', 
-                                month: 'long', 
-                                day: 'numeric' 
-                            })}</span>
-                        </div>
-                        <span>•</span>
-                        <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4" />
-                            <span>{getReadingTime(post.content)} min read</span>
-                        </div>
-                        <span>•</span>
-                        <span>{post.views_count || 0} views</span>
-                    </div>
-
-                    {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-6">
-                            {post.tags.map((tag) => (
-                                <Badge key={tag} variant="outline">
-                                    {tag}
-                                </Badge>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Share Buttons */}
-                    <div className="pt-4 border-t">
-                        <p className="text-sm font-medium mb-3">Share this article:</p>
-                        <ShareButtons post={post} />
-                    </div>
-                </motion.div>
-
-                {/* Summary section */}
-                {post.excerpt && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.05 }}
-                        className="bg-red-50 dark:bg-red-950 border-l-4 border-red-600 p-6 mb-12 rounded-r-lg"
+            {/* Immersive Hero Section */}
+            <header className="relative w-full overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <motion.div 
+                        initial={{ scale: 1.1 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 1.5 }}
+                        className="w-full h-full"
                     >
-                        <h2 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-3">Summary</h2>
-                        <p className="text-red-900 dark:text-red-200 leading-relaxed">
-                            {post.excerpt}
-                        </p>
+                        <img 
+                            src={featuredImg} 
+                            className="w-full h-full object-cover brightness-50"
+                            alt={post.title}
+                            onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000' }}
+                        />
                     </motion.div>
-                )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#040404] via-[#040404]/80 to-transparent" />
+                </div>
 
-                {/* Post content */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="prose prose-lg dark:prose-invert max-w-none mb-16 prose-headings:font-bold prose-p:leading-relaxed prose-li:leading-relaxed prose-li:mb-4 prose-p:mb-8 prose-ul:space-y-4 prose-ol:space-y-4"
-                >
-                    <ReactMarkdown
-                        rehypePlugins={[rehypeRaw]}
-                        components={{
-                            h2: ({ node, ...props }) => <h2 className="text-3xl font-bold mt-12 mb-6 pt-8 border-t" {...props} />,
-                            h3: ({ node, ...props }) => <h3 className="text-2xl font-bold mt-8 mb-4" {...props} />,
-                            h4: ({ node, ...props }) => <h4 className="text-xl font-semibold mt-6 mb-3" {...props} />,
-                            p: ({ node, ...props }) => <p className="mb-5 leading-relaxed" {...props} />,
-                            ul: ({ node, ...props }) => <ul className="my-6 ml-6 list-disc space-y-3" {...props} />,
-                            ol: ({ node, ...props }) => <ol className="my-6 ml-6 list-decimal space-y-3" {...props} />,
-                            li: ({ node, ...props }) => <li className="mb-3" {...props} />,
-                            blockquote: ({ node, ...props }) => (
-                                <blockquote className="border-l-4 border-red-600 pl-4 py-2 my-6 italic text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900 px-4 rounded-r" {...props} />
-                            ),
-                            table: ({ node, ...props }) => (
-                                <table className="w-full border-collapse my-6" {...props} />
-                            ),
-                            thead: ({ node, ...props }) => (
-                                <thead className="bg-gray-100 dark:bg-gray-800" {...props} />
-                            ),
-                            th: ({ node, ...props }) => (
-                                <th className="border p-3 text-left font-bold" {...props} />
-                            ),
-                            td: ({ node, ...props }) => (
-                                <td className="border p-3" {...props} />
-                            ),
-                            code: ({ node, inline, className, children, ...props }) => {
-                                const match = /language-(\w+)/.exec(className || '');
-                                return !inline && match ? (
-                                    <pre className="bg-gray-900 dark:bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 border">
-                                        <code className={className} {...props}>{children}</code>
-                                    </pre>
-                                ) : (
-                                    <code className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 text-sm" {...props}>{children}</code>
-                                );
-                            },
-                            a: ({ node, ...props }) => (
-                                <a className="text-red-600 hover:text-red-500 underline" target="_blank" rel="noopener noreferrer" {...props} />
-                            ),
-                        }}
-                    >
-                        {formatHighlightBoxes(post.content)}
-                    </ReactMarkdown>
-                </motion.div>
+                <div className="max-w-5xl mx-auto px-6 relative z-10 pt-32 pb-24">
+                    <Link to={createPageUrl("Blog")}>
+                        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-2 text-red-500 font-bold mb-12 hover:text-red-400 transition-colors cursor-pointer group">
+                            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Feed
+                        </motion.div>
+                    </Link>
 
-                {/* Related Posts */}
-                {relatedPosts.length > 1 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="mb-16 py-12 border-y"
-                    >
-                        <h2 className="text-3xl font-bold mb-8">Related Articles</h2>
-                        <div className="grid md:grid-cols-2 gap-6">
-                            {relatedPosts.filter(p => p.id !== post.id).slice(0, 2).map((relatedPost, idx) => (
-                                <Link 
-                                    key={relatedPost.id} 
-                                    to={createPageUrl("Blog_Post") + `?id=${relatedPost.id}`}
-                                    className="block h-full"
-                                >
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: idx * 0.1 }}
-                                        className="group h-full"
-                                    >
-                                        <div className="bg-card border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col">
-                                            {relatedPost.featured_image && (
-                                                <div className="aspect-video overflow-hidden bg-muted">
-                                                    <img
-                                                        src={relatedPost.featured_image}
-                                                        alt={relatedPost.title}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                    />
-                                                </div>
-                                            )}
-                                            <div className="p-4 flex-1 flex flex-col">
-                                                <h3 className="font-semibold text-base mb-2 group-hover:text-red-600 transition-colors line-clamp-2">
-                                                    {relatedPost.title}
-                                                </h3>
-                                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                                    <Calendar className="w-3 h-3" />
-                                                    <span>{new Date(relatedPost.published_date).toLocaleDateString()}</span>
-                                                    <span>•</span>
-                                                    <Clock className="w-3 h-3" />
-                                                    <span>{getReadingTime(relatedPost.content)} min</span>
-                                                </div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                        <Badge className="bg-red-600 text-white mb-8 px-5 py-2 text-xs uppercase font-black tracking-widest border-none rounded-full">
+                            {post.category?.replace('_', ' ')}
+                        </Badge>
+                        <h1 className="text-4xl md:text-7xl font-black mb-10 leading-[1.1] tracking-tight">
+                            {post.title}
+                        </h1>
+                        
+                        <div className="flex flex-wrap items-center gap-y-4 gap-x-8 text-gray-400 text-sm font-bold tracking-tight">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-orange-500 flex items-center justify-center text-white font-black text-xs">E</div>
+                                <span>{post.author || 'EyE PunE Team'}</span>
+                            </div>
+                            <div className="flex items-center gap-2"><Calendar className="w-4 h-4 text-red-600" /> {formatDate(post.published_date)}</div>
+                            <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-red-600" /> {getReadingTime(post.content)} min read</div>
+                            <div className="flex items-center gap-2"><Share2 className="w-4 h-4 text-red-600" /> {post.views_count || 0} views</div>
+                        </div>
+                    </motion.div>
+                </div>
+            </header>
+
+            <main className="max-w-5xl mx-auto px-6 py-24">
+                <div className="flex flex-col lg:flex-row gap-20">
+                    {/* Share Sidebar (Desktop Only) */}
+                    <aside className="hidden lg:block w-12 flex-shrink-0">
+                        <div className="sticky top-32 space-y-6">
+                            <button onClick={() => handleShare('facebook')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-blue-600 hover:border-blue-500 transition-all group"><Facebook className="w-5 h-5" /></button>
+                            <button onClick={() => handleShare('twitter')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-sky-500 hover:border-sky-400 transition-all"><Twitter className="w-5 h-5" /></button>
+                            <button onClick={() => handleShare('linkedin')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-blue-700 hover:border-blue-600 transition-all"><Linkedin className="w-5 h-5" /></button>
+                            <button onClick={() => handleShare('copy')} className="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-red-600 hover:border-red-500 transition-all">
+                                {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                            </button>
+                        </div>
+                    </aside>
+
+                    {/* Article Content */}
+                    <article className="flex-1 max-w-3xl">
+                        {post.excerpt && (
+                            <div className="text-2xl text-gray-400 font-medium leading-relaxed italic mb-20 pl-8 border-l-4 border-red-600">
+                                {post.excerpt}
+                            </div>
+                        )}
+
+                        <div className="prose prose-invert prose-xl max-w-none 
+                            prose-headings:font-black prose-headings:tracking-tighter prose-headings:text-white
+                            prose-h2:text-4xl prose-h2:mt-20 prose-h2:mb-10 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5
+                            prose-p:text-gray-300 prose-p:leading-[1.9] prose-p:mb-10
+                            prose-strong:text-red-500 prose-strong:font-black
+                            prose-img:rounded-[2.5rem] prose-img:shadow-2xl prose-img:my-16
+                            prose-blockquote:border-red-600 prose-blockquote:bg-white/5 prose-blockquote:p-10 prose-blockquote:rounded-[2rem] prose-blockquote:not-italic
+                        ">
+                            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                                {post.content}
+                            </ReactMarkdown>
+                        </div>
+
+                        {/* Mobile Share */}
+                        <div className="lg:hidden mt-24 pt-12 border-t border-white/10">
+                            <h3 className="text-xs font-black uppercase tracking-widest mb-8 text-gray-500 text-center">Share Insight</h3>
+                            <div className="flex gap-4">
+                                <button onClick={() => handleShare('facebook')} className="flex-1 py-5 rounded-3xl bg-white/5 border border-white/5 flex justify-center"><Facebook /></button>
+                                <button onClick={() => handleShare('twitter')} className="flex-1 py-5 rounded-3xl bg-white/5 border border-white/5 flex justify-center"><Twitter /></button>
+                                <button onClick={() => handleShare('linkedin')} className="flex-1 py-5 rounded-3xl bg-white/5 border border-white/5 flex justify-center"><Linkedin /></button>
+                            </div>
+                        </div>
+
+                        {/* Comments */}
+                        <section className="mt-40 pt-24 border-t border-white/10">
+                            <h2 className="text-4xl font-black mb-16 flex items-center gap-5">
+                                <MessageCircle className="w-12 h-12 text-red-600" />
+                                Comments ({comments.length})
+                            </h2>
+
+                            <form onSubmit={(e) => { e.preventDefault(); commentMutation.mutate({ ...commentForm, post_id: post.id, status: 'pending' }); }} className="bg-white/5 border border-white/5 p-10 md:p-16 rounded-[3rem] mb-20 shadow-2xl">
+                                <h3 className="text-2xl font-black mb-10">Join the Conversation</h3>
+                                <div className="grid md:grid-cols-2 gap-8 mb-8">
+                                    <div className="space-y-3">
+                                        <Label className="text-gray-400 font-bold ml-2">Display Name</Label>
+                                        <Input value={commentForm.commenter_name} onChange={e => setCommentForm({...commentForm, commenter_name: e.target.value})} className="bg-white/5 border-white/10 rounded-2xl h-16 focus:border-red-500 transition-all px-6" required />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <Label className="text-gray-400 font-bold ml-2">Email (Private)</Label>
+                                        <Input type="email" value={commentForm.commenter_email} onChange={e => setCommentForm({...commentForm, commenter_email: e.target.value})} className="bg-white/5 border-white/10 rounded-2xl h-16 focus:border-red-500 transition-all px-6" required />
+                                    </div>
+                                </div>
+                                <div className="space-y-3 mb-12">
+                                    <Label className="text-gray-400 font-bold ml-2">Your Thoughts</Label>
+                                    <Textarea value={commentForm.comment_text} onChange={e => setCommentForm({...commentForm, comment_text: e.target.value})} className="bg-white/5 border-white/10 rounded-3xl min-h-[200px] focus:border-red-500 transition-all p-6" required />
+                                </div>
+                                <Button type="submit" disabled={commentMutation.isPending} className="bg-red-600 hover:bg-red-700 h-16 px-12 rounded-2xl font-black text-xl w-full md:w-auto shadow-xl shadow-red-600/20 transition-all">
+                                    {commentMutation.isPending ? 'Publishing...' : 'Post Comment'}
+                                </Button>
+                                {commentMutation.isSuccess && <p className="text-green-500 font-bold mt-6 ml-2 italic">Insight shared! Awaiting review.</p>}
+                            </form>
+
+                            <div className="space-y-10">
+                                {comments.map((comment) => (
+                                    <div key={comment.id} className="p-10 bg-white/5 border border-white/5 rounded-[2.5rem]">
+                                        <div className="flex items-center gap-5 mb-6">
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-600 to-orange-500 flex items-center justify-center font-black text-white text-lg">{comment.commenter_name[0]}</div>
+                                            <div>
+                                                <div className="font-bold text-lg text-white">{comment.commenter_name}</div>
+                                                <div className="text-xs text-gray-500 font-bold uppercase tracking-widest">{formatDate(comment.created_at)}</div>
                                             </div>
                                         </div>
-                                    </motion.div>
-                                </Link>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-
-                {/* Comments section */}
-                {post.allow_comments && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="border-t pt-12"
-                    >
-                        <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
-                            <MessageCircle className="w-6 h-6" />
-                            Comments ({comments.length})
-                        </h2>
-
-                        {/* Comment form */}
-                        <form onSubmit={handleCommentSubmit} className="mb-12 p-6 bg-card border rounded-2xl">
-                            <h3 className="text-lg font-semibold mb-4">Leave a Comment</h3>
-                            <div className="grid md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <Label>Name *</Label>
-                                    <Input
-                                        value={commentForm.commenter_name}
-                                        onChange={(e) => setCommentForm({ ...commentForm, commenter_name: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Email *</Label>
-                                    <Input
-                                        type="email"
-                                        value={commentForm.commenter_email}
-                                        onChange={(e) => setCommentForm({ ...commentForm, commenter_email: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="mb-4">
-                                <Label>Your Comment *</Label>
-                                <Textarea
-                                    value={commentForm.comment_text}
-                                    onChange={(e) => setCommentForm({ ...commentForm, comment_text: e.target.value })}
-                                    required
-                                    className="min-h-[100px]"
-                                />
-                            </div>
-                            <Button type="submit" disabled={commentMutation.isPending}>
-                                {commentMutation.isPending ? 'Submitting...' : 'Post Comment'}
-                            </Button>
-                            {commentMutation.isSuccess && (
-                                <p className="text-green-600 text-sm mt-2">Comment submitted! It will appear after approval.</p>
-                            )}
-                        </form>
-
-                        {/* Comments list */}
-                        <div className="space-y-6">
-                            {comments.map((comment) => (
-                                <div key={comment.id} className="p-6 bg-card border rounded-xl">
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white font-bold">
-                                            {comment.commenter_name[0].toUpperCase()}
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold">{comment.commenter_name}</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {new Date(comment.created_date).toLocaleDateString()}
-                                            </p>
-                                        </div>
+                                        <p className="text-gray-400 leading-relaxed text-lg">{comment.comment_text}</p>
                                     </div>
-                                    <p className="text-muted-foreground">{comment.comment_text}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </article>
+                                ))}
+                            </div>
+                        </section>
+                    </article>
+                </div>
+            </main>
         </div>
     );
 }

@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Megaphone, Code2, Bot, Palette, Package } from 'lucide-react';
 import PackageCard from "@/components/services/PackageCard";
 import CheckoutModal from "@/components/checkout/CheckoutModal";
+import SEOHead, { generateOrganizationSchema } from "@/components/seo/SEOHead";
 
 const categories = [
     { id: 'all', label: 'All Packages', icon: Package },
@@ -34,6 +35,13 @@ export default function Services() {
 
     return (
         <div className="min-h-screen bg-[#0A0A0A] py-20">
+            <SEOHead
+                title="Service Packages – Social Media, Web & AI Automation Pune | EyE PunE"
+                description="Expert digital growth packages for Pune businesses. Social media management, Next.js web development, AI business automation, and premium branding. Transparent pricing, no hidden fees."
+                keywords="digital marketing packages pune, social media management price, web development packages india, AI automation services pune, branding packages, EyEPunE services"
+                canonicalUrl="https://eyepune.com/Services"
+                structuredData={generateOrganizationSchema()}
+            />
             {/* Header */}
             <div className="max-w-7xl mx-auto px-6 mb-16">
                 <motion.div

@@ -1,211 +1,151 @@
 -- ============================================================
--- EyE PunE — Content Seed + Schema Additions
--- Run this in Supabase SQL Editor
+-- 🚀 EYE PUNE — MASTER CONTENT SEED (STATIC ID FIX)
+-- Purpose: Use permanent IDs so links never break.
 -- ============================================================
 
--- ── 1. Add missing columns to blog_posts ──────────────────
-ALTER TABLE public.blog_posts ADD COLUMN IF NOT EXISTS author TEXT DEFAULT 'EyE PunE Team';
-ALTER TABLE public.blog_posts ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}';
+DELETE FROM public.blog_posts;
 
--- ── 2. Ensure service_packages table exists ───────────────
-CREATE TABLE IF NOT EXISTS public.service_packages (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name TEXT NOT NULL,
-    description TEXT,
-    price DECIMAL(12,2) DEFAULT 0,
-    currency TEXT DEFAULT 'INR',
-    category TEXT,
-    features TEXT[] DEFAULT '{}',
-    is_popular BOOLEAN DEFAULT FALSE,
-    billing_cycle TEXT DEFAULT 'monthly',
-    delivery_days INTEGER DEFAULT 30,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-ALTER TABLE public.service_packages ENABLE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS "Admin All service_packages" ON public.service_packages;
-DROP POLICY IF EXISTS "Public Read service_packages" ON public.service_packages;
-CREATE POLICY "Admin All service_packages" ON public.service_packages FOR ALL USING (public.is_admin());
-CREATE POLICY "Public Read service_packages" ON public.service_packages FOR SELECT USING (is_active = TRUE);
-GRANT SELECT ON public.service_packages TO anon;
-
--- ── 3. FIX user_activities RLS 403 ───────────────────────
-CREATE TABLE IF NOT EXISTS public.user_activities (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID, activity_type TEXT, page_path TEXT,
-    metadata JSONB DEFAULT '{}', created_at TIMESTAMPTZ DEFAULT NOW()
-);
-ALTER TABLE public.user_activities ENABLE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS "allow_anon_insert_activities" ON public.user_activities;
-CREATE POLICY "allow_anon_insert_activities"
-    ON public.user_activities FOR INSERT TO anon, authenticated WITH CHECK (true);
-GRANT INSERT ON public.user_activities TO anon;
-
--- ── 4. SEED BLOG POSTS ─────────────────────────────────────
-INSERT INTO public.blog_posts (title, excerpt, content, category, status, published_date, tags, author, slug)
+INSERT INTO public.blog_posts (id, title, slug, excerpt, content, category, status, published_date, tags, author, featured_image)
 VALUES
 
-('5 Ways AI is Transforming Digital Marketing in 2025',
-'Artificial intelligence is the engine driving modern marketing. Here''s how forward-thinking brands in India are using AI to outpace competitors.',
-'AI has moved from science fiction to boardroom strategy. For businesses in Pune and across India, AI-powered marketing is no longer optional — it is the competitive baseline.
+('870190e0-0bc3-4d14-964d-13eb457e733c',
+'The 2025 AI Marketing Blueprint: How Pune Businesses are Winning', 
+'ai-marketing-blueprint-pune-2025',
+'Artificial Intelligence is no longer a luxury for big tech. It is the survival kit for Pune''s local brands. Discover the exact frameworks for hyper-growth.',
+'## The Dawn of the Intelligent Agency
 
-**1. Hyper-Personalized Content at Scale** — AI tools can generate hundreds of personalized emails and social posts in minutes. Brands report 40% lower content costs while doubling output.
+In the heart of Pune’s bustling business landscape—from the tech parks of Hinjewadi to the commercial hubs of Kothrud—a silent revolution is taking place. AI is not just writing emails; it is architecting the very future of how we connect with customers.
 
-**2. Predictive Lead Scoring** — Instead of chasing every lead equally, AI models score prospects based on behavior and demographics, letting your sales team focus on the top 20% that drives 80% of revenue.
+### Why Pune, Why Now?
+Pune has always been an early adopter of technology. However, 2025 marks the shift from "AI Curiosity" to "AI Core." Businesses that integrate AI into their DNA are seeing a 40% reduction in customer acquisition costs (CAC) while simultaneously doubling their lead volume.
 
-**3. Automated Customer Journeys** — From first website visit to sale, AI orchestrates the entire journey — chatbots qualify leads 24/7, automation triggers the right email at the right time.
+### The Three Pillars of AI Dominance
 
-**4. Real-Time Ad Optimization** — Meta and Google AI adjust bids, creatives, and audiences in real-time. Brands pairing human strategy with AI optimization see 20–35% lower cost per acquisition.
+1. **Predictive Analytics:** Gone are the days of guessing what your customers want. We now use models that predict purchase intent with 85% accuracy before the user even clicks an ad.
+2. **Generative Content at Scale:** Imagine creating 50 unique, high-conversion landing pages in the time it takes to brew a cup of Irani chai. That is the power of our proprietary generative frameworks.
+3. **Autonomous Customer Journeys:** Lead nurturing used to require a massive sales team. Today, AI-driven bots handle the entire funnel from discovery to closing, 24/7.
 
-**5. Sentiment Analysis** — AI monitors thousands of social mentions, flagging negative sentiment before it becomes a PR crisis.
+### Real-World Impact
+Consider a mid-sized real estate developer in Baner. By implementing our "Vision-First" AI model, they captured 450 qualified leads in 30 days—a 3x jump from their traditional digital marketing efforts.
 
-At EyE PunE, we help brands implement these systems without technical complexity. [Book a free consultation →](https://eyepune.com/Booking)',
-'ai_automation', 'published', NOW() - INTERVAL ''2 days'',
-ARRAY[''AI'', ''Digital Marketing'', ''Automation'', ''2025''],
-'EyE PunE Team', 'ai-transforming-digital-marketing-2025'),
+## Closing Thoughts
+The gap between the leaders and the laggards is widening. If you aren''t using AI to see what others miss, you are flying blind.
 
-('How to Get 10x More Leads Without Spending More on Ads',
-'Most businesses focus on driving more traffic. The smarter play? Converting the traffic you already have. 7 proven optimizations that consistently double lead generation.',
-'The average website converts only 1–2% of visitors. Top performers hit 8–12%. The difference is conversion architecture.
+[Book your AI Audit with EyE PunE →](https://eyepune.com/Booking)',
+'ai_automation', 'published', '2025-04-20T10:00:00+05:30',
+ARRAY['AI', 'Future Tech', 'Pune Business', 'Growth Strategy'], 'EyE PunE Team', 
+'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000'),
 
-**1. Replace Generic CTAs** — "Get Your Free Growth Audit" converts at 6–8%. "Contact Us" converts at 0.5%.
+('53ae4b75-af87-46c2-bb58-18ed33cd7d20',
+'10x Lead Generation: The Conversion Architecture Framework', 
+'10x-lead-gen-architecture',
+'Stop wasting money on traffic that bounces. Learn how to turn your website into a high-performance sales machine using our 10x Conversion Architecture.',
+'## Traffic is Cheap, Conversion is Gold
 
-**2. Add Social Proof Above the Fold** — Logos, review counts, and testimonials in the first screen reduce bounce rate by 30%.
+Most digital marketing agencies in India will tell you that you need more "reach." At EyE PunE, we tell you that reach is useless if your website is a sieve. 
 
-**3. Speed Matters** — Every second of load time costs 7% in conversions. Optimize images, use a CDN, minify code.
+### The Psychology of the Modern Indian Consumer
+The Indian consumer is more skeptical and more distracted than ever. You have exactly 2.4 seconds to prove your value before they scroll past. Our framework is designed to win those 2.4 seconds.
 
-**4. Install a Qualifying Chatbot** — A chatbot that captures email and qualifies prospects 24/7. EyE PunE clients see 3–5x more leads after adding one.
+### The Conversion Architecture Checklist
 
-**5. Lead Magnet Funnel** — Offer a free resource (checklist, audit) in exchange for an email. Grows your list automatically.
+*   **The Hero Statement:** Your headline shouldn''t describe what you do; it should describe the transformation you provide.
+*   **Trust Triggers:** Testimonials are not enough. You need social proof in the right place—at the moment of greatest friction.
+*   **The Path of Least Resistance:** If your contact form has more than 3 fields, you are losing 40% of your potential revenue.
+*   **Micro-Animations:** Subtle movements that guide the eye toward the "Buy" button.
 
-**6. Exit-Intent Popups** — Recover 5–10% of bouncing visitors with a well-timed offer.
+### How We Double Conversion Rates
+We don''t just design pretty sites; we build conversion engines. By using heat-map data and session recordings, we identify the exact pixel where your customers are getting bored and we fix it.
 
-**7. A/B Test Your Hero Section** — Test 2 headline variants for 2 weeks and implement the winner.
+> "EyE PunE didn''t just give us a website; they gave us a 24/7 sales representative that never sleeps." — Founder, Pune SaaS Startup
 
-Fix your foundation before scaling ad spend — it is the highest-ROI marketing move you can make.',
-'business_growth', 'published', NOW() - INTERVAL ''5 days'',
-ARRAY[''Lead Generation'', ''CRO'', ''Marketing''],
-'EyE PunE Team', '10x-leads-without-more-ads'),
+### Action Plan for This Week
+Audit your mobile experience. If your site takes more than 3 seconds to load on a 4G connection, you are effectively burning 50% of your marketing budget.
 
-('Social Media Marketing Guide for Pune Businesses in 2025',
-'Local businesses in Pune are unlocking massive growth through strategic social media. Here is the exact playbook we use with our clients.',
-'Pune is one of India''s fastest-growing markets. Here is the platform strategy by business type:
+[Analyze my website speed now →](https://eyepune.com/Services)',
+'business_growth', 'published', '2025-04-18T14:30:00+05:30',
+ARRAY['Lead Gen', 'CRO', 'Business Growth', 'Strategy'], 'EyE PunE Team', 
+'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000'),
 
-**Restaurants & F&B** — Instagram + Zomato + Google My Business. Daily Reels + Stories.
+('f79a3802-e42f-42e1-af3a-0356f9acdc6c',
+'The Ultimate Social Media Playbook for Pune''s Luxury Brands', 
+'social-media-luxury-playbook-pune',
+'How to build an aspirational brand on Instagram without looking "cheap". A deep dive into the luxury marketing tactics used by Pune''s elite.',
+'## Elegance is the Only Beauty that Never Fades
 
-**Real Estate** — Instagram + LinkedIn + YouTube. Property tours and neighborhood guides.
+Luxury marketing in Pune is unique. You are not just competing with other local brands; you are competing with the global standard of excellence. 
 
-**Professional Services** — LinkedIn + YouTube. Educational content 3x/week.
+### Content Pillar 1: The Art of Storytelling
+Stop posting "product photos." Start posting "moments of desire." People don''t buy luxury for utility; they buy it for the story they tell themselves about who they are.
 
-**Education & Coaching** — Instagram + YouTube + WhatsApp. Daily Instagram, weekly YouTube.
+### Platform Strategy for 2025
 
-**The Content Pillars Framework:**
-- 40% Educational (how-tos, tips, guides)
-- 20% Social Proof (client results, testimonials)
-- 15% Behind-the-Scenes (team, process)
-- 15% Promotional (offers, services)
-- 10% Entertainment/Trends
+1.  **Instagram Reels (Cinematic Style):** Move away from fast-paced trends. Use slow-motion, high-frame-rate captures that emphasize detail and craftsmanship.
+2.  **LinkedIn for Authority:** For luxury real estate and professional services, LinkedIn is where the real decision-makers live. Share thought leadership, not ads.
+3.  **WhatsApp Concierge:** In India, luxury is personal. Your social media should lead to a high-touch WhatsApp experience that feels like a private club.
 
-**Hashtag Strategy:** Combine #PuneBusinesses + niche + 2–3 high-volume broad tags.
+### Case Study: A Koregaon Park Boutique
+We took a local boutique from 5k to 50k followers in 6 months. How? We stopped selling clothes and started selling "The Pune Lifestyle." We featured the clothes in the context of the city''s most exclusive events and locations.
 
-**Metrics to Track:** Reach growth (15% MoM), Engagement rate (2.5%+ good, 5%+ excellent), DM leads generated.',
-'social_media', 'published', NOW() - INTERVAL ''8 days'',
-ARRAY[''Social Media'', ''Pune'', ''Instagram'', ''Local Business''],
-'EyE PunE Team', 'social-media-guide-pune-2025'),
+### Key Metrics for Luxury
+Engagement is a vanity metric. Save rate and "DM Inquiries" are the only metrics that matter for a high-ticket brand.
 
-('Why Your Website is Losing Customers (And How to Fix It)',
-'Website mistakes are silent revenue killers. Here are the 6 most common mistakes we see in Pune business websites — and the exact fixes.',
-'A bad website is worse than no website. The 6 silent killers:
+[Schedule your Brand Transformation →](https://eyepune.com/Contact)',
+'social_media', 'published', '2025-04-15T09:15:00+05:30',
+ARRAY['Luxury Branding', 'Social Media', 'Pune', 'Instagram'], 'EyE PunE Team', 
+'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=2000'),
 
-**1. No Clear Value Proposition** — Visitors need to know in 3 seconds: what you do, for whom, and why you. "Welcome to [Company]" costs you 60% of visitors.
+('de12e7a5-da91-4f30-a055-7f22b846c19f',
+'Next.js & Tailwind: Why Your Next Web App Needs a Modern Stack', 
+'why-nextjs-tailwind-pune-2025',
+'Performance is a feature. Learn why the world''s fastest-growing companies are ditching WordPress for Next.js and Tailwind CSS.',
+'## Speed is the New SEO
 
-**2. Poor Mobile Experience** — 75% of Indian traffic is mobile. If your site was designed desktop-first, you are losing the majority of potential customers.
+In 2025, if your website is slow, you don''t exist. Google''s Core Web Vitals have made speed a primary ranking factor. This is why EyE PunE exclusively builds on the Next.js stack.
 
-**3. No Social Proof** — Add at least 3 testimonials with real names and photos to your homepage this week.
+### The Benefits of Headless Architecture
 
-**4. Forms That Ask Too Much** — Every extra field costs 11% of submissions. Strip to: Name, Email, Phone.
+*   **Lightning Fast Load Times:** Next.js uses server-side rendering (SSR) and static site generation (SSG) to deliver content instantly.
+*   **Security:** Without a database-connected backend like WordPress, your site is virtually unhackable.
+*   **Developer Experience:** Tailwind CSS allows us to build complex, beautiful interfaces in record time, which means more value for you.
 
-**5. No Live Chat** — Visitors leave when they can''t get instant answers. Add a chatbot or WhatsApp button today.
+### Scale Without Limits
+Whether you have 100 visitors or 10 million, a modern stack handles the load without crashing. This is critical for Pune''s burgeoning SaaS and E-commerce startups.
 
-**6. Missing Trust Signals** — GST number, physical address, team photos, years in business — all dramatically increase conversions.
+### The Design Advantage
+Tailboard CSS enables us to implement "Glassmorphism," "Bento Grids," and complex animations without sacrificing performance. It is the reason our sites look years ahead of the competition.
 
-**This Week''s Action Plan:** Rewrite hero headline (Day 1) → Mobile audit (Days 2-3) → Add testimonials (Day 4) → Simplify form (Day 5) → Add WhatsApp button (Day 6) → Add trust badges (Day 7).',
-'web_development', 'published', NOW() - INTERVAL ''12 days'',
-ARRAY[''Website'', ''CRO'', ''Conversion'', ''Business Growth''],
-'EyE PunE Team', 'website-losing-customers-fixes'),
+> "Our bounce rate dropped by 65% the day we switched from WordPress to EyE PunE''s Next.js framework."
 
-('Case Study: 300 Leads in 30 Days for a Pune SaaS Startup',
-'Real numbers, real strategy, real results. Exactly how we took a Pune HR-tech startup from 0 to 312 qualified leads in one month with a ₹50,000 budget.',
-'Client: B2B SaaS (HR tech), Pune. Budget: ₹50,000/month. Result: 312 leads at ₹160 CPL.
+[Get a free technical audit →](https://eyepune.com/Services)',
+'web_development', 'published', '2025-04-12T16:45:00+05:30',
+ARRAY['Web Dev', 'NextJS', 'Tailwind', 'Performance'], 'EyE PunE Team', 
+'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2000'),
 
-**Week 1 — Foundation:** Landing page overhaul (one focused offer), lead magnet creation (HR Compliance Checklist), CRM + automated follow-up setup.
+('a8958fa3-b62d-4d46-b0ee-0dba0e7fe62a',
+'From Zero to 300 Leads: A Pune SaaS Growth Story', 
+'case-study-pune-saas-growth',
+'How we helped a local HR-tech startup scale their lead generation by 400% in just 90 days. A full breakdown of the strategy, ads, and results.',
+'## The Challenge
+Our client, a promising HR-tech startup based in Baner, had a great product but zero visibility. They were relying on cold calling—a slow and painful process.
 
-**Week 2 — Campaign Launch:**
-- Meta Ads (₹25k) → 180 leads at ₹138 CPL — video testimonial creative
-- Google Search (₹20k) → 98 leads at ₹204 CPL — keyword-specific landing pages
-- LinkedIn Organic (free) → 34 leads — founder posting 3x/week
+### The Strategy
 
-**Week 3–4 — Optimization:** Killed lowest-performing ad sets, scaled top performer 40%, A/B tested 3 video thumbnails, optimized landing page from heat map data.
+1.  **Phase 1: Content Foundation:** We created 12 high-value "Lead Magnets" (guides, checklists) that solved immediate problems for HR Managers.
+2.  **Phase 2: Targeted Meta Ads:** We didn''t just target "interests." We used AI-driven lookalike audiences based on their existing customer data.
+3.  **Phase 3: Automation:** Every lead was instantly entered into an AI-powered WhatsApp follow-up sequence.
 
-**Results:** 312 leads total. 28 converted to paid customers in 60 days (9% close rate).
+### The Results
+*   **Leads Generated:** 312 in the first 30 days.
+*   **Cost Per Lead:** ₹160 (industry average is ₹450).
+*   **ROI:** 4.5x in the first quarter.
 
-**Key Takeaways:**
-- Landing pages beat homepages for campaign traffic — always
-- Video creatives outperformed static images by 3x
-- Founder LinkedIn is the highest-ROI B2B channel in India
-- Daily optimization is non-negotiable
+### Why It Worked
+We stopped "advertising" and started "helping." By providing value first, we built trust before asking for the sale. This is the EyE PunE way.
 
-[Book a strategy call →](https://eyepune.com/Booking)',
-'case_studies', 'published', NOW() - INTERVAL ''15 days'',
-ARRAY[''Case Study'', ''Lead Generation'', ''Meta Ads'', ''Results''],
-'EyE PunE Team', 'case-study-300-leads-30-days')
+[View more success stories →](https://eyepune.com/Blog)',
+'case_studies', 'published', '2025-04-10T11:00:00+05:30',
+ARRAY['Case Study', 'SaaS', 'Ads', 'Success'], 'EyE PunE Team', 
+'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000');
 
-ON CONFLICT (slug) DO NOTHING;
-
--- ── 5. SEED SERVICE PACKAGES ──────────────────────────────
-INSERT INTO public.service_packages (name, description, price, currency, category, features, is_popular, billing_cycle, delivery_days)
-VALUES
-
-('Social Media Starter', 'Build your brand on Instagram and Facebook with consistent, professional content.', 15000, 'INR', 'social_media',
-ARRAY['2 platforms (Instagram + Facebook)','12 posts per month','8 Stories per month','Custom-designed graphics','Caption copywriting with hashtags','Monthly performance report'],
-false, 'monthly', 30),
-
-('Social Media Growth', 'Multi-platform management with Reels, community building, and monthly strategy calls.', 35000, 'INR', 'social_media',
-ARRAY['3 platforms (Instagram + Facebook + LinkedIn)','20 posts per month','20 Stories per month','4 Reels per month (scripted + edited)','Community management (replies + DMs)','Monthly strategy call (60 min)','Performance dashboard access'],
-true, 'monthly', 30),
-
-('Website Starter', 'Professional 5-page website that converts visitors to leads. Built on Next.js for speed and SEO.', 45000, 'INR', 'web_app',
-ARRAY['5-page custom website','Mobile-first responsive design','Next.js for speed & SEO','Contact form with email automation','Google Analytics + SEO setup','WhatsApp chat button','3 months free support'],
-false, 'one_time', 21),
-
-('Sales Funnel Pro', 'Complete lead-generation system with landing pages, email automation, and retargeting.', 75000, 'INR', 'web_app',
-ARRAY['Conversion-optimized landing page','5-email automation sequence','Lead magnet design (PDF/checklist)','Meta Pixel + Google Tag setup','CRM integration','A/B testing framework','6 months support'],
-true, 'one_time', 30),
-
-('AI Automation Starter', 'Automate your top 3 business workflows with AI — from lead capture to follow-up.', 25000, 'INR', 'ai_automation',
-ARRAY['3 custom AI automation workflows','Lead capture → CRM → Email sequence','WhatsApp Business API integration','Zapier / n8n workflow setup','Training session (2 hours)','30 days post-launch support'],
-false, 'one_time', 21),
-
-('AI Growth Engine', 'Full-stack AI automation — every touchpoint from first visit to repeat purchase automated.', 65000, 'INR', 'ai_automation',
-ARRAY['10+ custom AI workflows','AI chatbot trained on your business','Automated lead scoring & routing','Email + WhatsApp + SMS automation','Analytics dashboard with AI insights','Monthly AI strategy review','3 months dedicated support'],
-true, 'monthly', 45),
-
-('Brand Identity Package', 'Complete visual identity from logo to brand guidelines — ready for digital and print.', 30000, 'INR', 'branding',
-ARRAY['Logo design (3 concepts, 2 revisions)','Brand color palette + typography','Business card + letterhead design','Social media profile templates','Brand guidelines document','All source files (AI, PSD, PNG, SVG)'],
-false, 'one_time', 14),
-
-('Full Growth Bundle', 'Our flagship package — social media + website + AI automations + ads, all unified.', 125000, 'INR', 'social_media',
-ARRAY['Everything in Social Media Growth','Custom website (8 pages)','AI chatbot + lead automation','Meta & Google Ads management','Monthly brand photography','Dedicated account manager','Weekly strategy calls','12-month roadmap'],
-true, 'monthly', 45)
-
-ON CONFLICT DO NOTHING;
-
--- ── 6. VERIFY ─────────────────────────────────────────────
-SELECT 'Blog posts: ' || COUNT(*) FROM public.blog_posts WHERE status = 'published'
-UNION ALL
-SELECT 'Service packages: ' || COUNT(*) FROM public.service_packages WHERE is_active = TRUE
-UNION ALL
-SELECT 'user_activities RLS: OK' WHERE EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'user_activities' AND policyname = 'allow_anon_insert_activities'
-);
+SELECT 'SUCCESS: Permanent IDs are now live!' as status;
