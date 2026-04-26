@@ -3,7 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { Calendar, User, ArrowLeft, MessageCircle, Clock, Share2, Facebook, Twitter, Linkedin, Copy, Check } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +16,7 @@ import rehypeRaw from 'rehype-raw';
 import SEOHead from "@/components/seo/SEOHead";
 
 export default function BlogPost() {
-    const [searchParams] = useSearchParams();
+    const searchParams = useSearchParams();
     const postId = searchParams.get('id');
     const postSlug = searchParams.get('slug');
     const queryClient = useQueryClient();
@@ -173,7 +174,7 @@ export default function BlogPost() {
             <div className="text-center max-w-md">
                 <h2 className="text-4xl font-black mb-6 tracking-tighter">Insight Not Found</h2>
                 <p className="text-gray-500 mb-8">The article you are looking for might have been moved or updated.</p>
-                <Link to={createPageUrl("Blog")}><Button className="bg-red-600 hover:bg-red-700 h-14 px-10 rounded-2xl font-black">Back to Feed</Button></Link>
+                <Link href={createPageUrl("Blog")}><Button className="bg-red-600 hover:bg-red-700 h-14 px-10 rounded-2xl font-black">Back to Feed</Button></Link>
             </div>
         </div>
     );
@@ -207,7 +208,7 @@ export default function BlogPost() {
                 </div>
 
                 <div className="max-w-5xl mx-auto px-6 relative z-10 py-24 w-full">
-                    <Link to={createPageUrl("Blog")}>
+                    <Link href={createPageUrl("Blog")}>
                         <div className="inline-flex items-center gap-2 text-red-500 font-bold mb-10 hover:text-red-400 transition-colors cursor-pointer group">
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Feed
                         </div>
@@ -271,7 +272,7 @@ export default function BlogPost() {
                                 <h2 className="text-3xl font-black mb-12">Related Vision Insights</h2>
                                 <div className="grid md:grid-cols-2 gap-8">
                                     {relatedPosts.map((relatedPost) => (
-                                        <Link key={relatedPost.id} to={createPageUrl(`Blog_Post?slug=${relatedPost.slug}`)} className="group block">
+                                        <Link key={relatedPost.id} href={createPageUrl(`Blog_Post?slug=${relatedPost.slug}`)} className="group block">
                                             <div className="bg-white/5 border border-white/5 rounded-3xl p-6 hover:bg-white/10 transition-all h-full flex flex-col">
                                                 <div className="aspect-video rounded-2xl overflow-hidden mb-6">
                                                     <img src={relatedPost.featured_image || featuredImg} className="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="" />

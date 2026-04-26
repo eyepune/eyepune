@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Calendar, User, ArrowRight, Search, Tag, Clock, Sparkles, TrendingUp } from 'lucide-react';
 import { Input } from "@/components/ui/input";
@@ -93,7 +93,7 @@ export default function Blog() {
             {featuredPost && selectedCategory === 'all' && !searchQuery && (
                 <section className="py-16 md:py-24 border-b border-white/[0.05]">
                     <div className="max-w-7xl mx-auto px-6">
-                        <Link to={createPageUrl(`Blog_Post?slug=${featuredPost.slug}`)} className="group">
+                        <Link href={createPageUrl(`Blog_Post?slug=${featuredPost.slug}`)} className="group">
                             <motion.div 
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -205,7 +205,7 @@ export default function Blog() {
                                                 transition={{ delay: idx * 0.05 }}
                                                 className="group"
                                             >
-                                                <Link to={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
+                                                <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
                                                     <div className="bg-white/[0.02] border border-white/[0.05] rounded-[2rem] p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 h-full flex flex-col">
                                                         <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-6">
                                                             <img 
