@@ -249,15 +249,15 @@ export default function BlogPost() {
 
                     <article className="flex-1 max-w-3xl">
                         {post.excerpt && (
-                            <div className="text-xl md:text-2xl text-gray-400 font-medium leading-relaxed italic mb-16 pl-8 border-l-4 border-red-600">
+                            <div className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed italic mb-16 pl-8 border-l-4 border-red-600">
                                 {post.excerpt}
                             </div>
                         )}
 
-                        <div className="prose prose-invert prose-lg md:prose-xl max-w-none 
+                        <div className="prose prose-invert prose-base md:prose-lg max-w-none 
                             prose-headings:font-black prose-headings:tracking-tighter prose-headings:text-white
-                            prose-h2:text-3xl md:text-4xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5
-                            prose-p:text-gray-300 prose-p:leading-[1.8] prose-p:mb-8
+                            prose-h2:text-2xl md:text-3xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5
+                            prose-p:text-gray-300 prose-p:leading-[1.7] prose-p:mb-8
                             prose-img:rounded-3xl prose-img:shadow-2xl prose-img:my-12
                             prose-blockquote:border-red-600 prose-blockquote:bg-white/5 prose-blockquote:p-8 prose-blockquote:rounded-3xl
                         ">
