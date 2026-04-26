@@ -94,11 +94,23 @@ export const AuthProvider = ({ children }) => {
       if (profileError || !userProfile) {
         console.warn('Profile not found, using auth metadata');
         if (authUser) {
+          // AUTO-CREATE PROFILE IF MISSING (Defensive)
+          try {
+            await supabase.from('users').insert([{
+              id: authUser.id,
+              email: authUser.email,
+              full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0],
+              role: authUser.email === 'connect@eyepune.com' ? 'admin' : 'client'
+            }]);
+          } catch (e) {
+            console.error('Auto-profile creation failed:', e);
+          }
+
           setUser({
             id: authUser.id,
             email: authUser.email,
             full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0],
-            role: 'client',
+            role: authUser.email === 'connect@eyepune.com' ? 'admin' : 'client',
             avatar_url: authUser.user_metadata?.avatar_url || null,
           });
           setIsAuthenticated(true);
@@ -106,13 +118,19 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
+      // Force admin role for master admin email
+      const finalRole = (authUser?.email === 'connect@eyepune.com' || userProfile.email === 'connect@eyepune.com') 
+        ? 'admin' 
+        : (userProfile.role || 'client');
+
       setUser({
         id: userId,
         email: authUser?.email || userProfile.email,
         full_name: userProfile.full_name || authUser?.user_metadata?.full_name,
-        role: userProfile.role || 'client',
+        role: finalRole,
         avatar_url: userProfile.avatar_url || authUser?.user_metadata?.avatar_url,
         ...userProfile,
+        role: finalRole, // Ensure it's not overridden by spread
       });
       setIsAuthenticated(true);
       setAuthError(null);

@@ -90,14 +90,23 @@ export default function Login() {
 
     const checkRoleAndRedirect = async (userId) => {
         try {
+            // Get user email from session to check for master admin
+            const { data: { session } } = await supabase.auth.getSession();
+            const userEmail = session?.user?.email;
+
             const { data: profile, error: profileError } = await supabase
                 .from('users')
                 .select('role')
                 .eq('id', userId)
                 .single();
 
-            // Default to client if profile or role goes missing
-            const userRole = profile?.role || 'client';
+            // Enforcement: Master admin always gets admin role
+            let userRole = profile?.role;
+            if (userEmail === 'connect@eyepune.com') {
+                userRole = 'admin';
+            } else if (!userRole) {
+                userRole = 'client';
+            }
 
             if (userRole === 'admin') {
                 window.location.href = '/Admin_Dashboard';
@@ -105,7 +114,14 @@ export default function Login() {
                 window.location.href = '/Client_Dashboard';
             }
         } catch (error) {
-            toast.error('Error fetching user profile');
+            console.error('Redirect error:', error);
+            // Emergency fallback for the master admin email
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user?.email === 'connect@eyepune.com') {
+                window.location.href = '/Admin_Dashboard';
+            } else {
+                window.location.href = '/Client_Dashboard';
+            }
         }
     };
 

@@ -23,7 +23,7 @@ import {
     Award,
     Sparkles,
     Clock,
-    PhoneCall
+    Phone
 } from 'lucide-react';
 import Link from 'next/link';
 import { base44 } from '@/api/base44Client';
@@ -851,10 +851,10 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                                         We'll contact you within 24 hours with a custom implementation strategy
                                     </p>
                                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-                                        <Link to={createPageUrl("Booking")}>
-                                            <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8">
-                                                <PhoneCall className="w-5 h-5 mr-2" />
-                                                Book Free Strategy Call
+                                        <Link href={createPageUrl("Booking")} className="flex-1">
+                                            <Button className="w-full bg-red-600 hover:bg-red-700 h-14 text-lg font-bold">
+                                                <Phone className="w-5 h-5 mr-2" />
+                                                Schedule Consultation
                                             </Button>
                                         </Link>
                                         <Link to={createPageUrl("Services_Detail")}>

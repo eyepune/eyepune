@@ -12,6 +12,7 @@ import {
     BarChart3, Calendar, CheckCircle2, AlertCircle,
     MessageSquare, Globe, ArrowRight
 } from 'lucide-react';
+import Link from 'next/link';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -216,12 +217,13 @@ function Admin_Dashboard() {
                     <Button variant="outline" className="bg-[#111] border-white/10 text-white hover:bg-white/5 hover:text-white h-10">
                         <Calendar className="w-4 h-4 mr-2 text-gray-400" /> Last 7 Days
                     </Button>
-                    <Button
-                        onClick={() => window.location.href = '/Admin_Analytics'}
-                        className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 border-0 h-10"
-                    >
-                        <BarChart3 className="w-4 h-4 mr-2" /> Full Analytics
-                    </Button>
+                    <Link href="/Admin_Analytics">
+                        <Button
+                            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 border-0 h-10"
+                        >
+                            <BarChart3 className="w-4 h-4 mr-2" /> Full Analytics
+                        </Button>
+                    </Link>
                 </div>
             </div>
 
@@ -270,13 +272,14 @@ function Admin_Dashboard() {
                                 </div>
                                 Recent Leads
                             </span>
-                            <Button
-                                variant="ghost" size="sm"
-                                onClick={() => window.location.href = '/Admin_CRM'}
-                                className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                            >
-                                View All <ArrowRight className="w-3 h-3 ml-1" />
-                            </Button>
+                            <Link href="/Admin_CRM">
+                                <Button
+                                    variant="ghost" size="sm"
+                                    className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                >
+                                    View All <ArrowRight className="w-3 h-3 ml-1" />
+                                </Button>
+                            </Link>
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
@@ -448,27 +451,27 @@ function Admin_Dashboard() {
                     </CardContent>
                 </Card>
 
-                {/* Quick Actions */}
-                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5">
-                    <CardContent className="pt-5 pb-4 space-y-2">
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">Quick Actions</p>
-                        {[
-                            { label: 'Add Manual Lead', href: '/Admin_CRM', icon: Plus, color: 'text-red-400' },
-                            { label: 'Send Campaign', href: '/Admin_Marketing', icon: Mail, color: 'text-blue-400' },
-                            { label: 'View Analytics', href: '/Admin_Analytics', icon: Globe, color: 'text-emerald-400' },
-                        ].map((action, i) => (
-                            <button
-                                key={i}
-                                onClick={() => window.location.href = action.href}
-                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 transition-all group"
-                            >
-                                <action.icon className={cn("w-4 h-4", action.color)} />
-                                <span className="text-sm text-white/80 group-hover:text-white">{action.label}</span>
-                                <ArrowRight className="w-3 h-3 text-gray-600 group-hover:text-gray-400 ml-auto transition-colors" />
-                            </button>
-                        ))}
-                    </CardContent>
-                </Card>
+                        {/* Quick Actions */}
+                        <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5">
+                            <CardContent className="pt-5 pb-4 space-y-2">
+                                <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">Quick Actions</p>
+                                {[
+                                    { label: 'Add Manual Lead', href: '/Admin_CRM', icon: Plus, color: 'text-red-400' },
+                                    { label: 'Send Campaign', href: '/Admin_Marketing', icon: Mail, color: 'text-blue-400' },
+                                    { label: 'View Analytics', href: '/Admin_Analytics', icon: Globe, color: 'text-emerald-400' },
+                                ].map((action, i) => (
+                                    <Link
+                                        key={i}
+                                        href={action.href}
+                                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 transition-all group"
+                                    >
+                                        <action.icon className={cn("w-4 h-4", action.color)} />
+                                        <span className="text-sm text-white/80 group-hover:text-white">{action.label}</span>
+                                        <ArrowRight className="w-3 h-3 text-gray-600 group-hover:text-gray-400 ml-auto transition-colors" />
+                                    </Link>
+                                ))}
+                            </CardContent>
+                        </Card>
             </div>
         </div>
     );

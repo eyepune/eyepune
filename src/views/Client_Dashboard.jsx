@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { motion } from 'framer-motion';
 import { 
     Folder, TrendingUp, Calendar, Upload, CheckCircle2, 
-    Clock, AlertCircle, FileText, Download, Loader2, BarChart3, Target, MessageSquare, Star, Phone, PhoneCall, LogOut, Settings
+    Clock, AlertCircle, FileText, Download, Loader2, BarChart3, Target, MessageSquare, Star, Phone, LogOut, Settings
 } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell, FunnelChart, Funnel, LabelList } from 'recharts';
 import FileManager from "@/components/dashboard/FileManager";
@@ -364,7 +364,7 @@ export default function Client_Dashboard() {
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link href={createPageUrl('Booking')}>
                                 <Button className="bg-red-600 hover:bg-red-700 px-8 h-12">
-                                    <PhoneCall className="w-4 h-4 mr-2" />
+                                    <Phone className="w-4 h-4 mr-2" />
                                     Book Kickoff Call
                                 </Button>
                             </Link>
