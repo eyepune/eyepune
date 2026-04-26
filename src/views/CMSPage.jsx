@@ -3,11 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Skeleton } from '@/components/ui/skeleton';
 import ReactMarkdown from 'react-markdown';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'next/navigation';
 
 export default function CMSPage() {
-    const location = useLocation();
-    const slug = new URLSearchParams(location.search).get('slug');
+    const searchParams = useSearchParams();
+    const slug = searchParams.get('slug');
 
     const { data: page, isLoading, error } = useQuery({
         queryKey: ['cms-page', slug],

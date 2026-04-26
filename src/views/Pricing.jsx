@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Check, Sparkles, ArrowRight, Zap, Globe, Share2, Code, TrendingUp, Palette, Bot } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CheckoutModal from "@/components/checkout/CheckoutModal";
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
 const SERVICE_CATEGORIES = [

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight, TrendingUp, Users, Heart, MessageSquare, BarChart3, Instagram } from 'lucide-react';

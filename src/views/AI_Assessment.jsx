@@ -25,7 +25,8 @@ import {
     Clock,
     PhoneCall
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { base44 } from '@/api/base44Client';
 import { createPageUrl } from "@/utils";
 
 const questions = [

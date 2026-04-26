@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrendingUp, Workflow, Target, Users, Zap, BarChart3, CheckCircle2, ArrowDownRight } from 'lucide-react';

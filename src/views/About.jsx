@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Target, Heart, Zap, Users, ArrowRight, CheckCircle2, Shield, Cpu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import SEOHead from "@/components/seo/SEOHead";
 
