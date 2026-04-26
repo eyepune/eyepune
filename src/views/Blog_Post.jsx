@@ -51,6 +51,21 @@ export default function BlogPost() {
         enabled: !!(postId || postSlug)
     });
 
+    const { data: relatedPosts = [] } = useQuery({
+        queryKey: ['related-posts', post?.category],
+        queryFn: async () => {
+            if (!post?.category) return [];
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('*')
+                .eq('category', post.category)
+                .neq('id', post.id)
+                .limit(2);
+            return data || [];
+        },
+        enabled: !!post?.id
+    });
+
     const { data: comments = [] } = useQuery({
         queryKey: ['blog-comments', post?.id],
         queryFn: async () => {
