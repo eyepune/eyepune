@@ -2,6 +2,7 @@ import '@/globals.css';
 import '@/index.css';
 import { Providers } from './providers';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
+import AIChatbot from '@/components/home/AIChatbot';
 
 export const metadata = {
   title: 'EyE PunE — AI-Powered Digital Growth',
@@ -44,6 +45,7 @@ export default function RootLayout({ children }) {
         <GoogleAnalytics />
         <Providers>
           {children}
+          <AIChatbot />
         </Providers>
       </body>
     </html>

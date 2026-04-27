@@ -150,4 +150,69 @@
 
   GRANT ALL ON public.whatsapp_sequences TO authenticated;
 
+  -- 11. RAZORPAY & DRIP AUTOMATION
+  -- ============================================================
+
+  -- Update invoices for Razorpay
+  ALTER TABLE public.invoices ADD COLUMN IF NOT EXISTS razorpay_order_id TEXT;
+  ALTER TABLE public.invoices ADD COLUMN IF NOT EXISTS razorpay_payment_id TEXT;
+  ALTER TABLE public.invoices ADD COLUMN IF NOT EXISTS razorpay_signature TEXT;
+
+  -- Drip Sequences
+  CREATE TABLE IF NOT EXISTS public.drip_sequences (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      name TEXT NOT NULL,
+      description TEXT,
+      is_active BOOLEAN DEFAULT true,
+      created_at TIMESTAMPTZ DEFAULT now(),
+      updated_at TIMESTAMPTZ DEFAULT now()
+  );
+
+  -- Drip Steps
+  CREATE TABLE IF NOT EXISTS public.drip_steps (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      sequence_id UUID REFERENCES public.drip_sequences(id) ON DELETE CASCADE,
+      step_order INTEGER NOT NULL,
+      delay_days INTEGER DEFAULT 0,
+      email_subject TEXT,
+      email_content TEXT,
+      created_at TIMESTAMPTZ DEFAULT now()
+  );
+
+  -- Lead Drip Status
+  CREATE TABLE IF NOT EXISTS public.lead_drip_status (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      lead_id UUID REFERENCES public.leads(id) ON DELETE CASCADE,
+      sequence_id UUID REFERENCES public.drip_sequences(id) ON DELETE CASCADE,
+      current_step_id UUID REFERENCES public.drip_steps(id),
+      last_sent_at TIMESTAMPTZ,
+      status TEXT DEFAULT 'active', -- 'active', 'completed', 'paused'
+      created_at TIMESTAMPTZ DEFAULT now(),
+      UNIQUE(lead_id, sequence_id)
+  );
+
+  -- RLS for Drip Tables
+  ALTER TABLE public.drip_sequences ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE public.drip_steps ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE public.lead_drip_status ENABLE ROW LEVEL SECURITY;
+
+  DO $$ 
+  BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'drip_sequences' AND policyname = 'Allow authenticated to manage drip sequences') THEN
+      CREATE POLICY "Allow authenticated to manage drip sequences" ON public.drip_sequences FOR ALL TO authenticated USING (true);
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'drip_steps' AND policyname = 'Allow authenticated to manage drip steps') THEN
+      CREATE POLICY "Allow authenticated to manage drip steps" ON public.drip_steps FOR ALL TO authenticated USING (true);
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'lead_drip_status' AND policyname = 'Allow authenticated to manage lead drip status') THEN
+      CREATE POLICY "Allow authenticated to manage lead drip status" ON public.lead_drip_status FOR ALL TO authenticated USING (true);
+    END IF;
+  END $$;
+
+  GRANT ALL ON public.drip_sequences TO authenticated;
+  GRANT ALL ON public.drip_steps TO authenticated;
+  GRANT ALL ON public.lead_drip_status TO authenticated;
+
   SELECT 'SYNC COMPLETE: Database now matches code requirements.' as status;

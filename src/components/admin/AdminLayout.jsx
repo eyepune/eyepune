@@ -18,6 +18,7 @@ const NAV_ITEMS = [
     { name: 'Dashboard', href: '/Admin_Dashboard', icon: LayoutDashboard },
     { name: 'CRM / Leads', href: '/Admin_CRM', icon: Users },
     { name: 'Marketing & Automation', href: '/Admin_Marketing', icon: Mail },
+    { name: 'Drip Automations', href: '/Admin_DripAutomations', icon: Zap },
     { name: 'WhatsApp Flows', href: '/Admin_WhatsAppMarketing', icon: MessageSquare },
     { name: 'Automation Lab', href: '/Admin_TestAutomation', icon: Beaker },
     { name: 'Documents', href: '/Admin_Documents', icon: FileText },

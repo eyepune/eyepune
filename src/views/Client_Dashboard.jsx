@@ -33,6 +33,7 @@ import ProjectDiscussionForum from "@/components/collaboration/ProjectDiscussion
 import DeliverableDiscussion from "@/components/collaboration/DeliverableDiscussion";
 import KanbanBoard from "@/components/collaboration/KanbanBoard";
 import QuickConsultationScheduler from "@/components/client/QuickConsultationScheduler";
+import ClientInvoices from "@/components/client/ClientInvoices";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -222,6 +223,7 @@ export default function Client_Dashboard() {
                                 <TabsList className="bg-white/[0.02] border border-white/[0.05] p-1.5 rounded-2xl h-auto">
                                     <TabsTrigger value="overview" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Overview</TabsTrigger>
                                     <TabsTrigger value="deliverables" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Deliverables</TabsTrigger>
+                                    <TabsTrigger value="invoices" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Invoices & Payments</TabsTrigger>
                                     <TabsTrigger value="milestones" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Milestones</TabsTrigger>
                                     <TabsTrigger value="analytics" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Growth Analytics</TabsTrigger>
                                 </TabsList>
@@ -276,6 +278,16 @@ export default function Client_Dashboard() {
                                                 />
                                             ))
                                         )}
+                                    </motion.div>
+                                </TabsContent>
+
+                                <TabsContent value="invoices" className="mt-0 outline-none">
+                                    <motion.div 
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        className="space-y-6"
+                                    >
+                                        <ClientInvoices userEmail={user.email} />
                                     </motion.div>
                                 </TabsContent>
                             </AnimatePresence>
