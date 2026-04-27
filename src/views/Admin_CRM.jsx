@@ -61,7 +61,6 @@ function Admin_CRM() {
     // Derived stats
     const totalLeads = leads.length;
     const wonLeads = leads.filter(l => l.status === 'won').length;
-    const newLeads = leads.filter(l => l.status === 'new').length;
     const winRate = totalLeads > 0 ? ((wonLeads / totalLeads) * 100).toFixed(1) : 0;
 
     const createMutation = useMutation({

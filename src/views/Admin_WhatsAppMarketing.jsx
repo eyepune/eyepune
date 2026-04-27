@@ -6,7 +6,7 @@ import AdminGuard from "@/components/admin/AdminGuard";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { motion } from 'framer-motion';
 import { 
-    Plus, Send, MessageCircle, Bot, Pencil, 
+    Plus, MessageCircle, Pencil, 
     Trash2, Loader2, Sparkles, AlertCircle, 
     CheckCircle2, Smartphone, Globe, Settings2,
     Code
@@ -14,14 +14,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { cn } from '@/lib/utils';
 
 export default function Admin_WhatsAppMarketing() {
     const [isEditing, setIsEditing] = useState(false);

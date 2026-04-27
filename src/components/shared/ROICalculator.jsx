@@ -1,14 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Calculator, TrendingUp, ArrowRight, Zap, Target, MousePointer2 } from 'lucide-react';
+import { Calculator, TrendingUp, ArrowRight, Zap } from 'lucide-react';
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
