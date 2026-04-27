@@ -277,7 +277,7 @@ export default function Admin_WhatsAppMarketing() {
                                 <div className="p-4 rounded-2xl bg-orange-500/5 border border-orange-500/10 flex gap-3">
                                     <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
                                     <p className="text-[11px] text-gray-400 leading-relaxed">
-                                        <strong>Note:</strong> Dynamic variables like <code>{{1}}</code> are currently passed as the lead's name by default. For complex custom components, please contact the development team.
+                                        <strong>Note:</strong> Dynamic variables like <code>{"{{1}}"}</code> are currently passed as the lead's name by default. For complex custom components, please contact the development team.
                                     </p>
                                 </div>
 
