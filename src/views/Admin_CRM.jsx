@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import AdminGuard from '@/components/admin/AdminGuard';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail, Users, Target, Activity, Filter, CheckCircle2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail, Users, Target, Activity, Filter, CheckCircle2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -32,6 +32,8 @@ function Admin_CRM() {
     const [editingLead, setEditingLead] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef(null);
     const queryClient = useQueryClient();
 
     const [formData, setFormData] = useState({
@@ -116,6 +118,79 @@ function Admin_CRM() {
         }
     };
 
+    const handleFileUpload = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const reader = new FileReader();
+        
+        reader.onload = async (event) => {
+            try {
+                const content = event.target.result;
+                let parsedData = [];
+
+                if (file.name.endsWith('.json')) {
+                    parsedData = JSON.parse(content);
+                } else if (file.name.endsWith('.csv')) {
+                    // Simple CSV parser that handles basic quotes
+                    const lines = content.split(/\r?\n/).filter(line => line.trim());
+                    if (lines.length < 2) throw new Error("CSV must have headers and at least one row");
+                    
+                    const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/ /g, '_'));
+                    
+                    for (let i = 1; i < lines.length; i++) {
+                        // Regex to handle commas inside quotes
+                        const matches = lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                        const values = matches.map(val => val.replace(/(^"|"$)/g, '').trim());
+                        
+                        const obj = {};
+                        headers.forEach((header, index) => {
+                            if (values[index] !== undefined && values[index] !== '') {
+                                obj[header] = values[index];
+                            }
+                        });
+                        parsedData.push(obj);
+                    }
+                } else {
+                    throw new Error("Unsupported file format. Please use .csv or .json");
+                }
+
+                // Clean data to only include valid columns and add defaults
+                const validColumns = ['full_name', 'email', 'phone', 'company', 'source', 'status', 'notes'];
+                const cleanedData = parsedData.map(row => {
+                    const cleanRow = { source: 'manual', status: 'new' };
+                    validColumns.forEach(col => {
+                        let val = row[col];
+                        if (!val) {
+                            if (col === 'full_name') val = row['name'] || row['first name'] || row['first_name'];
+                        }
+                        if (val) cleanRow[col] = String(val).substring(0, 255); // Safety trim
+                    });
+                    // Ensure required fields
+                    if (!cleanRow.full_name) cleanRow.full_name = 'Unknown Lead';
+                    return cleanRow;
+                });
+
+                if (cleanedData.length === 0) throw new Error("No valid data found in file");
+
+                const { error } = await supabase.from('leads').insert(cleanedData);
+                if (error) throw error;
+
+                toast.success(`Successfully imported ${cleanedData.length} leads`);
+                queryClient.invalidateQueries(['admin-leads']);
+            } catch (err) {
+                console.error("Upload error:", err);
+                toast.error(`Import failed: ${err.message}`);
+            } finally {
+                setIsUploading(false);
+                if (fileInputRef.current) fileInputRef.current.value = '';
+            }
+        };
+
+        reader.readAsText(file);
+    };
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header */}
@@ -130,12 +205,24 @@ function Admin_CRM() {
                         Track, manage, and convert your incoming leads into successful clients.
                     </p>
                 </div>
-                <Button 
-                    onClick={() => { resetForm(); setIsDialogOpen(true); }} 
-                    className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white shadow-lg shadow-blue-500/20 border-0 h-10"
-                >
-                    <Plus className="w-4 h-4 mr-2" /> Add New Lead
-                </Button>
+                <div className="flex gap-3">
+                    <input type="file" ref={fileInputRef} hidden accept=".csv,.json" onChange={handleFileUpload} />
+                    <Button 
+                        onClick={() => fileInputRef.current?.click()} 
+                        variant="outline"
+                        disabled={isUploading}
+                        className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5 h-10 shadow-lg"
+                    >
+                        {isUploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+                        Bulk Import
+                    </Button>
+                    <Button 
+                        onClick={() => { resetForm(); setIsDialogOpen(true); }} 
+                        className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white shadow-lg shadow-blue-500/20 border-0 h-10"
+                    >
+                        <Plus className="w-4 h-4 mr-2" /> Add New Lead
+                    </Button>
+                </div>
             </div>
 
             {/* Quick Stats */}
