@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { createPageUrl } from "@/utils";
 
 export default function ROICalculator() {
     const [monthlyTraffic, setMonthlyTraffic] = useState(5000);
@@ -124,9 +126,11 @@ export default function ROICalculator() {
                             </div>
 
                             <div className="pt-8">
-                                <Button className="w-full bg-white text-black hover:bg-gray-100 h-14 rounded-2xl font-black text-lg shadow-xl shadow-white/5">
-                                    Unlock This Growth <ArrowRight className="w-5 h-5 ml-2" />
-                                </Button>
+                                <Link href={createPageUrl("AI_Assessment")}>
+                                    <Button className="w-full bg-white text-black hover:bg-gray-100 h-14 rounded-2xl font-black text-lg shadow-xl shadow-white/5 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                                        Unlock This Growth <ArrowRight className="w-5 h-5 ml-2" />
+                                    </Button>
+                                </Link>
                                 <p className="text-center text-[10px] text-gray-600 mt-4 uppercase tracking-widest font-bold">
                                     Based on EyE PunE Average Performance Metrics
                                 </p>
