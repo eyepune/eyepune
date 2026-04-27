@@ -8,7 +8,7 @@ import Logo from '@/components/shared/Logo';
 import {
     LayoutDashboard, Users, UserPlus, Mail, Star, Image as ImageIcon,
     FileText, LogOut, ChevronLeft, ChevronRight, MessageSquare, Search, ShieldAlert,
-    Bell, Settings, Menu
+    Bell, Settings, Menu, Beaker
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,8 @@ const NAV_ITEMS = [
     { name: 'Dashboard', href: '/Admin_Dashboard', icon: LayoutDashboard },
     { name: 'CRM / Leads', href: '/Admin_CRM', icon: Users },
     { name: 'Marketing & Automation', href: '/Admin_Marketing', icon: Mail },
+    { name: 'WhatsApp Flows', href: '/Admin_WhatsAppMarketing', icon: MessageCircle },
+    { name: 'Automation Lab', href: '/Admin_TestAutomation', icon: Beaker },
     { name: 'Documents', href: '/Admin_Documents', icon: FileText },
     { name: 'Testimonials', href: '/Admin_Testimonials', icon: Star },
     { name: 'Client Logos', href: '/Admin_ClientLogos', icon: ImageIcon },

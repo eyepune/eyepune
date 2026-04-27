@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Bot, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
 const WORDS = ['Connect', 'Engage', 'Grow'];
@@ -213,7 +213,7 @@ export default function HeroSection() {
                     transition={{ delay: 0.55, duration: 0.7 }}
                     className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-12 md:mb-20 w-full"
                 >
-                    <Link to={createPageUrl("AI_Assessment")}>
+                    <Link href={createPageUrl("AI_Assessment")}>
                         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                             <Button size="lg" className="relative overflow-hidden group bg-red-600 hover:bg-red-600 text-white w-full sm:w-auto px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full font-bold shadow-[0_0_40px_rgba(239,68,68,0.5)] hover:shadow-[0_0_60px_rgba(239,68,68,0.7)] transition-all">
                                 <span className="absolute inset-0 bg-gradient-to-r from-red-600 via-red-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -225,7 +225,7 @@ export default function HeroSection() {
                             </Button>
                         </motion.div>
                     </Link>
-                    <Link to={createPageUrl("Booking")}>
+                    <Link href={createPageUrl("Booking")}>
                         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                             <Button size="lg" variant="outline" className="border-white/15 text-white hover:bg-white/5 hover:border-white/30 w-full sm:w-auto px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full backdrop-blur-sm font-semibold transition-all">
                                 Book Strategy Call

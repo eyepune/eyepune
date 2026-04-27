@@ -63,6 +63,8 @@ const ENTITY_TABLE_MAP = {
   SharedDocument: 'shared_documents',
   TaskComment: 'task_comments',
   ResourceAllocation: 'resource_allocations',
+  AI_Conversation: 'ai_conversations',
+  AI_Message: 'ai_messages',
 };
 
 // ── Parse Base44 sort syntax ───────────────────────────────────────────

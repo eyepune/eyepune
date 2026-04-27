@@ -134,7 +134,7 @@ function AdminBlogContent() {
     };
 
     return (
-        <div className="min-h-screen bg-background py-20">
+        <div className="py-6">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex justify-between items-center mb-8">
                     <div>
@@ -539,10 +539,14 @@ function AdminBlogContent() {
     );
 }
 
+import AdminLayout from "@/components/admin/AdminLayout";
+
 export default function AdminBlog() {
     return (
         <AdminGuard>
-            <AdminBlogContent />
+            <AdminLayout>
+                <AdminBlogContent />
+            </AdminLayout>
         </AdminGuard>
     );
 }

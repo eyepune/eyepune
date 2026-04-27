@@ -2,6 +2,7 @@
 
 import React, { Suspense } from 'react';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 import Layout from '@/Layout';
 
 // ── Page imports ────────────────────────────────────────────────────────
@@ -18,6 +19,7 @@ import Admin_Dashboard from '@/views/Admin_Dashboard';
 import Admin_Documents from '@/views/Admin_Documents';
 import Admin_EmailCampaigns from '@/views/Admin_EmailCampaigns';
 import Admin_EmailTemplates from '@/views/Admin_EmailTemplates';
+import Admin_TestAutomation from '@/views/Admin_TestAutomation';
 
 import Admin_Feedback from '@/views/Admin_Feedback';
 import Admin_Marketing from '@/views/Admin_Marketing';
@@ -32,6 +34,7 @@ import Admin_ServiceAddons from '@/views/Admin_ServiceAddons';
 import Admin_Templates from '@/views/Admin_Templates';
 import Admin_Testimonials from '@/views/Admin_Testimonials';
 import Admin_Users from '@/views/Admin_Users';
+import Admin_WhatsAppMarketing from '@/views/Admin_WhatsAppMarketing';
 import Admin_WhatsAppSetup from '@/views/Admin_WhatsAppSetup';
 import Blog from '@/views/Blog';
 import Blog_Post from '@/views/Blog_Post';
@@ -83,6 +86,7 @@ const PAGE_MAP = {
   Admin_PackageBuilder,
   Admin_ProjectManagement,
   Admin_Projects,
+  Admin_TestAutomation,
   Admin_Reports,
   Admin_SEO,
   Admin_SalesAssistant,
@@ -91,6 +95,7 @@ const PAGE_MAP = {
   Admin_Templates,
   Admin_Testimonials,
   Admin_Users,
+  Admin_WhatsAppMarketing,
   Admin_WhatsAppSetup,
   Blog,
   Blog_Post,
@@ -158,7 +163,14 @@ export default function CatchAllPageClient() {
   if (skipLayout) {
     return (
       <Suspense fallback={<LoadingSpinner />}>
-        <PageComponent />
+        <motion.div
+          key={resolvedPageName}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <PageComponent />
+        </motion.div>
       </Suspense>
     );
   }
@@ -166,7 +178,14 @@ export default function CatchAllPageClient() {
   return (
     <Layout currentPageName={resolvedPageName}>
       <Suspense fallback={<LoadingSpinner />}>
-        <PageComponent />
+        <motion.div
+          key={resolvedPageName}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <PageComponent />
+        </motion.div>
       </Suspense>
     </Layout>
   );

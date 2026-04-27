@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Users, Globe, Bot, BarChart3, Zap, ArrowRight, CheckCircle2, ChevronRight } from 'lucide-react';
@@ -6,6 +8,7 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
 import SEOHead from "@/components/seo/SEOHead";
+import ROICalculator from "@/components/shared/ROICalculator";
 
 const serviceLinks = [
     '/Booking',
@@ -147,7 +150,7 @@ export default function Services_Detail() {
                                                 <h3 className="text-xl sm:text-2xl font-black text-white">{service.title}</h3>
                                             </div>
                                             <p className="text-gray-400 leading-relaxed text-sm sm:text-base mb-3">{service.description}</p>
-                                            <Link to={serviceLinks[i]} className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 text-sm font-semibold transition-colors mb-3 lg:mb-0">
+                                            <Link href={serviceLinks[i]} className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 text-sm font-semibold transition-colors mb-3 lg:mb-0">
                                                 Learn More <ArrowRight className="w-3.5 h-3.5" />
                                             </Link>
 
@@ -176,6 +179,11 @@ export default function Services_Detail() {
                         ))}
                     </div>
                 </div>
+            </section>
+
+            {/* ── ROI CALCULATOR ── */}
+            <section className="py-24 border-t border-white/[0.06] bg-[#060606]">
+                <ROICalculator />
             </section>
 
             {/* ── LEX PRO PROMO ── */}
@@ -237,12 +245,12 @@ export default function Services_Detail() {
                         </h2>
                         <p className="text-xl text-gray-400 mb-10">Get a custom proposal tailored to your business goals</p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to={createPageUrl("Booking")}>
+                            <Link href={createPageUrl("Booking")}>
                                 <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-10 py-6 text-lg rounded-full font-bold shadow-[0_0_30px_rgba(239,68,68,0.4)]">
                                     Book Free Consultation
                                 </Button>
                             </Link>
-                            <Link to={createPageUrl("Pricing")}>
+                            <Link href={createPageUrl("Pricing")}>
                                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-10 py-6 text-lg rounded-full">
                                     View Pricing
                                 </Button>

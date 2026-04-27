@@ -172,7 +172,7 @@ function Admin_ProjectManagement() {
     };
 
     return (
-        <div className="min-h-screen bg-background p-6">
+        <div className="py-6">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <div>
@@ -607,10 +607,14 @@ function Admin_ProjectManagement() {
     );
 }
 
+import AdminLayout from "@/components/admin/AdminLayout";
+
 export default function AdminProjectManagementPage() {
     return (
         <AdminGuard>
-            <Admin_ProjectManagement />
+            <AdminLayout>
+                <Admin_ProjectManagement />
+            </AdminLayout>
         </AdminGuard>
     );
 }

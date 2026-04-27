@@ -18,6 +18,7 @@ export async function triggerAutomation(triggerType, payload) {
     // Lazy-load server-only modules to avoid client-side bundling issues
     const { createClient } = await import('@supabase/supabase-js');
     const { sendEmail } = await import('./email-service.js');
+    const { sendWhatsAppMessage } = await import('./whatsapp-service.js');
 
     const supabaseAdmin = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -40,15 +41,11 @@ export async function triggerAutomation(triggerType, payload) {
 
     const results = [];
 
-    // 2. Process each matching rule
+    // 2. Process Email Rules
     for (const rule of rules) {
       const template = rule.template;
-      if (!template) {
-        console.warn(`[AutomationService] Rule ${rule.id} has no linked template — skipping`);
-        continue;
-      }
+      if (!template) continue;
 
-      // 3. Populate template variables in subject and content
       let subject = template.subject || '(No Subject)';
       let content = template.content || '';
 
@@ -58,18 +55,35 @@ export async function triggerAutomation(triggerType, payload) {
         content = content.replace(regex, String(value || ''));
       });
 
-      // 4. Send the email
       try {
-        const result = await sendEmail({
-          to: payload.email,
-          subject,
-          html: content,
-        });
-        console.log(`[AutomationService] ✅ Email sent for rule "${rule.name}" to ${payload.email}`);
-        results.push({ ruleId: rule.id, ruleName: rule.name, success: true, result });
+        const result = await sendEmail({ to: payload.email, subject, html: content });
+        results.push({ ruleId: rule.id, type: 'email', success: true });
       } catch (sendErr) {
-        console.error(`[AutomationService] ❌ Failed to send email for rule ${rule.id}:`, sendErr.message);
-        results.push({ ruleId: rule.id, ruleName: rule.name, success: false, error: sendErr.message });
+        results.push({ ruleId: rule.id, type: 'email', success: false, error: sendErr.message });
+      }
+    }
+
+    // 3. Fetch and process WhatsApp Rules
+    const { data: waRules } = await supabaseAdmin
+      .from('whatsapp_sequences')
+      .select('*')
+      .eq('trigger_type', triggerType)
+      .eq('status', 'active');
+
+    if (waRules && waRules.length > 0 && payload.phone) {
+      for (const rule of waRules) {
+        try {
+          // Note: WhatsApp templates usually require pre-approval on Meta Panel
+          const result = await sendWhatsAppMessage({
+            to: payload.phone,
+            templateName: rule.template_name,
+            languageCode: rule.language_code || 'en_US',
+            components: rule.components || [] // You can pass dynamic components here
+          });
+          results.push({ ruleId: rule.id, type: 'whatsapp', success: result.success });
+        } catch (err) {
+          results.push({ ruleId: rule.id, type: 'whatsapp', success: false, error: err.message });
+        }
       }
     }
 

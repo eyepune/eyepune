@@ -9,7 +9,7 @@ import {
     Workflow,
     ArrowUpRight 
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
 const services = [
@@ -93,7 +93,7 @@ export default function ServicesOverview() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                         >
-                            <Link to={createPageUrl(service.page)}>
+                            <Link href={createPageUrl(service.page)}>
                                 <div className="group relative p-8 rounded-3xl bg-white/[0.02] border border-white/[0.05] hover:border-red-500/30 transition-all duration-500 hover:bg-white/[0.04] cursor-pointer h-full">
                                     {/* Glow effect on hover */}
                                     <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-red-600/0 to-red-500/0 group-hover:from-red-600/5 group-hover:to-red-500/5 transition-all duration-500" />

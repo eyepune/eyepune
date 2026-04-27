@@ -175,12 +175,12 @@ export default function Pricing() {
                             For enterprises with unique requirements — we'll build a bespoke growth solution tailored to you.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to={createPageUrl("Contact")}>
+                            <Link href={createPageUrl("Contact")}>
                                 <Button className="bg-white text-red-600 hover:bg-red-50 px-10 py-6 text-lg rounded-full font-black shadow-[0_0_30px_rgba(255,255,255,0.15)]">
                                     Contact Sales <ArrowRight className="w-5 h-5 ml-2" />
                                 </Button>
                             </Link>
-                            <Link to={createPageUrl("Booking")}>
+                            <Link href={createPageUrl("Booking")}>
                                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-10 py-6 text-lg rounded-full">
                                     Book a Call
                                 </Button>

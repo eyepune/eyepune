@@ -857,7 +857,7 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                                                 Schedule Consultation
                                             </Button>
                                         </Link>
-                                        <Link to={createPageUrl("Services_Detail")}>
+                                        <Link href={createPageUrl("Services_Detail")}>
                                             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8">
                                                 View Our Services
                                             </Button>
@@ -867,7 +867,7 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                                         No commitment required • Free consultation • Custom pricing
                                     </p>
                                 </motion.div>
-
+ 
                                 {/* Alternative CTA */}
                                 <motion.div
                                     initial={{ opacity: 0 }}
@@ -878,7 +878,7 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                                     <p className="text-muted-foreground mb-4">
                                         Want to explore solutions at your own pace?
                                     </p>
-                                    <Link to={createPageUrl("Pricing")}>
+                                    <Link href={createPageUrl("Pricing")}>
                                         <Button variant="outline" size="lg">
                                             View Pricing & Packages
                                         </Button>

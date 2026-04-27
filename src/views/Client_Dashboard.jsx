@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Folder, TrendingUp, Calendar, Upload, CheckCircle2, 
-    Clock, AlertCircle, FileText, Download, Loader2, BarChart3, Target, MessageSquare, Star, Phone, LogOut, Settings
+    Clock, AlertCircle, FileText, Download, Loader2, BarChart3, Target, MessageSquare, Star, Phone, LogOut, Settings,
+    Zap, ArrowUpRight, ShieldCheck, Activity
 } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell, FunnelChart, Funnel, LabelList } from 'recharts';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
 import FileManager from "@/components/dashboard/FileManager";
 import FeedbackDialog from "@/components/client/FeedbackDialog";
 import ReportSubscriptionSettings from "@/components/client/ReportSubscriptionSettings";
@@ -43,6 +46,9 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
+import { useAuth } from "@/lib/AuthContext";
+import { base44 } from "@/api/base44Client";
+import ClientLayout from "@/components/client/ClientLayout";
 
 export default function Client_Dashboard() {
     const [selectedProject, setSelectedProject] = useState(null);
@@ -55,30 +61,16 @@ export default function Client_Dashboard() {
     const [consultationDialogOpen, setConsultationDialogOpen] = useState(false);
     const [showOnboardingAssistant, setShowOnboardingAssistant] = useState(false);
     const [showSetupWizard, setShowSetupWizard] = useState(false);
-    const contentRef = React.useRef(null);
     const queryClient = useQueryClient();
 
-    React.useEffect(() => {
-        if (contentRef.current) {
-            contentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }, [activeTab]);
+    const { user } = useAuth();
 
-    const { data: user } = useQuery({
-        queryKey: ['current-user'],
-        queryFn: async () => {
-            const { data: { user: authUser } } = await supabase.auth.getUser();
-            if (!authUser) return null;
-            const { data } = await supabase.from('users').select('*').eq('email', authUser.email).single();
-            return data || { email: authUser.email, full_name: authUser.user_metadata?.full_name || authUser.email };
-        },
-    });
-
+    // -- DATA FETCHING --
     const { data: projects = [] } = useQuery({
         queryKey: ['client-projects', user?.email],
         queryFn: async () => {
             const { data, error } = await supabase.from('client_projects').select('*').eq('client_email', user.email);
-            if (error) { console.warn('[ClientDash] projects:', error.message); return []; }
+            if (error) return [];
             return data || [];
         },
         enabled: !!user?.email,
@@ -88,7 +80,7 @@ export default function Client_Dashboard() {
         queryKey: ['milestones', selectedProject?.id],
         queryFn: async () => {
             const { data, error } = await supabase.from('client_milestones').select('*').eq('project_id', selectedProject.id);
-            if (error) { console.warn('[ClientDash] milestones:', error.message); return []; }
+            if (error) return [];
             return data || [];
         },
         enabled: !!selectedProject?.id,
@@ -98,7 +90,7 @@ export default function Client_Dashboard() {
         queryKey: ['client-files', selectedProject?.id],
         queryFn: async () => {
             const { data, error } = await supabase.from('client_files').select('*').eq('project_id', selectedProject.id);
-            if (error) { console.warn('[ClientDash] files:', error.message); return []; }
+            if (error) return [];
             return data || [];
         },
         enabled: !!selectedProject?.id,
@@ -108,7 +100,7 @@ export default function Client_Dashboard() {
         queryKey: ['onboarding-tasks', selectedProject?.id],
         queryFn: async () => {
             const { data, error } = await supabase.from('onboarding_tasks').select('*').eq('project_id', selectedProject.id).eq('task_type', 'client');
-            if (error) { console.warn('[ClientDash] tasks:', error.message); return []; }
+            if (error) return [];
             return data || [];
         },
         enabled: !!selectedProject?.id,
@@ -118,7 +110,7 @@ export default function Client_Dashboard() {
         queryKey: ['project-tasks', selectedProject?.id],
         queryFn: async () => {
             const { data, error } = await supabase.from('project_tasks').select('*').eq('project_id', selectedProject.id);
-            if (error) { console.warn('[ClientDash] projectTasks:', error.message); return []; }
+            if (error) return [];
             return data || [];
         },
         enabled: !!selectedProject?.id,
@@ -127,18 +119,8 @@ export default function Client_Dashboard() {
     const { data: deliverables = [] } = useQuery({
         queryKey: ['deliverable-approvals', selectedProject?.id],
         queryFn: async () => {
-            const { data, error } = await supabase.from('deliverable_approvals').select('*').eq('project_id', selectedProject.id).order('created_at', { ascending: false }).limit(100);
-            if (error) { console.warn('[ClientDash] deliverables:', error.message); return []; }
-            return data || [];
-        },
-        enabled: !!selectedProject?.id,
-    });
-
-    const { data: timeLogs = [] } = useQuery({
-        queryKey: ['time-logs', selectedProject?.id],
-        queryFn: async () => {
-            const { data, error } = await supabase.from('time_logs').select('*').eq('project_id', selectedProject.id);
-            if (error) { console.warn('[ClientDash] timeLogs:', error.message); return []; }
+            const { data, error } = await supabase.from('deliverable_approvals').select('*').eq('project_id', selectedProject.id).order('created_at', { ascending: false });
+            if (error) return [];
             return data || [];
         },
         enabled: !!selectedProject?.id,
@@ -153,814 +135,214 @@ export default function Client_Dashboard() {
         enabled: !!user?.email,
     });
 
-    const { data: clientFeedback = [] } = useQuery({
-        queryKey: ['client-feedback', selectedProject?.id],
-        queryFn: async () => {
-            const { data, error } = await supabase.from('client_feedback').select('*').eq('project_id', selectedProject.id).eq('created_by', user.email).order('created_at', { ascending: false }).limit(100);
-            if (error) { console.warn('[ClientDash] feedback:', error.message); return []; }
-            return data || [];
-        },
-        enabled: !!selectedProject?.id && !!user?.email,
-    });
-
-    const { data: onboardingProgress } = useQuery({
-        queryKey: ['onboarding-progress', user?.email],
-        queryFn: async () => {
-            const { data } = await supabase.from('onboarding_progress').select('*').eq('user_email', user.email).single();
-            return data;
-        },
-        enabled: !!user
-    });
-
-    // Auto-show wizard for new users
-    React.useEffect(() => {
-        if (user && selectedProject && !onboardingProgress?.wizard_completed) {
-            const timer = setTimeout(() => setShowSetupWizard(true), 1000);
-            return () => clearTimeout(timer);
+    useEffect(() => {
+        if (!selectedProject && projects.length > 0) {
+            setSelectedProject(projects[0]);
         }
-    }, [user, selectedProject, onboardingProgress]);
-
-    const enabledWidgets = preferences?.enabled_widgets || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
-    const widgetOrder = preferences?.widget_order || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
-
-    // Render widgets in custom order
-    const renderWidget = (widgetId) => {
-        if (!enabledWidgets.includes(widgetId)) return null;
-        
-        switch(widgetId) {
-            case 'progress':
-                return <ProgressWidget key="progress" project={selectedProject} />;
-            case 'milestones':
-                return <MilestonesWidget key="milestones" milestones={milestones} />;
-            case 'deadlines':
-                return <DeadlinesWidget key="deadlines" milestones={milestones} tasks={tasks} />;
-            case 'budget':
-                return <BudgetWidget key="budget" project={selectedProject} timeLogs={timeLogs} />;
-            case 'activity':
-                return <ActivityWidget key="activity" project={selectedProject} />;
-            default:
-                return null;
-        }
-    };
-
-    const handleFileUpload = async (e) => {
-        e.preventDefault();
-        setIsUploading(true);
-        const file = e.target.querySelector('input[type=file]')?.files?.[0];
-        if (!file) { setIsUploading(false); return; }
-        try {
-            const fileExt = file.name.split('.').pop();
-            const filePath = `client-files/${selectedProject.id}/${Date.now()}.${fileExt}`;
-            const { error: uploadError } = await supabase.storage.from('eyepune-files').upload(filePath, file);
-            if (uploadError) throw uploadError;
-            const { data: { publicUrl } } = supabase.storage.from('eyepune-files').getPublicUrl(filePath);
-            await supabase.from('client_files').insert([{ project_id: selectedProject.id, name: file.name, url: publicUrl, size: file.size, uploaded_by: user?.email }]);
-            queryClient.invalidateQueries({ queryKey: ['client-files'] });
-            setUploadDialogOpen(false);
-            e.target.reset();
-        } catch (error) {
-            console.error('Upload error:', error);
-            alert('Failed to upload file: ' + error.message);
-        }
-        setIsUploading(false);
-    };
-
-    const updateTaskStatus = useMutation({
-        mutationFn: ({ taskId, status }) => supabase.from('onboarding_tasks').update({ 
-            status,
-            completed_date: status === 'completed' ? new Date().toISOString() : null
-        }).eq('id', taskId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['onboarding-tasks'] });
-        },
-    });
-
-    const deleteFileMutation = useMutation({
-        mutationFn: (fileId) => supabase.from('client_files').delete().eq('id', fileId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['client-files'] });
-        },
-    });
-
-    const submitFeedbackMutation = useMutation({
-        mutationFn: async (feedbackData) => {
-            const { data, error } = await supabase.from('client_feedback').insert([feedbackData]).select().single();
-            if (error) throw error;
-            return data;
-        },
-        onSuccess: () => {
-            alert('Thank you for your feedback!');
-        },
-    });
-
-
-    // Sample data for visualizations
-    const trafficData = [
-        { date: 'Mon', visitors: 120 },
-        { date: 'Tue', visitors: 150 },
-        { date: 'Wed', visitors: 180 },
-        { date: 'Thu', visitors: 160 },
-        { date: 'Fri', visitors: 200 },
-        { date: 'Sat', visitors: 95 },
-        { date: 'Sun', visitors: 110 }
-    ];
-
-    const conversionFunnelData = [
-        { stage: 'Visitors', value: 1000, fill: '#DC2626' },
-        { stage: 'Leads', value: 600, fill: '#EF4444' },
-        { stage: 'Qualified', value: 300, fill: '#F87171' },
-        { stage: 'Customers', value: 150, fill: '#FCA5A5' }
-    ];
-
-    const milestoneProgress = milestones.length > 0 ? [
-        { 
-            name: 'Completed', 
-            value: milestones.filter(m => m.status === 'completed').length,
-            color: '#10B981'
-        },
-        { 
-            name: 'In Progress', 
-            value: milestones.filter(m => m.status === 'in_progress').length,
-            color: '#3B82F6'
-        },
-        { 
-            name: 'Pending', 
-            value: milestones.filter(m => m.status === 'pending').length,
-            color: '#6B7280'
-        }
-    ] : [];
-
-    const statusColors = {
-        onboarding: 'bg-blue-500/10 text-blue-600',
-        in_progress: 'bg-yellow-500/10 text-yellow-600',
-        review: 'bg-purple-500/10 text-purple-600',
-        completed: 'bg-green-500/10 text-green-600',
-        on_hold: 'bg-gray-500/10 text-gray-600'
-    };
+    }, [selectedProject, projects]);
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-center">
-                    <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
-                    <p className="text-muted-foreground">Loading...</p>
-                </div>
+            <div className="min-h-screen bg-[#020202] flex items-center justify-center">
+                <Loader2 className="w-10 h-10 animate-spin text-red-600" />
             </div>
         );
     }
 
-    if (!selectedProject && projects.length > 0) {
-        setSelectedProject(projects[0]);
-    }
+    const enabledWidgets = preferences?.enabled_widgets || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
+    const widgetOrder = preferences?.widget_order || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
 
     return (
-        <div className="min-h-screen bg-background p-6">
-            <div className="max-w-7xl mx-auto" ref={contentRef}>
-                <div className="mb-8 flex justify-between items-start">
-                    <div>
-                        <h1 className="text-3xl font-bold">Welcome back, {user.full_name}!</h1>
-                        <p className="text-muted-foreground">Track your project progress and metrics</p>
+        <ClientLayout>
+            <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 space-y-12">
+                {/* Hero Greeting */}
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
+                    <div className="relative">
+                        <div className="absolute -top-10 -left-10 w-40 h-40 bg-red-600/10 blur-[80px] rounded-full pointer-events-none" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <Badge className="bg-red-500/10 text-red-500 border-red-500/20 px-3 py-1 text-[10px] uppercase font-black tracking-widest">
+                                Client Workspace
+                            </Badge>
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Live Updates Enabled</span>
+                        </div>
+                        <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter mb-4">
+                            Grow Smarter, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">{user.full_name?.split(' ')[0]}</span>.
+                        </h1>
+                        <p className="text-gray-400 text-lg font-medium max-w-xl">
+                            Your strategy is in motion. Monitor your growth engines and project health in real-time.
+                        </p>
                     </div>
-                    <div className="flex gap-2">
-                        <NotificationCenter user={user} />
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setShowSetupWizard(true)}
-                            title="Setup Wizard"
-                        >
-                            <Settings className="w-4 h-4 mr-2" />
-                            Setup
-                        </Button>
-                        <OnboardingTrigger user={user} />
-                        <DashboardCustomizer preferences={preferences} user={user} />
-                        <Button 
-                            variant="outline" 
-                            size="icon"
-                            onClick={() => base44.auth.logout()}
-                            title="Sign Out"
-                        >
-                            <LogOut className="w-4 h-4" />
-                        </Button>
+
+                    <div className="flex items-center gap-4 bg-white/[0.03] border border-white/[0.06] p-4 rounded-3xl backdrop-blur-xl">
+                        <div className="text-right">
+                            <p className="text-[10px] uppercase font-black text-gray-500 tracking-widest">Growth Phase</p>
+                            <p className="text-white font-bold">{selectedProject?.status?.replace('_', ' ') || 'Initializing'}</p>
+                        </div>
+                        <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20">
+                            <TrendingUp className="w-6 h-6 text-red-500" />
+                        </div>
                     </div>
                 </div>
 
-                {/* Auto-show onboarding for new users */}
-                <OnboardingAssistant user={user} />
+                {/* Quick KPI Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[
+                        { label: 'Project Health', value: '98%', icon: ShieldCheck, color: 'text-emerald-500', glow: 'shadow-emerald-500/10' },
+                        { label: 'Active Tasks', value: projectTasks.filter(t => t.status !== 'completed').length, icon: Activity, color: 'text-blue-500', glow: 'shadow-blue-500/10' },
+                        { label: 'Milestones', value: `${milestones.filter(m => m.status === 'completed').length}/${milestones.length}`, icon: Target, color: 'text-purple-500', glow: 'shadow-purple-500/10' },
+                        { label: 'Next Sync', value: 'Tomorrow', icon: Clock, color: 'text-orange-500', glow: 'shadow-orange-500/10' }
+                    ].map((kpi, i) => (
+                        <motion.div 
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className={cn(
+                                "p-6 rounded-[2rem] bg-[#0c0c0c]/80 border border-white/[0.05] shadow-xl relative overflow-hidden group",
+                                kpi.glow
+                            )}
+                        >
+                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <kpi.icon className="w-16 h-16" />
+                            </div>
+                            <kpi.icon className={cn("w-6 h-6 mb-4", kpi.color)} />
+                            <p className="text-[10px] uppercase font-black text-gray-500 tracking-widest mb-1">{kpi.label}</p>
+                            <p className="text-3xl font-black text-white">{kpi.value}</p>
+                        </motion.div>
+                    ))}
+                </div>
 
-                {projects.length === 0 ? (
-                    <motion.div 
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="bg-card border-2 border-dashed border-white/[0.06] rounded-2xl p-20 text-center"
-                    >
-                        <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-                            <Folder className="w-10 h-10 text-red-500" />
-                        </div>
-                        <h3 className="text-2xl font-bold mb-3 text-white">Your Workspace is Getting Ready</h3>
-                        <p className="text-muted-foreground max-w-md mx-auto mb-8">
-                            Once your project is kicked off, you'll find your roadmap, metrics, and deliverables right here. 
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link href={createPageUrl('Booking')}>
-                                <Button className="bg-red-600 hover:bg-red-700 px-8 h-12">
-                                    <Phone className="w-4 h-4 mr-2" />
-                                    Book Kickoff Call
-                                </Button>
-                            </Link>
-                            <Link href={createPageUrl('Contact')}>
-                                <Button variant="outline" className="border-white/[0.06] px-8 h-12">
-                                    Contact Support
-                                </Button>
-                            </Link>
-                        </div>
-                    </motion.div>
-                ) : (
-                    <>
-                        {/* Project Selector */}
-                        {projects.length > 1 && (
-                            <div className="mb-6">
-                                <Label>Select Project</Label>
-                                <Select 
-                                    value={selectedProject?.id} 
-                                    onValueChange={(id) => setSelectedProject(projects.find(p => p.id === id))}
+                {/* Main Content Area */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Left Column: Widgets & Progress */}
+                    <div className="lg:col-span-8 space-y-8">
+                        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                            <div className="flex items-center justify-between mb-8 overflow-x-auto pb-4 custom-scrollbar">
+                                <TabsList className="bg-white/[0.02] border border-white/[0.05] p-1.5 rounded-2xl h-auto">
+                                    <TabsTrigger value="overview" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Overview</TabsTrigger>
+                                    <TabsTrigger value="deliverables" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Deliverables</TabsTrigger>
+                                    <TabsTrigger value="milestones" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Milestones</TabsTrigger>
+                                    <TabsTrigger value="analytics" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Growth Analytics</TabsTrigger>
+                                </TabsList>
+                                <Button 
+                                    onClick={() => setConsultationDialogOpen(true)}
+                                    className="bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/20 rounded-xl font-bold ml-4"
                                 >
-                                    <SelectTrigger className="max-w-md">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {projects.map(project => (
-                                            <SelectItem key={project.id} value={project.id}>
-                                                {project.project_name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                    <Phone className="w-4 h-4 mr-2" /> Book Sync
+                                </Button>
                             </div>
-                        )}
 
-                        {/* Onboarding Progress (for new projects) */}
-                        {selectedProject?.status === 'onboarding' && (
-                            <div className="mb-6">
-                                <OnboardingProgress 
-                                    project={selectedProject} 
-                                    onShowAssistant={() => setShowOnboardingAssistant(true)}
-                                />
-                            </div>
-                        )}
-
-                        {/* Customizable Widgets */}
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                            {widgetOrder.map(widgetId => renderWidget(widgetId))}
-                        </div>
-
-                        {/* Main Content Tabs */}
-                        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-                            <TabsList className="flex-wrap h-auto">
-                                <TabsTrigger value="overview">Overview</TabsTrigger>
-                                <TabsTrigger value="kanban">Kanban</TabsTrigger>
-                                <TabsTrigger value="documents">Documents</TabsTrigger>
-                                <TabsTrigger value="discussion">Forum</TabsTrigger>
-                                <TabsTrigger value="messages">Messages</TabsTrigger>
-                                <TabsTrigger value="approvals">Deliverables</TabsTrigger>
-                                <TabsTrigger value="milestones">Milestones</TabsTrigger>
-                                <TabsTrigger value="files">Files</TabsTrigger>
-                                {tasks.length > 0 && <TabsTrigger value="onboarding">Onboarding</TabsTrigger>}
-                                <TabsTrigger value="reports">Reports</TabsTrigger>
-                                <TabsTrigger value="feedback">Feedback</TabsTrigger>
-                            </TabsList>
-
-                            <TabsContent value="approvals" className="mt-6">
-                                <div className="bg-card border rounded-xl p-6">
-                                    <h3 className="text-lg font-bold mb-4">Deliverables Awaiting Review</h3>
-                                    {deliverables.length === 0 ? (
-                                        <p className="text-muted-foreground text-center py-8">No deliverables yet</p>
-                                    ) : (
-                                        <div className="space-y-6">
-                                            {deliverables.map(deliverable => (
-                                                <div key={deliverable.id} className="space-y-4">
-                                                    <DeliverableApprovalCard 
-                                                        deliverable={deliverable}
-                                                        onProvideFeedback={(d) => {
-                                                            setSelectedDeliverable(d);
-                                                            setFeedbackDialogOpen(true);
-                                                        }}
-                                                    />
-                                                    <Card>
-                                                        <CardContent className="pt-6">
-                                                            <DeliverableDiscussion 
-                                                                deliverable={deliverable}
-                                                                projectId={selectedProject.id}
-                                                            />
-                                                        </CardContent>
-                                                    </Card>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="overview" className="mt-6">
-                                <div className="grid gap-6">
-                                    {/* KPI Dashboard */}
-                                    <div className="bg-card border rounded-xl p-6">
-                                        <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                                            <BarChart3 className="w-5 h-5" />
-                                            Key Performance Indicators
-                                        </h3>
-                                        {selectedProject?.metrics && Object.keys(selectedProject.metrics).length > 0 ? (
-                                            <div className="grid lg:grid-cols-2 gap-6">
-                                                {/* Metrics Summary */}
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    {Object.entries(selectedProject.metrics).map(([key, value]) => (
-                                                        <motion.div 
-                                                            key={key} 
-                                                            className="p-4 border rounded-lg bg-gradient-to-br from-red-50 to-white dark:from-red-950/10 dark:to-background"
-                                                            whileHover={{ scale: 1.02 }}
-                                                        >
-                                                            <p className="text-xs text-muted-foreground capitalize mb-1">{key.replace(/_/g, ' ')}</p>
-                                                            <p className="text-2xl font-bold text-red-600">{value}</p>
-                                                        </motion.div>
-                                                    ))}
-                                                </div>
-                                                
-                                                {/* Performance Chart */}
-                                                <div>
-                                                    <p className="text-sm text-muted-foreground mb-4">Growth Trend</p>
-                                                    <ResponsiveContainer width="100%" height={200}>
-                                                        <LineChart data={[
-                                                            { month: 'Week 1', value: 20 },
-                                                            { month: 'Week 2', value: 35 },
-                                                            { month: 'Week 3', value: 45 },
-                                                            { month: 'Week 4', value: 60 }
-                                                        ]}>
-                                                            <CartesianGrid strokeDasharray="3 3" />
-                                                            <XAxis dataKey="month" />
-                                                            <YAxis />
-                                                            <Tooltip />
-                                                            <Line type="monotone" dataKey="value" stroke="#DC2626" strokeWidth={2} />
-                                                        </LineChart>
-                                                    </ResponsiveContainer>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="text-center py-8">
-                                                <BarChart3 className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-                                                <p className="text-muted-foreground mb-4">KPIs will be available once your project progresses</p>
-                                                <p className="text-sm text-muted-foreground">Contact your account manager for more details</p>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="grid lg:grid-cols-2 gap-6">
-                                        <div className="bg-card border rounded-xl p-6">
-                                            <h3 className="text-lg font-bold mb-4">Project Details</h3>
-                                            <div className="space-y-3">
-                                                <div>
-                                                    <p className="text-sm text-muted-foreground">Project Name</p>
-                                                    <p className="font-medium">{selectedProject?.project_name}</p>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm text-muted-foreground">Type</p>
-                                                    <p className="font-medium capitalize">{selectedProject?.project_type?.replace('_', ' ')}</p>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm text-muted-foreground">Start Date</p>
-                                                    <p className="font-medium">
-                                                        {selectedProject?.start_date 
-                                                            ? new Date(selectedProject.start_date).toLocaleDateString()
-                                                            : 'TBD'}
-                                                    </p>
-                                                </div>
-                                                {selectedProject?.description && (
-                                                    <div>
-                                                        <p className="text-sm text-muted-foreground">Description</p>
-                                                        <p className="text-sm">{selectedProject.description}</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        <div className="bg-card border rounded-xl p-6">
-                                            <h3 className="text-lg font-bold mb-4">Quick Actions</h3>
-                                            <div className="space-y-3">
-                                                <Button 
-                                                    onClick={() => setConsultationDialogOpen(true)}
-                                                    className="w-full bg-red-600 hover:bg-red-700"
-                                                >
-                                                    <Phone className="w-4 h-4 mr-2" />
-                                                    Schedule Consultation
-                                                </Button>
-                                                <Button onClick={() => setUploadDialogOpen(true)} variant="outline" className="w-full">
-                                                    <Upload className="w-4 h-4 mr-2" />
-                                                    Upload Files
-                                                </Button>
-                                                <Button variant="outline" className="w-full" onClick={() => setActiveTab('messages')}>
-                                                    <MessageSquare className="w-4 h-4 mr-2" />
-                                                    Message Account Manager
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="analytics" className="mt-6">
-                                <div className="space-y-6">
-                                    {/* Traffic Visualization */}
-                                    <div className="bg-card border rounded-xl p-6">
-                                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                            <TrendingUp className="w-5 h-5" />
-                                            Website Traffic - Last 7 Days
-                                        </h3>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <AreaChart data={trafficData}>
-                                                <defs>
-                                                    <linearGradient id="colorVisitors" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="5%" stopColor="#DC2626" stopOpacity={0.3}/>
-                                                        <stop offset="95%" stopColor="#DC2626" stopOpacity={0}/>
-                                                    </linearGradient>
-                                                </defs>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="date" />
-                                                <YAxis />
-                                                <Tooltip />
-                                                <Area type="monotone" dataKey="visitors" stroke="#DC2626" fillOpacity={1} fill="url(#colorVisitors)" />
-                                            </AreaChart>
-                                        </ResponsiveContainer>
-                                    </div>
-
-                                    <div className="grid lg:grid-cols-2 gap-6">
-                                        {/* Conversion Funnel */}
-                                        <div className="bg-card border rounded-xl p-6">
-                                            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                                <Target className="w-5 h-5" />
-                                                Lead Conversion Funnel
-                                            </h3>
-                                            <ResponsiveContainer width="100%" height={300}>
-                                                <BarChart data={conversionFunnelData} layout="vertical">
-                                                    <CartesianGrid strokeDasharray="3 3" />
-                                                    <XAxis type="number" />
-                                                    <YAxis dataKey="stage" type="category" />
-                                                    <Tooltip />
-                                                    <Bar dataKey="value" fill="#DC2626">
-                                                        {conversionFunnelData.map((entry, index) => (
-                                                            <Cell key={`cell-${index}`} fill={entry.fill} />
-                                                        ))}
-                                                    </Bar>
-                                                </BarChart>
-                                            </ResponsiveContainer>
-                                            <div className="mt-4 space-y-2">
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-muted-foreground">Conversion Rate:</span>
-                                                    <span className="font-bold text-green-600">15%</span>
-                                                </div>
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-muted-foreground">Avg. Time to Convert:</span>
-                                                    <span className="font-bold">14 days</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Milestone Progress Chart */}
-                                        {milestoneProgress.length > 0 && (
-                                            <div className="bg-card border rounded-xl p-6">
-                                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                                    <CheckCircle2 className="w-5 h-5" />
-                                                    Milestone Progress
-                                                </h3>
-                                                <ResponsiveContainer width="100%" height={300}>
-                                                    <PieChart>
-                                                        <Pie
-                                                            data={milestoneProgress}
-                                                            cx="50%"
-                                                            cy="50%"
-                                                            labelLine={false}
-                                                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                                                            outerRadius={80}
-                                                            fill="#8884d8"
-                                                            dataKey="value"
-                                                        >
-                                                            {milestoneProgress.map((entry, index) => (
-                                                                <Cell key={`cell-${index}`} fill={entry.color} />
-                                                            ))}
-                                                        </Pie>
-                                                        <Tooltip />
-                                                    </PieChart>
-                                                </ResponsiveContainer>
-                                                <div className="mt-4 space-y-2">
-                                                    {milestoneProgress.map((item) => (
-                                                        <div key={item.name} className="flex justify-between text-sm">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                                                                <span>{item.name}</span>
-                                                            </div>
-                                                            <span className="font-bold">{item.value}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="milestones" className="mt-6">
-                                <div className="bg-card border rounded-xl p-6">
-                                    <h3 className="text-lg font-bold mb-4">Project Milestones</h3>
-                                    {milestones.length === 0 ? (
-                                        <p className="text-muted-foreground text-center py-8">No milestones yet</p>
-                                    ) : (
-                                        <div className="space-y-4">
-                                            {milestones.sort((a, b) => a.order - b.order).map((milestone) => (
-                                                <div key={milestone.id} className="flex items-start gap-4 p-4 border rounded-lg">
-                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                                        milestone.status === 'completed' ? 'bg-green-500/20' :
-                                                        milestone.status === 'in_progress' ? 'bg-blue-500/20' :
-                                                        milestone.status === 'overdue' ? 'bg-red-500/20' : 'bg-gray-500/20'
-                                                    }`}>
-                                                        {milestone.status === 'completed' ? (
-                                                            <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                                        ) : milestone.status === 'overdue' ? (
-                                                            <AlertCircle className="w-5 h-5 text-red-600" />
-                                                        ) : (
-                                                            <Clock className="w-5 h-5 text-gray-600" />
-                                                        )}
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <h4 className="font-medium mb-1">{milestone.title}</h4>
-                                                        <p className="text-sm text-muted-foreground mb-2">{milestone.description}</p>
-                                                        <div className="flex items-center justify-between">
-                                                            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                                                <span>Due: {new Date(milestone.due_date).toLocaleDateString()}</span>
-                                                                <Badge variant="outline" className="capitalize">
-                                                                    {milestone.status.replace('_', ' ')}
-                                                                </Badge>
-                                                            </div>
-                                                            <Button
-                                                                size="sm"
-                                                                variant="outline"
-                                                                onClick={() => {
-                                                                    setSelectedMilestone(milestone);
-                                                                    setFeedbackDialogOpen(true);
-                                                                }}
-                                                            >
-                                                                Give Feedback
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="files" className="mt-6">
-                                <div className="bg-card border rounded-xl p-6">
-                                    <div className="flex justify-between items-center mb-6">
-                                        <h3 className="text-lg font-bold">Project Files</h3>
-                                        <Button onClick={() => setUploadDialogOpen(true)} className="bg-red-600 hover:bg-red-700">
-                                            <Upload className="w-4 h-4 mr-2" />
-                                            Upload File
-                                        </Button>
-                                    </div>
-                                    <FileManager 
-                                        files={files} 
-                                        onDelete={(fileId) => deleteFileMutation.mutate(fileId)}
-                                    />
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="onboarding" className="mt-6">
-                                <div className="bg-card border rounded-xl p-6">
-                                    <h3 className="text-lg font-bold mb-4">Onboarding Checklist</h3>
-                                    <div className="space-y-3">
-                                        {tasks.sort((a, b) => a.order - b.order).map((task) => (
-                                            <div key={task.id} className="flex items-start gap-3 p-4 border rounded-lg">
-                                                <button
-                                                    onClick={() => updateTaskStatus.mutate({ 
-                                                        taskId: task.id, 
-                                                        status: task.status === 'completed' ? 'pending' : 'completed' 
-                                                    })}
-                                                    className={`w-6 h-6 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                                                        task.status === 'completed' 
-                                                            ? 'bg-green-500 border-green-500' 
-                                                            : 'border-gray-300 hover:border-green-500'
-                                                    }`}
-                                                >
-                                                    {task.status === 'completed' && (
-                                                        <CheckCircle2 className="w-4 h-4 text-white" />
-                                                    )}
-                                                </button>
-                                                <div className="flex-1">
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <h4 className={`font-medium ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>
-                                                            {task.task_title}
-                                                        </h4>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            onClick={() => {
-                                                                setSelectedMilestone({ ...task, title: task.task_title, description: task.task_description });
-                                                                setFeedbackDialogOpen(true);
-                                                            }}
-                                                        >
-                                                            Add Feedback
-                                                        </Button>
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">{task.task_description}</p>
-                                                </div>
+                            <AnimatePresence mode="wait">
+                                <TabsContent value="overview" className="mt-0 outline-none">
+                                    <motion.div 
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: 20 }}
+                                        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                                    >
+                                        {widgetOrder.map(widgetId => (
+                                            <div key={widgetId} className="col-span-1">
+                                                {widgetId === 'progress' && <ProgressWidget project={selectedProject} />}
+                                                {widgetId === 'milestones' && <MilestonesWidget milestones={milestones} />}
+                                                {widgetId === 'deadlines' && <DeadlinesWidget milestones={milestones} tasks={tasks} />}
+                                                {widgetId === 'budget' && <BudgetWidget project={selectedProject} />}
+                                                {widgetId === 'activity' && <ActivityWidget project={selectedProject} />}
                                             </div>
                                         ))}
-                                    </div>
-                                </div>
-                            </TabsContent>
+                                    </motion.div>
+                                </TabsContent>
 
-                            <TabsContent value="reports" className="mt-6">
-                                <div className="grid lg:grid-cols-2 gap-6">
-                                    <ReportsHistory project={selectedProject} />
-                                    <ReportSubscriptionSettings project={selectedProject} user={user} />
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="kanban" className="mt-6">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>Task Board</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        {projectTasks.length === 0 ? (
-                                            <p className="text-center text-muted-foreground py-12">
-                                                No tasks to display
-                                            </p>
+                                <TabsContent value="deliverables" className="mt-0 outline-none">
+                                    <motion.div 
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        className="space-y-6"
+                                    >
+                                        {deliverables.length === 0 ? (
+                                            <div className="py-24 text-center bg-[#0c0c0c]/50 rounded-[3rem] border border-dashed border-white/5">
+                                                <Zap className="w-12 h-12 text-gray-700 mx-auto mb-4" />
+                                                <p className="text-gray-500">No deliverables awaiting review</p>
+                                            </div>
                                         ) : (
-                                            <KanbanBoard tasks={projectTasks} />
+                                            deliverables.map(d => (
+                                                <DeliverableApprovalCard 
+                                                    key={d.id} 
+                                                    deliverable={d} 
+                                                    onProvideFeedback={() => {
+                                                        setSelectedDeliverable(d);
+                                                        setFeedbackDialogOpen(true);
+                                                    }}
+                                                />
+                                            ))
                                         )}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-
-                            <TabsContent value="documents" className="mt-6">
-                                <SharedDocumentEditor project={selectedProject} user={user} />
-                            </TabsContent>
-
-                            <TabsContent value="discussion" className="mt-6">
-                                <ProjectDiscussionForum project={selectedProject} user={user} />
-                            </TabsContent>
-
-                            <TabsContent value="messages" className="mt-6">
-                                <ClientMessaging project={selectedProject} user={user} />
-                            </TabsContent>
-
-                            <TabsContent value="feedback" className="mt-6">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-2">
-                                            <MessageSquare className="w-5 h-5" />
-                                            My Feedback History
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="space-y-4">
-                                            {clientFeedback.length === 0 ? (
-                                                <p className="text-center text-muted-foreground py-8">
-                                                    No feedback submitted yet
-                                                </p>
-                                            ) : (
-                                                clientFeedback.map((feedback) => (
-                                                    <Card key={feedback.id}>
-                                                        <CardContent className="pt-4">
-                                                            <div className="flex justify-between items-start mb-2">
-                                                                <div className="flex items-center gap-2">
-                                                                    {[1, 2, 3, 4, 5].map((star) => (
-                                                                        <Star
-                                                                            key={star}
-                                                                            className={`w-4 h-4 ${
-                                                                                star <= feedback.rating
-                                                                                    ? 'fill-yellow-400 text-yellow-400'
-                                                                                    : 'text-gray-300'
-                                                                            }`}
-                                                                        />
-                                                                    ))}
-                                                                </div>
-                                                                <Badge className={
-                                                                    feedback.status === 'pending_review' 
-                                                                        ? 'bg-yellow-100 text-yellow-800'
-                                                                        : feedback.status === 'reviewed'
-                                                                        ? 'bg-blue-100 text-blue-800'
-                                                                        : 'bg-green-100 text-green-800'
-                                                                }>
-                                                                    {feedback.status.replace('_', ' ')}
-                                                                </Badge>
-                                                            </div>
-                                                            <p className="text-sm mb-2">{feedback.feedback_text}</p>
-                                                            <p className="text-xs text-muted-foreground mb-2">
-                                                                {format(new Date(feedback.created_date), 'MMM d, yyyy')}
-                                                            </p>
-                                                            {feedback.admin_response && (
-                                                                <div className="bg-muted p-3 rounded-lg mt-3">
-                                                                    <p className="text-xs font-semibold mb-1">Team Response:</p>
-                                                                    <p className="text-sm">{feedback.admin_response}</p>
-                                                                </div>
-                                                            )}
-                                                        </CardContent>
-                                                    </Card>
-                                                ))
-                                            )}
-                                            <Button
-                                                onClick={() => setFeedbackDialogOpen(true)}
-                                                className="w-full bg-red-600 hover:bg-red-700"
-                                            >
-                                                Submit New Feedback
-                                            </Button>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
+                                    </motion.div>
+                                </TabsContent>
+                            </AnimatePresence>
                         </Tabs>
-                    </>
-                )}
+                    </div>
 
-                {/* Upload Dialog */}
-                <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Upload File</DialogTitle>
-                        </DialogHeader>
-                        <form onSubmit={handleFileUpload} className="space-y-4">
-                            <div>
-                                <Label>File *</Label>
-                                <Input name="file" type="file" required />
+                    {/* Right Column: Activity & Account Manager */}
+                    <div className="lg:col-span-4 space-y-8">
+                        {/* Account Manager Card */}
+                        <Card className="bg-gradient-to-br from-red-600 to-red-800 border-0 rounded-[3rem] p-8 text-white shadow-2xl relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700" />
+                            <CardHeader className="p-0 mb-6">
+                                <CardTitle className="text-xl font-black tracking-tight">Your Success Partner</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-0">
+                                <div className="flex items-center gap-4 mb-8">
+                                    <Avatar className="h-16 w-16 border-4 border-white/20">
+                                        <AvatarImage src="/team/manager.jpg" />
+                                        <AvatarFallback className="bg-white/10 text-white font-black text-xl">AM</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-black text-lg">Piyush Patel</p>
+                                        <p className="text-white/60 text-xs font-bold uppercase tracking-widest">Growth Strategist</p>
+                                    </div>
+                                </div>
+                                <Button className="w-full bg-white text-red-600 hover:bg-gray-100 font-black rounded-2xl h-12">
+                                    <MessageSquare className="w-4 h-4 mr-2" /> Message Now
+                                </Button>
+                            </CardContent>
+                        </Card>
+
+                        {/* Recent Activity */}
+                        <div className="bg-[#0c0c0c]/80 border border-white/[0.05] rounded-[3rem] p-8">
+                            <h3 className="text-lg font-black text-white mb-6 flex items-center justify-between">
+                                Stream
+                                <Badge className="bg-green-500/10 text-green-500 border-0 text-[9px] uppercase font-black">Live</Badge>
+                            </h3>
+                            <div className="space-y-6">
+                                {[
+                                    { text: 'Proposal updated for Website Revamp', time: '2h ago', icon: FileText, color: 'text-blue-400' },
+                                    { text: 'Phase 1: Brand Strategy completed', time: '5h ago', icon: CheckCircle2, color: 'text-green-400' },
+                                    { text: 'New report uploaded: SEO Audit', time: 'Yesterday', icon: BarChart3, color: 'text-purple-400' }
+                                ].map((act, i) => (
+                                    <div key={i} className="flex gap-4 group cursor-default">
+                                        <div className={cn("w-10 h-10 rounded-2xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-center flex-shrink-0 group-hover:bg-white/[0.08] transition-colors", act.color)}>
+                                            <act.icon className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-300 group-hover:text-white transition-colors">{act.text}</p>
+                                            <p className="text-[10px] text-gray-600 font-bold uppercase mt-1">{act.time}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <div>
-                                <Label>Category</Label>
-                                <Select name="category" defaultValue="other">
-                                    <SelectTrigger>
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="contract">Contract</SelectItem>
-                                        <SelectItem value="asset">Asset</SelectItem>
-                                        <SelectItem value="deliverable">Deliverable</SelectItem>
-                                        <SelectItem value="feedback">Feedback</SelectItem>
-                                        <SelectItem value="other">Other</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div>
-                                <Label>Description</Label>
-                                <Textarea name="description" placeholder="Optional description" />
-                            </div>
-                            <Button type="submit" disabled={isUploading} className="w-full bg-red-600 hover:bg-red-700">
-                                {isUploading ? (
-                                    <>
-                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                        Uploading...
-                                    </>
-                                ) : (
-                                    'Upload'
-                                )}
-                            </Button>
-                        </form>
-                    </DialogContent>
-                </Dialog>
-
-                <FeedbackDialog
-                    open={feedbackDialogOpen}
-                    onClose={() => {
-                        setFeedbackDialogOpen(false);
-                        setSelectedMilestone(null);
-                        setSelectedDeliverable(null);
-                    }}
-                    milestone={selectedMilestone}
-                    deliverable={selectedDeliverable}
-                    projectId={selectedProject?.id}
-                    onSubmit={(feedbackData) => submitFeedbackMutation.mutate(feedbackData)}
-                />
-
-                <QuickConsultationScheduler
-                    project={selectedProject}
-                    user={user}
-                    open={consultationDialogOpen}
-                    onClose={() => setConsultationDialogOpen(false)}
-                />
-
-                <OnboardingAssistant
-                    user={user}
-                    project={selectedProject}
-                    forceOpen={showOnboardingAssistant}
-                    onComplete={() => setShowOnboardingAssistant(false)}
-                />
-
-                <SetupWizard
-                    open={showSetupWizard}
-                    onOpenChange={setShowSetupWizard}
-                    user={user}
-                    project={selectedProject}
-                />
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            {/* Dialogs */}
+            <QuickConsultationScheduler open={consultationDialogOpen} onOpenChange={setConsultationDialogOpen} />
+            <FeedbackDialog 
+                open={feedbackDialogOpen} 
+                onOpenChange={setFeedbackDialogOpen}
+                deliverable={selectedDeliverable}
+            />
+            <SetupWizard open={showSetupWizard} onOpenChange={setShowSetupWizard} />
+        </ClientLayout>
     );
 }

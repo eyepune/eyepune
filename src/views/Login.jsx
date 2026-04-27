@@ -8,35 +8,30 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Logo from '@/components/shared/Logo';
+import { useAuth } from '@/lib/AuthContext';
 import { Loader2, Mail, Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
 export default function Login() {
+    const { user, isAuthenticated, isLoadingAuth } = useAuth();
     const [mode, setMode] = useState('signin');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [loading, setLoading] = useState(false);
-    const [isCheckingSession, setIsCheckingSession] = useState(true);
 
     React.useEffect(() => {
-        const checkExistingSession = async () => {
-            try {
-                const { data, error } = await supabase.auth.getSession();
-                if (data?.session?.user) {
-                    await checkRoleAndRedirect(data.session.user.id);
-                }
-            } catch (err) {
-                console.error("Session check error:", err);
-            } finally {
-                setIsCheckingSession(false);
+        if (!isLoadingAuth && isAuthenticated && user) {
+            if (user.role === 'admin') {
+                window.location.href = '/Admin_Dashboard';
+            } else {
+                window.location.href = '/Client_Dashboard';
             }
-        };
-        checkExistingSession();
-    }, []);
+        }
+    }, [isLoadingAuth, isAuthenticated, user]);
 
-    if (isCheckingSession) {
+    if (isLoadingAuth) {
         return (
             <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
                 <Loader2 className="w-8 h-8 animate-spin text-red-600" />
@@ -66,62 +61,23 @@ export default function Login() {
                 
                 toast.success('Registration successful! Please check your email to confirm your account (if enabled), or sign in.');
                 
-                // Note: If email confirmation is disabled, user is logged in automatically
                 if (data?.session) {
-                   checkRoleAndRedirect(data.user.id);
+                    // Redirect will be handled by the useEffect above
                 } else {
                    setMode('signin');
                 }
             } else {
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { error } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
                 if (error) throw error;
-                
-                await checkRoleAndRedirect(data.user.id);
+                // Redirect will be handled by the useEffect above
             }
         } catch (error) {
             toast.error(error.message || 'Authentication failed');
         } finally {
             setLoading(false);
-        }
-    };
-
-    const checkRoleAndRedirect = async (userId) => {
-        try {
-            // Get user email from session to check for master admin
-            const { data: { session } } = await supabase.auth.getSession();
-            const userEmail = session?.user?.email;
-
-            const { data: profile, error: profileError } = await supabase
-                .from('users')
-                .select('role')
-                .eq('id', userId)
-                .single();
-
-            // Enforcement: Master admin always gets admin role
-            let userRole = profile?.role;
-            if (userEmail === 'connect@eyepune.com') {
-                userRole = 'admin';
-            } else if (!userRole) {
-                userRole = 'client';
-            }
-
-            if (userRole === 'admin') {
-                window.location.href = '/Admin_Dashboard';
-            } else {
-                window.location.href = '/Client_Dashboard';
-            }
-        } catch (error) {
-            console.error('Redirect error:', error);
-            // Emergency fallback for the master admin email
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session?.user?.email === 'connect@eyepune.com') {
-                window.location.href = '/Admin_Dashboard';
-            } else {
-                window.location.href = '/Client_Dashboard';
-            }
         }
     };
 

@@ -29,8 +29,11 @@ export default function Home() {
                 {/* 1. Hero — animated eye canvas + typewriter */}
                 <HeroSection />
 
-                {/* 2. Client logos marquee */}
-                <section className="py-14 border-y border-white/[0.05] bg-[#040404]">
+                {/* 2. Live Pulse Ticker */}
+                <LivePulse />
+
+                {/* 3. Client logos marquee */}
+                <section className="py-14 border-b border-white/[0.05] bg-[#040404]">
                     <ClientLogos />
                 </section>
 
@@ -67,7 +70,7 @@ export default function Home() {
                         </motion.div>
                         <TestimonialDisplay featured={true} limit={3} />
                         <div className="text-center mt-12">
-                            <Link to={createPageUrl("Testimonials")}>
+                            <Link href={createPageUrl("Testimonials")}>
                                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-white/25 rounded-full px-8 py-5">
                                     View All Client Stories <ChevronRight className="w-4 h-4 ml-1" />
                                 </Button>

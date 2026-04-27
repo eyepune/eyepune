@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Users, Globe, Bot, BarChart3, Zap, ArrowUpRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
 const services = [
@@ -40,7 +40,7 @@ export default function ServicesSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <Link to={createPageUrl("Services_Detail")}>
+                        <Link href={createPageUrl("Services_Detail")}>
                             <button className="group flex items-center gap-3 px-6 py-3 rounded-full border border-white/10 hover:border-red-500/40 text-gray-400 hover:text-white transition-all text-sm font-medium">
                                 Explore all services
                                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -59,7 +59,7 @@ export default function ServicesSection() {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.08 }}
                         >
-                            <Link to={createPageUrl("Services_Detail")}>
+                            <Link href={createPageUrl("Services_Detail")}>
                                 <div className="group relative flex items-start sm:items-center gap-4 sm:gap-8 py-7 sm:py-8 border-b border-white/[0.06] hover:border-red-500/20 transition-all cursor-pointer">
                                     <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 to-transparent opacity-0 group-hover:opacity-[0.04] transition-opacity rounded-xl" />
 

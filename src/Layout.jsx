@@ -9,11 +9,12 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import Logo from "@/components/shared/Logo";
 import { ThemeProvider, useTheme } from "@/components/shared/ThemeToggle";
-import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
 import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
+import CustomCursor from "@/components/shared/CustomCursor";
 
 const publicNavLinks = [
     { name: 'Home', page: 'Home' },
@@ -107,19 +108,12 @@ function LayoutContent({ children, currentPageName }) {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    const { data: user } = useQuery({
-        queryKey: ['current-user'],
-        queryFn: async () => { try { return await base44.auth.me(); } catch { return null; } },
-    });
+    const { user } = useAuth();
 
     const isAdminPage = currentPageName?.startsWith('Admin_');
     const isClientPage = currentPageName?.startsWith('Client_');
 
-    useEffect(() => {
-        if (user) {
-            base44.entities.UserActivity.create({ user_email: user.email, activity_type: 'page_view', page_name: currentPageName }).catch(() => {});
-        }
-    }, [currentPageName, user]);
+    // Activity logging is now handled by NavigationTracker to avoid redundancy
 
     let navLinks = publicNavLinks;
     if (isAdminPage) navLinks = adminNavLinks;
@@ -401,6 +395,7 @@ export default function Layout(props) {
     const isPublicPage = !props.currentPageName?.startsWith('Admin_') && !props.currentPageName?.startsWith('Client_');
     return (
         <ThemeProvider>
+            <CustomCursor />
             <LayoutContent {...props} />
             <ChatbotWidget />
             {isPublicPage && <WhatsAppFloat />}

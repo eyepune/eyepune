@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import AdminGuard from "@/components/admin/AdminGuard";
+import AdminLayout from "@/components/admin/AdminLayout";
 import { motion } from 'framer-motion';
 import { TrendingUp, Users, DollarSign, Target, Mail, Calendar } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -187,7 +188,9 @@ function Admin_Analytics() {
 export default function AdminAnalyticsPage() {
     return (
         <AdminGuard>
-            <Admin_Analytics />
+            <AdminLayout>
+                <Admin_Analytics />
+            </AdminLayout>
         </AdminGuard>
     );
 }

@@ -79,7 +79,7 @@ function Admin_CMS() {
     };
 
     return (
-        <div className="min-h-screen bg-background p-6">
+        <div className="p-4">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <div>
@@ -265,10 +265,14 @@ function Admin_CMS() {
     );
 }
 
+import AdminLayout from "@/components/admin/AdminLayout";
+
 export default function AdminCMSPage() {
     return (
         <AdminGuard>
-            <Admin_CMS />
+            <AdminLayout>
+                <Admin_CMS />
+            </AdminLayout>
         </AdminGuard>
     );
 }

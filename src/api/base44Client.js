@@ -270,10 +270,100 @@ const functions = {
   }
 };
 
+// ── Agents API (AI Sales Assistant / WhatsApp) ──────────────────────────
+const agents = {
+  async listConversations(params = {}) {
+    let query = supabase.from('ai_conversations').select('*');
+    if (params.agent_name) query = query.eq('agent_name', params.agent_name);
+    
+    const { data: convs, error } = await query.order('updated_at', { ascending: false });
+    if (error) throw error;
+    
+    // Fetch last messages for each conversation
+    const result = await Promise.all((convs || []).map(async (conv) => {
+      const { data: messages } = await supabase
+        .from('ai_messages')
+        .select('*')
+        .eq('conversation_id', conv.id)
+        .order('created_at', { ascending: false });
+      return { ...conv, messages: (messages || []).reverse() };
+    }));
+    
+    return result;
+  },
+
+  async getConversation(id) {
+    const { data: conv, error: convErr } = await supabase.from('ai_conversations').select('*').eq('id', id).single();
+    if (convErr) throw convErr;
+    
+    const { data: messages, error: msgErr } = await supabase
+      .from('ai_messages')
+      .select('*')
+      .eq('conversation_id', id)
+      .order('created_at', { ascending: true });
+    if (msgErr) throw msgErr;
+    
+    return { ...conv, messages: messages || [] };
+  },
+
+  async createConversation(params) {
+    const { data, error } = await supabase
+      .from('ai_conversations')
+      .insert({
+        agent_name: params.agent_name,
+        metadata: params.metadata || {},
+        status: 'active'
+      })
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
+  async addMessage(conversation, message) {
+    const { data, error } = await supabase
+      .from('ai_messages')
+      .insert({
+        conversation_id: conversation.id,
+        role: message.role,
+        content: message.content,
+        metadata: message.metadata || {}
+      })
+      .select()
+      .single();
+    if (error) throw error;
+    
+    // Update conversation timestamp
+    await supabase.from('ai_conversations').update({ updated_at: new Date().toISOString() }).eq('id', conversation.id);
+    
+    return data;
+  },
+
+  subscribeToConversation(id, callback) {
+    const channel = supabase
+      .channel(`conversation-${id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'ai_messages', filter: `conversation_id=eq.${id}` }, 
+      async () => {
+        const updated = await this.getConversation(id);
+        callback(updated);
+      })
+      .subscribe();
+      
+    return () => supabase.removeChannel(channel);
+  },
+
+  getWhatsAppConnectURL(agentName) {
+    // This is a placeholder for the actual WhatsApp integration URL
+    // In production, this would point to a service that handles the QR/Connect flow
+    return `https://wa.me/919284712033?text=Connect%20to%20${agentName}`;
+  }
+};
+
 // ── Build the base44-compatible export ──────────────────────────────────
 export const base44 = {
   entities: db,
   auth,
   integrations,
   functions,
+  agents,
 };

@@ -11,14 +11,21 @@ export default function NavigationTracker() {
     const { user } = useAuth();
 
     useEffect(() => {
+        const pageName = pathname.startsWith('/') ? pathname.slice(1) : pathname;
+        const activityData = {
+            activity_type: 'page_view',
+            page_name: pageName || 'Home',
+            metadata: {
+                url: window.location.href,
+                userAgent: navigator.userAgent
+            }
+        };
+
         if (user) {
-            const pageName = pathname.startsWith('/') ? pathname.slice(1) : pathname;
-            base44.entities.UserActivity.create({
-                user_email: user.email,
-                activity_type: 'page_view',
-                page_name: pageName || 'Home',
-            }).catch(() => {});
+            activityData.user_email = user.email;
         }
+
+        base44.entities.UserActivity.create(activityData).catch(() => {});
     }, [pathname, searchParams, user]);
 
     return null;

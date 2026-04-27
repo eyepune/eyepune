@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bot, ArrowRight, Phone } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
 function Grid3D() {
@@ -97,7 +97,7 @@ export default function CTASection() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-lg mx-auto sm:max-w-none">
-                        <Link to={createPageUrl("AI_Assessment")}>
+                        <Link href={createPageUrl("AI_Assessment")}>
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                                 <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 w-full sm:w-auto px-8 sm:px-10 py-5 sm:py-6 text-base sm:text-lg rounded-full font-black shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:shadow-[0_0_70px_rgba(255,255,255,0.3)] transition-all">
                                     <Bot className="w-5 h-5 mr-2" />

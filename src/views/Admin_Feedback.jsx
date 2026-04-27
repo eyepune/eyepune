@@ -104,7 +104,7 @@ function Admin_Feedback() {
     };
 
     return (
-        <div className="min-h-screen bg-background p-6">
+        <div className="py-6">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mb-2">Client Feedback Management</h1>
@@ -322,10 +322,14 @@ function Admin_Feedback() {
     );
 }
 
+import AdminLayout from "@/components/admin/AdminLayout";
+
 export default function AdminFeedbackPage() {
     return (
         <AdminGuard>
-            <Admin_Feedback />
+            <AdminLayout>
+                <Admin_Feedback />
+            </AdminLayout>
         </AdminGuard>
     );
 }

@@ -87,7 +87,7 @@ function OutreachContent() {
     );
 
     return (
-        <div className="p-6 space-y-6 bg-[#040404] min-h-screen text-white">
+        <div className="space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
@@ -299,6 +299,14 @@ function OutreachContent() {
     );
 }
 
+import AdminLayout from '@/components/admin/AdminLayout';
+
 export default function Admin_Outreach() {
-    return <AdminGuard><OutreachContent /></AdminGuard>;
+    return (
+        <AdminGuard>
+            <AdminLayout>
+                <OutreachContent />
+            </AdminLayout>
+        </AdminGuard>
+    );
 }

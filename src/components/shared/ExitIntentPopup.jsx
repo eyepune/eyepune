@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bot, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 
@@ -119,7 +119,7 @@ export default function ExitIntentPopup() {
                                 </form>
 
                                 <div className="mt-4 text-center">
-                                    <Link to={createPageUrl("AI_Assessment")} onClick={handleDismiss} className="text-red-400 hover:text-red-300 text-xs underline">
+                                    <Link href={createPageUrl("AI_Assessment")} onClick={handleDismiss} className="text-red-400 hover:text-red-300 text-xs underline">
                                         Or take our full AI Assessment →
                                     </Link>
                                 </div>

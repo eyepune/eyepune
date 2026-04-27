@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session) {
-          await fetchUserProfile(session.user.id);
+          await fetchUserProfile(session.user.id, session.user);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setIsAuthenticated(false);
@@ -51,17 +51,17 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Check if user has an active session
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
 
-      if (error) {
-        console.error('Session check failed:', error);
-        setAuthError({ type: 'unknown', message: error.message });
+      if (authError && authError.message !== 'Auth session missing!') {
+        console.error('Session check failed:', authError);
+        setAuthError({ type: 'unknown', message: authError.message });
         setIsLoadingAuth(false);
         return;
       }
 
-      if (session?.user) {
-        await fetchUserProfile(session.user.id);
+      if (authUser) {
+        await fetchUserProfile(authUser.id, authUser);
       } else {
         setUser(null);
         setIsAuthenticated(false);
@@ -80,16 +80,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const fetchUserProfile = async (userId) => {
+  const fetchUserProfile = async (userId, authUser) => {
     try {
       const { data: userProfile, error: profileError } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
         .single();
-
-      const { data: { session } } = await supabase.auth.getSession();
-      const authUser = session?.user;
 
       if (profileError || !userProfile) {
         console.warn('Profile not found, using auth metadata');

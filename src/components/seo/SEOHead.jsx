@@ -5,7 +5,7 @@ export default function SEOHead({
     title = "EyE PunE - Connect Engage Grow | Digital Marketing & Web Solutions",
     description = "Transform your business with EyE PunE's comprehensive digital solutions. Expert social media marketing, web app development, AI automation, and branding services in Pune, India.",
     keywords = "digital marketing pune, web development pune, social media marketing, AI automation, branding services, business growth, lead generation, sales automation, CRM solutions, SEO services",
-    ogImage = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200",
+    ogImage = "/og-image.png",
     canonicalUrl,
     structuredData,
     author = "EyE PunE"

@@ -7,11 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Users, Calendar, DollarSign, Target, Sparkles, MessageCircle, Package, Activity, RefreshCw, Download } from 'lucide-react';
 import AdminGuard from "@/components/admin/AdminGuard";
+import AdminLayout from "@/components/admin/AdminLayout";
 import { motion } from 'framer-motion';
 
 const COLORS = ['#dc2626', '#ea580c', '#d97706', '#ca8a04', '#65a30d', '#16a34a', '#059669', '#0891b2'];
 
-export default function Admin_Reports() {
+function Admin_Reports() {
     const [period, setPeriod] = useState('month');
 
     const { data: metrics, isLoading, refetch } = useQuery({
@@ -34,11 +35,9 @@ export default function Admin_Reports() {
 
     if (isLoading) {
         return (
-            <AdminGuard>
-                <div className="min-h-screen bg-background flex items-center justify-center">
-                    <RefreshCw className="w-8 h-8 animate-spin text-red-600" />
-                </div>
-            </AdminGuard>
+            <div className="flex items-center justify-center min-h-[400px]">
+                <RefreshCw className="w-8 h-8 animate-spin text-red-600" />
+            </div>
         );
     }
 
@@ -65,8 +64,7 @@ export default function Admin_Reports() {
     })) : [];
 
     return (
-        <AdminGuard>
-            <div className="min-h-screen bg-background p-6">
+        <div className="py-6">
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
                     <div className="flex items-center justify-between mb-8">
@@ -347,7 +345,16 @@ export default function Admin_Reports() {
                         </Card>
                     </div>
                 </div>
-            </div>
+        </div>
+    );
+}
+
+export default function AdminReportsPage() {
+    return (
+        <AdminGuard>
+            <AdminLayout>
+                <Admin_Reports />
+            </AdminLayout>
         </AdminGuard>
     );
 }

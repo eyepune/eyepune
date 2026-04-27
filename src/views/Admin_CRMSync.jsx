@@ -13,6 +13,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { RefreshCw, Plus, Trash2, Settings, CheckCircle2, AlertCircle, ArrowLeftRight } from 'lucide-react';
 import { toast } from 'sonner';
 
+import AdminLayout from '@/components/admin/AdminLayout';
+
 export default function Admin_CRMSync() {
     const [editingConfig, setEditingConfig] = useState(null);
     const [isSyncing, setIsSyncing] = useState(false);
@@ -82,8 +84,8 @@ export default function Admin_CRMSync() {
 
     return (
         <AdminGuard>
-            <div className="min-h-screen bg-background p-6">
-                <div className="max-w-6xl mx-auto space-y-6">
+            <AdminLayout>
+                <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-4xl font-bold mb-2">CRM Synchronization</h1>
@@ -303,7 +305,7 @@ export default function Admin_CRMSync() {
                         </Card>
                     )}
                 </div>
-            </div>
+            </AdminLayout>
         </AdminGuard>
     );
 }

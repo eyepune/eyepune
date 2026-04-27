@@ -74,12 +74,12 @@ export default function About() {
                                 Your long-term growth partner — not just another agency. We combine strategy, technology, and AI to build businesses that scale predictably and profitably.
                             </p>
                             <div className="flex gap-4">
-                                <Link to={createPageUrl("Booking")}>
+                                <Link href={createPageUrl("Booking")}>
                                     <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-7 py-5 rounded-full font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)]">
                                         Work With Us <ArrowRight className="w-4 h-4 ml-2" />
                                     </Button>
                                 </Link>
-                                <Link to={createPageUrl("Contact")}>
+                                <Link href={createPageUrl("Contact")}>
                                     <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-7 py-5 rounded-full">
                                         Get in Touch
                                     </Button>
@@ -235,12 +235,12 @@ export default function About() {
                         </h2>
                         <p className="text-xl text-gray-400 mb-10">Let's build something remarkable together.</p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to={createPageUrl("Booking")}>
+                            <Link href={createPageUrl("Booking")}>
                                 <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-10 py-6 text-lg rounded-full font-bold shadow-[0_0_30px_rgba(239,68,68,0.4)]">
                                     Book Free Consultation <ArrowRight className="w-5 h-5 ml-2" />
                                 </Button>
                             </Link>
-                            <Link to={createPageUrl("Contact")}>
+                            <Link href={createPageUrl("Contact")}>
                                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-10 py-6 text-lg rounded-full">
                                     Get in Touch
                                 </Button>
