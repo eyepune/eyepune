@@ -113,40 +113,6 @@ export default function HeroSection() {
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[120px]" />
                 <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-orange-600/5 rounded-full blur-[120px]" />
-                
-                {/* Floating Tech & Social Symbols */}
-                {[
-                    { Icon: Bot, x: "10%", y: "20%", delay: 0 },
-                    { Icon: Instagram, x: "85%", y: "15%", delay: 2 },
-                    { Icon: Facebook, x: "75%", y: "70%", delay: 4 },
-                    { Icon: Linkedin, x: "15%", y: "75%", delay: 1 },
-                    { Icon: Twitter, x: "50%", y: "10%", delay: 3 },
-                    { Icon: Cpu, x: "90%", y: "60%", delay: 5 },
-                    { Icon: Code, x: "5%", y: "45%", delay: 2.5 },
-                    { Icon: Globe, x: "80%", y: "40%", delay: 1.5 },
-                    { Icon: Zap, x: "30%", y: "85%", delay: 0.5 },
-                    { Icon: MessageCircle, x: "70%", y: "80%", delay: 3.5 },
-                ].map((item, i) => (
-                    <motion.div
-                        key={i}
-                        initial={{ opacity: 0 }}
-                        animate={{ 
-                            opacity: [0.1, 0.2, 0.1],
-                            y: [0, -40, 0],
-                            rotate: [0, 10, -10, 0]
-                        }}
-                        transition={{ 
-                            duration: 10 + Math.random() * 5, 
-                            repeat: Infinity, 
-                            ease: "easeInOut",
-                            delay: item.delay
-                        }}
-                        className="absolute text-white"
-                        style={{ left: item.x, top: item.y }}
-                    >
-                        <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={1} />
-                    </motion.div>
-                ))}
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">

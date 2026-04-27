@@ -15,6 +15,7 @@ import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
 import CustomCursor from "@/components/shared/CustomCursor";
+import FloatingBackground from "@/components/shared/FloatingBackground";
 
 const publicNavLinks = [
     { name: 'Home', page: 'Home' },
@@ -123,8 +124,9 @@ function LayoutContent({ children, currentPageName }) {
 
     return (
         <div className="min-h-screen bg-[#040404] text-white">
-
-            {/* ── NAVBAR ── */}
+            <FloatingBackground />
+            <CustomCursor />
+            <ExitIntentPopup />
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 scrolled
                     ? 'bg-[#040404]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
