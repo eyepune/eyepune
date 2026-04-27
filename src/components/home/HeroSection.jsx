@@ -97,6 +97,16 @@ export default function HeroSection() {
     const y = useTransform(scrollY, [0, 600], [0, 100]);
     const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
+    const words = ["Precision", "Growth", "Systems"];
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % words.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <section ref={heroRef} className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-[#040404]">
             {/* Background elements */}
@@ -124,44 +134,31 @@ export default function HeroSection() {
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
-                            <motion.span
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                                className="inline-block mr-3"
-                            >
-                                Precision
-                            </motion.span>
-                            <motion.span
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.4 }}
-                                className="inline-block mr-3 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500"
-                            >
-                                Growth
-                            </motion.span>
-                            <motion.span
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.6 }}
-                                className="inline-block mr-3"
-                            >
-                                Systems
-                            </motion.span>
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 1, delay: 1.2 }}
-                                className="block md:inline"
-                            >
-                                for Ambitious Brands
-                            </motion.span>
+                            <div className="relative inline-flex flex-col h-[1.2em] overflow-hidden align-bottom">
+                                <AnimatePresence mode="wait">
+                                    <motion.span
+                                        key={words[index]}
+                                        initial={{ opacity: 0, y: 40 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -40 }}
+                                        transition={{ 
+                                            duration: 0.6, 
+                                            ease: [0.23, 1, 0.32, 1] 
+                                        }}
+                                        className={index === 1 ? "text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500" : "text-white"}
+                                    >
+                                        {words[index]}
+                                    </motion.span>
+                                </AnimatePresence>
+                            </div>
+                            <br />
+                            for Ambitious Brands
                         </h1>
 
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 1.5 }}
+                            transition={{ duration: 1, delay: 0.8 }}
                             className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed"
                         >
                             We combine deep-tech automation with elite sales strategy to scale your business predictably. No fluff, just performance-driven results.
@@ -170,7 +167,7 @@ export default function HeroSection() {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 1.8 }}
+                            transition={{ duration: 0.8, delay: 1 }}
                             className="flex flex-wrap gap-4 mb-12"
                         >
                             <Link href={createPageUrl("AI_Assessment")}>
