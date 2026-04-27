@@ -48,158 +48,94 @@ function TypewriterWords() {
 
 // High-Fidelity Cyber-Eye Animation
 function EyeCanvas() {
-    const canvasRef = useRef(null);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let animId;
-        let t = 0;
-
-        const resize = () => {
-            const dpr = window.devicePixelRatio || 1;
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
-        };
-        resize();
-        window.addEventListener('resize', resize);
-
-        const draw = () => {
-            const w = canvas.width / (window.devicePixelRatio || 1);
-            const h = canvas.height / (window.devicePixelRatio || 1);
-            ctx.clearRect(0, 0, w, h);
-            
-            const cx = w / 2;
-            const cy = h / 2;
-            const maxR = Math.min(w, h) * 0.35;
-
-            // 1. Background Neural Web (Subtle)
-            ctx.globalAlpha = 0.15;
-            for (let i = 0; i < 3; i++) {
-                const r = maxR * (1.2 + i * 0.2) + Math.sin(t * 0.5 + i) * 10;
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, 0, Math.PI * 2);
-                ctx.strokeStyle = '#ef4444';
-                ctx.setLineDash([5, 15]);
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-                ctx.setLineDash([]);
-            }
-
-            // 2. Outer Glowing Rings
-            for (let i = 0; i < 4; i++) {
-                const r = maxR * (0.8 + i * 0.08) + Math.sin(t * 1.5 + i) * 5;
-                const alpha = 0.1 - i * 0.02;
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, t * 0.2 + i, t * 0.2 + i + Math.PI * 0.6);
-                ctx.strokeStyle = `rgba(239,68,68,${alpha})`;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, t * 0.2 + i + Math.PI, t * 0.2 + i + Math.PI * 1.6);
-                ctx.stroke();
-            }
-
-            // 3. Iris Layer 1 (Base Gradient)
-            const irisR = maxR * 0.45;
-            const irisGrad = ctx.createRadialGradient(cx, cy, irisR * 0.2, cx, cy, irisR);
-            irisGrad.addColorStop(0, '#000000');
-            irisGrad.addColorStop(0.6, '#ef4444');
-            irisGrad.addColorStop(1, '#000000');
-            
-            ctx.globalAlpha = 0.8;
-            ctx.beginPath();
-            ctx.arc(cx, cy, irisR, 0, Math.PI * 2);
-            ctx.fillStyle = irisGrad;
-            ctx.fill();
-
-            // 4. Iris Texture (Fibers)
-            ctx.globalCompositeOperation = 'lighter';
-            for (let i = 0; i < 60; i++) {
-                const angle = (i / 60) * Math.PI * 2 + Math.sin(t * 0.5) * 0.1;
-                const len = irisR * (0.7 + Math.random() * 0.3);
-                ctx.beginPath();
-                ctx.moveTo(cx + Math.cos(angle) * (irisR * 0.3), cy + Math.sin(angle) * (irisR * 0.3));
-                ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
-                ctx.strokeStyle = `rgba(239,68,68,${0.2 + Math.random() * 0.3})`;
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
-
-            // 5. Pupil (The Core)
-            const pupilR = irisR * 0.35 + Math.sin(t * 2) * 2;
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.beginPath();
-            ctx.arc(cx, cy, pupilR, 0, Math.PI * 2);
-            ctx.fillStyle = '#000000';
-            ctx.fill();
-
-            // 6. Pupil Inner Glow
-            const pGlowR = pupilR * 0.8;
-            const pGlowGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, pGlowR);
-            pGlowGrad.addColorStop(0, 'rgba(239,68,68,0.8)');
-            pGlowGrad.addColorStop(1, 'rgba(239,68,68,0)');
-            ctx.beginPath();
-            ctx.arc(cx, cy, pGlowR, 0, Math.PI * 2);
-            ctx.fillStyle = pGlowGrad;
-            ctx.fill();
-
-            // 7. Scanning Data Ring
-            ctx.globalCompositeOperation = 'lighter';
-            const dataR = maxR * 0.65;
-            ctx.beginPath();
-            ctx.arc(cx, cy, dataR, -t, -t + 0.5);
-            ctx.strokeStyle = '#f97316';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-
-            // 8. Orbiting Tech Particles
-            for (let i = 0; i < 12; i++) {
-                const orbitR = maxR * 0.75 + Math.sin(t + i) * 15;
-                const angle = (i / 12) * Math.PI * 2 + t * 0.4;
-                const px = cx + Math.cos(angle) * orbitR;
-                const py = cy + Math.sin(angle) * orbitR;
+    return (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px]"
+            >
+                {/* Background Glow */}
+                <div className="absolute inset-0 rounded-full bg-red-500/10 blur-[100px] animate-pulse" />
                 
-                ctx.beginPath();
-                ctx.arc(px, py, 1.5, 0, Math.PI * 2);
-                ctx.fillStyle = i % 3 === 0 ? '#ffffff' : '#ef4444';
-                ctx.fill();
-                
-                // Trailing faint lines
-                ctx.beginPath();
-                ctx.moveTo(px, py);
-                ctx.lineTo(px - Math.cos(angle) * 20, py - Math.sin(angle) * 20);
-                ctx.strokeStyle = `rgba(239,68,68,0.2)`;
-                ctx.stroke();
-            }
+                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_30px_rgba(239,68,68,0.3)]">
+                    {/* Eyelashes with drawing animation */}
+                    <motion.g 
+                        stroke="#ef4444" 
+                        strokeWidth="4" 
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
+                    >
+                        <line x1="15" y1="47" x2="5" y2="36" />
+                        <line x1="27" y1="40" x2="18" y2="28" />
+                        <line x1="38" y1="36" x2="33" y2="22" />
+                        <line x1="50" y1="35" x2="50" y2="20" />
+                        <line x1="62" y1="36" x2="67" y2="22" />
+                        <line x1="73" y1="40" x2="82" y2="28" />
+                        <line x1="85" y1="47" x2="95" y2="36" />
+                    </motion.g>
 
-            // 9. Glint / Reflection
-            const glintX = cx - irisR * 0.3;
-            const glintY = cy - irisR * 0.3;
-            const glintGrad = ctx.createRadialGradient(glintX, glintY, 0, glintX, glintY, irisR * 0.2);
-            glintGrad.addColorStop(0, 'rgba(255,255,255,0.4)');
-            glintGrad.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.beginPath();
-            ctx.arc(glintX, glintY, irisR * 0.2, 0, Math.PI * 2);
-            ctx.fillStyle = glintGrad;
-            ctx.fill();
+                    {/* Eye Outline with drawing animation */}
+                    <motion.path 
+                        d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" 
+                        stroke="#ef4444" 
+                        strokeWidth="4" 
+                        strokeLinejoin="round"
+                        fill="rgba(239, 68, 68, 0.05)"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 2, ease: "easeInOut" }}
+                    />
 
-            t += 0.015;
-            animId = requestAnimationFrame(draw);
-        };
-        draw();
+                    {/* Iris with pulsing scale */}
+                    <motion.circle 
+                        cx="50" cy="55" r="14" 
+                        stroke="#ef4444" 
+                        strokeWidth="3"
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: [0, 1.1, 1], opacity: 1 }}
+                        transition={{ duration: 1, delay: 1.2 }}
+                    />
 
-        return () => {
-            cancelAnimationFrame(animId);
-            window.removeEventListener('resize', resize);
-        };
-    }, []);
+                    {/* Pupil with inner glow/pulse */}
+                    <motion.circle 
+                        cx="50" cy="55" r="6" 
+                        fill="#ef4444"
+                        animate={{ 
+                            scale: [1, 1.2, 1],
+                            opacity: [0.8, 1, 0.8] 
+                        }}
+                        transition={{ 
+                            repeat: Infinity, 
+                            duration: 3,
+                            ease: "easeInOut" 
+                        }}
+                    />
+                </svg>
 
-    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-80" />;
+                {/* Orbiting particles for extra "wow" factor */}
+                {[...Array(3)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute top-1/2 left-1/2 w-1 h-1 bg-red-400 rounded-full"
+                        animate={{
+                            rotate: 360,
+                            x: [Math.cos(i) * 150, Math.cos(i + 2) * 180, Math.cos(i) * 150],
+                            y: [Math.sin(i) * 150, Math.sin(i + 2) * 180, Math.sin(i) * 150],
+                        }}
+                        transition={{
+                            duration: 10 + i * 2,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    />
+                ))}
+            </motion.div>
+        </div>
+    );
 }
 
 export default function HeroSection() {
