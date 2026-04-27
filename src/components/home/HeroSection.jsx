@@ -124,14 +124,55 @@ export default function HeroSection() {
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
-                            Precision <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Growth</span> Systems for Ambitious Brands
+                            <motion.span
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="inline-block mr-3"
+                            >
+                                Precision
+                            </motion.span>
+                            <motion.span
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                                className="inline-block mr-3 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500"
+                            >
+                                Growth
+                            </motion.span>
+                            <motion.span
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.6 }}
+                                className="inline-block mr-3"
+                            >
+                                Systems
+                            </motion.span>
+                            <motion.span
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 1, delay: 1.2 }}
+                                className="block md:inline"
+                            >
+                                for Ambitious Brands
+                            </motion.span>
                         </h1>
 
-                        <p className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed">
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1, delay: 1.5 }}
+                            className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed"
+                        >
                             We combine deep-tech automation with elite sales strategy to scale your business predictably. No fluff, just performance-driven results.
-                        </p>
+                        </motion.p>
 
-                        <div className="flex flex-wrap gap-4 mb-12">
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 1.8 }}
+                            className="flex flex-wrap gap-4 mb-12"
+                        >
                             <Link href={createPageUrl("AI_Assessment")}>
                                 <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white rounded-full px-8 py-6 text-lg font-bold shadow-[0_0_30px_rgba(239,68,68,0.3)] transition-all">
                                     Start AI Assessment
@@ -143,7 +184,7 @@ export default function HeroSection() {
                                     Book Strategy Call
                                 </Button>
                             </Link>
-                        </div>
+                        </motion.div>
 
                         {/* Trust markers */}
                         <div className="flex items-center gap-8 border-t border-white/5 pt-8">
