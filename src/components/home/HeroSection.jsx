@@ -47,130 +47,6 @@ function TypewriterWords() {
 }
 
 // High-Fidelity Cyber-Eye Animation
-function EyeCanvas() {
-    const canvasRef = useRef(null);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let animId;
-        let t = 0;
-
-        const resize = () => {
-            const dpr = window.devicePixelRatio || 1;
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
-        };
-        resize();
-        window.addEventListener('resize', resize);
-
-        const draw = () => {
-            const w = canvas.width / (window.devicePixelRatio || 1);
-            const h = canvas.height / (window.devicePixelRatio || 1);
-            ctx.clearRect(0, 0, w, h);
-            
-            const cx = w / 2;
-            const cy = h / 2;
-            const scale = Math.min(w, h) / 120; // Scale based on 100x100 logo coord system
-
-            // 1. Background Pulse Glow
-            const glowSize = 40 * scale;
-            const bgGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowSize * 1.5);
-            bgGrad.addColorStop(0, 'rgba(239,68,68,0.15)');
-            bgGrad.addColorStop(1, 'rgba(239,68,68,0)');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, w, h);
-
-            // 2. High-Tech Iris (Internal Animation)
-            const irisR = 14 * scale;
-            const pupilR = 6 * scale + Math.sin(t * 3) * 1;
-            
-            // Iris Base
-            ctx.beginPath();
-            ctx.arc(cx, cy + 5 * scale, irisR, 0, Math.PI * 2);
-            const irisGrad = ctx.createRadialGradient(cx, cy + 5 * scale, 0, cx, cy + 5 * scale, irisR);
-            irisGrad.addColorStop(0, '#000');
-            irisGrad.addColorStop(0.5, '#ef4444');
-            irisGrad.addColorStop(1, '#000');
-            ctx.fillStyle = irisGrad;
-            ctx.fill();
-
-            // Neural Fibers
-            ctx.globalCompositeOperation = 'lighter';
-            for (let i = 0; i < 40; i++) {
-                const angle = (i / 40) * Math.PI * 2 + t * 0.2;
-                const len = irisR * (0.6 + Math.random() * 0.4);
-                ctx.beginPath();
-                ctx.moveTo(cx + Math.cos(angle) * pupilR, cy + 5 * scale + Math.sin(angle) * pupilR);
-                ctx.lineTo(cx + Math.cos(angle) * len, cy + 5 * scale + Math.sin(angle) * len);
-                ctx.strokeStyle = `rgba(239,68,68,${0.3 + Math.random() * 0.4})`;
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
-
-            // Scanning Ring
-            ctx.beginPath();
-            ctx.arc(cx, cy + 5 * scale, irisR * 1.2, t, t + 1);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Pupil
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.beginPath();
-            ctx.arc(cx, cy + 5 * scale, pupilR, 0, Math.PI * 2);
-            ctx.fillStyle = '#000';
-            ctx.fill();
-
-            // 3. Authentic Logo Frame (7 Eyelashes + Almond)
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 4 * scale;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            // Eyelashes
-            const lashes = [
-                [15, 47, 5, 36], [27, 40, 18, 28], [38, 36, 33, 22],
-                [50, 35, 50, 20],
-                [62, 36, 67, 22], [73, 40, 82, 28], [85, 47, 95, 36]
-            ];
-            lashes.forEach(([x1, y1, x2, y2]) => {
-                ctx.beginPath();
-                ctx.moveTo(cx + (x1 - 50) * scale, cy + (y1 - 50) * scale);
-                ctx.lineTo(cx + (x2 - 50) * scale, cy + (y2 - 50) * scale);
-                ctx.stroke();
-            });
-
-            // Almond Outline
-            ctx.beginPath();
-            ctx.moveTo(cx - 45 * scale, cy + 5 * scale);
-            ctx.quadraticCurveTo(cx, cy - 35 * scale, cx + 45 * scale, cy + 5 * scale);
-            ctx.quadraticCurveTo(cx, cy + 45 * scale, cx - 45 * scale, cy + 5 * scale);
-            ctx.stroke();
-
-            // 4. Tech Glints
-            ctx.beginPath();
-            ctx.arc(cx - irisR * 0.3, cy + 5 * scale - irisR * 0.3, 2 * scale, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.fill();
-
-            t += 0.02;
-            animId = requestAnimationFrame(draw);
-        };
-        draw();
-
-        return () => {
-            cancelAnimationFrame(animId);
-            window.removeEventListener('resize', resize);
-        };
-    }, []);
-
-    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-90" />;
-}
-
 export default function HeroSection() {
     const heroRef = useRef(null);
     const { scrollY } = useScroll();
@@ -179,12 +55,29 @@ export default function HeroSection() {
 
     return (
         <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#040404]">
-            {/* Eye animation */}
-            <EyeCanvas />
+            {/* Elite Ambient Glows */}
+            <div className="absolute inset-0 pointer-events-none">
+                <motion.div 
+                    animate={{ 
+                        scale: [1, 1.1, 1],
+                        opacity: [0.03, 0.06, 0.03] 
+                    }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-red-600 blur-[120px]"
+                />
+                <motion.div 
+                    animate={{ 
+                        scale: [1, 1.2, 1],
+                        opacity: [0.02, 0.05, 0.02] 
+                    }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                    className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-orange-600 blur-[120px]"
+                />
+            </div>
 
-            {/* Grid */}
-            <div className="absolute inset-0 opacity-[0.035]"
-                style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            {/* Subtle Grid */}
+            <div className="absolute inset-0 opacity-[0.02]"
+                style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px)', backgroundSize: '40px 40px' }}
             />
 
             {/* Red glow center */}
