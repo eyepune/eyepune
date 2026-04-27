@@ -6,14 +6,14 @@ export default function WhatsAppFloat() {
     const [showTooltip, setShowTooltip] = useState(false);
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+        <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start gap-2">
             <AnimatePresence>
                 {showTooltip && (
                     <motion.div
                         initial={{ opacity: 0, y: 10, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                        className="bg-[#111] border border-white/10 rounded-2xl p-4 shadow-2xl max-w-[240px] text-right"
+                        className="bg-[#111] border border-white/10 rounded-2xl p-4 shadow-2xl max-w-[240px] text-left"
                     >
                         <button
                             onClick={() => setShowTooltip(false)}

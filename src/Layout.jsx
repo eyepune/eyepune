@@ -290,7 +290,7 @@ function LayoutContent({ children, currentPageName }) {
             </nav>
 
             {/* ── PAGE CONTENT ── */}
-            <main className={isPublicPage ? '' : 'pt-20'}>
+            <main className={isPublicPage ? 'pb-20' : 'pt-20'}>
                 {children}
             </main>
 
