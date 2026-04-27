@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { Calendar, User, ArrowLeft, MessageCircle, Clock, Share2, Facebook, Twitter, Linkedin, Copy, Check } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -196,14 +197,16 @@ export default function BlogPost() {
             {/* Hero Section */}
             <header className="relative w-full overflow-hidden min-h-[60vh] flex items-end">
                 <div className="absolute inset-0 z-0">
-                    <motion.div initial={{ scale: 1.05 }} animate={{ scale: 1 }} transition={{ duration: 1.2 }} className="w-full h-full">
-                        <img 
-                            src={featuredImg} 
-                            className="w-full h-full object-cover brightness-[0.6]"
-                            alt=""
-                            onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000' }}
-                        />
-                    </motion.div>
+                        <div className="relative w-full h-full">
+                            <Image 
+                                src={featuredImg} 
+                                fill
+                                sizes="100vw"
+                                priority
+                                className="object-cover brightness-[0.6]"
+                                alt={post.title || "Blog Post Header"}
+                            />
+                        </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#040404] via-[#040404]/80 to-transparent" />
                 </div>
 
@@ -274,8 +277,8 @@ export default function BlogPost() {
                                     {relatedPosts.map((relatedPost) => (
                                         <Link key={relatedPost.id} href={createPageUrl(`Blog_Post?slug=${relatedPost.slug}`)} className="group block">
                                             <div className="bg-white/5 border border-white/5 rounded-3xl p-6 hover:bg-white/10 transition-all h-full flex flex-col">
-                                                <div className="aspect-video rounded-2xl overflow-hidden mb-6">
-                                                    <img src={relatedPost.featured_image || featuredImg} className="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="" />
+                                                <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
+                                                    <Image src={relatedPost.featured_image || featuredImg} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover group-hover:scale-105 transition-transform" alt={relatedPost.title || "Related Post"} />
                                                 </div>
                                                 <h3 className="text-xl font-bold group-hover:text-red-500 transition-colors line-clamp-2">{relatedPost.title}</h3>
                                             </div>

@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { createPageUrl } from "@/utils";
 import { Calendar, User, ArrowRight, Search, Tag, Clock, Sparkles, TrendingUp } from 'lucide-react';
 import { Input } from "@/components/ui/input";
@@ -101,10 +102,13 @@ export default function Blog() {
                                 className="relative grid lg:grid-cols-2 gap-12 items-center bg-white/[0.02] border border-white/[0.05] rounded-[2.5rem] p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-700"
                             >
                                 <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-red-900/10">
-                                    <img 
+                                    <Image 
                                         src={featuredPost.featured_image || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200'} 
                                         alt={featuredPost.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                                        fill
+                                        sizes="(max-width: 1024px) 100vw, 50vw"
+                                        priority
+                                        className="object-cover group-hover:scale-105 transition-transform duration-1000"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-[#040404]/60 to-transparent" />
                                     <div className="absolute top-6 left-6">
@@ -207,11 +211,13 @@ export default function Blog() {
                                             >
                                                 <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
                                                     <div className="bg-white/[0.02] border border-white/[0.05] rounded-[2rem] p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 h-full flex flex-col">
-                                                        <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-6">
-                                                            <img 
+                                                        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6">
+                                                            <Image 
                                                                 src={post.featured_image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'} 
                                                                 alt={post.title}
-                                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                                fill
+                                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                                                className="object-cover group-hover:scale-105 transition-transform duration-700"
                                                             />
                                                         </div>
                                                         <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-gray-500 uppercase mb-4">

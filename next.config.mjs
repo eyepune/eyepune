@@ -25,6 +25,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'ui-avatars.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
   transpilePackages: ['react-leaflet', 'leaflet'],
