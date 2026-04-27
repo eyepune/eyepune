@@ -48,94 +48,127 @@ function TypewriterWords() {
 
 // High-Fidelity Cyber-Eye Animation
 function EyeCanvas() {
-    return (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-                className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px]"
-            >
-                {/* Background Glow */}
-                <div className="absolute inset-0 rounded-full bg-red-500/10 blur-[100px] animate-pulse" />
-                
-                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_30px_rgba(239,68,68,0.3)]">
-                    {/* Eyelashes with drawing animation */}
-                    <motion.g 
-                        stroke="#ef4444" 
-                        strokeWidth="4" 
-                        strokeLinecap="round"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
-                    >
-                        <line x1="15" y1="47" x2="5" y2="36" />
-                        <line x1="27" y1="40" x2="18" y2="28" />
-                        <line x1="38" y1="36" x2="33" y2="22" />
-                        <line x1="50" y1="35" x2="50" y2="20" />
-                        <line x1="62" y1="36" x2="67" y2="22" />
-                        <line x1="73" y1="40" x2="82" y2="28" />
-                        <line x1="85" y1="47" x2="95" y2="36" />
-                    </motion.g>
+    const canvasRef = useRef(null);
 
-                    {/* Eye Outline with drawing animation */}
-                    <motion.path 
-                        d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" 
-                        stroke="#ef4444" 
-                        strokeWidth="4" 
-                        strokeLinejoin="round"
-                        fill="rgba(239, 68, 68, 0.05)"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 2, ease: "easeInOut" }}
-                    />
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let animId;
+        let t = 0;
 
-                    {/* Iris with pulsing scale */}
-                    <motion.circle 
-                        cx="50" cy="55" r="14" 
-                        stroke="#ef4444" 
-                        strokeWidth="3"
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: [0, 1.1, 1], opacity: 1 }}
-                        transition={{ duration: 1, delay: 1.2 }}
-                    />
+        const resize = () => {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+        };
+        resize();
+        window.addEventListener('resize', resize);
 
-                    {/* Pupil with inner glow/pulse */}
-                    <motion.circle 
-                        cx="50" cy="55" r="6" 
-                        fill="#ef4444"
-                        animate={{ 
-                            scale: [1, 1.2, 1],
-                            opacity: [0.8, 1, 0.8] 
-                        }}
-                        transition={{ 
-                            repeat: Infinity, 
-                            duration: 3,
-                            ease: "easeInOut" 
-                        }}
-                    />
-                </svg>
+        const draw = () => {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            ctx.clearRect(0, 0, w, h);
+            
+            const cx = w / 2;
+            const cy = h / 2;
+            const scale = Math.min(w, h) / 120; // Scale based on 100x100 logo coord system
 
-                {/* Orbiting particles for extra "wow" factor */}
-                {[...Array(3)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute top-1/2 left-1/2 w-1 h-1 bg-red-400 rounded-full"
-                        animate={{
-                            rotate: 360,
-                            x: [Math.cos(i) * 150, Math.cos(i + 2) * 180, Math.cos(i) * 150],
-                            y: [Math.sin(i) * 150, Math.sin(i + 2) * 180, Math.sin(i) * 150],
-                        }}
-                        transition={{
-                            duration: 10 + i * 2,
-                            repeat: Infinity,
-                            ease: "linear"
-                        }}
-                    />
-                ))}
-            </motion.div>
-        </div>
-    );
+            // 1. Background Pulse Glow
+            const glowSize = 40 * scale;
+            const bgGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowSize * 1.5);
+            bgGrad.addColorStop(0, 'rgba(239,68,68,0.15)');
+            bgGrad.addColorStop(1, 'rgba(239,68,68,0)');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, w, h);
+
+            // 2. High-Tech Iris (Internal Animation)
+            const irisR = 14 * scale;
+            const pupilR = 6 * scale + Math.sin(t * 3) * 1;
+            
+            // Iris Base
+            ctx.beginPath();
+            ctx.arc(cx, cy + 5 * scale, irisR, 0, Math.PI * 2);
+            const irisGrad = ctx.createRadialGradient(cx, cy + 5 * scale, 0, cx, cy + 5 * scale, irisR);
+            irisGrad.addColorStop(0, '#000');
+            irisGrad.addColorStop(0.5, '#ef4444');
+            irisGrad.addColorStop(1, '#000');
+            ctx.fillStyle = irisGrad;
+            ctx.fill();
+
+            // Neural Fibers
+            ctx.globalCompositeOperation = 'lighter';
+            for (let i = 0; i < 40; i++) {
+                const angle = (i / 40) * Math.PI * 2 + t * 0.2;
+                const len = irisR * (0.6 + Math.random() * 0.4);
+                ctx.beginPath();
+                ctx.moveTo(cx + Math.cos(angle) * pupilR, cy + 5 * scale + Math.sin(angle) * pupilR);
+                ctx.lineTo(cx + Math.cos(angle) * len, cy + 5 * scale + Math.sin(angle) * len);
+                ctx.strokeStyle = `rgba(239,68,68,${0.3 + Math.random() * 0.4})`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+
+            // Scanning Ring
+            ctx.beginPath();
+            ctx.arc(cx, cy + 5 * scale, irisR * 1.2, t, t + 1);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Pupil
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.beginPath();
+            ctx.arc(cx, cy + 5 * scale, pupilR, 0, Math.PI * 2);
+            ctx.fillStyle = '#000';
+            ctx.fill();
+
+            // 3. Authentic Logo Frame (7 Eyelashes + Almond)
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 4 * scale;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Eyelashes
+            const lashes = [
+                [15, 47, 5, 36], [27, 40, 18, 28], [38, 36, 33, 22],
+                [50, 35, 50, 20],
+                [62, 36, 67, 22], [73, 40, 82, 28], [85, 47, 95, 36]
+            ];
+            lashes.forEach(([x1, y1, x2, y2]) => {
+                ctx.beginPath();
+                ctx.moveTo(cx + (x1 - 50) * scale, cy + (y1 - 50) * scale);
+                ctx.lineTo(cx + (x2 - 50) * scale, cy + (y2 - 50) * scale);
+                ctx.stroke();
+            });
+
+            // Almond Outline
+            ctx.beginPath();
+            ctx.moveTo(cx - 45 * scale, cy + 5 * scale);
+            ctx.quadraticCurveTo(cx, cy - 35 * scale, cx + 45 * scale, cy + 5 * scale);
+            ctx.quadraticCurveTo(cx, cy + 45 * scale, cx - 45 * scale, cy + 5 * scale);
+            ctx.stroke();
+
+            // 4. Tech Glints
+            ctx.beginPath();
+            ctx.arc(cx - irisR * 0.3, cy + 5 * scale - irisR * 0.3, 2 * scale, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.fill();
+
+            t += 0.02;
+            animId = requestAnimationFrame(draw);
+        };
+        draw();
+
+        return () => {
+            cancelAnimationFrame(animId);
+            window.removeEventListener('resize', resize);
+        };
+    }, []);
+
+    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-90" />;
 }
 
 export default function HeroSection() {
