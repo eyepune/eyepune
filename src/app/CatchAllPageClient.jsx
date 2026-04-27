@@ -147,8 +147,8 @@ export default function CatchAllPageClient() {
   // Case-insensitive lookup: try exact match first, then find by case-insensitive key
   let resolvedPageName = rawPageName;
   if (!PAGE_MAP[resolvedPageName]) {
-    const lowerName = rawPageName.toLowerCase();
-    const matchKey = Object.keys(PAGE_MAP).find(k => k.toLowerCase() === lowerName);
+    const lowerName = rawPageName.toLowerCase().replace(/-/g, '_');
+    const matchKey = Object.keys(PAGE_MAP).find(k => k.toLowerCase().replace(/-/g, '_') === lowerName);
     if (matchKey) resolvedPageName = matchKey;
   }
   
