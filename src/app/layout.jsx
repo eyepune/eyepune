@@ -4,12 +4,16 @@ import { Providers } from './providers';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import AIChatbot from '@/components/home/AIChatbot';
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export const metadata = {
   title: 'EyE PunE — AI-Powered Digital Growth',
   description: 'Full-service digital marketing & AI automation agency based in Pune, India. Social media, web development, branding, paid ads, and AI solutions.',
   keywords: 'digital marketing pune, social media marketing, website development, AI automation, branding, lead generation, eyepune',
   authors: [{ name: 'EyE PunE' }],
-  viewport: 'width=device-width, initial-scale=1',
   openGraph: {
     title: 'EyE PunE — AI-Powered Digital Growth',
     description: 'Pune\'s premier digital agency specializing in AI-driven marketing, web development, and custom automations.',

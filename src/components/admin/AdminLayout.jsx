@@ -8,7 +8,7 @@ import Logo from '@/components/shared/Logo';
 import {
     LayoutDashboard, Users, UserPlus, Mail, Star, Image as ImageIcon,
     FileText, LogOut, ChevronLeft, ChevronRight, MessageSquare, Search, ShieldAlert,
-    Bell, Settings, Menu, Beaker
+    Bell, Settings, Menu, Beaker, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';

@@ -59,6 +59,10 @@ import adminDashboard from './views/Admin_Dashboard';
 import adminDocuments from './views/Admin_Documents';
 import adminEmailcampaigns from './views/Admin_EmailCampaigns';
 import adminEmailtemplates from './views/Admin_EmailTemplates';
+import adminDripAutomations from './views/Admin_DripAutomations';
+import adminForms from './views/Admin_Forms';
+import adminTestAutomation from './views/Admin_TestAutomation';
+import adminWhatsAppMarketing from './views/Admin_WhatsAppMarketing';
 
 import adminFeedback from './views/Admin_Feedback';
 import adminMarketing from './views/Admin_Marketing';
@@ -89,6 +93,12 @@ import servicesDetail from './views/Services_Detail';
 import SignContract from './views/SignContract';
 import Testimonials from './views/Testimonials';
 import Unsubscribe from './views/Unsubscribe';
+import Login from './views/Login';
+import SystemStatus from './views/SystemStatus';
+import SignProposal from './views/SignProposal';
+import clientPortal from './views/Client_Portal';
+import Service_AIAutomation from './views/Service_AIAutomation';
+import Service_WebDevelopment from './views/Service_WebDevelopment';
 import __Layout from './Layout.jsx';
 
 
@@ -105,6 +115,10 @@ export const PAGES = {
     "Admin_Documents": adminDocuments,
     "Admin_EmailCampaigns": adminEmailcampaigns,
     "Admin_EmailTemplates": adminEmailtemplates,
+    "Admin_DripAutomations": adminDripAutomations,
+    "Admin_Forms": adminForms,
+    "Admin_TestAutomation": adminTestAutomation,
+    "Admin_WhatsAppMarketing": adminWhatsAppMarketing,
 
     "Admin_Feedback": adminFeedback,
     "Admin_Marketing": adminMarketing,
@@ -135,6 +149,12 @@ export const PAGES = {
     "SignContract": SignContract,
     "Testimonials": Testimonials,
     "Unsubscribe": Unsubscribe,
+    "Login": Login,
+    "SystemStatus": SystemStatus,
+    "SignProposal": SignProposal,
+    "Client_Portal": clientPortal,
+    "Service_AIAutomation": Service_AIAutomation,
+    "Service_WebDevelopment": Service_WebDevelopment,
 }
 
 export const pagesConfig = {
