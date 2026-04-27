@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap } from 'lucide-react';
+import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap, Cpu, Globe, Code, MessageCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
@@ -110,9 +110,41 @@ export default function HeroSection() {
     return (
         <section ref={heroRef} className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-[#040404]">
             {/* Background elements */}
-            <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[120px]" />
                 <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-orange-600/5 rounded-full blur-[120px]" />
+                
+                {/* Floating Tech & Social Symbols */}
+                {[
+                    { Icon: Bot, x: "10%", y: "20%", delay: 0 },
+                    { Icon: Cpu, x: "85%", y: "15%", delay: 2 },
+                    { Icon: Code, x: "75%", y: "70%", delay: 4 },
+                    { Icon: Globe, x: "15%", y: "75%", delay: 1 },
+                    { Icon: Sparkles, x: "50%", y: "10%", delay: 3 },
+                    { Icon: Zap, x: "90%", y: "60%", delay: 5 },
+                    { Icon: ShieldCheck, x: "5%", y: "45%", delay: 2.5 },
+                    { Icon: MessageCircle, x: "80%", y: "40%", delay: 1.5 },
+                ].map((item, i) => (
+                    <motion.div
+                        key={i}
+                        initial={{ opacity: 0 }}
+                        animate={{ 
+                            opacity: [0.02, 0.05, 0.02],
+                            y: [0, -40, 0],
+                            rotate: [0, 10, -10, 0]
+                        }}
+                        transition={{ 
+                            duration: 10 + Math.random() * 5, 
+                            repeat: Infinity, 
+                            ease: "easeInOut",
+                            delay: item.delay
+                        }}
+                        className="absolute text-white"
+                        style={{ left: item.x, top: item.y }}
+                    >
+                        <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={0.5} />
+                    </motion.div>
+                ))}
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
