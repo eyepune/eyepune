@@ -129,7 +129,7 @@ export default function HeroSection() {
                         key={i}
                         initial={{ opacity: 0 }}
                         animate={{ 
-                            opacity: [0.02, 0.05, 0.02],
+                            opacity: [0.05, 0.12, 0.05],
                             y: [0, -40, 0],
                             rotate: [0, 10, -10, 0]
                         }}
@@ -142,7 +142,7 @@ export default function HeroSection() {
                         className="absolute text-white"
                         style={{ left: item.x, top: item.y }}
                     >
-                        <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={0.5} />
+                        <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={0.8} />
                     </motion.div>
                 ))}
             </div>
