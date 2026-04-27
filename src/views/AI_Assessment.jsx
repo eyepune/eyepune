@@ -248,15 +248,26 @@ Based on their revenue range, estimate:
 - Cost reduction opportunities
 - Expected timeline to see results
 
+## Internal CRM Evaluation
+At the very bottom of your response, output this exact format:
+[CRM_SCORE: number]
+where number is a lead intent score (0-100) indicating how urgently they need agency services and their likelihood to convert based on their revenue and stated challenges.
+
 Be encouraging but realistic. Reference Indian market context. Make it personal and actionable.`,
                 add_context_from_internet: false
             });
             
             console.log('AI Response received:', aiResponse);
 
-            // Calculate growth score from AI response
-            const scoreMatch = aiResponse.match(/Growth Score.*?(\d+)/i);
-            const growthScore = scoreMatch ? parseInt(scoreMatch[1]) : 65;
+            // Calculate growth score and CRM intent score from AI response
+            const growthMatch = aiResponse.match(/Growth Score.*?(\d+)/i);
+            const growthScore = growthMatch ? parseInt(growthMatch[1]) : 65;
+            
+            const crmMatch = aiResponse.match(/\[CRM_SCORE:\s*(\d+)\]/i);
+            const crmScore = crmMatch ? parseInt(crmMatch[1]) : 75;
+
+            // Strip the CRM score from the final report shown to the user
+            const cleanAiResponse = aiResponse.replace(/## Internal CRM Evaluation[\s\S]*?\[CRM_SCORE:\s*\d+\]/i, '').trim();
 
             // Extract recommendations
             const recommendations = [
@@ -314,7 +325,7 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                     business_name: formData.company_name,
                     ...answers,
                     score: growthScore,
-                    ai_report: aiResponse,
+                    ai_report: cleanAiResponse,
                     converted_to_lead: false
                 }]).select().single();
                 if (error) console.warn('Failed to save assessment:', error);
@@ -332,8 +343,8 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                     company: formData.company_name,
                     source: 'ai_assessment',
                     status: 'new',
-                    score: growthScore,
-                    notes: `Completed AI Assessment. Biggest challenge: ${answers.biggest_challenge}`
+                    score: crmScore,
+                    notes: `AI Assessment Growth Score: ${growthScore}/100. Biggest challenge: ${answers.biggest_challenge}`
                 }]).select().single();
                 if (error) console.warn('Failed to save lead:', error);
                 else savedLead = data;
