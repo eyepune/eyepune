@@ -203,9 +203,10 @@ Response rules:
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-2rem)] flex flex-col"
+                        className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden"
                         style={{
                             height: '560px',
+                            maxHeight: 'calc(100vh - 120px)',
                             background: 'rgba(10,10,10,0.97)',
                             border: '1px solid rgba(239,68,68,0.15)',
                             borderRadius: '20px',
