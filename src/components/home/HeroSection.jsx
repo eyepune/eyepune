@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap, Cpu, Globe, Code, MessageCircle } from 'lucide-react';
+import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap, Cpu, Globe, Code, MessageCircle, Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
@@ -117,19 +117,21 @@ export default function HeroSection() {
                 {/* Floating Tech & Social Symbols */}
                 {[
                     { Icon: Bot, x: "10%", y: "20%", delay: 0 },
-                    { Icon: Cpu, x: "85%", y: "15%", delay: 2 },
-                    { Icon: Code, x: "75%", y: "70%", delay: 4 },
-                    { Icon: Globe, x: "15%", y: "75%", delay: 1 },
-                    { Icon: Sparkles, x: "50%", y: "10%", delay: 3 },
-                    { Icon: Zap, x: "90%", y: "60%", delay: 5 },
-                    { Icon: ShieldCheck, x: "5%", y: "45%", delay: 2.5 },
-                    { Icon: MessageCircle, x: "80%", y: "40%", delay: 1.5 },
+                    { Icon: Instagram, x: "85%", y: "15%", delay: 2 },
+                    { Icon: Facebook, x: "75%", y: "70%", delay: 4 },
+                    { Icon: Linkedin, x: "15%", y: "75%", delay: 1 },
+                    { Icon: Twitter, x: "50%", y: "10%", delay: 3 },
+                    { Icon: Cpu, x: "90%", y: "60%", delay: 5 },
+                    { Icon: Code, x: "5%", y: "45%", delay: 2.5 },
+                    { Icon: Globe, x: "80%", y: "40%", delay: 1.5 },
+                    { Icon: Zap, x: "30%", y: "85%", delay: 0.5 },
+                    { Icon: MessageCircle, x: "70%", y: "80%", delay: 3.5 },
                 ].map((item, i) => (
                     <motion.div
                         key={i}
                         initial={{ opacity: 0 }}
                         animate={{ 
-                            opacity: [0.05, 0.12, 0.05],
+                            opacity: [0.1, 0.2, 0.1],
                             y: [0, -40, 0],
                             rotate: [0, 10, -10, 0]
                         }}
@@ -142,7 +144,7 @@ export default function HeroSection() {
                         className="absolute text-white"
                         style={{ left: item.x, top: item.y }}
                     >
-                        <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={0.8} />
+                        <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={1} />
                     </motion.div>
                 ))}
             </div>
