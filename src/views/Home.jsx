@@ -12,6 +12,7 @@ import ServicesSection from "@/components/home/ServicesSection";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LexProSection from "@/components/home/LexProSection";
 import CTASection from "@/components/home/CTASection";
+import LivePulse from "@/components/home/LivePulse";
 
 export default function Home() {
     return (

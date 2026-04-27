@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Beaker, Send, CheckCircle2, AlertCircle, Loader2, Mail, Zap, Calendar } from 'lucide-react';
+import { Beaker, Send, CheckCircle2, AlertCircle, Loader2, Mail, Zap, Calendar, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Admin_TestAutomation() {
