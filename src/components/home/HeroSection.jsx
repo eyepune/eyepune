@@ -120,7 +120,7 @@ export default function HeroSection() {
                             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-widest mb-8"
                         >
                             <Sparkles className="w-3 h-3" />
-                            Elite Growth Intelligence
+                            Connect · Engage · Grow
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">

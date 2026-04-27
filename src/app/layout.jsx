@@ -10,12 +10,12 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: 'EyE PunE — AI-Powered Digital Growth',
+  title: 'EyE PunE — Connect · Engage · Grow',
   description: 'Full-service digital marketing & AI automation agency based in Pune, India. Social media, web development, branding, paid ads, and AI solutions.',
   keywords: 'digital marketing pune, social media marketing, website development, AI automation, branding, lead generation, eyepune',
   authors: [{ name: 'EyE PunE' }],
   openGraph: {
-    title: 'EyE PunE — AI-Powered Digital Growth',
+    title: 'EyE PunE — Connect · Engage · Grow',
     description: 'Pune\'s premier digital agency specializing in AI-driven marketing, web development, and custom automations.',
     url: 'https://www.eyepune.com/',
     siteName: 'EyE PunE',
