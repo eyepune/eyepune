@@ -46,7 +46,7 @@ function TypewriterWords() {
     );
 }
 
-// Canvas-based Eye animation background
+// High-Fidelity Cyber-Eye Animation
 function EyeCanvas() {
     const canvasRef = useRef(null);
 
@@ -58,76 +58,135 @@ function EyeCanvas() {
         let t = 0;
 
         const resize = () => {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
         };
         resize();
         window.addEventListener('resize', resize);
 
         const draw = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
-            const maxR = Math.min(canvas.width, canvas.height) * 0.4;
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            ctx.clearRect(0, 0, w, h);
+            
+            const cx = w / 2;
+            const cy = h / 2;
+            const maxR = Math.min(w, h) * 0.35;
 
-            // Draw concentric glowing rings
-            for (let i = 6; i >= 1; i--) {
-                const r = Math.max(0, maxR * (i / 6) + Math.sin(t * 0.8 + i) * 8);
-                const alpha = (0.06 - i * 0.008) + Math.sin(t + i) * 0.015;
-                if (r <= 0) continue;
+            // 1. Background Neural Web (Subtle)
+            ctx.globalAlpha = 0.15;
+            for (let i = 0; i < 3; i++) {
+                const r = maxR * (1.2 + i * 0.2) + Math.sin(t * 0.5 + i) * 10;
                 ctx.beginPath();
                 ctx.arc(cx, cy, r, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(239,68,68,${Math.max(0.01, alpha)})`;
+                ctx.strokeStyle = '#ef4444';
+                ctx.setLineDash([5, 15]);
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // 2. Outer Glowing Rings
+            for (let i = 0; i < 4; i++) {
+                const r = maxR * (0.8 + i * 0.08) + Math.sin(t * 1.5 + i) * 5;
+                const alpha = 0.1 - i * 0.02;
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, t * 0.2 + i, t * 0.2 + i + Math.PI * 0.6);
+                ctx.strokeStyle = `rgba(239,68,68,${alpha})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, t * 0.2 + i + Math.PI, t * 0.2 + i + Math.PI * 1.6);
+                ctx.stroke();
+            }
+
+            // 3. Iris Layer 1 (Base Gradient)
+            const irisR = maxR * 0.45;
+            const irisGrad = ctx.createRadialGradient(cx, cy, irisR * 0.2, cx, cy, irisR);
+            irisGrad.addColorStop(0, '#000000');
+            irisGrad.addColorStop(0.6, '#ef4444');
+            irisGrad.addColorStop(1, '#000000');
+            
+            ctx.globalAlpha = 0.8;
+            ctx.beginPath();
+            ctx.arc(cx, cy, irisR, 0, Math.PI * 2);
+            ctx.fillStyle = irisGrad;
+            ctx.fill();
+
+            // 4. Iris Texture (Fibers)
+            ctx.globalCompositeOperation = 'lighter';
+            for (let i = 0; i < 60; i++) {
+                const angle = (i / 60) * Math.PI * 2 + Math.sin(t * 0.5) * 0.1;
+                const len = irisR * (0.7 + Math.random() * 0.3);
+                ctx.beginPath();
+                ctx.moveTo(cx + Math.cos(angle) * (irisR * 0.3), cy + Math.sin(angle) * (irisR * 0.3));
+                ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+                ctx.strokeStyle = `rgba(239,68,68,${0.2 + Math.random() * 0.3})`;
                 ctx.lineWidth = 1;
                 ctx.stroke();
             }
 
-            // Iris
-            const irisR = Math.max(1, maxR * 0.28 + Math.sin(t * 0.5) * 5);
-            const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, irisR);
-            grad.addColorStop(0, 'rgba(239,68,68,0.35)');
-            grad.addColorStop(0.5, 'rgba(239,68,68,0.15)');
-            grad.addColorStop(1, 'rgba(239,68,68,0)');
-            ctx.beginPath();
-            ctx.arc(cx, cy, irisR, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
-            ctx.fill();
-
-            // Pupil glow
-            const pupilR = Math.max(1, maxR * 0.1 + Math.sin(t * 0.7) * 3);
-            const pupilGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, pupilR);
-            pupilGrad.addColorStop(0, 'rgba(239,68,68,0.8)');
-            pupilGrad.addColorStop(1, 'rgba(239,68,68,0)');
+            // 5. Pupil (The Core)
+            const pupilR = irisR * 0.35 + Math.sin(t * 2) * 2;
+            ctx.globalCompositeOperation = 'source-over';
             ctx.beginPath();
             ctx.arc(cx, cy, pupilR, 0, Math.PI * 2);
-            ctx.fillStyle = pupilGrad;
+            ctx.fillStyle = '#000000';
             ctx.fill();
 
-            // Orbiting dots
-            for (let i = 0; i < 8; i++) {
-                const angle = (i / 8) * Math.PI * 2 + t * 0.3;
-                const r2 = maxR * 0.55 + Math.sin(t * 0.5 + i) * 15;
-                const x = cx + Math.cos(angle) * r2;
-                const y = cy + Math.sin(angle) * r2;
-                const dotR = Math.max(0.5, 2 + Math.sin(t + i * 0.8) * 1.5);
+            // 6. Pupil Inner Glow
+            const pGlowR = pupilR * 0.8;
+            const pGlowGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, pGlowR);
+            pGlowGrad.addColorStop(0, 'rgba(239,68,68,0.8)');
+            pGlowGrad.addColorStop(1, 'rgba(239,68,68,0)');
+            ctx.beginPath();
+            ctx.arc(cx, cy, pGlowR, 0, Math.PI * 2);
+            ctx.fillStyle = pGlowGrad;
+            ctx.fill();
+
+            // 7. Scanning Data Ring
+            ctx.globalCompositeOperation = 'lighter';
+            const dataR = maxR * 0.65;
+            ctx.beginPath();
+            ctx.arc(cx, cy, dataR, -t, -t + 0.5);
+            ctx.strokeStyle = '#f97316';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // 8. Orbiting Tech Particles
+            for (let i = 0; i < 12; i++) {
+                const orbitR = maxR * 0.75 + Math.sin(t + i) * 15;
+                const angle = (i / 12) * Math.PI * 2 + t * 0.4;
+                const px = cx + Math.cos(angle) * orbitR;
+                const py = cy + Math.sin(angle) * orbitR;
+                
                 ctx.beginPath();
-                ctx.arc(x, y, dotR, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(239,68,68,${0.3 + Math.sin(t + i) * 0.2})`;
+                ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = i % 3 === 0 ? '#ffffff' : '#ef4444';
                 ctx.fill();
+                
+                // Trailing faint lines
+                ctx.beginPath();
+                ctx.moveTo(px, py);
+                ctx.lineTo(px - Math.cos(angle) * 20, py - Math.sin(angle) * 20);
+                ctx.strokeStyle = `rgba(239,68,68,0.2)`;
+                ctx.stroke();
             }
 
-            // Scanning lines
-            const scanY = cy + Math.sin(t * 1.2) * (maxR * 0.6);
-            const scanGrad = ctx.createLinearGradient(cx - maxR, scanY, cx + maxR, scanY);
-            scanGrad.addColorStop(0, 'rgba(239,68,68,0)');
-            scanGrad.addColorStop(0.5, 'rgba(239,68,68,0.25)');
-            scanGrad.addColorStop(1, 'rgba(239,68,68,0)');
+            // 9. Glint / Reflection
+            const glintX = cx - irisR * 0.3;
+            const glintY = cy - irisR * 0.3;
+            const glintGrad = ctx.createRadialGradient(glintX, glintY, 0, glintX, glintY, irisR * 0.2);
+            glintGrad.addColorStop(0, 'rgba(255,255,255,0.4)');
+            glintGrad.addColorStop(1, 'rgba(255,255,255,0)');
             ctx.beginPath();
-            ctx.moveTo(cx - maxR, scanY);
-            ctx.lineTo(cx + maxR, scanY);
-            ctx.strokeStyle = scanGrad;
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.arc(glintX, glintY, irisR * 0.2, 0, Math.PI * 2);
+            ctx.fillStyle = glintGrad;
+            ctx.fill();
 
             t += 0.015;
             animId = requestAnimationFrame(draw);
@@ -140,7 +199,7 @@ function EyeCanvas() {
         };
     }, []);
 
-    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-60" />;
+    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-80" />;
 }
 
 export default function HeroSection() {

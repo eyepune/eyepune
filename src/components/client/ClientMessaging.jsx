@@ -8,7 +8,7 @@ import { MessageSquare, Send, Paperclip, File, Calendar, Bell } from 'lucide-rea
 import { Input } from "@/components/ui/input";
 import { format } from 'date-fns';
 import { toast } from 'sonner';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
 export default function ClientMessaging({ project, user }) {
@@ -113,7 +113,7 @@ export default function ClientMessaging({ project, user }) {
                         Message Your Account Manager
                         <Bell className="w-4 h-4 text-green-600" title="Real-time notifications enabled" />
                     </div>
-                    <Link to={createPageUrl("Booking")}>
+                    <Link href={createPageUrl("Booking")}>
                         <Button size="sm" variant="outline">
                             <Calendar className="w-4 h-4 mr-2" />
                             Schedule Call

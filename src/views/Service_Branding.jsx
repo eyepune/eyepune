@@ -94,12 +94,12 @@ export default function Service_Branding() {
                                 Build a brand that people remember, trust, and choose over competitors. From logo to full brand identity — we create brands that drive business growth.
                             </p>
                             <div className="flex flex-wrap gap-4">
-                                <Link to={createPageUrl("Booking")}>
+                                <Link href={createPageUrl("Booking")}>
                                     <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-8 py-5 rounded-full font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] text-base">
                                         Start Your Brand <ArrowRight className="w-4 h-4 ml-2" />
                                     </Button>
                                 </Link>
-                                <Link to={createPageUrl("Pricing")}>
+                                <Link href={createPageUrl("Pricing")}>
                                     <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-8 py-5 rounded-full text-base">
                                         View Packages
                                     </Button>
@@ -172,7 +172,7 @@ export default function Service_Branding() {
                     <h2 className="text-4xl md:text-5xl font-black mb-4">Let's Build a Brand <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Worth Remembering</span></h2>
                     <p className="text-gray-400 mb-8">Book a free consultation — we'll share brand strategy insights specific to your industry.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link to={createPageUrl("Booking")}>
+                        <Link href={createPageUrl("Booking")}>
                             <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-10 py-6 rounded-full font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.4)]">
                                 Start Branding Project
                             </Button>

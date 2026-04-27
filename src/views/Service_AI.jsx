@@ -94,12 +94,12 @@ export default function Service_AI() {
                                 Stop doing manual work. Automate your lead follow-ups, customer support, reports, and more — so your team can focus on closing deals.
                             </p>
                             <div className="flex flex-wrap gap-4">
-                                <Link to={createPageUrl("AI_Assessment")}>
+                                <Link href={createPageUrl("AI_Assessment")}>
                                     <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-8 py-5 rounded-full font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] text-base">
                                         Free AI Assessment <ArrowRight className="w-4 h-4 ml-2" />
                                     </Button>
                                 </Link>
-                                <Link to={createPageUrl("Booking")}>
+                                <Link href={createPageUrl("Booking")}>
                                     <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-8 py-5 rounded-full text-base">
                                         Book Demo
                                     </Button>
@@ -172,12 +172,12 @@ export default function Service_AI() {
                     <h2 className="text-4xl md:text-5xl font-black mb-4">Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Automate Your Business?</span></h2>
                     <p className="text-gray-400 mb-8">Take our free AI Assessment and discover which processes you should automate first.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link to={createPageUrl("AI_Assessment")}>
+                        <Link href={createPageUrl("AI_Assessment")}>
                             <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-10 py-6 rounded-full font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.4)]">
                                 Take Free AI Assessment
                             </Button>
                         </Link>
-                        <Link to={createPageUrl("Booking")}>
+                        <Link href={createPageUrl("Booking")}>
                             <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-10 py-6 rounded-full text-lg">
                                 Book a Demo
                             </Button>

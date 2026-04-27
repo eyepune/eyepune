@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { CheckCircle2, ArrowRight, ChevronRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -48,12 +48,12 @@ export default function ServiceLanding({ config }) {
                             />
                             <p className="text-xl text-gray-400 max-w-2xl leading-relaxed mb-10">{hero.description}</p>
                             <div className="flex flex-wrap gap-4">
-                                <Link to={createPageUrl("Booking")}>
+                                <Link href={createPageUrl("Booking")}>
                                     <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-8 py-6 rounded-full font-bold text-base shadow-[0_0_25px_rgba(239,68,68,0.4)]">
                                         Book Free Consultation <ArrowRight className="w-4 h-4 ml-2" />
                                     </Button>
                                 </Link>
-                                <Link to={createPageUrl("Pricing")}>
+                                <Link href={createPageUrl("Pricing")}>
                                     <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-8 py-6 rounded-full text-base">
                                         View Pricing
                                     </Button>
@@ -157,12 +157,12 @@ export default function ServiceLanding({ config }) {
                         </h2>
                         <p className="text-xl text-gray-400 mb-10">Get a free consultation and custom proposal today.</p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to={createPageUrl("Booking")}>
+                            <Link href={createPageUrl("Booking")}>
                                 <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-10 py-6 text-lg rounded-full font-bold shadow-[0_0_30px_rgba(239,68,68,0.4)]">
                                     Book Free Consultation
                                 </Button>
                             </Link>
-                            <Link to={createPageUrl("AI_Assessment")}>
+                            <Link href={createPageUrl("AI_Assessment")}>
                                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-10 py-6 text-lg rounded-full">
                                     Free AI Assessment <ChevronRight className="w-5 h-5 ml-1" />
                                 </Button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { createPageUrl } from '@/utils';
 import {
   LayoutDashboard, Users, FolderKanban, Calendar, Megaphone,
@@ -50,7 +50,7 @@ export default function AdminSidebar({ activeSection, onNavigate }) {
       {/* Bottom */}
       <div className="px-3 py-4 border-t border-white/[0.06] space-y-1">
         <Link
-          to={createPageUrl('Home')}
+          href={createPageUrl('Home')}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-500 hover:text-white hover:bg-white/[0.04] transition-all"
         >
           <ExternalLink className="w-4 h-4" />

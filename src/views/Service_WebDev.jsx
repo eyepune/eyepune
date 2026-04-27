@@ -95,12 +95,12 @@ export default function Service_WebDev() {
                                 High-performance websites and web applications built to rank on Google and convert your visitors into paying customers.
                             </p>
                             <div className="flex flex-wrap gap-4">
-                                <Link to={createPageUrl("Booking")}>
+                                <Link href={createPageUrl("Booking")}>
                                     <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-8 py-5 rounded-full font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] text-base">
                                         Get Free Quote <ArrowRight className="w-4 h-4 ml-2" />
                                     </Button>
                                 </Link>
-                                <Link to={createPageUrl("Pricing")}>
+                                <Link href={createPageUrl("Pricing")}>
                                     <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-8 py-5 rounded-full text-base">
                                         View Packages
                                     </Button>
@@ -173,7 +173,7 @@ export default function Service_WebDev() {
                     <h2 className="text-4xl md:text-5xl font-black mb-4">Let's Build Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Dream Website</span></h2>
                     <p className="text-gray-400 mb-8">Get a free consultation and quote within 24 hours.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link to={createPageUrl("Booking")}>
+                        <Link href={createPageUrl("Booking")}>
                             <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-10 py-6 rounded-full font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.4)]">
                                 Start Your Project
                             </Button>
