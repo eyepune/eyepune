@@ -47,6 +47,7 @@ const adminNavLinks = [
     { name: 'Email Templates', page: 'Admin_EmailTemplates' },
     { name: 'Analytics', page: 'Admin_Analytics' },
     { name: 'SEO', page: 'Admin_SEO' },
+    { name: 'Automation Lab', page: 'Admin_TestAutomation' },
     { name: 'Client Logos', page: 'Admin_ClientLogos' },
     { name: 'Service Add-ons', page: 'Admin_ServiceAddons' },
     { name: 'Outreach', page: 'Admin_Outreach' },
@@ -65,7 +66,6 @@ const footerLinks = {
         { name: 'Google & Meta Ads', page: 'Service_PaidAds' },
         { name: 'Branding & Design', page: 'Service_Branding' },
         { name: 'Sales Funnels', page: 'Service_Funnels' },
-        { name: 'System Funnels', page: 'Service_Funnels' },
     ],
     Company: [
         { name: 'About Us', page: 'About' },

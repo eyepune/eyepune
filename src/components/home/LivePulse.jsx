@@ -51,9 +51,9 @@ export default function LivePulse() {
                         >
                             <event.icon className={cn("w-4 h-4", event.color)} />
                             <p className="text-sm font-medium text-gray-300 truncate">
-                                <span className="text-white font-bold">{event.text.split(' for ')[0]}</span>
-                                <span className="text-gray-600"> for </span>
-                                <span className="text-red-400/80 font-bold">{event.text.split(' for ')[1]}</span>
+                                <span className="text-white font-bold">{event.text?.includes(' for ') ? event.text.split(' for ')[0] : event.text}</span>
+                                {event.text?.includes(' for ') && <span className="text-gray-600"> for </span>}
+                                {event.text?.includes(' for ') && <span className="text-red-400/80 font-bold">{event.text.split(' for ')[1]}</span>}
                             </p>
                         </motion.div>
                     </AnimatePresence>
