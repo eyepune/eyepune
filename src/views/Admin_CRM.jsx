@@ -70,7 +70,7 @@ function Admin_CRM() {
             if (error) throw error;
             return result;
         },
-        onSuccess: () => { queryClient.invalidateQueries(['admin-leads']); resetForm(); toast.success('Lead added successfully'); },
+        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-leads'] }); resetForm(); toast.success('Lead added successfully'); },
         onError: (e) => toast.error(e.message),
     });
 
@@ -80,7 +80,7 @@ function Admin_CRM() {
             if (error) throw error;
             return result;
         },
-        onSuccess: () => { queryClient.invalidateQueries(['admin-leads']); resetForm(); toast.success('Lead updated successfully'); },
+        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-leads'] }); resetForm(); toast.success('Lead updated successfully'); },
         onError: (e) => toast.error(e.message),
     });
 
@@ -89,7 +89,7 @@ function Admin_CRM() {
             const { error } = await supabase.from('leads').delete().eq('id', id);
             if (error) throw error;
         },
-        onSuccess: () => { queryClient.invalidateQueries(['admin-leads']); toast.success('Lead deleted'); },
+        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-leads'] }); toast.success('Lead deleted'); },
         onError: (e) => toast.error(e.message),
     });
 
@@ -131,7 +131,8 @@ function Admin_CRM() {
                 let parsedData = [];
 
                 if (file.name.endsWith('.json')) {
-                    parsedData = JSON.parse(content);
+                    const parsed = JSON.parse(content);
+                    parsedData = Array.isArray(parsed) ? parsed : [parsed];
                 } else if (file.name.endsWith('.csv')) {
                     // Simple CSV parser that handles basic quotes
                     const lines = content.split(/\r?\n/).filter(line => line.trim());
@@ -158,6 +159,9 @@ function Admin_CRM() {
 
                 // Clean data to only include valid columns and add defaults
                 const validColumns = ['full_name', 'email', 'phone', 'company', 'source', 'status', 'notes'];
+                const validStatuses = ['new', 'contacted', 'qualified', 'proposal_sent', 'negotiation', 'won', 'lost'];
+                const validSources = ['website', 'referral', 'social_media', 'google_ads', 'manual'];
+                
                 const cleanedData = parsedData.map(row => {
                     const cleanRow = { source: 'manual', status: 'new' };
                     validColumns.forEach(col => {
@@ -165,7 +169,13 @@ function Admin_CRM() {
                         if (!val) {
                             if (col === 'full_name') val = row['name'] || row['first name'] || row['first_name'];
                         }
-                        if (val) cleanRow[col] = String(val).substring(0, 255); // Safety trim
+                        if (val) {
+                            val = String(val).substring(0, 255); // Safety trim
+                            if (col === 'status' && !validStatuses.includes(val.toLowerCase())) val = 'new';
+                            if (col === 'source' && !validSources.includes(val.toLowerCase())) val = 'manual';
+                            if (col === 'status' || col === 'source') val = val.toLowerCase();
+                            cleanRow[col] = val;
+                        }
                     });
                     // Ensure required fields
                     if (!cleanRow.full_name) cleanRow.full_name = 'Unknown Lead';
@@ -178,7 +188,7 @@ function Admin_CRM() {
                 if (error) throw error;
 
                 toast.success(`Successfully imported ${cleanedData.length} leads`);
-                queryClient.invalidateQueries(['admin-leads']);
+                queryClient.invalidateQueries({ queryKey: ['admin-leads'] });
             } catch (err) {
                 console.error("Upload error:", err);
                 toast.error(`Import failed: ${err.message}`);
