@@ -145,7 +145,7 @@ export default function HeroSection() {
                                             duration: 0.6, 
                                             ease: [0.23, 1, 0.32, 1] 
                                         }}
-                                        className={index === 1 ? "text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500" : "text-white"}
+                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500"
                                     >
                                         {words[index]}
                                     </motion.span>
