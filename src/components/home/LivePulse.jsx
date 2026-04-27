@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, TrendingUp, Target, Users, Sparkles, MessageCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const EVENTS = [
     { type: 'lead', text: 'New high-intent lead captured for Real Estate Partner', icon: Target, color: 'text-blue-400' },
