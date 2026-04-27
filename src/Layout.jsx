@@ -322,9 +322,7 @@ function LayoutContent({ children, currentPageName }) {
                                     <a href="tel:+919284712033" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors">
                                         <span className="w-4 h-4 text-red-500">📱</span> +91 9284712033
                                     </a>
-                                    <a href="https://wa.me/917718899466" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors">
-                                        <span className="w-4 h-4 text-red-500">💬</span> +91 77188 99466 (Avinash)
-                                    </a>
+
                                     <p className="flex items-center gap-2 text-gray-600">
                                         <span className="w-4 h-4 text-red-500">📍</span> Pune, Maharashtra, India
                                     </p>

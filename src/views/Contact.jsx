@@ -239,7 +239,7 @@ export default function Contact() {
                                         { icon: Mail, label: 'Email', value: 'connect@eyepune.com', href: 'mailto:connect@eyepune.com' },
                                         
                                         { icon: Phone, label: 'Sales Team', value: '+91 92847 12033', href: 'tel:+919284712033' },
-                                        { icon: Phone, label: 'WhatsApp (Avinash)', value: '+91 77188 99466', href: 'https://wa.me/917718899466' },
+
                                         { icon: MapPin, label: 'Location', value: 'Pune, Maharashtra, India', href: null },
                                     ].map((item, i) => (
                                         <div key={i}>
@@ -276,7 +276,7 @@ export default function Contact() {
                                     {[
                                         { label: 'Instagram', tag: 'IG', href: 'https://instagram.com/eyepune' },
                                         { label: 'LinkedIn', tag: 'LI', href: 'https://linkedin.com/company/eyepune' },
-                                        { label: 'WhatsApp', tag: 'WA', href: 'https://wa.me/917718899466' },
+                                        { label: 'WhatsApp', tag: 'WA', href: 'https://wa.me/919284712033' },
                                     ].map((s, i) => (
                                         <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                                             whileHover={{ y: -3 }}
