@@ -12,7 +12,7 @@ const features = [
 
 export default function LexProSection() {
     return (
-        <section className="py-32 relative overflow-hidden bg-transparent">
+        <section className="py-32 relative overflow-hidden bg-[#040404]">
             {/* Orange accent glow */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent" />
             <div className="absolute inset-0 pointer-events-none">

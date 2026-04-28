@@ -25,7 +25,7 @@ export default function Home() {
                 structuredData={generateOrganizationSchema()}
             />
 
-            <div className="bg-transparent text-white overflow-x-hidden">
+            <div className="bg-[#040404] text-white overflow-x-hidden">
 
                 {/* 1. Hero — animated eye canvas + typewriter */}
                 <HeroSection />
@@ -34,7 +34,7 @@ export default function Home() {
                 <LivePulse />
 
                 {/* 3. Client logos marquee */}
-                <section className="py-14 border-b border-white/[0.05] bg-transparent">
+                <section className="py-14 border-b border-white/[0.05] bg-[#040404]">
                     <ClientLogos />
                 </section>
 
@@ -48,7 +48,7 @@ export default function Home() {
                 <LexProSection />
 
                 {/* 6. Testimonials */}
-                <section className="py-32 bg-transparent relative">
+                <section className="py-32 bg-[#040404] relative">
                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/15 to-transparent" />
                     <div className="max-w-7xl mx-auto px-6">
                         <motion.div

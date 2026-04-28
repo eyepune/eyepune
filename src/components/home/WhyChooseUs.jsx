@@ -31,7 +31,7 @@ const pillars = [
 
 export default function WhyChooseUs() {
     return (
-        <section className="py-32 relative overflow-hidden bg-transparent">
+        <section className="py-32 relative overflow-hidden bg-[#040404]">
             {/* Diagonal accent line */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent" />
 
