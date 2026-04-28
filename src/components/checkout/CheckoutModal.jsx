@@ -164,7 +164,7 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex justify-center items-start sm:items-center overflow-y-auto p-4 sm:p-6"
                 onClick={onClose}
             >
                 <motion.div
@@ -172,7 +172,7 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-card border rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+                    className="bg-card border rounded-3xl max-w-lg w-full my-auto shadow-2xl relative overflow-hidden"
                 >
                     {/* Header */}
                     <div className="p-6 border-b flex items-center justify-between">
