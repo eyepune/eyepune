@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap, Cpu, Globe, Code, MessageCircle, Facebook, Instagram, Linkedin, Twitter, Command } from 'lucide-react';
+import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap, Cpu, Globe, Code, MessageCircle, Facebook, Instagram, Linkedin, Twitter, Command, Hash, Database } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
@@ -116,18 +116,21 @@ export default function HeroSection() {
 
                 {/* Floating Tech & Social Symbols */}
                 {[
-                    { Icon: Bot, x: "8%", y: "12%", delay: 0 },
-                    { Icon: Instagram, x: "32%", y: "8%", delay: 2 },
-                    { Icon: Facebook, x: "62%", y: "12%", delay: 4 },
-                    { Icon: Linkedin, x: "88%", y: "15%", delay: 1 },
-                    { Icon: Twitter, x: "12%", y: "38%", delay: 3 },
-                    { Icon: Cpu, x: "85%", y: "35%", delay: 5 },
-                    { Icon: Code, x: "5%", y: "65%", delay: 2.5 },
-                    { Icon: Globe, x: "92%", y: "62%", delay: 1.5 },
-                    { Icon: Zap, x: "15%", y: "88%", delay: 0.5 },
-                    { Icon: MessageCircle, x: "38%", y: "92%", delay: 3.5 },
-                    { Icon: Sparkles, x: "65%", y: "88%", delay: 4 },
-                    { Icon: Command, x: "85%", y: "82%", delay: 1.5 },
+                    { Icon: Bot, x: "15%", y: "15%", delay: 0 },
+                    { Icon: Instagram, x: "35%", y: "10%", delay: 2 },
+                    { Icon: Facebook, x: "55%", y: "15%", delay: 4 },
+                    { Icon: Linkedin, x: "75%", y: "10%", delay: 1 },
+                    { Icon: Twitter, x: "92%", y: "15%", delay: 3 },
+                    { Icon: Cpu, x: "10%", y: "45%", delay: 5 },
+                    { Icon: Code, x: "30%", y: "40%", delay: 2.5 },
+                    { Icon: Globe, x: "50%", y: "45%", delay: 1.5 },
+                    { Icon: Zap, x: "70%", y: "40%", delay: 0.5 },
+                    { Icon: MessageCircle, x: "90%", y: "45%", delay: 3.5 },
+                    { Icon: Sparkles, x: "15%", y: "75%", delay: 4 },
+                    { Icon: Command, x: "35%", y: "70%", delay: 1.5 },
+                    { Icon: Hash, x: "55%", y: "75%", delay: 2 },
+                    { Icon: Database, x: "75%", y: "70%", delay: 5 },
+                    { Icon: ShieldCheck, x: "92%", y: "75%", delay: 0 },
                 ].map((item, i) => (
                     <motion.div
                         key={i}
