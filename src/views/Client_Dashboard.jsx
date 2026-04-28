@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Folder, TrendingUp, Calendar, Upload, CheckCircle2, 
     Clock, AlertCircle, FileText, Download, Loader2, BarChart3, Target, MessageSquare, Star, Phone, LogOut, Settings,
-    Zap, ArrowUpRight, ShieldCheck, Activity
+    Zap, ArrowUpRight, ShieldCheck, Activity, Sparkles
 } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
 import FileManager from "@/components/dashboard/FileManager";
