@@ -7,6 +7,7 @@ import { Loader2, Megaphone, Code2, Bot, Palette, Package } from 'lucide-react';
 import PackageCard from "@/components/services/PackageCard";
 import CheckoutModal from "@/components/checkout/CheckoutModal";
 import SEOHead, { generateOrganizationSchema } from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const categories = [
     { id: 'all', label: 'All Packages', icon: Package },
@@ -34,7 +35,15 @@ export default function Services() {
         : packages.filter(pkg => pkg.category === activeCategory);
 
     return (
-        <div className="min-h-screen bg-[#0A0A0A] py-20">
+        <div className="min-h-screen bg-[#040404] text-white py-20 relative overflow-hidden">
+            {/* Grid bg */}
+            <div className="absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404] pointer-events-none" />
+            
+            <HeroFloatingIcons opacity={0.15} />
+
             <SEOHead
                 title="Service Packages – Social Media, Web & AI Automation Pune | EyE PunE"
                 description="Expert digital growth packages for Pune businesses. Social media management, Next.js web development, AI business automation, and premium branding. Transparent pricing, no hidden fees."
@@ -43,7 +52,7 @@ export default function Services() {
                 structuredData={generateOrganizationSchema()}
             />
             {/* Header */}
-            <div className="max-w-7xl mx-auto px-6 mb-16">
+            <div className="max-w-7xl mx-auto px-6 mb-16 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}

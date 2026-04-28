@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import NotificationCenter from "@/components/client/NotificationCenter";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const NAV_ITEMS = [
     { name: 'Dashboard', href: '/Client_Dashboard', icon: LayoutDashboard },
@@ -48,6 +49,15 @@ export default function ClientLayout({ children }) {
 
     return (
         <div className="min-h-screen bg-[#020202] text-white flex overflow-hidden relative font-sans">
+            {/* Elite Grid Background */}
+            <div className="absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202] pointer-events-none" />
+            
+            {/* Subtle Command Center Background Icons */}
+            <HeroFloatingIcons opacity={0.04} />
+
             {/* Ambient Background Glow */}
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-red-600/[0.03] blur-[150px] pointer-events-none animate-pulse" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/[0.03] blur-[120px] pointer-events-none" />

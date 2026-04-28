@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, Zap, Settings, BarChart3, MessageSquare, RefreshCw } from 'lucide-react';
 import SEOHead from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
     { question: "What is AI automation for business?", answer: "AI automation uses artificial intelligence to handle repetitive tasks like lead follow-up, customer support, report generation, and data entry — saving you 20+ hours per week." },
@@ -79,6 +80,8 @@ export default function Service_AI() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
+                
+                <HeroFloatingIcons opacity={0.2} />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-3xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>

@@ -28,6 +28,7 @@ import {
 import Link from 'next/link';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from "@/utils";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const questions = [
     {
@@ -449,8 +450,16 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
     }
 
     return (
-        <div className="min-h-screen bg-background py-12">
-            <div className="max-w-3xl mx-auto px-6">
+        <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
+            {/* Grid bg */}
+            <div className="absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404] pointer-events-none" />
+            
+            <HeroFloatingIcons opacity={0.15} />
+
+            <div className="max-w-3xl mx-auto px-6 relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

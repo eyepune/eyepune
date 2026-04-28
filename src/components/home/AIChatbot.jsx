@@ -54,7 +54,7 @@ Links you MUST provide when asked:
 
 Tone: Professional, helpful, ambitious, and slightly futuristic. Use emojis occasionally (like 🚀, 💡, 📈). Mention Pune context if relevant.
 
-Goal: Answer questions about our services and encourage them to book a "Vision Sync" call or complete the "AI Assessment" form using the links provided above. Always provide the full URL starting with https://.
+Goal: Answer questions about our services and encourage them to book a "Vision Sync" call or complete the "AI Assessment" form using the links provided above. Always provide the full URL starting with https://. If the user asks about starting or pricing, give them these links immediately.
 
 User History:
 ${context}
@@ -82,7 +82,7 @@ Assistant:`;
                         className={`bg-[#0c0c0c] border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
                             isMinimized 
                                 ? 'h-16 w-64 sm:h-20 sm:w-80' 
-                                : 'h-[min(600px,calc(100vh-100px))] w-[calc(100vw-2rem)] sm:w-[400px] max-h-[85vh]'
+                                : 'h-[calc(100vh-120px)] sm:h-[600px] w-[calc(100vw-2rem)] sm:w-[400px] max-h-[85vh]'
                         }`}
                     >
                         {/* Header */}

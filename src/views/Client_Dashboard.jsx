@@ -52,6 +52,21 @@ import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 import ClientLayout from "@/components/client/ClientLayout";
+import { Sparkles as SparklesIcon } from 'lucide-react';
+
+const HolographicScanner = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+        <motion.div
+            animate={{
+                y: ["0%", "100%", "0%"],
+                opacity: [0, 0.5, 0]
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            className="w-full h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.03)_0%,transparent_70%)]" />
+    </div>
+);
 
 export default function Client_Dashboard() {
     const [selectedProject, setSelectedProject] = useState(null);
@@ -235,8 +250,17 @@ export default function Client_Dashboard() {
                             </Badge>
                             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                             <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Live Updates Enabled</span>
+                            <motion.div 
+                                animate={{ opacity: [0.3, 0.6, 0.3] }} 
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="flex items-center gap-1 ml-2"
+                            >
+                                <span className="w-1 h-1 rounded-full bg-red-500/50" />
+                                <span className="text-[8px] text-red-500/50 uppercase font-black tracking-tighter">Scanning...</span>
+                            </motion.div>
                         </div>
-                        <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter mb-4">
+                        <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter mb-4 relative">
+                            <HolographicScanner />
                             Grow Smarter, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">{(user.fullName || user.full_name || '').split(' ')[0]}</span>.
                         </h1>
                         <p className="text-gray-400 text-lg font-medium max-w-xl">

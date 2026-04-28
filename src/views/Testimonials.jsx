@@ -4,14 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
 import TestimonialSubmission from "@/components/testimonials/TestimonialSubmission";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 export default function Testimonials() {
     const [activeTab, setActiveTab] = useState('all');
     const [serviceFilter, setServiceFilter] = useState(null);
 
     return (
-        <div className="min-h-screen bg-background py-20">
-            <div className="max-w-7xl mx-auto px-6">
+        <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
+            {/* Grid bg */}
+            <div className="absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404] pointer-events-none" />
+            
+            <HeroFloatingIcons opacity={0.15} />
+
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}

@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrendingUp, Target, BarChart3, DollarSign, Search, Megaphone } from 'lucide-react';
 import SEOHead from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
     { question: "What is the minimum budget for Google Ads in Pune?", answer: "We recommend a minimum ad spend of ₹15,000/month for Google Ads to see meaningful results. Our management fee starts at ₹8,000/month. Total minimum investment: ₹23,000/month." },
@@ -79,6 +80,8 @@ export default function Service_PaidAds() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
+                
+                <HeroFloatingIcons opacity={0.2} />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-3xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>

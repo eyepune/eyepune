@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Palette, Layers, FileText, Star, Image, Sparkles } from 'lucide-react';
 import SEOHead from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
     { question: "How much does branding cost in Pune?", answer: "EyE PunE's branding packages start at ₹20,000 for a logo and brand kit. Full brand identity packages including guidelines, collaterals, and templates range from ₹50,000 to ₹1,50,000." },
@@ -79,6 +80,8 @@ export default function Service_Branding() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
+                
+                <HeroFloatingIcons opacity={0.2} />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-3xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>

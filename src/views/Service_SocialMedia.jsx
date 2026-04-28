@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight, TrendingUp, Users, Heart, MessageSquare, BarChart3, Instagram } from 'lucide-react';
 import SEOHead from "@/components/seo/SEOHead";
 import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
     { question: "How much does social media management cost in Pune?", answer: "EyE PunE's social media management packages start at ₹30,000/month for 2 platforms, including content creation, scheduling, and monthly reporting. Custom packages are available for enterprise clients." },
@@ -80,6 +81,8 @@ export default function Service_SocialMedia() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
+                
+                <HeroFloatingIcons opacity={0.2} />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-3xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>

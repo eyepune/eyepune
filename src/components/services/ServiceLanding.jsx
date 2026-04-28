@@ -4,6 +4,7 @@ import { createPageUrl } from "@/utils";
 import { CheckCircle2, ArrowRight, ChevronRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 export default function ServiceLanding({ config }) {
     const { title, subtitle, hero, seo, features, process, faqs, Icon } = config;
@@ -36,6 +37,8 @@ export default function ServiceLanding({ config }) {
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
+                
+                <HeroFloatingIcons opacity={0.2} />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-4xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>

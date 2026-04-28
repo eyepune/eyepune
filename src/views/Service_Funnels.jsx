@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrendingUp, Workflow, Target, Users, Zap, BarChart3, CheckCircle2, ArrowDownRight } from 'lucide-react';
 import SEOHead from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
     { question: "What is a sales funnel?", answer: "A sales funnel is a step-by-step process that guides potential customers from first awareness of your brand all the way to making a purchase. We design, build, and optimize every stage — ads, landing pages, email follow-ups, and closing sequences." },
@@ -83,6 +84,8 @@ export default function Service_Funnels() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
+                
+                <HeroFloatingIcons opacity={0.2} />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-3xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>

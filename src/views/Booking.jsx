@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar as CalendarIcon, Clock, CheckCircle2, Video, Loader2 } from 'lucide-react';
 import { DatePicker } from "@/components/ui/date-picker";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 export default function Booking() {
     const [formData, setFormData] = useState({
@@ -154,8 +155,16 @@ export default function Booking() {
     };
 
     return (
-        <div className="min-h-screen bg-background py-20">
-            <div className="max-w-4xl mx-auto px-6" ref={contentRef}>
+        <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
+            {/* Grid bg */}
+            <div className="absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404] pointer-events-none" />
+            
+            <HeroFloatingIcons opacity={0.15} />
+
+            <div className="max-w-4xl mx-auto px-6 relative z-10" ref={contentRef}>
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}

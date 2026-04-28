@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 export default function Blog() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -77,28 +78,7 @@ export default function Blog() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#3b0000,transparent_70%)] opacity-40" />
                 
                 {/* Floating Icons */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-                    {[
-                        { Icon: BookOpen, x: "10%", y: "30%", delay: 0 },
-                        { Icon: TrendingUp, x: "80%", y: "20%", delay: 1 },
-                        { Icon: Sparkles, x: "20%", y: "70%", delay: 2 },
-                        { Icon: Search, x: "70%", y: "60%", delay: 3 },
-                        { Icon: Bot, x: "45%", y: "15%", delay: 4 },
-                        { Icon: MessageCircle, x: "60%", y: "25%", delay: 5 },
-                        { Icon: Hash, x: "30%", y: "85%", delay: 1.5 },
-                        { Icon: Tag, x: "50%", y: "45%", delay: 2.5 },
-                    ].map((item, i) => (
-                        <motion.div
-                            key={i}
-                            animate={{ y: [0, -20, 0], opacity: [0.1, 0.3, 0.1] }}
-                            transition={{ duration: 8 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
-                            className="absolute text-red-500"
-                            style={{ left: item.x, top: item.y }}
-                        >
-                            <item.Icon className="w-12 h-12 md:w-16 md:h-16" strokeWidth={0.5} />
-                        </motion.div>
-                    ))}
-                </div>
+                <HeroFloatingIcons opacity={0.2} />
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                         <span className="inline-block py-1 px-3 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold tracking-widest uppercase mb-6">
