@@ -68,14 +68,18 @@ Assistant:`;
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-[9999] font-sans">
+        <div className="fixed bottom-4 right-4 z-[9999] font-sans flex flex-col items-end pointer-events-none">
             <AnimatePresence>
                 {isOpen ? (
                     <motion.div
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className={`bg-[#0c0c0c] border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${isMinimized ? 'h-20 w-80' : 'h-[600px] w-full max-w-[400px]'}`}
+                        className={`bg-[#0c0c0c] border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
+                            isMinimized 
+                                ? 'h-16 w-64 sm:h-20 sm:w-80' 
+                                : 'h-[min(600px,calc(100vh-100px))] w-[calc(100vw-2rem)] sm:w-[400px] max-h-[85vh]'
+                        }`}
                     >
                         {/* Header */}
                         <div className="p-5 bg-gradient-to-r from-red-600 to-orange-600 flex items-center justify-between">

@@ -395,7 +395,6 @@ export default function Layout(props) {
         <ThemeProvider>
             <CustomCursor />
             <LayoutContent {...props} />
-            <ChatbotWidget />
             {isPublicPage && <WhatsAppFloat />}
             {isPublicPage && <ExitIntentPopup />}
         </ThemeProvider>
