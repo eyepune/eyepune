@@ -292,7 +292,7 @@ function LayoutContent({ children, currentPageName }) {
             </nav>
 
             {/* ── PAGE CONTENT ── */}
-            <main className={isPublicPage ? 'pb-20' : 'pt-20'}>
+            <main className={`relative z-10 bg-transparent ${isPublicPage ? 'pb-20' : 'pt-20'}`}>
                 {children}
             </main>
 

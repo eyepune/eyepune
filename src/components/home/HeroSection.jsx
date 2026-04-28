@@ -108,7 +108,7 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section ref={heroRef} className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-[#040404]">
+        <section ref={heroRef} className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-transparent">
             {/* Background elements */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[120px]" />

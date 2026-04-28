@@ -27,7 +27,7 @@ const ICONS = [
 
 export default function FloatingBackground() {
     return (
-        <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden opacity-[0.15]">
+        <div className="fixed inset-0 pointer-events-none z-[2] overflow-hidden">
             {/* Background Glows */}
             <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-red-600/[0.03] rounded-full blur-[150px]" />
             <div className="absolute bottom-0 right-1/4 w-[800px] h-[800px] bg-orange-600/[0.03] rounded-full blur-[150px]" />
@@ -38,7 +38,7 @@ export default function FloatingBackground() {
                     key={i}
                     initial={{ opacity: 0 }}
                     animate={{ 
-                        opacity: [0.1, 0.3, 0.1],
+                        opacity: [0.3, 0.6, 0.3],
                         y: [0, -30, 0],
                         rotate: [0, 15, -15, 0]
                     }}
@@ -48,10 +48,10 @@ export default function FloatingBackground() {
                         ease: "easeInOut",
                         delay: item.delay
                     }}
-                    className="absolute text-white"
+                    className="absolute text-white/40"
                     style={{ left: item.x, top: item.y }}
                 >
-                    <item.Icon className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" strokeWidth={0.5} />
+                    <item.Icon className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" strokeWidth={0.8} />
                 </motion.div>
             ))}
         </div>

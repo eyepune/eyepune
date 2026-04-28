@@ -27,7 +27,7 @@ export default function LivePulse() {
     const event = EVENTS[index];
 
     return (
-        <section className="relative py-4 bg-[#050505] border-y border-white/[0.05] overflow-hidden">
+        <section className="relative py-4 bg-transparent border-y border-white/[0.05] overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-8">
                 <div className="flex items-center gap-3 flex-shrink-0">
                     <div className="relative">
