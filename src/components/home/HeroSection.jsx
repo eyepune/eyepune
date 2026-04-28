@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap, Cpu, Globe, Code, MessageCircle, Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { Bot, ArrowRight, ChevronDown, Sparkles, ShieldCheck, Zap, Cpu, Globe, Code, MessageCircle, Facebook, Instagram, Linkedin, Twitter, Command } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
