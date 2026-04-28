@@ -16,7 +16,7 @@ export default function AIChatbot() {
     const [messages, setMessages] = useState([
         { 
             role: 'assistant', 
-            content: "Namaste! 🙏 I'm EyeBot, your AI growth assistant from EyE PunE. How can I help you transform your business today?" 
+            content: "Namaste! 🙏 I'm EyE BoT, your AI growth assistant from EyE PunE. How can I help you transform your business today?" 
         }
     ]);
     const [input, setInput] = useState('');
@@ -39,7 +39,7 @@ export default function AIChatbot() {
 
         try {
             const context = messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n');
-            const prompt = `You are "EyeBot", a professional AI Sales & Growth Assistant for "EyE PunE" - Pune's premier AI-powered digital marketing agency.
+            const prompt = `You are "EyE BoT", a professional AI Sales & Growth Assistant for "EyE PunE" - Pune's premier AI-powered digital marketing agency.
 
 Our Services:
 - AI Automation & Custom Bots
@@ -92,7 +92,7 @@ Assistant:`;
                                     <Bot className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-white font-black text-sm">EyeBot <Sparkles className="inline w-3 h-3 ml-1 text-orange-200" /></h3>
+                                    <h3 className="text-white font-black text-sm">EyE BoT <Sparkles className="inline w-3 h-3 ml-1 text-orange-200" /></h3>
                                     <div className="flex items-center gap-1.5">
                                         <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                                         <span className="text-[10px] text-white/70 font-bold uppercase tracking-widest">Active Assistant</span>
