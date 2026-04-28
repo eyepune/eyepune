@@ -67,39 +67,38 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Check if user is authenticated
-        if (!user) {
+        // Check if user is authenticated (Bypass for testing only if ?test_payment=true is present)
+        const isTestMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('test_payment') === 'true';
+        if (!user && !isTestMode) {
             alert('Please login to continue with payment');
             base44.auth.redirectToLogin(window.location.href);
             return;
         }
 
         setIsLoading(true);
-
         try {
-            // Create Razorpay order
-            const orderResponse = await base44.functions.invoke('createRazorpayOrder', {
-                amount: pkg.price * 100,
-                currency: 'INR',
-                planName: pkg.name,
-                customerDetails: formData,
-                isSubscription: pkg.billing_cycle && pkg.billing_cycle !== 'one_time'
+            // Create Razorpay order via local API
+            const orderRes = await fetch('/api/razorpay/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: pkg.price,
+                    currency: 'INR',
+                    receipt: `pkg_${Date.now()}`
+                })
             });
 
-            if (orderResponse.data?.error) {
-                throw new Error(orderResponse.data.error);
-            }
-
-            const { orderId, amount, currency, keyId } = orderResponse.data;
+            const order = await orderRes.json();
+            if (order.error) throw new Error(order.error);
 
             // Initialize Razorpay
             const options = {
-                key: keyId,
-                amount: amount,
-                currency: currency,
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                amount: order.amount,
+                currency: order.currency,
                 name: 'EyE PunE',
                 description: pkg.name,
-                order_id: orderId,
+                order_id: order.id,
                 prefill: {
                     name: formData.name,
                     email: formData.email,
@@ -109,22 +108,37 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                     color: '#DC2626'
                 },
                 handler: async function (response) {
-                    // Payment successful
-                    await base44.entities.Payment.create({
-                        customer_name: formData.name,
-                        customer_email: formData.email,
-                        customer_phone: formData.phone,
-                        amount: amount,
-                        currency: currency,
-                        plan_name: pkg.name,
-                        payment_type: pkg.billing_cycle === 'one_time' ? 'one_time' : 'subscription',
-                        status: 'completed',
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_order_id: response.razorpay_order_id
-                    });
+                    try {
+                        // Verify payment on server
+                        const verifyRes = await fetch('/api/razorpay/verify', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                metadata: {
+                                    customer_name: formData.name,
+                                    customer_email: formData.email,
+                                    customer_phone: formData.phone,
+                                    plan_name: pkg.name,
+                                    amount: pkg.price,
+                                    notes: formData.notes
+                                }
+                            }),
+                        });
 
-                    setIsLoading(false);
-                    setStep(2);
+                        const verifyData = await verifyRes.json();
+                        if (verifyData.success) {
+                            setStep(2);
+                        } else {
+                            throw new Error(verifyData.error || 'Verification failed');
+                        }
+                    } catch (err) {
+                        alert('Payment verification failed. Please contact support with your payment ID.');
+                    } finally {
+                        setIsLoading(false);
+                    }
                 },
                 modal: {
                     ondismiss: function() {
@@ -136,9 +150,8 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
             const razorpay = new window.Razorpay(options);
             razorpay.open();
         } catch (error) {
-            console.error('Payment error:', error);
-            const errorMsg = error.response?.data?.error || error.message || 'Please try again.';
-            alert(`Payment initialization failed: ${errorMsg}`);
+            console.error('Payment initialization error:', error);
+            alert(`Failed to start payment: ${error.message}`);
             setIsLoading(false);
         }
     };
