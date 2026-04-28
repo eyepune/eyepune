@@ -125,13 +125,12 @@ export default function HeroSection() {
                     { Icon: Code, x: "30%", y: "40%", delay: 2.5 },
                     { Icon: Globe, x: "50%", y: "45%", delay: 1.5 },
                     { Icon: Zap, x: "70%", y: "30%", delay: 0.5 },
-                    { Icon: Sparkles, x: "65%", y: "60%", delay: 4 },
+                    { Icon: Sparkles, x: "65%", y: "55%", delay: 4 },
                     { Icon: Command, x: "35%", y: "70%", delay: 1.5 },
                     { Icon: Hash, x: "55%", y: "75%", delay: 2 },
-                    { Icon: Database, x: "75%", y: "85%", delay: 5 },
-                    { Icon: ShieldCheck, x: "92%", y: "75%", delay: 0 },
-                    { Icon: Zap, x: "65%", y: "40%", delay: 2.8 },
-                    { Icon: Bot, x: "80%", y: "25%", delay: 1.2 },
+                    { Icon: Database, x: "15%", y: "85%", delay: 5 },
+                    { Icon: MessageCircle, x: "5%", y: "65%", delay: 3 },
+                    { Icon: ShieldCheck, x: "85%", y: "25%", delay: 1.2 },
                 ].map((item, i) => (
                     <motion.div
                         key={i}
