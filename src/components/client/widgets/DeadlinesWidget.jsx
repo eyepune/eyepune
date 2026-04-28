@@ -4,12 +4,12 @@ import { Calendar, Clock } from 'lucide-react';
 
 export default function DeadlinesWidget({ milestones = [], tasks = [] }) {
     const upcomingDeadlines = [
-        ...milestones.filter(m => m.status !== 'completed' && m.due_date)
+        ...milestones.filter(m => m.status !== 'completed' && m.dueDate)
             .map(m => ({ ...m, type: 'milestone', name: m.title })),
-        ...tasks.filter(t => t.status !== 'completed' && t.due_date)
-            .map(t => ({ ...t, type: 'task', name: t.task_title }))
+        ...tasks.filter(t => t.status !== 'completed' && t.dueDate)
+            .map(t => ({ ...t, type: 'task', name: t.title }))
     ]
-    .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
     .slice(0, 3);
 
     return (
@@ -26,7 +26,7 @@ export default function DeadlinesWidget({ milestones = [], tasks = [] }) {
                 ) : (
                     <div className="space-y-2">
                         {upcomingDeadlines.map((item, idx) => {
-                            const daysUntil = Math.ceil((new Date(item.due_date) - new Date()) / (1000 * 60 * 60 * 24));
+                            const daysUntil = Math.ceil((new Date(item.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
                             return (
                                 <div key={idx} className="flex items-center justify-between text-sm">
                                     <span className="truncate flex-1">{item.name}</span>

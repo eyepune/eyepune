@@ -11,11 +11,11 @@ export default function OnboardingProgress({ project, onShowAssistant }) {
     const queryClient = useQueryClient();
 
     const { data: tasks = [] } = useQuery({
-        queryKey: ['onboarding-tasks', project.id],
+        queryKey: ['onboarding-tasks', project?.id],
         queryFn: async () => {
             const allTasks = await base44.entities.OnboardingTask.list();
             return allTasks
-                .filter(t => t.project_id === project.id)
+                .filter(t => t.projectId === project.id)
                 .sort((a, b) => a.order - b.order);
         },
         enabled: !!project?.id
@@ -28,7 +28,7 @@ export default function OnboardingProgress({ project, onShowAssistant }) {
         }
     });
 
-    const clientTasks = tasks.filter(t => t.task_type === 'client');
+    const clientTasks = tasks.filter(t => t.taskType === 'client');
     const completedTasks = clientTasks.filter(t => t.status === 'completed').length;
     const progressPercentage = clientTasks.length > 0 
         ? Math.round((completedTasks / clientTasks.length) * 100) 
@@ -91,10 +91,10 @@ export default function OnboardingProgress({ project, onShowAssistant }) {
                             <h4 className={`font-medium mb-1 ${
                                 task.status === 'completed' ? 'line-through text-muted-foreground' : ''
                             }`}>
-                                {task.task_title}
+                                {task.title}
                             </h4>
                             <p className="text-sm text-muted-foreground">
-                                {task.task_description}
+                                {task.description}
                             </p>
                         </div>
                     </motion.div>

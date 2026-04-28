@@ -151,17 +151,17 @@ function Admin_Projects() {
                         >
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 className="font-bold mb-1">{project.project_name}</h3>
-                                    <p className="text-sm text-muted-foreground">{project.client_name}</p>
+                                    <h3 className="font-bold mb-1">{project.projectName}</h3>
+                                    <p className="text-sm text-muted-foreground">{project.clientName}</p>
                                 </div>
                                 <Badge className={statusColors[project.status]}>
                                     {project.status?.replace('_', ' ')}
                                 </Badge>
                             </div>
 
-                            <Progress value={project.progress_percentage || 0} className="mb-4" />
+                            <Progress value={project.progressPercentage || 0} className="mb-4" />
                             <p className="text-sm text-muted-foreground mb-4">
-                                {project.progress_percentage || 0}% complete
+                                {project.progressPercentage || 0}% complete
                             </p>
 
                             <div className="space-y-2">
@@ -183,7 +183,7 @@ function Admin_Projects() {
                                             try {
                                                 await base44.functions.invoke('generatePersonalizedOnboarding', {
                                                     project_id: project.id,
-                                                    client_email: project.client_email
+                                                    client_email: project.clientEmail
                                                 });
                                                 toast.success('Onboarding checklist generated!');
                                             } catch (error) {
@@ -272,21 +272,21 @@ function Admin_Projects() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label>Client Name *</Label>
-                                    <Input name="client_name" defaultValue={selectedProject?.client_name} required />
+                                    <Input name="client_name" defaultValue={selectedProject?.clientName} required />
                                 </div>
                                 <div>
                                     <Label>Client Email *</Label>
-                                    <Input name="client_email" type="email" defaultValue={selectedProject?.client_email} required />
+                                    <Input name="client_email" type="email" defaultValue={selectedProject?.clientEmail} required />
                                 </div>
                             </div>
                             <div>
                                 <Label>Project Name *</Label>
-                                <Input name="project_name" defaultValue={selectedProject?.project_name} required />
+                                <Input name="project_name" defaultValue={selectedProject?.projectName} required />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label>Project Type *</Label>
-                                    <Select name="project_type" defaultValue={selectedProject?.project_type || 'web_app'}>
+                                    <Select name="project_type" defaultValue={selectedProject?.projectType || 'web_app'}>
                                         <SelectTrigger>
                                             <SelectValue />
                                         </SelectTrigger>
@@ -318,11 +318,11 @@ function Admin_Projects() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label>Start Date</Label>
-                                    <DatePicker name="start_date" defaultValue={selectedProject?.start_date} />
+                                    <DatePicker name="start_date" defaultValue={selectedProject?.startDate} />
                                 </div>
                                 <div>
                                     <Label>Expected Completion</Label>
-                                    <DatePicker name="expected_completion_date" defaultValue={selectedProject?.expected_completion_date} />
+                                    <DatePicker name="expected_completion_date" defaultValue={selectedProject?.expectedCompletionDate} />
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
@@ -332,7 +332,7 @@ function Admin_Projects() {
                                 </div>
                                 <div>
                                     <Label>Progress %</Label>
-                                    <Input name="progress_percentage" type="number" min="0" max="100" defaultValue={selectedProject?.progress_percentage || 0} />
+                                    <Input name="progress_percentage" type="number" min="0" max="100" defaultValue={selectedProject?.progressPercentage || 0} />
                                 </div>
                             </div>
                             <div>
@@ -354,7 +354,7 @@ function Admin_Projects() {
                                             <SelectContent>
                                                 {templates.map(template => (
                                                     <SelectItem key={template.id} value={template.id}>
-                                                        {template.template_name} ({template.project_type})
+                                                        {template.templateName} ({template.projectType})
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>

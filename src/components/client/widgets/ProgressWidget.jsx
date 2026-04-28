@@ -13,10 +13,10 @@ export default function ProgressWidget({ project }) {
                     </div>
                     <div className="flex-1">
                         <p className="text-sm text-muted-foreground mb-1">Overall Progress</p>
-                        <p className="text-2xl font-bold">{project?.progress_percentage || 0}%</p>
+                        <p className="text-2xl font-bold">{project?.progressPercentage || 0}%</p>
                     </div>
                 </div>
-                <Progress value={project?.progress_percentage || 0} className="mt-4" />
+                <Progress value={project?.progressPercentage || 0} className="mt-4" />
             </CardContent>
         </Card>
     );

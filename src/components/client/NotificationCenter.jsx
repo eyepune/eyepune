@@ -17,8 +17,8 @@ export default function NotificationCenter({ user }) {
     const { data: notifications = [] } = useQuery({
         queryKey: ['client-notifications', user?.email],
         queryFn: async () => {
-            const all = await base44.entities.ClientNotification.list('-created_date', 50);
-            return all.filter(n => n.user_email === user.email);
+            const all = await base44.entities.ClientNotification.list('-createdAt', 50);
+            return all.filter(n => n.userEmail === user.email);
         },
         enabled: !!user?.email,
         refetchInterval: 30000 // Refresh every 30 seconds
@@ -29,7 +29,7 @@ export default function NotificationCenter({ user }) {
         if (!user?.email) return;
 
         const unsubscribe = base44.entities.ClientNotification.subscribe((event) => {
-            if (event.type === 'create' && event.data?.user_email === user.email) {
+            if (event.type === 'create' && event.data?.userEmail === user.email) {
                 queryClient.invalidateQueries({ queryKey: ['client-notifications'] });
             }
         });
@@ -38,7 +38,7 @@ export default function NotificationCenter({ user }) {
     }, [user?.email, queryClient]);
 
     const markAsReadMutation = useMutation({
-        mutationFn: (id) => base44.entities.ClientNotification.update(id, { is_read: true }),
+        mutationFn: (id) => base44.entities.ClientNotification.update(id, { isRead: true }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['client-notifications'] });
         }
@@ -46,9 +46,9 @@ export default function NotificationCenter({ user }) {
 
     const markAllReadMutation = useMutation({
         mutationFn: async () => {
-            const unread = notifications.filter(n => !n.is_read);
+            const unread = notifications.filter(n => !n.isRead);
             await Promise.all(unread.map(n => 
-                base44.entities.ClientNotification.update(n.id, { is_read: true })
+                base44.entities.ClientNotification.update(n.id, { isRead: true })
             ));
         },
         onSuccess: () => {
@@ -63,7 +63,7 @@ export default function NotificationCenter({ user }) {
         }
     });
 
-    const unreadCount = notifications.filter(n => !n.is_read).length;
+    const unreadCount = notifications.filter(n => !n.isRead).length;
 
     const getNotificationIcon = (type) => {
         const icons = {
@@ -121,12 +121,12 @@ export default function NotificationCenter({ user }) {
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 20 }}
                                     className={`p-4 border-b hover:bg-accent/50 transition-colors ${
-                                        !notification.is_read ? 'bg-blue-50 dark:bg-blue-950/20' : ''
+                                        !notification.isRead ? 'bg-blue-50 dark:bg-blue-950/20' : ''
                                     }`}
                                 >
                                     <div className="flex gap-3">
                                         <div className="text-2xl flex-shrink-0">
-                                            {getNotificationIcon(notification.notification_type)}
+                                            {getNotificationIcon(notification.notificationType)}
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-start justify-between gap-2 mb-1">
@@ -145,16 +145,16 @@ export default function NotificationCenter({ user }) {
                                             </p>
                                             <div className="flex items-center justify-between">
                                                 <span className="text-xs text-muted-foreground">
-                                                    {formatDistanceToNow(new Date(notification.created_date), { addSuffix: true })}
+                                                    {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                                                 </span>
                                                 <div className="flex gap-2">
-                                                    {notification.action_url && (
+                                                    {notification.actionUrl && (
                                                         <Button 
                                                             size="sm" 
                                                             variant="ghost"
                                                             className="h-7 px-2"
                                                             onClick={() => {
-                                                                window.location.href = notification.action_url;
+                                                                window.location.href = notification.actionUrl;
                                                                 markAsReadMutation.mutate(notification.id);
                                                             }}
                                                         >
@@ -162,7 +162,7 @@ export default function NotificationCenter({ user }) {
                                                             View
                                                         </Button>
                                                     )}
-                                                    {!notification.is_read && (
+                                                    {!notification.isRead && (
                                                         <Button 
                                                             size="sm" 
                                                             variant="ghost"

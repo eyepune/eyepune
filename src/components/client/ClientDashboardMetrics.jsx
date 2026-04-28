@@ -14,12 +14,12 @@ export default function ClientDashboardMetrics({
     deliverables = [] 
 }) {
     const upcomingDeadlines = [
-        ...milestones.filter(m => m.status !== 'completed' && m.due_date)
+        ...milestones.filter(m => m.status !== 'completed' && m.dueDate)
             .map(m => ({ ...m, type: 'milestone' })),
-        ...tasks.filter(t => t.status !== 'completed' && t.due_date)
+        ...tasks.filter(t => t.status !== 'completed' && t.dueDate)
             .map(t => ({ ...t, type: 'task' }))
     ]
-    .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
     .slice(0, 5);
 
     const completionRate = milestones.length > 0 
@@ -29,8 +29,8 @@ export default function ClientDashboardMetrics({
     const pendingApprovals = deliverables.filter(d => d.status === 'pending_review').length;
     const approvedDeliverables = deliverables.filter(d => d.status === 'approved').length;
 
-    const daysUntilCompletion = project?.expected_completion_date 
-        ? Math.ceil((new Date(project.expected_completion_date) - new Date()) / (1000 * 60 * 60 * 24))
+    const daysUntilCompletion = project?.expectedCompletionDate 
+        ? Math.ceil((new Date(project.expectedCompletionDate) - new Date()) / (1000 * 60 * 60 * 24))
         : null;
 
     const metrics = [
@@ -128,7 +128,7 @@ export default function ClientDashboardMetrics({
                     ) : (
                         <div className="space-y-3">
                             {upcomingDeadlines.map((item, index) => {
-                                const daysUntil = Math.ceil((new Date(item.due_date) - new Date()) / (1000 * 60 * 60 * 24));
+                                const daysUntil = Math.ceil((new Date(item.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
                                 const isOverdue = daysUntil < 0;
                                 const isDueSoon = daysUntil <= 3 && daysUntil >= 0;
                                 
@@ -143,7 +143,7 @@ export default function ClientDashboardMetrics({
                                     >
                                         <div className="flex-1">
                                             <p className="font-medium text-sm">
-                                                {item.title || item.task_title}
+                                                {item.title}
                                             </p>
                                             <p className="text-xs text-muted-foreground capitalize">
                                                 {item.type}
@@ -155,7 +155,7 @@ export default function ClientDashboardMetrics({
                                                 isDueSoon ? 'text-orange-600' :
                                                 'text-foreground'
                                             }`}>
-                                                {new Date(item.due_date).toLocaleDateString()}
+                                                {new Date(item.dueDate).toLocaleDateString()}
                                             </p>
                                             <p className="text-xs text-muted-foreground">
                                                 {isOverdue 

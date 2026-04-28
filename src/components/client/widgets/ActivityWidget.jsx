@@ -7,24 +7,26 @@ import { format } from 'date-fns';
 
 export default function ActivityWidget({ project }) {
     const { data: messages = [] } = useQuery({
-        queryKey: ['client-messages', project.id],
+        queryKey: ['client-messages', project?.id],
         queryFn: async () => {
-            const all = await base44.entities.ClientMessage.list('-created_date', 10);
-            return all.filter(m => m.project_id === project.id).slice(0, 3);
+            const all = await base44.entities.ClientMessage.list('-createdAt', 10);
+            return all.filter(m => m.projectId === project.id).slice(0, 3);
         },
+        enabled: !!project?.id,
     });
 
     const { data: files = [] } = useQuery({
-        queryKey: ['recent-files', project.id],
+        queryKey: ['recent-files', project?.id],
         queryFn: async () => {
-            const all = await base44.entities.ClientFile.list('-created_date', 10);
-            return all.filter(f => f.project_id === project.id).slice(0, 2);
+            const all = await base44.entities.ClientFile.list('-createdAt', 10);
+            return all.filter(f => f.projectId === project.id).slice(0, 2);
         },
+        enabled: !!project?.id,
     });
 
     const activities = [
-        ...messages.map(m => ({ type: 'message', text: `${m.sender_name} sent a message`, date: m.created_date })),
-        ...files.map(f => ({ type: 'file', text: `File uploaded: ${f.file_name}`, date: f.created_date }))
+        ...messages.map(m => ({ type: 'message', text: `${m.senderName} sent a message`, date: m.createdAt })),
+        ...files.map(f => ({ type: 'file', text: `File uploaded: ${f.fileName}`, date: f.createdAt }))
     ]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 5);

@@ -21,9 +21,9 @@ export default function ProjectDiscussionForum({ project, user }) {
     const { data: threads = [] } = useQuery({
         queryKey: ['discussion-threads', project.id],
         queryFn: async () => {
-            const all = await base44.entities.TaskComment.list('-created_date', 200);
+            const all = await base44.entities.TaskComment.list('-createdDate', 200);
             // Group by parent threads (comments without parent_comment_id)
-            return all.filter(c => c.project_id === project.id && !c.parent_comment_id);
+            return all.filter(c => c.projectId === project.id && !c.parentCommentId);
         },
     });
 
@@ -31,8 +31,8 @@ export default function ProjectDiscussionForum({ project, user }) {
         queryKey: ['discussion-replies', selectedThread?.id],
         queryFn: async () => {
             if (!selectedThread) return [];
-            const all = await base44.entities.TaskComment.list('-created_date', 500);
-            return all.filter(c => c.parent_comment_id === selectedThread.id);
+            const all = await base44.entities.TaskComment.list('-createdDate', 500);
+            return all.filter(c => c.parentCommentId === selectedThread.id);
         },
         enabled: !!selectedThread,
     });
@@ -68,9 +68,9 @@ export default function ProjectDiscussionForum({ project, user }) {
         if (!threadTitle.trim() || !threadContent.trim()) return;
         
         createThreadMutation.mutate({
-            project_id: project.id,
-            task_id: 'discussion_forum', // Special identifier for forum threads
-            comment_text: `# ${threadTitle}\n\n${threadContent}`,
+            projectId: project.id,
+            taskId: 'discussion_forum', // Special identifier for forum threads
+            commentText: `# ${threadTitle}\n\n${threadContent}`,
         });
     };
 
@@ -78,15 +78,15 @@ export default function ProjectDiscussionForum({ project, user }) {
         if (!replyContent.trim()) return;
 
         createReplyMutation.mutate({
-            project_id: project.id,
-            task_id: 'discussion_forum',
-            comment_text: replyContent,
-            parent_comment_id: selectedThread.id,
+            projectId: project.id,
+            taskId: 'discussion_forum',
+            commentText: replyContent,
+            parentCommentId: selectedThread.id,
         });
     };
 
     const getRepliesCount = (threadId) => {
-        return threads.filter(t => t.parent_comment_id === threadId).length;
+        return threads.filter(t => t.parentCommentId === threadId).length;
     };
 
     return (
@@ -125,7 +125,7 @@ export default function ProjectDiscussionForum({ project, user }) {
                         <div className="flex items-center gap-3">
                             <Users className="w-8 h-8 text-green-600" />
                             <div>
-                                <p className="text-2xl font-bold">{new Set(threads.map(t => t.created_by)).size}</p>
+                                <p className="text-2xl font-bold">{new Set(threads.map(t => t.createdBy)).size}</p>
                                 <p className="text-xs text-muted-foreground">Contributors</p>
                             </div>
                         </div>
@@ -139,7 +139,7 @@ export default function ProjectDiscussionForum({ project, user }) {
                                 <p className="text-2xl font-bold">
                                     {threads.filter(t => {
                                         const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
-                                        return new Date(t.created_date) > hourAgo;
+                                        return new Date(t.createdDate) > hourAgo;
                                     }).length}
                                 </p>
                                 <p className="text-xs text-muted-foreground">Last Hour</p>
@@ -163,8 +163,8 @@ export default function ProjectDiscussionForum({ project, user }) {
                                 </p>
                             ) : (
                                 threads.map(thread => {
-                                    const title = thread.comment_text.split('\n')[0].replace('# ', '');
-                                    const preview = thread.comment_text.split('\n\n')[1]?.substring(0, 60) || '';
+                                    const title = thread.commentText.split('\n')[0].replace('# ', '');
+                                    const preview = thread.commentText.split('\n\n')[1]?.substring(0, 60) || '';
                                     
                                     return (
                                         <button
@@ -180,7 +180,7 @@ export default function ProjectDiscussionForum({ project, user }) {
                                             <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{preview}</p>
                                             <div className="flex items-center justify-between text-xs">
                                                 <span className="text-muted-foreground">
-                                                    {thread.created_by?.split('@')[0]}
+                                                    {thread.createdBy?.split('@')[0]}
                                                 </span>
                                                 <Badge variant="outline" className="text-xs">
                                                     <Reply className="w-3 h-3 mr-1" />
@@ -202,16 +202,16 @@ export default function ProjectDiscussionForum({ project, user }) {
                             <CardHeader>
                                 <div className="space-y-2">
                                     <CardTitle className="text-xl">
-                                        {selectedThread.comment_text.split('\n')[0].replace('# ', '')}
+                                        {selectedThread.commentText.split('\n')[0].replace('# ', '')}
                                     </CardTitle>
                                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                         <span className="flex items-center gap-1">
                                             <Users className="w-4 h-4" />
-                                            {selectedThread.created_by?.split('@')[0]}
+                                            {selectedThread.createdBy?.split('@')[0]}
                                         </span>
                                         <span className="flex items-center gap-1">
                                             <Clock className="w-4 h-4" />
-                                            {format(new Date(selectedThread.created_date), 'MMM d, h:mm a')}
+                                            {format(new Date(selectedThread.createdDate), 'MMM d, h:mm a')}
                                         </span>
                                         <Badge variant="outline">
                                             <Reply className="w-3 h-3 mr-1" />
@@ -224,7 +224,7 @@ export default function ProjectDiscussionForum({ project, user }) {
                                 {/* Original Post */}
                                 <div className="bg-muted/50 rounded-lg p-4">
                                     <p className="text-sm whitespace-pre-wrap">
-                                        {selectedThread.comment_text.split('\n\n').slice(1).join('\n\n')}
+                                        {selectedThread.commentText.split('\n\n').slice(1).join('\n\n')}
                                     </p>
                                 </div>
 
@@ -235,13 +235,13 @@ export default function ProjectDiscussionForum({ project, user }) {
                                             <CardContent className="pt-4">
                                                 <div className="flex justify-between items-start mb-2">
                                                     <span className="font-medium text-sm">
-                                                        {reply.created_by?.split('@')[0]}
+                                                        {reply.createdBy?.split('@')[0]}
                                                     </span>
                                                     <span className="text-xs text-muted-foreground">
-                                                        {format(new Date(reply.created_date), 'MMM d, h:mm a')}
+                                                        {format(new Date(reply.createdDate), 'MMM d, h:mm a')}
                                                     </span>
                                                 </div>
-                                                <p className="text-sm whitespace-pre-wrap">{reply.comment_text}</p>
+                                                <p className="text-sm whitespace-pre-wrap">{reply.commentText}</p>
                                             </CardContent>
                                         </Card>
                                     ))}

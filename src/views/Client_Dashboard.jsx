@@ -50,6 +50,7 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
+import { cn } from "@/lib/utils";
 import ClientLayout from "@/components/client/ClientLayout";
 
 export default function Client_Dashboard() {
@@ -71,9 +72,14 @@ export default function Client_Dashboard() {
     const { data: projects = [] } = useQuery({
         queryKey: ['client-projects', user?.email],
         queryFn: async () => {
-            const { data, error } = await supabase.from('client_projects').select('*').eq('client_email', user.email);
-            if (error) return [];
-            return data || [];
+            // Admins see everything, clients see only their projects
+            const isAdmin = user?.role === 'admin' || user?.email === 'connect@eyepune.com';
+            
+            if (isAdmin) {
+                return await base44.entities.ClientProject.list('-created_at', 50);
+            } else {
+                return await base44.entities.ClientProject.filter({ clientEmail: user?.email });
+            }
         },
         enabled: !!user?.email,
     });
@@ -81,9 +87,7 @@ export default function Client_Dashboard() {
     const { data: milestones = [] } = useQuery({
         queryKey: ['milestones', selectedProject?.id],
         queryFn: async () => {
-            const { data, error } = await supabase.from('client_milestones').select('*').eq('project_id', selectedProject.id);
-            if (error) return [];
-            return data || [];
+            return await base44.entities.ClientMilestone.filter({ projectId: selectedProject.id });
         },
         enabled: !!selectedProject?.id,
     });
@@ -91,9 +95,7 @@ export default function Client_Dashboard() {
     const { data: files = [] } = useQuery({
         queryKey: ['client-files', selectedProject?.id],
         queryFn: async () => {
-            const { data, error } = await supabase.from('client_files').select('*').eq('project_id', selectedProject.id);
-            if (error) return [];
-            return data || [];
+            return await base44.entities.ClientFile.filter({ projectId: selectedProject.id });
         },
         enabled: !!selectedProject?.id,
     });
@@ -101,9 +103,10 @@ export default function Client_Dashboard() {
     const { data: tasks = [] } = useQuery({
         queryKey: ['onboarding-tasks', selectedProject?.id],
         queryFn: async () => {
-            const { data, error } = await supabase.from('onboarding_tasks').select('*').eq('project_id', selectedProject.id).eq('task_type', 'client');
-            if (error) return [];
-            return data || [];
+            return await base44.entities.OnboardingTask.filter({ 
+                projectId: selectedProject.id,
+                taskType: 'client'
+            });
         },
         enabled: !!selectedProject?.id,
     });
@@ -111,9 +114,7 @@ export default function Client_Dashboard() {
     const { data: projectTasks = [] } = useQuery({
         queryKey: ['project-tasks', selectedProject?.id],
         queryFn: async () => {
-            const { data, error } = await supabase.from('project_tasks').select('*').eq('project_id', selectedProject.id);
-            if (error) return [];
-            return data || [];
+            return await base44.entities.ProjectTask.filter({ projectId: selectedProject.id });
         },
         enabled: !!selectedProject?.id,
     });
@@ -121,9 +122,7 @@ export default function Client_Dashboard() {
     const { data: deliverables = [] } = useQuery({
         queryKey: ['deliverable-approvals', selectedProject?.id],
         queryFn: async () => {
-            const { data, error } = await supabase.from('deliverable_approvals').select('*').eq('project_id', selectedProject.id).order('created_at', { ascending: false });
-            if (error) return [];
-            return data || [];
+            return await base44.entities.DeliverableApproval.filter({ projectId: selectedProject.id }, '-createdAt');
         },
         enabled: !!selectedProject?.id,
     });
@@ -131,8 +130,8 @@ export default function Client_Dashboard() {
     const { data: preferences } = useQuery({
         queryKey: ['dashboard-preferences', user?.email],
         queryFn: async () => {
-            const { data } = await supabase.from('dashboard_preferences').select('*').eq('user_email', user.email).single();
-            return data;
+            const results = await base44.entities.DashboardPreference.filter({ userEmail: user.email });
+            return results[0] || null;
         },
         enabled: !!user?.email,
     });
@@ -151,8 +150,39 @@ export default function Client_Dashboard() {
         );
     }
 
-    const enabledWidgets = preferences?.enabled_widgets || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
-    const widgetOrder = preferences?.widget_order || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
+    if (projects.length === 0) {
+        return (
+            <ClientLayout>
+                <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-6">
+                    <div className="w-24 h-24 bg-red-600/10 rounded-full flex items-center justify-center mb-8 border border-red-600/20">
+                        <Zap className="w-10 h-10 text-red-600 animate-pulse" />
+                    </div>
+                    <h1 className="text-4xl font-black text-white mb-4">Welcome to your <span className="text-red-500">Elite Command Center</span></h1>
+                    <p className="text-gray-400 text-lg max-w-lg mb-10">
+                        We're currently setting up your growth engine. Once your project is initialized, you'll see real-time metrics, milestones, and deliverables here.
+                    </p>
+                    <div className="flex flex-wrap gap-4 justify-center">
+                        <Button 
+                            onClick={() => setConsultationDialogOpen(true)}
+                            className="bg-red-600 hover:bg-red-700 text-white rounded-2xl px-8 h-14 font-bold text-lg"
+                        >
+                            <Phone className="w-5 h-5 mr-2" /> Book Kickoff Call
+                        </Button>
+                        <Button 
+                            variant="outline"
+                            onClick={() => setShowSetupWizard(true)}
+                            className="border-white/10 text-white hover:bg-white/5 rounded-2xl px-8 h-14 font-bold text-lg"
+                        >
+                            <Settings className="w-5 h-5 mr-2" /> View Setup Wizard
+                        </Button>
+                    </div>
+                </div>
+            </ClientLayout>
+        );
+    }
+
+    const enabledWidgets = preferences?.enabledWidgets || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
+    const widgetOrder = preferences?.widgetOrder || ['progress', 'milestones', 'deadlines', 'budget', 'activity'];
 
     return (
         <ClientLayout>
@@ -169,7 +199,7 @@ export default function Client_Dashboard() {
                             <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Live Updates Enabled</span>
                         </div>
                         <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter mb-4">
-                            Grow Smarter, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">{user.full_name?.split(' ')[0]}</span>.
+                            Grow Smarter, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">{(user.fullName || user.full_name || '').split(' ')[0]}</span>.
                         </h1>
                         <p className="text-gray-400 text-lg font-medium max-w-xl">
                             Your strategy is in motion. Monitor your growth engines and project health in real-time.
@@ -349,13 +379,23 @@ export default function Client_Dashboard() {
             </div>
 
             {/* Dialogs */}
-            <QuickConsultationScheduler open={consultationDialogOpen} onOpenChange={setConsultationDialogOpen} />
+            <QuickConsultationScheduler 
+                open={consultationDialogOpen} 
+                onOpenChange={setConsultationDialogOpen} 
+                user={user}
+                project={selectedProject}
+            />
             <FeedbackDialog 
                 open={feedbackDialogOpen} 
                 onOpenChange={setFeedbackDialogOpen}
                 deliverable={selectedDeliverable}
             />
-            <SetupWizard open={showSetupWizard} onOpenChange={setShowSetupWizard} />
+            <SetupWizard 
+                open={showSetupWizard} 
+                onOpenChange={setShowSetupWizard} 
+                user={user}
+                project={selectedProject}
+            />
         </ClientLayout>
     );
 }

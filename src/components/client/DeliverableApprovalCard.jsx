@@ -17,15 +17,15 @@ export default function DeliverableApprovalCard({ deliverable, onApprove, onRequ
         mutationFn: async ({ status, feedbackText }) => {
             await base44.entities.DeliverableApproval.update(deliverable.id, {
                 status,
-                feedback_text: feedbackText,
-                reviewed_date: new Date().toISOString()
+                feedbackText: feedbackText,
+                reviewedDate: new Date().toISOString()
             });
             
             // Trigger notification to team
             await base44.functions.invoke('sendClientCommunication', {
                 event_type: 'deliverable_reviewed',
-                project_id: deliverable.project_id,
-                deliverable_name: deliverable.deliverable_name,
+                project_id: deliverable.projectId,
+                deliverable_name: deliverable.deliverableName,
                 status
             });
         },
@@ -62,7 +62,7 @@ export default function DeliverableApprovalCard({ deliverable, onApprove, onRequ
                         <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                                 <FileText className="w-5 h-5 text-muted-foreground" />
-                                <h4 className="font-semibold">{deliverable.deliverable_name}</h4>
+                                <h4 className="font-semibold">{deliverable.deliverableName}</h4>
                             </div>
                             <Badge className={statusConfig[deliverable.status].color}>
                                 {statusConfig[deliverable.status].label}
@@ -70,9 +70,9 @@ export default function DeliverableApprovalCard({ deliverable, onApprove, onRequ
                         </div>
                     </div>
 
-                    {deliverable.deliverable_url && (
+                    {deliverable.deliverableUrl && (
                         <a 
-                            href={deliverable.deliverable_url} 
+                            href={deliverable.deliverableUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 text-sm text-blue-600 hover:underline mb-4"
@@ -82,10 +82,10 @@ export default function DeliverableApprovalCard({ deliverable, onApprove, onRequ
                         </a>
                     )}
 
-                    {deliverable.feedback_text && deliverable.status !== 'pending_review' && (
+                    {deliverable.feedbackText && deliverable.status !== 'pending_review' && (
                         <div className="mb-4 p-3 bg-muted rounded-lg">
                             <p className="text-xs text-muted-foreground mb-1">Your Feedback:</p>
-                            <p className="text-sm">{deliverable.feedback_text}</p>
+                            <p className="text-sm">{deliverable.feedbackText}</p>
                         </div>
                     )}
 
@@ -124,9 +124,9 @@ export default function DeliverableApprovalCard({ deliverable, onApprove, onRequ
                         )}
                     </div>
 
-                    {deliverable.reviewed_date && (
+                    {deliverable.reviewedDate && (
                         <p className="text-xs text-muted-foreground mt-3">
-                            Reviewed on {new Date(deliverable.reviewed_date).toLocaleDateString()}
+                            Reviewed on {new Date(deliverable.reviewedDate).toLocaleDateString()}
                         </p>
                     )}
                 </CardContent>

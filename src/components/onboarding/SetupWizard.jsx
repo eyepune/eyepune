@@ -67,7 +67,7 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
     const { data: progress } = useQuery({
         queryKey: ['onboarding-progress', user?.email],
         queryFn: async () => {
-            const results = await base44.entities.OnboardingProgress.filter({ user_email: user.email });
+            const results = await base44.entities.OnboardingProgress.filter({ userEmail: user.email });
             return results[0];
         },
         enabled: !!user
@@ -87,14 +87,14 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
 
     useEffect(() => {
         if (progress) {
-            setCurrentStep(progress.current_step || 0);
+            setCurrentStep(progress.currentStep || 0);
             setFormData(prev => ({
                 ...prev,
-                communication_frequency: progress.project_settings?.communication_frequency || 'weekly',
-                preferred_meeting_time: progress.project_settings?.preferred_meeting_time || '',
-                collaboration_tools: progress.project_settings?.collaboration_tools || [],
-                team_members: progress.team_roles || [],
-                ...progress.notification_preferences
+                communication_frequency: progress.projectSettings?.communication_frequency || 'weekly',
+                preferred_meeting_time: progress.projectSettings?.preferred_meeting_time || '',
+                collaboration_tools: progress.projectSettings?.collaboration_tools || [],
+                team_members: progress.teamRoles || [],
+                ...progress.notificationPreferences
             }));
         }
     }, [progress]);
@@ -105,8 +105,8 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
                 return await base44.entities.OnboardingProgress.update(progress.id, data);
             } else {
                 return await base44.entities.OnboardingProgress.create({
-                    user_email: user.email,
-                    project_id: project?.id,
+                    userEmail: user.email,
+                    projectId: project?.id,
                     ...data
                 });
             }
@@ -121,20 +121,20 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
         
         // Save current step data
         const updateData = {
-            current_step: currentStep + 1,
-            completed_steps: [...(progress?.completed_steps || []), stepId]
+            currentStep: currentStep + 1,
+            completedSteps: [...(progress?.completedSteps || []), stepId]
         };
 
         if (stepId === 'project_settings') {
-            updateData.project_settings = {
+            updateData.projectSettings = {
                 communication_frequency: formData.communication_frequency,
                 preferred_meeting_time: formData.preferred_meeting_time,
                 collaboration_tools: formData.collaboration_tools
             };
         } else if (stepId === 'team_roles') {
-            updateData.team_roles = formData.team_members;
+            updateData.teamRoles = formData.team_members;
         } else if (stepId === 'notifications') {
-            updateData.notification_preferences = {
+            updateData.notificationPreferences = {
                 email_notifications: formData.email_notifications,
                 milestone_updates: formData.milestone_updates,
                 deliverable_notifications: formData.deliverable_notifications,
@@ -144,8 +144,8 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
         }
 
         if (currentStep === wizardSteps.length - 2) {
-            updateData.wizard_completed = true;
-            updateData.tutorial_completed = true;
+            updateData.wizardCompleted = true;
+            updateData.tutorialCompleted = true;
             
             // Celebrate completion
             confetti({
@@ -270,7 +270,7 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
                                     {project && (
                                         <div className="bg-muted rounded-lg p-4">
                                             <p className="text-sm text-muted-foreground mb-1">Your Project</p>
-                                            <p className="font-semibold">{project.project_name}</p>
+                                            <p className="font-semibold">{project.projectName || project.project_name}</p>
                                         </div>
                                     )}
                                 </div>
