@@ -108,7 +108,7 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section ref={heroRef} className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-[#040404]">
+        <section ref={heroRef} className="relative min-h-screen pt-20 pb-32 flex items-center justify-center overflow-hidden bg-[#040404]">
             {/* Background elements */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[120px]" />
@@ -223,7 +223,7 @@ export default function HeroSection() {
                         </motion.div>
 
                         {/* Trust markers */}
-                        <div className="flex items-center gap-8 border-t border-white/5 pt-8">
+                        <div className="flex items-center gap-8 border-t border-white/5 pt-8 mb-20">
                             <div className="flex flex-col">
                                 <span className="text-2xl font-black text-white">100+</span>
                                 <span className="text-xs text-gray-500 uppercase tracking-widest">Global Clients</span>
