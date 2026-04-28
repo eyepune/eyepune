@@ -41,49 +41,57 @@ export default function CustomCursor() {
 
     return (
         <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
-            {/* Outer Ring */}
+            {/* The Eye Shape (Outer) */}
             <motion.div
                 style={{
                     translateX: cursorXSpring,
                     translateY: cursorYSpring,
-                    left: -16,
-                    top: -16,
+                    left: -20,
+                    top: -12,
                 }}
                 animate={{
-                    scale: isHovering ? 2.5 : 1,
-                    borderColor: isHovering ? 'rgba(239, 68, 68, 0.5)' : 'rgba(239, 68, 68, 0.3)',
-                    backgroundColor: isHovering ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0)',
+                    scale: isHovering ? 1.2 : 1,
+                    borderColor: isHovering ? 'rgba(239, 68, 68, 0.8)' : 'rgba(239, 68, 68, 0.4)',
+                    backgroundColor: isHovering ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.05)',
+                    rotateX: isHovering ? 0 : 20,
                 }}
-                className="absolute w-8 h-8 rounded-full border border-red-500/30 transition-colors duration-300"
-            />
+                className="absolute w-10 h-6 rounded-[100%] border-2 border-red-500/40 backdrop-blur-[2px] transition-colors duration-300 flex items-center justify-center overflow-hidden"
+            >
+                {/* Iris/Pupil Container */}
+                <motion.div 
+                    animate={{
+                        scale: isHovering ? 1.5 : 1,
+                    }}
+                    className="w-4 h-4 rounded-full border border-red-500/30 flex items-center justify-center"
+                >
+                    {/* Pupil */}
+                    <div className="w-2 h-2 bg-red-600 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                </motion.div>
+                
+                {/* Scanning line */}
+                <motion.div 
+                    animate={{
+                        y: [-10, 10, -10],
+                        opacity: [0, 0.5, 0]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 w-full h-[1px] bg-red-400/30"
+                />
+            </motion.div>
             
-            {/* Inner Dot */}
-            <motion.div
-                style={{
-                    translateX: cursorX,
-                    translateY: cursorY,
-                    left: -2,
-                    top: -2,
-                }}
-                animate={{
-                    scale: isHovering ? 0 : 1,
-                }}
-                className="absolute w-1 h-1 bg-red-500 rounded-full"
-            />
-
             {/* Glowing Aura */}
             <motion.div
                 style={{
                     translateX: cursorXSpring,
                     translateY: cursorYSpring,
-                    left: -40,
-                    top: -40,
+                    left: -30,
+                    top: -30,
                 }}
                 animate={{
-                    opacity: isHovering ? 0.15 : 0,
-                    scale: isHovering ? 1.5 : 0.8,
+                    opacity: isHovering ? 0.3 : 0.1,
+                    scale: isHovering ? 1.2 : 0.8,
                 }}
-                className="absolute w-20 h-20 bg-red-500 rounded-full blur-2xl transition-opacity duration-500"
+                className="absolute w-15 h-15 bg-red-600/20 rounded-full blur-xl pointer-events-none"
             />
         </div>
     );
