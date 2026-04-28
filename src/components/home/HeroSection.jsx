@@ -116,16 +116,18 @@ export default function HeroSection() {
 
                 {/* Floating Tech & Social Symbols */}
                 {[
-                    { Icon: Bot, x: "10%", y: "20%", delay: 0 },
-                    { Icon: Instagram, x: "85%", y: "15%", delay: 2 },
-                    { Icon: Facebook, x: "75%", y: "70%", delay: 4 },
-                    { Icon: Linkedin, x: "15%", y: "75%", delay: 1 },
-                    { Icon: Twitter, x: "50%", y: "10%", delay: 3 },
-                    { Icon: Cpu, x: "90%", y: "60%", delay: 5 },
-                    { Icon: Code, x: "5%", y: "45%", delay: 2.5 },
-                    { Icon: Globe, x: "80%", y: "40%", delay: 1.5 },
-                    { Icon: Zap, x: "30%", y: "85%", delay: 0.5 },
-                    { Icon: MessageCircle, x: "70%", y: "80%", delay: 3.5 },
+                    { Icon: Bot, x: "5%", y: "10%", delay: 0 },
+                    { Icon: Instagram, x: "92%", y: "15%", delay: 2 },
+                    { Icon: Facebook, x: "95%", y: "75%", delay: 4 },
+                    { Icon: Linkedin, x: "5%", y: "85%", delay: 1 },
+                    { Icon: Twitter, x: "88%", y: "5%", delay: 3 },
+                    { Icon: Cpu, x: "2%", y: "65%", delay: 5 },
+                    { Icon: Code, x: "94%", y: "45%", delay: 2.5 },
+                    { Icon: Globe, x: "8%", y: "35%", delay: 1.5 },
+                    { Icon: Zap, x: "12%", y: "92%", delay: 0.5 },
+                    { Icon: MessageCircle, x: "85%", y: "90%", delay: 3.5 },
+                    { Icon: Sparkles, x: "45%", y: "3%", delay: 4 },
+                    { Icon: Command, x: "55%", y: "96%", delay: 1.5 },
                 ].map((item, i) => (
                     <motion.div
                         key={i}
