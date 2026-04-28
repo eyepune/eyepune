@@ -51,7 +51,7 @@ const adminNavLinks = [
     { name: 'Analytics', page: 'Admin_Analytics' },
     { name: 'SEO', page: 'Admin_SEO' },
     { name: 'Automation Lab', page: 'Admin_TestAutomation' },
-    { name: 'Client Logos', page: 'Admin_ClientLogos' },
+
     { name: 'Service Add-ons', page: 'Admin_ServiceAddons' },
     { name: 'Outreach', page: 'Admin_Outreach' },
 ];

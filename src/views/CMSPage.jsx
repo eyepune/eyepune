@@ -12,10 +12,13 @@ export default function CMSPage() {
     const { data: page, isLoading, error } = useQuery({
         queryKey: ['cms-page', slug],
         queryFn: async () => {
+            console.log('[CMSPage] Fetching slug:', slug);
             const pages = await base44.entities.CMS_Page.filter({ slug });
+            console.log('[CMSPage] Results:', pages);
             return pages.length > 0 ? pages[0] : null;
         },
         enabled: !!slug,
+        retry: 2,
     });
 
     useEffect(() => {

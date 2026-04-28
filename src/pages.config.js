@@ -153,8 +153,14 @@ export const PAGES = {
     "SystemStatus": SystemStatus,
     "SignProposal": SignProposal,
     "Client_Portal": clientPortal,
-    "Service_AIAutomation": Service_AIAutomation,
-    "Service_WebDevelopment": Service_WebDevelopment,
+    "Service-AIAutomation": Service_AIAutomation,
+    "Service-WebDevelopment": Service_WebDevelopment,
+    "Service-SocialMedia": Service_SocialMedia,
+    "Service-WebDev": Service_WebDev,
+    "Service-AI": Service_AI,
+    "Service-PaidAds": Service_PaidAds,
+    "Service-Branding": Service_Branding,
+    "Service-Funnels": Service_Funnels,
 }
 
 export const pagesConfig = {

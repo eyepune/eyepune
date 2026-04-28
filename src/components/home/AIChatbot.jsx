@@ -38,6 +38,22 @@ export default function AIChatbot() {
         setIsLoading(true);
 
         try {
+            // Lead Capture Logic
+            const emailMatch = input.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+            const phoneMatch = input.match(/(\+91|91|0)?[6-9]\d{9}/);
+            
+            if (emailMatch || phoneMatch) {
+                const { supabase } = await import('@/integrations/supabase/client');
+                await supabase.from('leads').upsert([{
+                    full_name: 'Chatbot Prospect',
+                    email: emailMatch?.[0] || null,
+                    phone: phoneMatch?.[0] || null,
+                    source: 'chatbot',
+                    status: 'new',
+                    notes: `Captured via Chatbot: "${input}"`
+                }], { onConflict: 'email' });
+            }
+
             const context = messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n');
             const prompt = `You are "EyE BoT", a professional AI Sales & Growth Assistant for "EyE PunE" - Pune's premier AI-powered digital marketing agency.
 

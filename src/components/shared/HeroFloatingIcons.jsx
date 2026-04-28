@@ -54,7 +54,7 @@ export default function HeroFloatingIcons({ opacity = 0.25 }) {
                     className="absolute text-white"
                     style={{ left: item.x, top: item.y }}
                 >
-                    <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={0.6} />
+                    <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={0.3} />
                 </motion.div>
             ))}
         </div>

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
-import ClientLogos from "@/components/home/ClientLogos";
 import SEOHead, { generateOrganizationSchema } from "@/components/seo/SEOHead";
 import HeroSection from "@/components/home/HeroSection";
 import ServicesSection from "@/components/home/ServicesSection";
@@ -32,11 +31,6 @@ export default function Home() {
 
                 {/* 2. Live Pulse Ticker */}
                 <LivePulse />
-
-                {/* 3. Client logos marquee */}
-                <section className="py-14 border-b border-white/[0.05] bg-[#040404]">
-                    <ClientLogos />
-                </section>
 
                 {/* 3. Services — editorial list layout */}
                 <ServicesSection />

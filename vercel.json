@@ -4,29 +4,11 @@
   "installCommand": "npm install",
   "outputDirectory": ".next",
   "rewrites": [
-    {
-      "source": "/Service_SocialMedia",
-      "destination": "/Service_SocialMedia"
-    },
-    {
-      "source": "/Service_WebDev",
-      "destination": "/Service_WebDev"
-    },
-    {
-      "source": "/Service_AI",
-      "destination": "/Service_AI"
-    },
-    {
-      "source": "/Service_PaidAds",
-      "destination": "/Service_PaidAds"
-    },
-    {
-      "source": "/Service_Branding",
-      "destination": "/Service_Branding"
-    },
-    {
-      "source": "/Service_Funnels",
-      "destination": "/Service_Funnels"
-    }
+    { "source": "/Service-SocialMedia", "destination": "/Service-SocialMedia" },
+    { "source": "/Service-WebDev", "destination": "/Service-WebDev" },
+    { "source": "/Service-AI", "destination": "/Service-AI" },
+    { "source": "/Service-PaidAds", "destination": "/Service-PaidAds" },
+    { "source": "/Service-Branding", "destination": "/Service-Branding" },
+    { "source": "/Service-Funnels", "destination": "/Service-Funnels" }
   ]
 }

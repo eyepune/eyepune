@@ -2,13 +2,13 @@ import React from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-// Fallback logos using actual client names — displayed when DB has no logos
+// Updated partner logos using the provided assets
 const FALLBACK_LOGOS = [
-    { id: '1', company_name: 'Client 1', logo_url: '/logos/media__1776429958339.png', website_url: null, is_active: true, display_order: 1 },
-    { id: '2', company_name: 'Client 2', logo_url: '/logos/media__1776429958484.jpg', website_url: null, is_active: true, display_order: 2 },
-    { id: '3', company_name: 'Client 3', logo_url: '/logos/media__1776429958559.png', website_url: null, is_active: true, display_order: 3 },
-    { id: '4', company_name: 'Client 4', logo_url: '/logos/media__1776429958611.png', website_url: null, is_active: true, display_order: 4 },
-    { id: '5', company_name: 'Client 5', logo_url: '/logos/media__1776429958637.jpg', website_url: null, is_active: true, display_order: 5 },
+    { id: '1', company_name: 'Orbit Solutions', logo_url: '/logos/partner_1.svg', website_url: null, is_active: true, display_order: 1 },
+    { id: '2', company_name: 'Nexus Tech', logo_url: '/logos/partner_2.svg', website_url: null, is_active: true, display_order: 2 },
+    { id: '3', company_name: 'Magniflex', logo_url: '/logos/partner_3.svg', website_url: null, is_active: true, display_order: 3 },
+    { id: '4', company_name: 'Flow Dynamics', logo_url: '/logos/partner_4.svg', website_url: null, is_active: true, display_order: 4 },
+    { id: '5', company_name: 'Body Perfect', logo_url: '/logos/partner_5.svg', website_url: null, is_active: true, display_order: 5 },
     { id: '6', company_name: 'CloudNine Systems', logo_url: 'https://ui-avatars.com/api/?name=CN&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 6 },
     { id: '7', company_name: 'NexGen Innovations', logo_url: 'https://ui-avatars.com/api/?name=NG&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 7 },
     { id: '8', company_name: 'SwiftOps', logo_url: 'https://ui-avatars.com/api/?name=SO&background=1a1a2e&color=e94560&size=128&font-size=0.4', website_url: null, is_active: true, display_order: 8 },

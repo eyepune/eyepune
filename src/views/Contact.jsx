@@ -33,15 +33,15 @@ export default function Contact() {
 
         setIsSubmitting(true);
         try {
-            // 1. Save inquiry to Supabase
-            const { error: dbError } = await supabase.from('inquiries').insert([{
+            // 1. Save lead to Supabase CRM
+            const { error: dbError } = await supabase.from('leads').insert([{
                 full_name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
                 company: formData.company,
-                service_interest: formData.service_interest,
-                message: formData.message,
-                status: 'new'
+                source: 'website',
+                status: 'new',
+                notes: `Service Interest: ${formData.service_interest}\nMessage: ${formData.message}`
             }]);
             if (dbError) throw dbError;
 
