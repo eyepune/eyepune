@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Target, Heart, Zap, Users, ArrowRight, CheckCircle2, Shield, Cpu } from 'lucide-react';
+import { Target, Heart, Zap, Users, ArrowRight, CheckCircle2, Shield, Cpu, Bot, Sparkles, Command, Globe, Code, Database, MessageCircle, Instagram, Facebook, Linkedin, Twitter, Hash, ShieldCheck } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
@@ -58,6 +58,30 @@ export default function About() {
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%)' }}
                 />
+
+                {/* Floating Tech Symbols */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+                    {[
+                        { Icon: Bot, x: "10%", y: "20%", delay: 0 },
+                        { Icon: Zap, x: "85%", y: "15%", delay: 1 },
+                        { Icon: Sparkles, x: "70%", y: "40%", delay: 2 },
+                        { Icon: Command, x: "20%", y: "60%", delay: 3 },
+                        { Icon: Globe, x: "40%", y: "10%", delay: 4 },
+                        { Icon: Code, x: "60%", y: "15%", delay: 5 },
+                        { Icon: Database, x: "80%", y: "70%", delay: 1.5 },
+                        { Icon: MessageCircle, x: "5%", y: "80%", delay: 2.5 },
+                    ].map((item, i) => (
+                        <motion.div
+                            key={i}
+                            animate={{ y: [0, -20, 0], opacity: [0.1, 0.3, 0.1] }}
+                            transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
+                            className="absolute text-red-500"
+                            style={{ left: item.x, top: item.y }}
+                        >
+                            <item.Icon className="w-12 h-12 md:w-16 md:h-16" strokeWidth={0.5} />
+                        </motion.div>
+                    ))}
+                </div>
 
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">

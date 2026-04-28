@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Phone, MapPin, Send, CheckCircle, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, ArrowRight, Bot, Zap, Sparkles, Command, Globe, Code, Database, MessageCircle, Instagram, Facebook, Linkedin, Twitter, Hash, ShieldCheck } from 'lucide-react';
 
 export default function Contact() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -121,6 +121,30 @@ export default function Contact() {
                 <div className="absolute top-0 left-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%)' }}
                 />
+
+                {/* Floating Icons */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+                    {[
+                        { Icon: Mail, x: "15%", y: "20%", delay: 0 },
+                        { Icon: Phone, x: "80%", y: "15%", delay: 1 },
+                        { Icon: MessageCircle, x: "10%", y: "70%", delay: 2 },
+                        { Icon: MapPin, x: "85%", y: "60%", delay: 3 },
+                        { Icon: Bot, x: "40%", y: "10%", delay: 4 },
+                        { Icon: Zap, x: "60%", y: "25%", delay: 5 },
+                        { Icon: Database, x: "25%", y: "85%", delay: 1.5 },
+                        { Icon: Instagram, x: "50%", y: "45%", delay: 2.5 },
+                    ].map((item, i) => (
+                        <motion.div
+                            key={i}
+                            animate={{ y: [0, -20, 0], opacity: [0.1, 0.3, 0.1] }}
+                            transition={{ duration: 7 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
+                            className="absolute text-red-500"
+                            style={{ left: item.x, top: item.y }}
+                        >
+                            <item.Icon className="w-12 h-12 md:w-16 md:h-16" strokeWidth={0.5} />
+                        </motion.div>
+                    ))}
+                </div>
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-2xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>

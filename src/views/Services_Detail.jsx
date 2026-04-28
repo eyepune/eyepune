@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Users, Globe, Bot, BarChart3, Zap, ArrowRight, CheckCircle2, ChevronRight } from 'lucide-react';
+import { TrendingUp, Users, Globe, Bot, BarChart3, Zap, ArrowRight, CheckCircle2, ChevronRight, Sparkles, Command, Code, Database, MessageCircle, Instagram, Facebook, Linkedin, Twitter, Hash, ShieldCheck } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
@@ -105,6 +105,30 @@ export default function Services_Detail() {
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
+
+                {/* Floating Tech Icons */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+                    {[
+                        { Icon: Bot, x: "5%", y: "20%", delay: 0 },
+                        { Icon: Zap, x: "90%", y: "15%", delay: 1 },
+                        { Icon: Globe, x: "75%", y: "40%", delay: 2 },
+                        { Icon: Code, x: "15%", y: "65%", delay: 3 },
+                        { Icon: TrendingUp, x: "40%", y: "10%", delay: 4 },
+                        { Icon: BarChart3, x: "60%", y: "20%", delay: 5 },
+                        { Icon: Database, x: "30%", y: "80%", delay: 1.5 },
+                        { Icon: Sparkles, x: "50%", y: "45%", delay: 2.5 },
+                    ].map((item, i) => (
+                        <motion.div
+                            key={i}
+                            animate={{ y: [0, -30, 0], opacity: [0.1, 0.3, 0.1] }}
+                            transition={{ duration: 6 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
+                            className="absolute text-red-500"
+                            style={{ left: item.x, top: item.y }}
+                        >
+                            <item.Icon className="w-12 h-12 md:w-16 md:h-16" strokeWidth={0.5} />
+                        </motion.div>
+                    ))}
+                </div>
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-3xl">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>

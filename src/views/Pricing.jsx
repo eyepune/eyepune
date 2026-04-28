@@ -3,7 +3,7 @@ import SEOHead from "@/components/seo/SEOHead";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { motion } from 'framer-motion';
-import { Check, Sparkles, ArrowRight, Zap, Globe, Share2, Code, TrendingUp, Palette, Bot } from 'lucide-react';
+import { Check, Sparkles, ArrowRight, Zap, Globe, Share2, Code, TrendingUp, Palette, Bot, Command, Database, MessageCircle, Instagram, Facebook, Linkedin, Twitter, Hash, ShieldCheck } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CheckoutModal from "@/components/checkout/CheckoutModal";
 import Link from 'next/link';
@@ -48,6 +48,30 @@ export default function Pricing() {
                 <div className="absolute inset-0 opacity-[0.03]"
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
+
+                {/* Floating Icons */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+                    {[
+                        { Icon: Zap, x: "5%", y: "15%", delay: 0 },
+                        { Icon: Code, x: "90%", y: "20%", delay: 1 },
+                        { Icon: TrendingUp, x: "15%", y: "70%", delay: 2 },
+                        { Icon: Bot, x: "80%", y: "65%", delay: 3 },
+                        { Icon: Globe, x: "45%", y: "10%", delay: 4 },
+                        { Icon: Share2, x: "65%", y: "15%", delay: 5 },
+                        { Icon: Database, x: "30%", y: "80%", delay: 1.5 },
+                        { Icon: Sparkles, x: "50%", y: "45%", delay: 2.5 },
+                    ].map((item, i) => (
+                        <motion.div
+                            key={i}
+                            animate={{ y: [0, -25, 0], opacity: [0.1, 0.3, 0.1] }}
+                            transition={{ duration: 6 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
+                            className="absolute text-red-500"
+                            style={{ left: item.x, top: item.y }}
+                        >
+                            <item.Icon className="w-12 h-12 md:w-16 md:h-16" strokeWidth={0.5} />
+                        </motion.div>
+                    ))}
+                </div>
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
                     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-8">

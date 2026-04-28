@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LayoutDashboard, LogOut, LogIn, ChevronDown, Bot } from 'lucide-react';
+import { 
+    Menu, X, LayoutDashboard, LogOut, LogIn, ChevronDown, Bot, 
+    Home as HomeIcon, Briefcase, Tag, BookOpen, Users, Mail, Sparkles, Calendar 
+} from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import Logo from "@/components/shared/Logo";
@@ -17,12 +20,12 @@ import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
 import CustomCursor from "@/components/shared/CustomCursor";
 
 const publicNavLinks = [
-    { name: 'Home', page: 'Home' },
-    { name: 'Services', page: 'Services_Detail' },
-    { name: 'Pricing', page: 'Pricing' },
-    { name: 'Blog', page: 'Blog' },
-    { name: 'About', page: 'About' },
-    { name: 'Contact', page: 'Contact' },
+    { name: 'Home', page: 'Home', icon: HomeIcon },
+    { name: 'Services', page: 'Services_Detail', icon: Briefcase },
+    { name: 'Pricing', page: 'Pricing', icon: Tag },
+    { name: 'Blog', page: 'Blog', icon: BookOpen },
+    { name: 'About', page: 'About', icon: Users },
+    { name: 'Contact', page: 'Contact', icon: Mail },
 ];
 
 const adminNavLinks = [
@@ -150,12 +153,13 @@ function LayoutContent({ children, currentPageName }) {
                                     <Link
                                         key={link.page}
                                         href={createPageUrl(link.page)}
-                                        className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all ${
+                                        className={`group relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all ${
                                             currentPageName === link.page
                                                 ? 'text-white bg-white/[0.07]'
                                                 : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
                                         }`}
                                     >
+                                        {link.icon && <link.icon className={`w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110 ${currentPageName === link.page ? 'text-red-500' : 'text-gray-500 group-hover:text-red-400'}`} />}
                                         {link.name}
                                         {currentPageName === link.page && (
                                             <motion.span
