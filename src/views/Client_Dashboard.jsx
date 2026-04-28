@@ -153,29 +153,67 @@ export default function Client_Dashboard() {
     if (projects.length === 0) {
         return (
             <ClientLayout>
-                <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-6">
-                    <div className="w-24 h-24 bg-red-600/10 rounded-full flex items-center justify-center mb-8 border border-red-600/20">
-                        <Zap className="w-10 h-10 text-red-600 animate-pulse" />
-                    </div>
-                    <h1 className="text-4xl font-black text-white mb-4">Welcome to your <span className="text-red-500">Elite Command Center</span></h1>
-                    <p className="text-gray-400 text-lg max-w-lg mb-10">
-                        We're currently setting up your growth engine. Once your project is initialized, you'll see real-time metrics, milestones, and deliverables here.
-                    </p>
-                    <div className="flex flex-wrap gap-4 justify-center">
-                        <Button 
-                            onClick={() => setConsultationDialogOpen(true)}
-                            className="bg-red-600 hover:bg-red-700 text-white rounded-2xl px-8 h-14 font-bold text-lg"
-                        >
-                            <Phone className="w-5 h-5 mr-2" /> Book Kickoff Call
-                        </Button>
-                        <Button 
-                            variant="outline"
-                            onClick={() => setShowSetupWizard(true)}
-                            className="border-white/10 text-white hover:bg-white/5 rounded-2xl px-8 h-14 font-bold text-lg"
-                        >
-                            <Settings className="w-5 h-5 mr-2" /> View Setup Wizard
-                        </Button>
-                    </div>
+                <div className="min-h-[85vh] flex flex-col items-center justify-center py-20 px-6 overflow-hidden relative">
+                    {/* Background Decorative Elements */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/[0.03] blur-[120px] rounded-full pointer-events-none" />
+                    
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center relative z-10 max-w-4xl"
+                    >
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 mb-8">
+                            <Sparkles className="w-4 h-4 text-red-500 animate-pulse" />
+                            <span className="text-[10px] uppercase font-black tracking-[0.3em] text-red-500">System Initializing</span>
+                        </div>
+                        
+                        <h1 className="text-6xl md:text-7xl font-black text-white tracking-tighter mb-6 leading-none">
+                            Welcome to your <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-[length:200%_auto] animate-gradient">Elite Command Center</span>
+                        </h1>
+                        
+                        <p className="text-gray-400 text-xl font-medium max-w-2xl mx-auto mb-16 leading-relaxed">
+                            Your dedicated growth engine is being calibrated by our engineers. 
+                            Complete the onboarding to unlock real-time metrics, project files, and direct strategist access.
+                        </p>
+
+                        {/* Onboarding Roadmap */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 text-left">
+                            {[
+                                { step: '01', title: 'Strategy Sync', desc: 'Book your kickoff call with your dedicated strategist.', status: 'pending' },
+                                { step: '02', title: 'Asset Handoff', desc: 'Provide necessary access and branding assets via Setup Wizard.', status: 'upcoming' },
+                                { step: '03', title: 'Launch Engine', desc: 'Monitor your first campaign live in this dashboard.', status: 'upcoming' }
+                            ].map((s, i) => (
+                                <div key={i} className="p-8 rounded-[2.5rem] bg-[#0c0c0c]/60 border border-white/[0.05] relative overflow-hidden group hover:border-red-500/20 transition-all">
+                                    <div className="text-4xl font-black text-white/5 absolute top-4 right-6 group-hover:text-red-500/10 transition-colors">{s.step}</div>
+                                    <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
+                                    <p className="text-sm text-gray-500 leading-relaxed mb-6">{s.desc}</p>
+                                    <Badge className={cn(
+                                        "px-3 py-1 text-[9px] uppercase font-black",
+                                        s.status === 'pending' ? "bg-red-500/20 text-red-500 border-0" : "bg-white/5 text-gray-600 border-0"
+                                    )}>
+                                        {s.status}
+                                    </Badge>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="flex flex-wrap gap-4 justify-center">
+                            <Button 
+                                onClick={() => setConsultationDialogOpen(true)}
+                                className="bg-red-600 hover:bg-red-700 text-white rounded-[1.5rem] px-10 h-16 font-black text-lg shadow-[0_0_40px_rgba(220,38,38,0.3)] hover:shadow-[0_0_60px_rgba(220,38,38,0.5)] transition-all"
+                            >
+                                <Phone className="w-5 h-5 mr-3" /> Book Kickoff Call
+                            </Button>
+                            <Button 
+                                variant="outline"
+                                onClick={() => setShowSetupWizard(true)}
+                                className="border-white/10 text-white hover:bg-white/5 rounded-[1.5rem] px-10 h-16 font-black text-lg backdrop-blur-xl"
+                            >
+                                <Zap className="w-5 h-5 mr-3 text-orange-500" /> Start Setup Wizard
+                            </Button>
+                        </div>
+                    </motion.div>
                 </div>
             </ClientLayout>
         );
@@ -272,17 +310,60 @@ export default function Client_Dashboard() {
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: 20 }}
-                                        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                                        className="space-y-8"
                                     >
-                                        {widgetOrder.map(widgetId => (
-                                            <div key={widgetId} className="col-span-1">
-                                                {widgetId === 'progress' && <ProgressWidget project={selectedProject} />}
-                                                {widgetId === 'milestones' && <MilestonesWidget milestones={milestones} />}
-                                                {widgetId === 'deadlines' && <DeadlinesWidget milestones={milestones} tasks={tasks} />}
-                                                {widgetId === 'budget' && <BudgetWidget project={selectedProject} />}
-                                                {widgetId === 'activity' && <ActivityWidget project={selectedProject} />}
+                                        {/* Growth Trajectory Chart */}
+                                        <Card className="bg-[#0c0c0c]/80 border border-white/[0.05] rounded-[3rem] p-8 overflow-hidden relative">
+                                            <div className="absolute top-0 right-0 p-8 opacity-20">
+                                                <TrendingUp className="w-24 h-24 text-red-500" />
                                             </div>
-                                        ))}
+                                            <div className="mb-8">
+                                                <h3 className="text-xl font-black text-white flex items-center gap-3">
+                                                    Growth Trajectory
+                                                    <Badge className="bg-red-500/10 text-red-500 border-0 text-[10px] uppercase font-black">Forecast</Badge>
+                                                </h3>
+                                                <p className="text-gray-500 text-sm mt-1">Projected lead volume and conversion growth based on current strategy.</p>
+                                            </div>
+                                            <div className="h-[300px] w-full">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <AreaChart data={[
+                                                        { name: 'Week 1', leads: 400, conv: 240 },
+                                                        { name: 'Week 2', leads: 600, conv: 350 },
+                                                        { name: 'Week 3', leads: 900, conv: 580 },
+                                                        { name: 'Week 4', leads: 1400, conv: 890 },
+                                                        { name: 'Week 5', leads: 2100, conv: 1300 },
+                                                        { name: 'Week 6', leads: 2800, conv: 1900 },
+                                                    ]}>
+                                                        <defs>
+                                                            <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
+                                                                <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                                                                <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                                                        <XAxis dataKey="name" stroke="#666" fontSize={10} axisLine={false} tickLine={false} />
+                                                        <YAxis hide />
+                                                        <Tooltip 
+                                                            contentStyle={{ backgroundColor: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                                                            itemStyle={{ color: '#fff' }}
+                                                        />
+                                                        <Area type="monotone" dataKey="leads" stroke="#ef4444" strokeWidth={4} fillOpacity={1} fill="url(#colorLeads)" />
+                                                    </AreaChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </Card>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            {widgetOrder.map(widgetId => (
+                                                <div key={widgetId} className="col-span-1">
+                                                    {widgetId === 'progress' && <ProgressWidget project={selectedProject} />}
+                                                    {widgetId === 'milestones' && <MilestonesWidget milestones={milestones} />}
+                                                    {widgetId === 'deadlines' && <DeadlinesWidget milestones={milestones} tasks={tasks} />}
+                                                    {widgetId === 'budget' && <BudgetWidget project={selectedProject} />}
+                                                    {widgetId === 'activity' && <ActivityWidget project={selectedProject} />}
+                                                </div>
+                                            ))}
+                                        </div>
                                     </motion.div>
                                 </TabsContent>
 

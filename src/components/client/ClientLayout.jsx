@@ -139,28 +139,46 @@ export default function ClientLayout({ children }) {
                             <Menu className="w-6 h-6" />
                         </button>
                         
-                        <div className="hidden sm:flex items-center gap-2">
-                           <Sparkles className="w-4 h-4 text-red-500 animate-pulse" />
-                           <span className="text-[10px] uppercase font-black tracking-[0.3em] text-gray-500">Premium Growth Engine</span>
+                        <div className="hidden sm:flex items-center gap-4">
+                           <div className="flex -space-x-2">
+                               {[1, 2, 3].map(i => (
+                                   <div key={i} className="w-6 h-6 rounded-full border-2 border-[#050505] bg-red-600/20 flex items-center justify-center">
+                                       <Sparkles className="w-3 h-3 text-red-500" />
+                                   </div>
+                               ))}
+                           </div>
+                           <span className="text-[10px] uppercase font-black tracking-[0.3em] text-gray-500">EyE Vision Engine <span className="text-red-500/50">v4.4</span></span>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                        <NotificationCenter user={user} />
-                        
-                        <div className="h-10 w-px bg-white/[0.06]" />
-                        
-                        <div className="flex items-center gap-4 cursor-pointer group">
-                            <div className="hidden md:block text-right">
-                                <p className="text-sm font-black text-white group-hover:text-red-500 transition-colors tracking-tight">{user?.full_name || 'Partner'}</p>
-                                <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-0.5">{user?.email}</p>
+                    <div className="flex items-center gap-4 sm:gap-8">
+                        <div className="hidden xl:flex items-center gap-4">
+                            <Button 
+                                variant="ghost" 
+                                className="text-gray-500 hover:text-white rounded-xl text-xs font-bold uppercase tracking-widest px-4"
+                                onClick={() => window.location.href = '/Booking'}
+                            >
+                                <Calendar className="w-4 h-4 mr-2" /> Vision Sync
+                            </Button>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <NotificationCenter user={user} />
+                            
+                            <div className="h-10 w-px bg-white/[0.06] hidden sm:block" />
+                            
+                            <div className="flex items-center gap-4 cursor-pointer group">
+                                <div className="hidden md:block text-right">
+                                    <p className="text-sm font-black text-white group-hover:text-red-500 transition-colors tracking-tight">{user?.full_name || 'Partner'}</p>
+                                    <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-0.5">{user?.email}</p>
+                                </div>
+                                <Avatar className="h-12 w-12 border border-white/[0.08] ring-4 ring-transparent group-hover:ring-red-500/10 transition-all duration-500 scale-100 group-hover:scale-105">
+                                    <AvatarImage src={user?.avatar_url} />
+                                    <AvatarFallback className="bg-red-600/10 text-red-500 font-black text-lg">
+                                        {user?.full_name?.charAt(0) || user?.email?.charAt(0) || 'P'}
+                                    </AvatarFallback>
+                                </Avatar>
                             </div>
-                            <Avatar className="h-12 w-12 border border-white/[0.08] ring-4 ring-transparent group-hover:ring-red-500/10 transition-all duration-500 scale-100 group-hover:scale-105">
-                                <AvatarImage src={user?.avatar_url} />
-                                <AvatarFallback className="bg-red-600/10 text-red-500 font-black text-lg">
-                                    {user?.full_name?.charAt(0) || user?.email?.charAt(0) || 'P'}
-                                </AvatarFallback>
-                            </Avatar>
                         </div>
                     </div>
                 </header>

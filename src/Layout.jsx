@@ -133,14 +133,14 @@ function LayoutContent({ children, currentPageName }) {
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex items-center justify-between h-20">
 
-                        {/* Logo — only show on public/client pages */}
-                        {!isAdminPage && (
+                        {/* Logo — only show on public pages */}
+                        {!isAdminPage && !isClientPage && (
                         <Link href={createPageUrl("Home")} className="flex-shrink-0">
                             <Logo variant="dark" size="sm" />
                         </Link>
                         )}
-                        {isAdminPage && (
-                        <span className="text-sm font-semibold text-gray-400 tracking-widest uppercase">Admin Panel</span>
+                        {(isAdminPage || isClientPage) && (
+                        <span className="text-sm font-semibold text-gray-400 tracking-widest uppercase">{isAdminPage ? 'Admin Panel' : 'Client Command Center'}</span>
                         )}
 
                         {/* Desktop nav — public */}
