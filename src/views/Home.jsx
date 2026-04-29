@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
-import SEOHead, { generateOrganizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { generateOrganizationSchema, generateBreadcrumbSchema } from "@/components/seo/SEOHead";
 import HeroSection from "@/components/home/HeroSection";
 import ServicesSection from "@/components/home/ServicesSection";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
