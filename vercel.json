@@ -10,5 +10,11 @@
     { "source": "/Service-PaidAds", "destination": "/Service-PaidAds" },
     { "source": "/Service-Branding", "destination": "/Service-Branding" },
     { "source": "/Service-Funnels", "destination": "/Service-Funnels" }
+  ],
+  "crons": [
+    {
+      "path": "/api/automation/ai-blog",
+      "schedule": "0 10 * * *"
+    }
   ]
 }
