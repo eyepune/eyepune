@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
+// Using default Node.js runtime for better compatibility
 
 export const alt = 'EyE PunE — AI-Powered Digital Growth';
 export const size = {

@@ -4,6 +4,8 @@
   "installCommand": "npm install",
   "outputDirectory": ".next",
   "rewrites": [
+    { "source": "/opengraph-image.png", "destination": "/opengraph-image" },
+    { "source": "/twitter-image.png", "destination": "/twitter-image" },
     { "source": "/Service-SocialMedia", "destination": "/Service-SocialMedia" },
     { "source": "/Service-WebDev", "destination": "/Service-WebDev" },
     { "source": "/Service-AI", "destination": "/Service-AI" },

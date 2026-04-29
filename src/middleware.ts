@@ -5,11 +5,19 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export async function middleware(request: NextRequest) {
+  // Bypass middleware for crawlers
+  const userAgent = request.headers.get("user-agent") || "";
+  const isBot = /bot|googlebot|crawler|spider|robot|crawling|facebookexternalhit|linkedinbot/i.test(userAgent);
+  
   let supabaseResponse = NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
+
+  if (isBot) {
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(
     supabaseUrl!,
