@@ -34,10 +34,10 @@ export default function SEOHead({
         setMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
         setMetaTag('viewport', 'width=device-width, initial-scale=1.0');
         
-        // Open Graph tags
+        // Open Graph tags (handled by App Router dynamically)
         setMetaTag('og:title', title, true);
         setMetaTag('og:description', description, true);
-        setMetaTag('og:image', ogImage, true);
+        // setMetaTag('og:image', ogImage, true);
         setMetaTag('og:type', 'website', true);
         setMetaTag('og:site_name', 'EyE PunE', true);
         setMetaTag('og:locale', 'en_IN', true);
@@ -46,11 +46,11 @@ export default function SEOHead({
             setMetaTag('og:url', canonicalUrl, true);
         }
 
-        // Twitter Card tags
+        // Twitter Card tags (handled by App Router dynamically)
         setMetaTag('twitter:card', 'summary_large_image');
         setMetaTag('twitter:title', title);
         setMetaTag('twitter:description', description);
-        setMetaTag('twitter:image', ogImage);
+        // setMetaTag('twitter:image', ogImage);
         setMetaTag('twitter:site', '@eyepune');
         setMetaTag('twitter:creator', '@eyepune');
 

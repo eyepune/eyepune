@@ -49,12 +49,12 @@ export async function generateMetadata({ params, searchParams }) {
     openGraph: {
       title,
       description,
-      images: [{ url: imageUrl }],
+      ...(imageUrl !== '/opengraph-image.png' && { images: [{ url: imageUrl }] }),
     },
     twitter: {
       title,
       description,
-      images: [imageUrl],
+      ...(imageUrl !== '/opengraph-image.png' && { images: [imageUrl] }),
     }
   };
 }
