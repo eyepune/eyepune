@@ -124,5 +124,19 @@ async function generateAndPostBlog(audience) {
 
     if (error) throw error;
 
+    // 4. Auto-Post to LinkedIn (Social Distribution)
+    try {
+        console.log(`[AI-Blog] Triggering LinkedIn post for: ${newPost.title}`);
+        await supabase.functions.invoke('postBlogToLinkedIn', {
+            body: {
+                event: { type: 'create' },
+                data: newPost,
+                old_data: null
+            }
+        });
+    } catch (linkedInError) {
+        console.warn('[AI-Blog] LinkedIn auto-post failed (skipping):', linkedInError.message);
+    }
+
     return { id: newPost.id, title: newPost.title, audience };
 }
