@@ -41,23 +41,25 @@ function SparkBar({ data = [], color = '#ef4444', label = '' }) {
 
 // ── Donut chart (inline SVG) ────────────────────────────────
 function DonutChart({ segments = [], size = 100 }) {
-    const total = segments.reduce((s, seg) => s + seg.value, 0) || 1;
     const radius = 40;
-    const circumference = 2 * Math.PI * radius;
+    const validRadius = Math.max(0, radius || 0);
+    const circumference = 2 * Math.PI * validRadius;
+    const total = segments.reduce((s, seg) => s + (Number(seg.value) || 0), 0) || 1;
     let offset = 0;
 
     return (
         <svg width={size} height={size} viewBox="0 0 100 100" className="-rotate-90">
-            <circle cx="50" cy="50" r={radius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="12" />
+            <circle cx="50" cy="50" r={validRadius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="12" />
             {segments.map((seg, i) => {
-                const dash = (seg.value / total) * circumference;
-                const gap = circumference - dash;
+                const val = Number(seg.value) || 0;
+                const dash = Math.max(0, (val / total) * circumference);
+                const gap = Math.max(0, circumference - dash);
                 const el = (
                     <circle
                         key={i}
-                        cx="50" cy="50" r={radius}
+                        cx="50" cy="50" r={validRadius}
                         fill="none"
-                        stroke={seg.color}
+                        stroke={seg.color || '#6b7280'}
                         strokeWidth="12"
                         strokeDasharray={`${dash} ${gap}`}
                         strokeDashoffset={-offset}

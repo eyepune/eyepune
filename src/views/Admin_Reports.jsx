@@ -250,7 +250,7 @@ function Admin_Reports() {
                                                 <div 
                                                     className="bg-red-600 h-full flex items-center px-3 text-white text-sm font-medium"
                                                     style={{ 
-                                                        width: `${(challenge.count / assessmentData.totalAssessments) * 100}%`,
+                                                        width: `${(challenge.count / (assessmentData.totalAssessments || 1)) * 100}%`,
                                                         minWidth: '60px'
                                                     }}
                                                 >

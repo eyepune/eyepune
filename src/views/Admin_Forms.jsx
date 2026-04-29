@@ -289,13 +289,28 @@ function Admin_Forms() {
                                                         <span className="text-gray-300">{a.business_name || '-'}</span>
                                                     </td>
                                                     <td className="px-6 py-4 text-center">
-                                                        <div className="inline-flex items-center justify-center relative">
-                                                            <svg className="w-12 h-12 transform -rotate-90">
-                                                                <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-white/10" />
-                                                                <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="4" fill="transparent" strokeDasharray={125.6} strokeDashoffset={125.6 - (125.6 * (a.score || 0)) / 100} className={cn((a.score || 0) >= 70 ? 'text-emerald-500' : (a.score || 0) >= 40 ? 'text-yellow-500' : 'text-red-500')} />
-                                                            </svg>
-                                                            <span className="absolute text-xs font-bold text-white">{a.score || 0}</span>
-                                                        </div>
+                                                         <div className="inline-flex items-center justify-center relative">
+                                                             <svg className="w-12 h-12 transform -rotate-90">
+                                                                 <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-white/10" />
+                                                                 {(() => {
+                                                                     const score = Number(a.score) || 0;
+                                                                     const circumference = 2 * Math.PI * 20;
+                                                                     const offset = circumference - (circumference * score) / 100;
+                                                                     return (
+                                                                         <circle 
+                                                                             cx="24" cy="24" r="20" 
+                                                                             stroke="currentColor" 
+                                                                             strokeWidth="4" 
+                                                                             fill="transparent" 
+                                                                             strokeDasharray={circumference} 
+                                                                             strokeDashoffset={offset} 
+                                                                             className={cn(score >= 70 ? 'text-emerald-500' : score >= 40 ? 'text-yellow-500' : 'text-red-500')} 
+                                                                         />
+                                                                     );
+                                                                 })()}
+                                                             </svg>
+                                                             <span className="absolute text-xs font-bold text-white">{a.score || 0}</span>
+                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <p className="text-gray-400">{a.created_at ? new Date(a.created_at).toLocaleDateString() : 'N/A'}</p>

@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
               id: authUser.id,
               email: authUser.email,
               full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0],
-              role: authUser.email === 'connect@eyepune.com' ? 'admin' : 'client'
+              role: (authUser.email === 'connect@eyepune.com' || authUser.email === 'eyepune.contact@gmail.com') ? 'admin' : 'client'
             }]);
           } catch (e) {
             console.error('Auto-profile creation failed:', e);
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
             id: authUser.id,
             email: authUser.email,
             full_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0],
-            role: authUser.email === 'connect@eyepune.com' ? 'admin' : 'client',
+            role: (authUser.email === 'connect@eyepune.com' || authUser.email === 'eyepune.contact@gmail.com') ? 'admin' : 'client',
             avatar_url: authUser.user_metadata?.avatar_url || null,
           });
           setIsAuthenticated(true);
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Force admin role for master admin email
-      const finalRole = (authUser?.email === 'connect@eyepune.com' || userProfile.email === 'connect@eyepune.com') 
+      const finalRole = (authUser?.email === 'connect@eyepune.com' || userProfile.email === 'connect@eyepune.com' || authUser?.email === 'eyepune.contact@gmail.com' || userProfile.email === 'eyepune.contact@gmail.com') 
         ? 'admin' 
         : (userProfile.role || 'client');
 

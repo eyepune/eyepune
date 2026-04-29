@@ -15,12 +15,10 @@ export async function POST(request) {
         // We store settings in a dedicated 'system_settings' table
         // Schema: id (uuid), key (text, unique), value (text), updated_at (timestamp)
         const { error } = await supabase
-            .from('crm_sync_configs') // Reusing this table as it's meant for configs
+            .from('crm_sync_configs')
             .upsert({ 
-                provider: key, // Using 'provider' column to store the key name (e.g., 'linkedin_token')
-                api_key: value, 
-                status: 'active',
-                updated_at: new Date().toISOString()
+                provider: key,
+                api_key: value
             }, { onConflict: 'provider' });
 
         if (error) throw error;

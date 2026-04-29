@@ -44,7 +44,28 @@ export async function middleware(request: NextRequest) {
 
   // Refresh the session so it doesn't expire
   try {
-    await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Protect Admin Routes
+    const isAdminRoute = request.nextUrl.pathname.startsWith('/Admin_') || 
+                        request.nextUrl.pathname.startsWith('/Admin-') ||
+                        request.nextUrl.pathname === '/Admin_Dashboard';
+
+    if (isAdminRoute) {
+      if (!user) {
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
+      
+      // We can't easily check the 'role' field from the 'users' table in middleware 
+      // without a database query (which we should avoid in middleware for performance).
+      // However, we can check for a specific admin email or a JWT claim if available.
+      // For now, we'll rely on the client-side AdminGuard for the role check,
+      // but blocking unauthenticated users here is a huge first step.
+      const adminEmails = ['connect@eyepune.com', 'eyepune.contact@gmail.com']; 
+      if (!adminEmails.includes(user.email || '')) {
+         return NextResponse.redirect(new URL('/', request.url));
+      }
+    }
   } catch (e) {
     // Ignore session errors for public routes/crawlers
   }
