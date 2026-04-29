@@ -88,9 +88,14 @@ export function generateOrganizationSchema() {
         "@type": ["Organization", "LocalBusiness"],
         "name": "EyE PunE",
         "alternateName": ["EyePune", "EyEPunE", "Eye Pune"],
-        "url": "https://eyepune.com",
-        "logo": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69697d1626923688ef1d9afa/627f406e8_Free_Sample_By_Wix_edited-removebg-preview.png",
-        "description": "Transform your business with comprehensive digital solutions including social media marketing, web development, AI automation, and branding services.",
+        "url": "https://www.eyepune.com",
+        "logo": "https://www.eyepune.com/icon",
+        "description": "Pune-based premier digital agency serving clients across the globe with AI-driven marketing, web development, and sales systems.",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "124"
+        },
         "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+91-9284712033",
