@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-// Using default Node.js runtime for better compatibility
+export const runtime = 'edge';
 
 export const alt = 'EyE PunE — AI-Powered Digital Growth';
 export const size = {
@@ -76,7 +76,6 @@ export default function Image() {
                 stroke="#ef4444" 
                 strokeWidth="5" 
                 strokeLinejoin="round" 
-                style={{ filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))' }}
               />
               {/* Iris */}
               <circle cx="50" cy="55" r="14" stroke="#ef4444" strokeWidth="4" />
