@@ -260,13 +260,16 @@ function AdminBlogContent() {
                                                                     variant="outline"
                                                                     onClick={async () => {
                                                                         try {
-                                                                            const response = await base44.functions.invoke('postBlogToLinkedIn', {
-                                                                                event: { type: 'create' },
-                                                                                data: post,
-                                                                                old_data: null
+                                                                            const res = await fetch('/api/automation/linkedin', {
+                                                                                method: 'POST',
+                                                                                headers: { 'Content-Type': 'application/json' },
+                                                                                body: JSON.stringify({ postId: post.id })
                                                                             });
-                                                                            if (response.data.success) {
-                                                                                alert('Posted to LinkedIn!');
+                                                                            const result = await res.json();
+                                                                            if (result.success) {
+                                                                                alert('Successfully posted to LinkedIn!');
+                                                                            } else {
+                                                                                alert('LinkedIn Error: ' + result.error);
                                                                             }
                                                                         } catch (error) {
                                                                             alert('Error posting to LinkedIn: ' + error.message);
