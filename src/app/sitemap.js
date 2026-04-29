@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 export default async function sitemap() {
-    const baseUrl = 'https://www.eyepune.com';
+    const baseUrl = 'https://eyepune.com';
     const now = new Date();
 
     // Static pages — prioritized for Google

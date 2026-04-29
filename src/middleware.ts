@@ -35,7 +35,11 @@ export async function middleware(request: NextRequest) {
   );
 
   // Refresh the session so it doesn't expire
-  await supabase.auth.getUser();
+  try {
+    await supabase.auth.getUser();
+  } catch (e) {
+    // Ignore session errors for public routes/crawlers
+  }
 
   return supabaseResponse;
 }

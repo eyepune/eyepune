@@ -10,6 +10,7 @@ export const viewport = {
 };
 
 export const metadata = {
+  metadataBase: new URL('https://eyepune.com'),
   title: 'EyE PunE — Connect · Engage · Grow',
   description: 'Full-service digital marketing & AI automation agency based in Pune, India. Social media, web development, branding, paid ads, and AI solutions.',
   keywords: 'digital marketing pune, social media marketing, website development, AI automation, branding, lead generation, eyepune',
@@ -17,16 +18,8 @@ export const metadata = {
   openGraph: {
     title: 'EyE PunE — Connect · Engage · Grow',
     description: 'Pune\'s premier digital agency specializing in AI-driven marketing, web development, and custom automations.',
-    url: 'https://www.eyepune.com/',
+    url: 'https://eyepune.com/',
     siteName: 'EyE PunE',
-    images: [
-      {
-        url: 'https://www.eyepune.com/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'EyE PunE — AI-Powered Digital Growth',
-      },
-    ],
     locale: 'en_IN',
     type: 'website',
   },
@@ -34,7 +27,6 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'EyE PunE — AI-Powered Digital Growth',
     description: 'Pune\'s premier digital agency specializing in AI-driven marketing, web development, and custom automations.',
-    images: ['https://www.eyepune.com/og-image.png'],
   },
   robots: {
     index: true,

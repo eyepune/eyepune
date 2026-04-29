@@ -13,7 +13,7 @@ export async function generateMetadata({ params, searchParams }) {
 
   let title = baseRoute.replace(/-/g, ' ');
   let description = `Explore ${title} at EyE PunE, Pune's premier digital agency.`;
-  let imageUrl = 'https://www.eyepune.com/og-image.png';
+  let imageUrl = '/opengraph-image.png';
 
   // Dynamic SEO for Blog Posts (Fetch from DB for accurate meta tags)
   if (baseRoute === 'Blog-Post' && identifier && !supabaseUrl.includes('placeholder')) {
