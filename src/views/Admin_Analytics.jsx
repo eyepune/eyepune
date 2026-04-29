@@ -129,56 +129,74 @@ function Admin_Analytics() {
                     {/* Monthly Trends */}
                     <div className="bg-card border rounded-xl p-6">
                         <h3 className="text-lg font-bold mb-4">Monthly Trends</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={monthlyData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Line type="monotone" dataKey="leads" stroke="#DC2626" />
-                                <Line type="monotone" dataKey="bookings" stroke="#3B82F6" />
-                            </LineChart>
-                        </ResponsiveContainer>
+                        {monthlyData.every(d => d.leads === 0 && d.bookings === 0) ? (
+                            <div className="h-[300px] flex items-center justify-center border-2 border-dashed border-muted rounded-xl text-muted-foreground italic">
+                                No activity recorded in the last 6 months
+                            </div>
+                        ) : (
+                            <ResponsiveContainer width="100%" height={300}>
+                                <LineChart data={monthlyData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="leads" stroke="#DC2626" />
+                                    <Line type="monotone" dataKey="bookings" stroke="#3B82F6" />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        )}
                     </div>
 
                     {/* Lead Sources */}
                     <div className="bg-card border rounded-xl p-6">
                         <h3 className="text-lg font-bold mb-4">Lead Sources</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <PieChart>
-                                <Pie
-                                    data={leadsBySource}
-                                    cx="50%"
-                                    cy="50%"
-                                    labelLine={false}
-                                    label={(entry) => entry.name}
-                                    outerRadius={80}
-                                    fill="#8884d8"
-                                    dataKey="value"
-                                >
-                                    {leadsBySource.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </ResponsiveContainer>
+                        {leadsBySource.length === 0 ? (
+                            <div className="h-[300px] flex items-center justify-center border-2 border-dashed border-muted rounded-xl text-muted-foreground italic">
+                                Awaiting traffic data
+                            </div>
+                        ) : (
+                            <ResponsiveContainer width="100%" height={300}>
+                                <PieChart>
+                                    <Pie
+                                        data={leadsBySource}
+                                        cx="50%"
+                                        cy="50%"
+                                        labelLine={false}
+                                        label={(entry) => entry.name}
+                                        outerRadius={80}
+                                        fill="#8884d8"
+                                        dataKey="value"
+                                    >
+                                        {leadsBySource.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        )}
                     </div>
                 </div>
 
                 {/* Conversion Funnel */}
                 <div className="bg-card border rounded-xl p-6">
                     <h3 className="text-lg font-bold mb-4">Conversion Funnel</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={conversionData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="stage" />
-                            <YAxis />
-                            <Tooltip />
-                            <Bar dataKey="count" fill="#DC2626" />
-                        </BarChart>
-                    </ResponsiveContainer>
+                    {conversionData.every(d => d.count === 0) ? (
+                        <div className="h-[300px] flex items-center justify-center border-2 border-dashed border-muted rounded-xl text-muted-foreground italic">
+                            No funnel data available
+                        </div>
+                    ) : (
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={conversionData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="stage" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="count" fill="#DC2626" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    )}
                 </div>
             </div>
         </div>
