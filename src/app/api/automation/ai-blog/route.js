@@ -115,8 +115,6 @@ async function generateAndPostBlog(audience) {
             slug,
             featured_image: imageUrl,
             status: 'published',
-            author_name: 'EyE PunE AI',
-            author_email: 'ai@eyepune.com',
             published_date: new Date().toISOString()
         })
         .select()

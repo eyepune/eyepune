@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import AdminGuard from "@/components/admin/AdminGuard";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { motion } from 'framer-motion';
-import { Plus, Send, Pause, Play, BarChart3, Bot, Pencil, Loader2, Mail, Activity, Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Plus, Send, Pause, Play, BarChart3, Bot, Pencil, Loader2, Mail, Activity, Sparkles, AlertCircle, CheckCircle2, Linkedin } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
