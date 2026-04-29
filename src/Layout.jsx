@@ -6,12 +6,14 @@ import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Menu, X, LayoutDashboard, LogOut, LogIn, ChevronDown, Bot, 
-    Home as HomeIcon, Briefcase, Tag, BookOpen, Users, Mail, Sparkles, Calendar 
+    Home as HomeIcon, Briefcase, Tag, BookOpen, Users, Mail, Sparkles, Calendar,
+    Instagram, Linkedin, MessageCircle
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import Logo from "@/components/shared/Logo";
 import { ThemeProvider, useTheme } from "@/components/shared/ThemeToggle";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
 import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
@@ -333,16 +335,22 @@ function LayoutContent({ children, currentPageName }) {
                                 </div>
 
                                 {/* Social */}
-                                <div className="flex gap-3 mt-6">
+                                <div className="flex gap-4 mt-6">
                                     {[
-                                        { label: 'IG', href: 'https://instagram.com/eyepune' },
-                                        { label: 'LI', href: 'https://linkedin.com/company/eyepune' },
-                                        { label: 'WA', href: 'https://wa.me/919284712033' },
+                                        { icon: Instagram, href: 'https://instagram.com/eyepune', color: 'hover:text-pink-500' },
+                                        { icon: Linkedin, href: 'https://linkedin.com/company/eyepune', color: 'hover:text-blue-500' },
+                                        { icon: MessageCircle, href: 'https://wa.me/919284712033', color: 'hover:text-emerald-500' },
                                     ].map((s, i) => (
                                         <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                                             whileHover={{ y: -3, scale: 1.1 }}
-                                            className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] hover:border-red-500/40 hover:bg-red-500/10 flex items-center justify-center text-gray-500 hover:text-red-400 text-xs font-bold transition-colors"
-                                        >{s.label}</motion.a>
+                                            className={cn(
+                                                "w-10 h-10 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-500 transition-all",
+                                                s.color,
+                                                "hover:bg-white/[0.08] hover:border-white/20"
+                                            )}
+                                        >
+                                            <s.icon className="w-5 h-5" />
+                                        </motion.a>
                                     ))}
                                 </div>
                             </div>
