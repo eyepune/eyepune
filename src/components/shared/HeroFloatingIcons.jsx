@@ -32,8 +32,8 @@ export default function HeroFloatingIcons({ opacity = 0.25 }) {
             className="absolute inset-0 pointer-events-none overflow-hidden"
             style={{ 
                 opacity: 0.25,
-                maskImage: 'radial-gradient(circle at center, black 30%, transparent 90%)',
-                WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 90%)'
+                maskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)'
             }}
         >
             {icons.map((item, i) => (
@@ -41,12 +41,12 @@ export default function HeroFloatingIcons({ opacity = 0.25 }) {
                     key={i}
                     initial={{ opacity: 0 }}
                     animate={{ 
-                        opacity: [0.15, 0.25, 0.15],
-                        y: [0, -40, 0],
-                        rotate: [0, 10, -10, 0]
+                        opacity: 1, // Container handles the 0.25 total
+                        y: [0, -30, 0],
+                        rotate: [0, 15, -15, 0]
                     }}
                     transition={{ 
-                        duration: 10 + Math.random() * 5, 
+                        duration: 12 + Math.random() * 8, 
                         repeat: Infinity, 
                         ease: "easeInOut",
                         delay: item.delay
@@ -54,7 +54,7 @@ export default function HeroFloatingIcons({ opacity = 0.25 }) {
                     className="absolute text-white"
                     style={{ left: item.x, top: item.y }}
                 >
-                    <item.Icon className="w-12 h-12 md:w-20 md:h-20" strokeWidth={0.3} />
+                    <item.Icon className="w-12 h-12 md:w-24 md:h-24 opacity-100" strokeWidth={0.2} />
                 </motion.div>
             ))}
         </div>
