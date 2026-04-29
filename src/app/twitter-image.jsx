@@ -47,67 +47,57 @@ export default async function Image() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '80px',
+            padding: '60px 100px',
             borderRadius: '40px',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
             background: 'rgba(5, 5, 5, 0.9)',
             boxShadow: '0 0 80px rgba(239, 68, 68, 0.15)',
             position: 'relative',
           }}
         >
-          <div style={{ position: 'absolute', top: '20px', left: '20px', width: '30px', height: '30px', borderTop: '3px solid #ef4444', borderLeft: '3px solid #ef4444', borderRadius: '4px' }} />
-          <div style={{ position: 'absolute', top: '20px', right: '20px', width: '30px', height: '30px', borderTop: '3px solid #ef4444', borderRight: '3px solid #ef4444', borderRadius: '4px' }} />
-          <div style={{ position: 'absolute', bottom: '20px', left: '20px', width: '30px', height: '30px', borderBottom: '3px solid #ef4444', borderLeft: '3px solid #ef4444', borderRadius: '4px' }} />
-          <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '30px', height: '30px', borderBottom: '3px solid #ef4444', borderRight: '3px solid #ef4444', borderRadius: '4px' }} />
+          <div style={{ display: 'flex', marginBottom: '30px' }}>
+            <svg width="180" height="180" viewBox="0 0 100 100" fill="none">
+              <g stroke="#ef4444" strokeWidth="4" strokeLinecap="round" opacity="0.8">
+                <line x1="15" y1="47" x2="5" y2="36" />
+                <line x1="27" y1="40" x2="18" y2="28" />
+                <line x1="38" y1="36" x2="33" y2="22" />
+                <line x1="50" y1="35" x2="50" y2="20" />
+                <line x1="62" y1="36" x2="67" y2="22" />
+                <line x1="73" y1="40" x2="82" y2="28" />
+                <line x1="85" y1="47" x2="95" y2="36" />
+              </g>
+              <path d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" stroke="#ef4444" strokeWidth="5" strokeLinejoin="round" />
+              <circle cx="50" cy="55" r="14" stroke="#ef4444" strokeWidth="4" />
+              <circle cx="50" cy="55" r="6" fill="#ef4444" />
+            </svg>
+          </div>
 
           <h1
             style={{
-              fontSize: '120px',
+              fontSize: '90px',
               fontWeight: 900,
               color: '#ffffff',
               margin: 0,
               display: 'flex',
               alignItems: 'center',
-              letterSpacing: '-6px',
-              textShadow: '0 0 30px rgba(239, 68, 68, 0.5)',
+              letterSpacing: '-4px',
             }}
           >
-            EyE<span style={{ color: '#ef4444', marginLeft: '12px' }}>PunE</span>
+            EyE<span style={{ color: '#ef4444', marginLeft: '10px' }}>PunE</span>
           </h1>
 
           <div
             style={{
-              fontSize: '32px',
+              fontSize: '28px',
               fontWeight: 600,
               color: 'rgba(255, 255, 255, 0.6)',
-              letterSpacing: '10px',
+              letterSpacing: '8px',
               textTransform: 'uppercase',
-              marginTop: '20px',
-              borderTop: '1px solid rgba(239, 68, 68, 0.2)',
-              paddingTop: '20px',
+              marginTop: '15px',
             }}
           >
             Connect · Engage · Grow
           </div>
-        </div>
-
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '40px',
-            right: '60px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '24px',
-            color: 'rgba(255, 255, 255, 0.4)',
-            fontSize: '16px',
-            fontWeight: 500,
-            letterSpacing: '1px',
-          }}
-        >
-          <span>AI AUTOMATION</span>
-          <span style={{ color: 'rgba(239, 68, 68, 0.4)' }}>|</span>
-          <span>DIGITAL MARKETING</span>
         </div>
       </div>
     ),

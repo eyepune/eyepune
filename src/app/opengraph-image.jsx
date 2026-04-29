@@ -42,132 +42,101 @@ export default async function Image() {
           }}
         />
 
-        {/* Dynamic Light Rays */}
-        <div
-          style={{
-            position: 'absolute',
-            top: -200,
-            left: -200,
-            width: 600,
-            height: 600,
-            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: -200,
-            right: -200,
-            width: 600,
-            height: 600,
-            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-          }}
-        />
-
-        {/* Central Logo & Brand Container */}
+        {/* Central Brand Container */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '80px',
+            padding: '60px 100px',
             borderRadius: '40px',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
             background: 'rgba(5, 5, 5, 0.9)',
-            boxShadow: '0 0 80px rgba(239, 68, 68, 0.15), inset 0 0 20px rgba(239, 68, 68, 0.05)',
+            boxShadow: '0 0 80px rgba(239, 68, 68, 0.15)',
             position: 'relative',
           }}
         >
-          {/* Decorative Corner Brackets */}
-          <div style={{ position: 'absolute', top: '20px', left: '20px', width: '30px', height: '30px', borderTop: '3px solid #ef4444', borderLeft: '3px solid #ef4444', borderRadius: '4px' }} />
-          <div style={{ position: 'absolute', top: '20px', right: '20px', width: '30px', height: '30px', borderTop: '3px solid #ef4444', borderRight: '3px solid #ef4444', borderRadius: '4px' }} />
-          <div style={{ position: 'absolute', bottom: '20px', left: '20px', width: '30px', height: '30px', borderBottom: '3px solid #ef4444', borderLeft: '3px solid #ef4444', borderRadius: '4px' }} />
-          <div style={{ position: 'absolute', bottom: '20px', right: '20px', width: '30px', height: '30px', borderBottom: '3px solid #ef4444', borderRight: '3px solid #ef4444', borderRadius: '4px' }} />
+          {/* THE EYE LOGO (REPLICATED FROM SVG) */}
+          <div style={{ display: 'flex', marginBottom: '30px', position: 'relative' }}>
+            <svg width="180" height="180" viewBox="0 0 100 100" fill="none">
+              {/* Eyelashes/Rays */}
+              <g stroke="#ef4444" strokeWidth="4" strokeLinecap="round" opacity="0.8">
+                <line x1="15" y1="47" x2="5" y2="36" />
+                <line x1="27" y1="40" x2="18" y2="28" />
+                <line x1="38" y1="36" x2="33" y2="22" />
+                <line x1="50" y1="35" x2="50" y2="20" />
+                <line x1="62" y1="36" x2="67" y2="22" />
+                <line x1="73" y1="40" x2="82" y2="28" />
+                <line x1="85" y1="47" x2="95" y2="36" />
+              </g>
+              {/* Eye Shape */}
+              <path 
+                d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" 
+                stroke="#ef4444" 
+                strokeWidth="5" 
+                strokeLinejoin="round" 
+                style={{ filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))' }}
+              />
+              {/* Iris */}
+              <circle cx="50" cy="55" r="14" stroke="#ef4444" strokeWidth="4" />
+              {/* Pupil */}
+              <circle cx="50" cy="55" r="6" fill="#ef4444" />
+            </svg>
+          </div>
 
           {/* Main Title */}
           <h1
             style={{
-              fontSize: '120px',
+              fontSize: '90px',
               fontWeight: 900,
               color: '#ffffff',
               margin: 0,
               display: 'flex',
               alignItems: 'center',
-              letterSpacing: '-6px',
-              textShadow: '0 0 30px rgba(239, 68, 68, 0.5)',
+              letterSpacing: '-4px',
             }}
           >
-            EyE<span style={{ color: '#ef4444', marginLeft: '12px' }}>PunE</span>
+            EyE<span style={{ color: '#ef4444', marginLeft: '10px' }}>PunE</span>
           </h1>
 
-          {/* Subtitle / Tagline */}
+          {/* Tagline */}
           <div
             style={{
-              fontSize: '32px',
+              fontSize: '28px',
               fontWeight: 600,
               color: 'rgba(255, 255, 255, 0.6)',
-              letterSpacing: '10px',
+              letterSpacing: '8px',
               textTransform: 'uppercase',
-              marginTop: '20px',
-              borderTop: '1px solid rgba(239, 68, 68, 0.2)',
-              paddingTop: '20px',
+              marginTop: '15px',
             }}
           >
             Connect · Engage · Grow
           </div>
         </div>
 
-        {/* Dashboard-style Status Bar */}
+        {/* Dashboard Status Bar */}
         <div
           style={{
             position: 'absolute',
             bottom: '40px',
             width: '100%',
             display: 'flex',
-            justifyContent: 'space-between',
-            padding: '0 60px',
+            justifyContent: 'center',
+            gap: '40px',
             alignItems: 'center',
+            color: 'rgba(255, 255, 255, 0.4)',
+            fontSize: '16px',
+            fontWeight: 700,
+            letterSpacing: '2px',
           }}
         >
-          {/* Left: System Status */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ef4444', boxShadow: '0 0 15px #ef4444' }} />
-            <span style={{ color: '#ef4444', fontSize: '16px', fontWeight: 'bold', letterSpacing: '2px' }}>ELITE COMMAND ACTIVE</span>
-          </div>
-
-          {/* Middle: Capabilities */}
-          <div style={{ display: 'flex', gap: '30px', color: 'rgba(255, 255, 255, 0.4)', fontSize: '14px', fontWeight: 600, letterSpacing: '1px' }}>
-            <span>AI AUTOMATION</span>
-            <span>DIGITAL MARKETING</span>
-            <span>SALES SYSTEMS</span>
-          </div>
-
-          {/* Right: Location/Identity */}
-          <div style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '16px', fontWeight: 700 }}>
-            PUNE, INDIA
-          </div>
+          <span>AI AUTOMATION</span>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
+          <span>DIGITAL MARKETING</span>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
+          <span>SALES SYSTEMS</span>
         </div>
-
-        {/* Abstract Data Nodes (Small glowing dots) */}
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              width: '4px',
-              height: '4px',
-              backgroundColor: '#ef4444',
-              borderRadius: '50%',
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              boxShadow: '0 0 10px #ef4444',
-              opacity: 0.4,
-            }}
-          />
-        ))}
       </div>
     ),
     {
