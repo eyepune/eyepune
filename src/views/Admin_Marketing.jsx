@@ -249,6 +249,37 @@ function Admin_Marketing() {
 
                 <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden group hover:border-white/10 transition-colors">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <CardContent className="p-6 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className={cn(
+                                "w-12 h-12 rounded-2xl flex items-center justify-center border",
+                                systemStatus?.linkedin?.configured ? 'bg-[#0077b5]/10 border-[#0077b5]/20' : 'bg-amber-500/10 border-amber-500/20'
+                            )}>
+                                <Linkedin className={cn("w-6 h-6", systemStatus?.linkedin?.configured ? 'text-[#0077b5]' : 'text-amber-500')} />
+                            </div>
+                            <div>
+                                <p className="text-sm font-bold text-white flex items-center gap-2">
+                                    LinkedIn Integration
+                                    {systemStatus?.linkedin?.configured ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <AlertCircle className="w-3.5 h-3.5 text-amber-500" />}
+                                </p>
+                                <p className="text-xs text-gray-400 mt-1">
+                                    {systemStatus?.linkedin?.configured ? 'Automated posting active' : 'LinkedIn account not linked'}
+                                </p>
+                            </div>
+                        </div>
+                        {!systemStatus?.linkedin?.configured && (
+                            <Button 
+                                onClick={() => toast.info('Please contact support to link your LinkedIn account.')} 
+                                className="h-9 text-xs px-4 bg-[#0077b5] hover:bg-[#00669c] text-white border-0 shadow-lg shadow-[#0077b5]/20"
+                            >
+                                Link Account
+                            </Button>
+                        )}
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden group hover:border-white/10 transition-colors">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <CardContent className="p-6 flex items-center gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                             <Activity className="w-6 h-6 text-blue-500" />

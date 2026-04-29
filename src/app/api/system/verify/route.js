@@ -44,6 +44,11 @@ export async function GET() {
       username: process.env.ZOHO_MAIL_USERNAME || 'connect@eyepune.com'
     };
 
+    // Check LinkedIn Configuration
+    report.linkedin = {
+      configured: !!(process.env.LINKEDIN_ACCESS_TOKEN || process.env.LINKEDIN_CLIENT_ID),
+    };
+
     return Response.json({ success: true, report });
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 500 });
