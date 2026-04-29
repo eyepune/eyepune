@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const supabase = (supabaseUrl && supabaseKey) 
+    ? createClient(supabaseUrl, supabaseKey)
+    : null;
 
 export default async function sitemap() {
     const baseUrl = 'https://www.eyepune.com';
@@ -31,23 +33,25 @@ export default async function sitemap() {
 
     // Dynamic blog post URLs from Supabase
     let blogRoutes = [];
-    try {
-        const { data: posts } = await supabase
-            .from('blog_posts')
-            .select('slug, published_date')
-            .eq('status', 'published')
-            .order('published_date', { ascending: false });
-
-        if (posts) {
-            blogRoutes = posts.map(post => ({
-                url: `${baseUrl}/Blog-Post?id=${post.slug}`,
-                lastModified: post.published_date ? new Date(post.published_date) : now,
-                changeFrequency: 'weekly',
-                priority: 0.75,
-            }));
+    if (supabase) {
+        try {
+            const { data: posts } = await supabase
+                .from('blog_posts')
+                .select('slug, published_date')
+                .eq('status', 'published')
+                .order('published_date', { ascending: false });
+    
+            if (posts) {
+                blogRoutes = posts.map(post => ({
+                    url: `${baseUrl}/Blog-Post?id=${post.slug}`,
+                    lastModified: post.published_date ? new Date(post.published_date) : now,
+                    changeFrequency: 'weekly',
+                    priority: 0.75,
+                }));
+            }
+        } catch (e) {
+            console.warn('[Sitemap] Could not fetch blog posts:', e.message);
         }
-    } catch (e) {
-        console.warn('[Sitemap] Could not fetch blog posts:', e.message);
     }
 
     return [...staticRoutes, ...blogRoutes];
