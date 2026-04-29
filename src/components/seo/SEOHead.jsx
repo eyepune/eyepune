@@ -90,7 +90,11 @@ export function generateOrganizationSchema() {
         "alternateName": ["EyePune", "EyEPunE", "Eye Pune"],
         "url": "https://www.eyepune.com",
         "logo": "https://www.eyepune.com/icon",
+        "image": "https://www.eyepune.com/opengraph-image",
         "description": "Pune-based premier digital agency serving clients across the globe with AI-driven marketing, web development, and sales systems.",
+        "priceRange": "$$",
+        "telephone": "+91-9284712033",
+        "openingHours": "Mo-Sa 10:00-20:00",
         "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "4.9",
@@ -100,19 +104,42 @@ export function generateOrganizationSchema() {
             "@type": "ContactPoint",
             "telephone": "+91-9284712033",
             "contactType": "customer service",
-            "areaServed": "IN",
+            "areaServed": "Global",
             "availableLanguage": ["English", "Hindi"]
         },
         "address": {
             "@type": "PostalAddress",
+            "streetAddress": "Baner",
             "addressLocality": "Pune",
             "addressRegion": "Maharashtra",
+            "postalCode": "411045",
             "addressCountry": "IN"
         },
         "sameAs": [
             "https://instagram.com/eyepune",
-            "https://linkedin.com/company/eyepune"
-        ]
+            "https://linkedin.com/company/eyepune",
+            "https://twitter.com/eyepune",
+            "https://facebook.com/eyepune"
+        ],
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.eyepune.com/Blog?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    };
+}
+
+// Helper function to generate breadcrumb structured data
+export function generateBreadcrumbSchema(items) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": items.map((item, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": item.name,
+            "item": `https://www.eyepune.com${item.path}`
+        }))
     };
 }
 

@@ -7,6 +7,8 @@ import AIChatbot from '@/components/home/AIChatbot';
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
+  themeColor: '#ef4444',
+  colorScheme: 'dark',
 };
 
 export const metadata = {

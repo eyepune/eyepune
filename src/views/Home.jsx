@@ -21,7 +21,10 @@ export default function Home() {
                 description="Pune-based digital agency serving clients across the globe. We combine AI-driven marketing, web development, and sales systems to scale businesses worldwide."
                 keywords="digital marketing agency pune, global marketing agency, social media marketing pune, AI automation pune, lead generation worldwide, branding pune, EyEPunE"
                 canonicalUrl="https://www.eyepune.com"
-                structuredData={generateOrganizationSchema()}
+                structuredData={[
+                    generateOrganizationSchema(),
+                    generateBreadcrumbSchema([{ name: "Home", path: "/" }])
+                ]}
             />
 
             <div className="bg-[#040404] text-white overflow-x-hidden">
