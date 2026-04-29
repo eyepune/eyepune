@@ -10,7 +10,7 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL('https://eyepune.com'),
+  metadataBase: new URL('https://www.eyepune.com'),
   title: 'EyE PunE — Connect · Engage · Grow',
   description: 'Full-service digital marketing & AI automation agency based in Pune, India. Social media, web development, branding, paid ads, and AI solutions.',
   keywords: 'digital marketing pune, social media marketing, website development, AI automation, branding, lead generation, eyepune',
@@ -18,7 +18,7 @@ export const metadata = {
   openGraph: {
     title: 'EyE PunE — Connect · Engage · Grow',
     description: 'Pune\'s premier digital agency specializing in AI-driven marketing, web development, and custom automations.',
-    url: 'https://eyepune.com/',
+    url: 'https://www.eyepune.com/',
     siteName: 'EyE PunE',
     locale: 'en_IN',
     type: 'website',
