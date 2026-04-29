@@ -38,15 +38,20 @@ export async function GET() {
     const { count: adminCount } = await supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'admin');
     report.auth.has_admin = (adminCount || 0) > 0;
 
+    // Check Database Settings for Overrides
+    const { data: dbSettings } = await supabase.from('crm_sync_configs').select('provider, api_key');
+    const dbLinkedIn = dbSettings?.find(s => s.provider === 'linkedin_token')?.api_key;
+    const dbZoho = dbSettings?.find(s => s.provider === 'zoho_config')?.api_key;
+
     // Check Zoho Configuration
     report.zoho = {
-      configured: !!(process.env.ZOHO_REFRESH_TOKEN && process.env.ZOHO_MAIL_ACCOUNT_ID),
+      configured: !!(process.env.ZOHO_REFRESH_TOKEN && process.env.ZOHO_MAIL_ACCOUNT_ID) || !!dbZoho,
       username: process.env.ZOHO_MAIL_USERNAME || 'connect@eyepune.com'
     };
 
     // Check LinkedIn Configuration
     report.linkedin = {
-      configured: !!(process.env.LINKEDIN_ACCESS_TOKEN || process.env.LINKEDIN_CLIENT_ID),
+      configured: !!(process.env.LINKEDIN_ACCESS_TOKEN || process.env.LINKEDIN_CLIENT_ID) || !!dbLinkedIn,
     };
 
     return Response.json({ success: true, report });

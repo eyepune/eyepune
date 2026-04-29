@@ -24,6 +24,8 @@ function Admin_Marketing() {
     const [selectedCampaign, setSelectedCampaign] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingAutomation, setIsEditingAutomation] = useState(false);
+    const [isEditingZoho, setIsEditingZoho] = useState(false);
+    const [isEditingLinkedin, setIsEditingLinkedin] = useState(false);
     const [selectedAutomation, setSelectedAutomation] = useState(null);
     const queryClient = useQueryClient();
 
@@ -234,7 +236,7 @@ function Admin_Marketing() {
                             </div>
                         </div>
                         <Button 
-                            onClick={() => window.open('/api/zoho/auth', '_blank')} 
+                            onClick={() => setIsEditingZoho(true)} 
                             className={cn(
                                 "h-9 text-xs px-4 border-0",
                                 systemStatus?.zoho?.configured 
@@ -242,7 +244,7 @@ function Admin_Marketing() {
                                     : "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white shadow-lg shadow-amber-500/20"
                             )}
                         >
-                            {systemStatus?.zoho?.configured ? 'Re-authorize' : 'Authorize Zoho'}
+                            {systemStatus?.zoho?.configured ? 'Manage Zoho' : 'Authorize Zoho'}
                         </Button>
                     </CardContent>
                 </Card>
@@ -267,14 +269,17 @@ function Admin_Marketing() {
                                 </p>
                             </div>
                         </div>
-                        {!systemStatus?.linkedin?.configured && (
-                            <Button 
-                                onClick={() => toast.info('Please contact support to link your LinkedIn account.')} 
-                                className="h-9 text-xs px-4 bg-[#0077b5] hover:bg-[#00669c] text-white border-0 shadow-lg shadow-[#0077b5]/20"
-                            >
-                                Link Account
-                            </Button>
-                        )}
+                        <Button 
+                            onClick={() => setIsEditingLinkedin(true)} 
+                            className={cn(
+                                "h-9 text-xs px-4 border-0",
+                                systemStatus?.linkedin?.configured 
+                                    ? "bg-white/5 hover:bg-white/10 text-white border border-white/10" 
+                                    : "bg-[#0077b5] hover:bg-[#00669c] text-white shadow-lg shadow-[#0077b5]/20"
+                            )}
+                        >
+                            {systemStatus?.linkedin?.configured ? 'Manage LinkedIn' : 'Link Account'}
+                        </Button>
                     </CardContent>
                 </Card>
 
@@ -536,6 +541,103 @@ function Admin_Marketing() {
                             </Button>
                         </div>
                     </form>
+                </DialogContent>
+            </Dialog>
+            {/* Zoho Integration Modal */}
+            <Dialog open={isEditingZoho} onOpenChange={setIsEditingZoho}>
+                <DialogContent className="bg-[#0c0c0c]/95 backdrop-blur-2xl border-white/10 text-white max-w-md p-0 overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 to-emerald-400" />
+                    <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-white/[0.01]">
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            <Mail className="w-5 h-5 text-emerald-500" /> Zoho Mail Configuration
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="p-6 space-y-6">
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Refresh Token</Label>
+                                <Input id="zoho_token" type="password" placeholder="Enter Zoho Refresh Token" className="bg-[#111] border-white/10 focus:border-emerald-500/50 h-11" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Account ID</Label>
+                                <Input id="zoho_account" placeholder="Enter Zoho Account ID" className="bg-[#111] border-white/10 focus:border-emerald-500/50 h-11" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+                            <Button variant="outline" onClick={() => setIsEditingZoho(false)} className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5">Cancel</Button>
+                            <Button 
+                                onClick={async () => {
+                                    const token = document.getElementById('zoho_token').value;
+                                    const account = document.getElementById('zoho_account').value;
+                                    if (!token || !account) return toast.error('Both fields are required');
+                                    
+                                    const res = await fetch('/api/system/settings', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ key: 'zoho_config', value: JSON.stringify({ token, account }) })
+                                    });
+                                    if (res.ok) {
+                                        toast.success('Zoho settings saved. System is reconnecting...');
+                                        setIsEditingZoho(false);
+                                        queryClient.invalidateQueries(['system-status']);
+                                    } else {
+                                        toast.error('Failed to save settings');
+                                    }
+                                }} 
+                                className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-500/20 border-0 px-8"
+                            >
+                                Save Settings
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            {/* LinkedIn Integration Modal */}
+            <Dialog open={isEditingLinkedin} onOpenChange={setIsEditingLinkedin}>
+                <DialogContent className="bg-[#0c0c0c]/95 backdrop-blur-2xl border-white/10 text-white max-w-md p-0 overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-[#0077b5]" />
+                    <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-white/[0.01]">
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            <Linkedin className="w-5 h-5 text-[#0077b5]" /> LinkedIn Configuration
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="p-6 space-y-6">
+                        <div className="space-y-4">
+                            <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs text-blue-300 leading-relaxed">
+                                Provide your LinkedIn **Permanent Access Token** to enable automated daily blog distribution to your personal or company profile.
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Access Token</Label>
+                                <Input id="linkedin_token" type="password" placeholder="Paste your LinkedIn Access Token" className="bg-[#111] border-white/10 focus:border-[#0077b5]/50 h-11" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+                            <Button variant="outline" onClick={() => setIsEditingLinkedin(false)} className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5">Cancel</Button>
+                            <Button 
+                                onClick={async () => {
+                                    const token = document.getElementById('linkedin_token').value;
+                                    if (!token) return toast.error('Token is required');
+                                    
+                                    const res = await fetch('/api/system/settings', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ key: 'linkedin_token', value: token })
+                                    });
+                                    if (res.ok) {
+                                        toast.success('LinkedIn integration active!');
+                                        setIsEditingLinkedin(false);
+                                        queryClient.invalidateQueries(['system-status']);
+                                    } else {
+                                        toast.error('Failed to save token');
+                                    }
+                                }} 
+                                className="bg-[#0077b5] hover:bg-[#00669c] text-white shadow-lg shadow-[#0077b5]/20 border-0 px-8"
+                            >
+                                Activate Integration
+                            </Button>
+                        </div>
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>
