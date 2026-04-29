@@ -7,11 +7,11 @@ import { createPageUrl } from "@/utils";
 import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
 import SEOHead, { generateOrganizationSchema, generateBreadcrumbSchema } from "@/components/seo/SEOHead";
 import HeroSection from "@/components/home/HeroSection";
+import SuccessTicker from "@/components/home/SuccessTicker";
 import ServicesSection from "@/components/home/ServicesSection";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LexProSection from "@/components/home/LexProSection";
 import CTASection from "@/components/home/CTASection";
-import LivePulse from "@/components/home/LivePulse";
 
 export default function Home() {
     return (
@@ -32,8 +32,8 @@ export default function Home() {
                 {/* 1. Hero — animated eye canvas + typewriter */}
                 <HeroSection />
 
-                {/* 2. Live Pulse Ticker */}
-                <LivePulse />
+                {/* 2. Success Ticker — Live ROI & Social Proof */}
+                <SuccessTicker />
 
                 {/* 3. Services — editorial list layout */}
                 <ServicesSection />

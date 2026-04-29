@@ -172,19 +172,30 @@ export default function HeroSection() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 1 }}
-                            className="flex flex-wrap gap-4 mb-12"
+                            className="w-full max-w-xl mb-12"
                         >
-                            <Link href={createPageUrl("AI_Assessment")}>
-                                <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white rounded-full px-8 py-6 text-lg font-bold shadow-[0_0_30px_rgba(239,68,68,0.3)] transition-all">
-                                    Start AI Assessment
-                                    <ArrowRight className="w-5 h-5 ml-2" />
-                                </Button>
-                            </Link>
-                            <Link href={createPageUrl("Booking")}>
-                                <Button size="lg" variant="outline" className="border-white/10 text-white hover:bg-white/5 rounded-full px-8 py-6 text-lg font-semibold">
-                                    Book Strategy Call
-                                </Button>
-                            </Link>
+                            <div className="relative group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-orange-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                                <div className="relative flex items-center bg-[#111] border border-white/10 rounded-full p-1.5 focus-within:border-red-500/50 transition-all">
+                                    <Globe className="w-5 h-5 text-gray-500 ml-4 hidden sm:block" />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Enter your website URL (e.g. yoursite.com)"
+                                        className="bg-transparent border-none focus:ring-0 text-white text-base py-3 px-4 flex-1 placeholder:text-gray-600 outline-none"
+                                    />
+                                    <Link href={createPageUrl("AI_Assessment")}>
+                                        <Button className="bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8">
+                                            <span className="hidden sm:inline">Claim Free AI Audit</span>
+                                            <span className="sm:hidden">Start</span>
+                                            <ArrowRight className="w-4 h-4 ml-2" />
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </div>
+                            <p className="text-[11px] text-gray-600 mt-4 ml-6 uppercase tracking-widest flex items-center gap-2">
+                                <Zap className="w-3 h-3 text-orange-500" />
+                                Instant AI Analysis · No Credit Card Required
+                            </p>
                         </motion.div>
 
                         {/* Trust markers */}
