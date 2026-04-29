@@ -99,6 +99,21 @@ export default function Image() {
             Connect · Engage · Grow
           </div>
         </div>
+
+        {/* Global Footer */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            color: 'rgba(255, 255, 255, 0.3)',
+            fontSize: '12px',
+            fontWeight: 800,
+            letterSpacing: '4px',
+            textTransform: 'uppercase',
+          }}
+        >
+          Pune-Based · Serving Globally
+        </div>
       </div>
     ),
     {

@@ -137,6 +137,21 @@ export default function Image() {
           <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
           <span>SALES SYSTEMS</span>
         </div>
+
+        {/* Global Footer */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            color: 'rgba(255, 255, 255, 0.3)',
+            fontSize: '12px',
+            fontWeight: 800,
+            letterSpacing: '4px',
+            textTransform: 'uppercase',
+          }}
+        >
+          Pune-Based · Serving Globally
+        </div>
       </div>
     ),
     {
