@@ -17,10 +17,10 @@ export default function Home() {
     return (
         <>
             <SEOHead
-                title="EyE PunE – Digital Marketing Agency Pune | Social Media, Web Dev & AI Automation"
-                description="EyE PunE is Pune's #1 all-in-one digital growth agency. Social media management, website development, AI automation, paid ads and lead generation. 100+ clients. Free AI Assessment."
-                keywords="digital marketing agency pune, social media marketing pune, website development pune, AI automation pune, lead generation pune, branding pune, EyEPunE, eyepune"
-                canonicalUrl="https://eyepune.com"
+                title="EyE PunE – Digital Marketing Agency Pune | Global Growth & AI Automation"
+                description="Pune-based digital agency serving clients across the globe. We combine AI-driven marketing, web development, and sales systems to scale businesses worldwide."
+                keywords="digital marketing agency pune, global marketing agency, social media marketing pune, AI automation pune, lead generation worldwide, branding pune, EyEPunE"
+                canonicalUrl="https://www.eyepune.com"
                 structuredData={generateOrganizationSchema()}
             />
 

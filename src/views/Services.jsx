@@ -45,10 +45,10 @@ export default function Services() {
             <HeroFloatingIcons opacity={0.15} />
 
             <SEOHead
-                title="Service Packages – Social Media, Web & AI Automation Pune | EyE PunE"
-                description="Expert digital growth packages for Pune businesses. Social media management, Next.js web development, AI business automation, and premium branding. Transparent pricing, no hidden fees."
-                keywords="digital marketing packages pune, social media management price, web development packages india, AI automation services pune, branding packages, EyEPunE services"
-                canonicalUrl="https://eyepune.com/Services"
+                title="Service Packages – Global Growth & AI Automation | EyE PunE"
+                description="Expert digital growth packages for businesses worldwide. Pune-based excellence in social media, web development, and AI business automation. Transparent pricing, no hidden fees."
+                keywords="digital marketing packages, global growth services, social media management price, web development packages india, AI automation services pune, EyEPunE services"
+                canonicalUrl="https://www.eyepune.com/Services"
                 structuredData={generateOrganizationSchema()}
             />
             {/* Header */}

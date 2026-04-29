@@ -316,7 +316,7 @@ function LayoutContent({ children, currentPageName }) {
                             <div className="sm:col-span-2 md:col-span-2">
                                 <Logo variant="dark" size="sm" className="mb-5" />
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
-                                    Your all-in-one growth partner for sales, marketing, and technology. Connect · Engage · Grow.
+                                    Pune-based all-in-one growth partner serving clients across the globe. Connect · Engage · Grow.
                                 </p>
                                 <div className="space-y-2 text-sm">
                                     <a href="mailto:connect@eyepune.com" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors">
@@ -328,7 +328,7 @@ function LayoutContent({ children, currentPageName }) {
                                     </a>
 
                                     <p className="flex items-center gap-2 text-gray-600">
-                                        <span className="w-4 h-4 text-red-500">📍</span> Pune, Maharashtra, India
+                                        <span className="w-4 h-4 text-red-500">📍</span> Pune, India · Serving Globally
                                     </p>
                                 </div>
 
