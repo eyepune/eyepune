@@ -611,18 +611,24 @@ function Admin_Marketing() {
                                 <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Access Token</Label>
                                 <Input id="linkedin_token" type="password" placeholder="Paste your LinkedIn Access Token" className="bg-[#111] border-white/10 focus:border-[#0077b5]/50 h-11" />
                             </div>
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Organization URN (Optional)</Label>
+                                <Input id="linkedin_urn" placeholder="urn:li:organization:XXXXXXXX" className="bg-[#111] border-white/10 focus:border-[#0077b5]/50 h-11" />
+                                <p className="text-[10px] text-gray-500">Leave blank to post to your personal profile.</p>
+                            </div>
                         </div>
                         <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
                             <Button variant="outline" onClick={() => setIsEditingLinkedin(false)} className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5">Cancel</Button>
                             <Button 
                                 onClick={async () => {
                                     const token = document.getElementById('linkedin_token').value;
+                                    const urn = document.getElementById('linkedin_urn').value;
                                     if (!token) return toast.error('Token is required');
                                     
                                     const res = await fetch('/api/system/settings', {
                                         method: 'POST',
                                         headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ key: 'linkedin_token', value: token })
+                                        body: JSON.stringify({ key: 'linkedin_config', value: JSON.stringify({ token, urn }) })
                                     });
                                     if (res.ok) {
                                         toast.success('LinkedIn integration active!');

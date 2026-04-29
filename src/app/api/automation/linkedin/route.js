@@ -20,21 +20,34 @@ export async function POST(request) {
         const { data: config } = await supabase
             .from('crm_sync_configs')
             .select('api_key')
-            .eq('provider', 'linkedin_token')
+            .eq('provider', 'linkedin_config')
             .single();
 
-        const token = config?.api_key || process.env.LINKEDIN_ACCESS_TOKEN;
+        let token = process.env.LINKEDIN_ACCESS_TOKEN;
+        let urn = null;
+
+        if (config?.api_key) {
+            try {
+                const parsed = JSON.parse(config.api_key);
+                token = parsed.token;
+                urn = parsed.urn;
+            } catch (e) {
+                token = config.api_key;
+            }
+        }
 
         if (!token) throw new Error('LinkedIn integration not configured. Please link your account in the Marketing Dashboard.');
 
-        // 3. Get LinkedIn User URN (the 'me' profile)
-        const meRes = await fetch('https://api.linkedin.com/v2/me', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const meData = await meRes.json();
-        const personUrn = `urn:li:person:${meData.id}`;
-
-        if (!meData.id) throw new Error('Invalid LinkedIn token or profile not accessible.');
+        // 3. Get LinkedIn User URN (if not provided in config)
+        let authorUrn = urn;
+        if (!authorUrn) {
+            const meRes = await fetch('https://api.linkedin.com/v2/me', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const meData = await meRes.json();
+            if (!meData.id) throw new Error('Invalid LinkedIn token or profile not accessible.');
+            authorUrn = `urn:li:person:${meData.id}`;
+        }
 
         // 4. Create the Post
         const shareRes = await fetch('https://api.linkedin.com/v2/ugcPosts', {
@@ -45,7 +58,7 @@ export async function POST(request) {
                 'X-Restli-Protocol-Version': '2.0.0'
             },
             body: JSON.stringify({
-                author: personUrn,
+                author: authorUrn,
                 lifecycleState: "PUBLISHED",
                 specificContent: {
                     "com.linkedin.ugc.ShareContent": {
