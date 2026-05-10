@@ -317,18 +317,34 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                 benefit: 'Cut operational costs by 25%'
             });
 
+            // Prepare answers to match Supabase schema (omit missing columns and stringify arrays)
+            const dbAnswers = { ...answers };
+            if (Array.isArray(dbAnswers.marketing_channels)) {
+                dbAnswers.marketing_channels = dbAnswers.marketing_channels.join(', ');
+            }
+            
+            // team_size is currently not a column in the ai_assessments table
+            const teamSize = dbAnswers.team_size;
+            delete dbAnswers.team_size;
+
             // Save to database via Supabase (each write is individually wrapped so failures don't block the report)
             let savedAssessment = null;
             try {
-                const { data, error } = await supabase.from('ai_assessments').insert([{
+                // Providing both sets of names to satisfy different schema versions/constraints
+                const assessmentPayload = {
                     full_name: formData.lead_name,
+                    lead_name: formData.lead_name,
                     email: formData.lead_email,
+                    lead_email: formData.lead_email,
                     business_name: formData.company_name,
-                    ...answers,
+                    company_name: formData.company_name,
+                    ...dbAnswers,
                     score: growthScore,
                     ai_report: cleanAiResponse,
                     converted_to_lead: false
-                }]).select().single();
+                };
+
+                const { data, error } = await supabase.from('ai_assessments').insert([assessmentPayload]).select().single();
                 if (error) console.warn('Failed to save assessment:', error);
                 else savedAssessment = data;
             } catch (err) {
@@ -351,6 +367,23 @@ Be encouraging but realistic. Reference Indian market context. Make it personal 
                 else savedLead = data;
             } catch (err) {
                 console.warn('Failed to save lead:', err);
+            }
+
+            // Fallback: Also save to inquiries to ensure visibility in the main Admin Forms tab
+            try {
+                await supabase.from('inquiries').insert([{
+                    full_name: formData.lead_name,
+                    name: formData.lead_name,
+                    email: formData.lead_email,
+                    phone: formData.lead_phone,
+                    company: formData.company_name,
+                    service_interest: 'AI Business Assessment',
+                    message: `AI Growth Score: ${growthScore}/100. Challenge: ${answers.biggest_challenge}`,
+                    source: 'ai_assessment',
+                    status: 'new'
+                }]);
+            } catch (err) {
+                console.warn('Failed to save inquiry fallback:', err);
             }
 
             // Link assessment to lead if both were saved

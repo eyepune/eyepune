@@ -44,6 +44,8 @@ export default function AIChatbot() {
             
             if (emailMatch || phoneMatch) {
                 const { supabase } = await import('@/integrations/supabase/client');
+                const contactInfo = emailMatch?.[0] || phoneMatch?.[0];
+                
                 await supabase.from('leads').upsert([{
                     full_name: 'Chatbot Prospect',
                     email: emailMatch?.[0] || null,
@@ -52,6 +54,18 @@ export default function AIChatbot() {
                     status: 'new',
                     notes: `Captured via Chatbot: "${input}"`
                 }], { onConflict: 'email' });
+
+                // Add to inquiries for visibility in Admin Panel
+                await supabase.from('inquiries').insert([{
+                    full_name: 'Chatbot Prospect',
+                    name: 'Chatbot Prospect',
+                    email: emailMatch?.[0] || 'no-email@eyepune.com',
+                    phone: phoneMatch?.[0] || null,
+                    service_interest: 'AI Chatbot Conversation',
+                    message: `Lead captured during chat: "${input}"`,
+                    source: 'chatbot',
+                    status: 'new'
+                }]).catch(() => {});
             }
 
             const context = messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n');

@@ -73,14 +73,15 @@ export default function Booking() {
             const timeStr = selectedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             // 1. Create booking in Supabase
+            // Column names updated to match SETUP_DATABASE.sql: name, email, date, time, etc.
             const { error: bookingError } = await supabase.from('bookings').insert([{
-                full_name: formData.name,
+                name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
                 company: formData.company,
-                service_type: 'consultation',
-                booking_date: dateStr,
-                booking_time: timeStr,
+                service: 'consultation',
+                date: dateStr,
+                time: timeStr,
                 duration: '30 min',
                 status: 'pending',
                 notes: formData.notes,
@@ -98,7 +99,20 @@ export default function Booking() {
                 status: 'contacted',
                 score: 50,
                 notes: `Consultation booked for ${selectedDate.toLocaleString()}`
-            }]).then(({ error }) => { if (error) console.warn('Lead creation failed:', error); });
+            }]).catch(({ error }) => { if (error) console.warn('Lead creation failed:', error); });
+
+            // 2.1 Fallback to inquiries for visibility in Admin Panel
+            await supabase.from('inquiries').insert([{
+                full_name: formData.name,
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                company: formData.company,
+                service_interest: 'Discovery Call / Booking',
+                message: `Consultation booked for ${dateStr} at ${timeStr}. Notes: ${formData.notes}`,
+                source: 'booking',
+                status: 'new'
+            }]).catch(({ error }) => { if (error) console.warn('Inquiry fallback failed:', error); });
 
             // 3. Trigger booking confirmation automation (sends email to lead) — non-blocking
             fetch('/api/automation/trigger', {

@@ -57,6 +57,21 @@ export default function ChatbotWidget() {
                     .join('\n')}`
             }]);
 
+            // Save to inquiries table for visibility in Admin Forms tab
+            try {
+                await supabase.from('inquiries').insert([{
+                    full_name: name,
+                    name: name,
+                    email: email,
+                    service_interest: 'AI Chatbot Inquiry',
+                    message: `Lead captured via chatbot after ${messageCount} messages.`,
+                    source: 'chatbot',
+                    status: 'new'
+                }]);
+            } catch (err) {
+                console.warn('[Chatbot] Inquiry save failed:', err);
+            }
+
             // Fire WhatsApp notify (non-blocking)
             fetch('/api/whatsapp/notify', {
                 method: 'POST',

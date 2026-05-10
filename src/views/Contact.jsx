@@ -45,6 +45,23 @@ export default function Contact() {
             }]);
             if (dbError) throw dbError;
 
+            // 1.1 Save to inquiries table for visibility in Admin Forms tab
+            try {
+                await supabase.from('inquiries').insert([{
+                    full_name: formData.name,
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    company: formData.company,
+                    service_interest: formData.service_interest || 'General Inquiry',
+                    message: formData.message,
+                    source: 'website',
+                    status: 'new'
+                }]);
+            } catch (err) {
+                console.warn('[Contact] Inquiry save failed:', err);
+            }
+
             // 2. Trigger automation (sends welcome email to lead)
             // Non-blocking — failure does not interrupt the user flow
             fetch('/api/automation/trigger', {
