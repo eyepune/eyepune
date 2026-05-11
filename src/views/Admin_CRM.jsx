@@ -178,7 +178,7 @@ function Admin_CRM() {
                 // Clean data to only include valid columns and add defaults
                 const validColumns = ['full_name', 'email', 'phone', 'company', 'source', 'status', 'notes'];
                 const validStatuses = ['new', 'contacted', 'qualified', 'proposal_sent', 'negotiation', 'won', 'lost'];
-                const validSources = ['website', 'referral', 'social_media', 'google_ads', 'manual'];
+                const validSources = ['website', 'referral', 'social_media', 'google_ads', 'manual', 'chatbot', 'ai_assessment', 'consultation_booking', 'website_inquiry'];
                 
                 const cleanedData = parsedData.map(row => {
                     const cleanRow = { source: 'manual', status: 'new' };

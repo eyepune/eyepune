@@ -78,20 +78,23 @@ function Admin_Dashboard() {
     const { data: stats, isLoading } = useQuery({
         queryKey: ['admin-dashboard-stats'],
         queryFn: async () => {
-            const [leads, inquiries, assessments, bookings, templates, campaigns] = await Promise.all([
-                supabase.from('leads').select('id,status,created_at', { count: 'exact' }),
+            const [leads, inquiries, assessments, bookings, chat_sessions, templates, campaigns] = await Promise.all([
+                supabase.from('leads').select('id,status,source,created_at', { count: 'exact' }),
                 supabase.from('inquiries').select('id,created_at', { count: 'exact' }),
                 supabase.from('ai_assessments').select('id,created_at', { count: 'exact' }),
                 supabase.from('bookings').select('id,created_at', { count: 'exact' }),
+                supabase.from('chat_sessions').select('id,created_at', { count: 'exact' }),
                 supabase.from('email_templates').select('id', { count: 'exact', head: true }),
                 supabase.from('campaigns').select('id', { count: 'exact', head: true }),
             ]);
+            
             return {
                 leadsData: leads.data || [],
                 leadsCount: leads.count || 0,
                 inquiries: inquiries.count || 0,
                 assessments: assessments.count || 0,
                 bookings: bookings.count || 0,
+                chatSessions: chat_sessions.count || 0,
                 templates: templates.count || 0,
                 campaigns: campaigns.count || 0,
                 conversion: leads.count > 0 ? ((bookings.count / leads.count) * 100).toFixed(1) : 0,
@@ -101,13 +104,13 @@ function Admin_Dashboard() {
                     acc[s] = (acc[s] || 0) + 1;
                     return acc;
                 }, {}),
-                // Last 7 days daily counts
+                // Daily trends
                 dailyLeads: buildDailyCount(leads.data || [], 7),
                 dailyInquiries: buildDailyCount(inquiries.data || [], 7),
-                dailyAssessments: buildDailyCount(assessments.data || [], 7),
+                dailyChats: buildDailyCount(chat_sessions.data || [], 7),
             };
         },
-        refetchInterval: 60000, // refresh every 60s
+        refetchInterval: 60000,
     });
 
     const { data: recentLeads = [] } = useQuery({
@@ -196,12 +199,12 @@ function Admin_Dashboard() {
             bg: "bg-amber-500/10", border: "border-amber-500/20", text: "text-amber-400"
         },
         {
-            title: "Inquiries",
-            value: stats?.inquiries,
-            sub: "Form submissions",
+            title: "AI Engagement",
+            value: stats?.chatSessions,
+            sub: "Total bot interactions",
             trend: "up",
-            icon: Mail,
-            spark: stats?.dailyInquiries,
+            icon: MessageSquare,
+            spark: stats?.dailyChats,
             color: "from-emerald-500 to-green-400",
             bg: "bg-emerald-500/10", border: "border-emerald-500/20", text: "text-emerald-400"
         }
