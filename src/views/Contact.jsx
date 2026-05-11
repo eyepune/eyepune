@@ -62,8 +62,8 @@ export default function Contact() {
                 console.warn('[Contact] Inquiry save failed:', err);
             }
 
-            // 2. Trigger automation (sends welcome email to lead)
-            // Non-blocking — failure does not interrupt the user flow
+            // 2. Trigger Automation (sends welcome email to lead)
+            // This relies on active rules in the 'email_sequences' table
             fetch('/api/automation/trigger', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -78,45 +78,19 @@ export default function Contact() {
                 })
             }).catch(err => console.warn('[Contact] Automation trigger failed:', err));
 
-            // 3. Send admin notification email
-            fetch('/api/email', {
+            // 3. Trigger Admin Notification (Sales Sniper)
+            // Replaces multiple manual fetch calls with one centralized alert
+            fetch('/api/admin/notify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    to: 'connect@eyepune.com',
-                    subject: `🔔 New Inquiry: ${formData.name}`,
-                    html: getAdminNotificationTemplate('Website Inquiry', {
+                    type: 'inquiry',
+                    payload: {
                         name: formData.name,
                         email: formData.email,
-                        phone: formData.phone || 'Not provided',
-                        company: formData.company || 'Not provided',
-                        interest: formData.service_interest || 'General',
+                        service: formData.service_interest || 'General Inquiry',
                         message: formData.message
-                    })
-                })
-            }).catch(err => console.warn('[Contact] Admin notification failed:', err));
-
-            // 3.1 Send client welcome email
-            fetch('/api/email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    to: formData.email,
-                    subject: `EyE PunE | Thank you for your inquiry, ${formData.name}!`,
-                    html: getClientWelcomeTemplate(formData.name, formData.service_interest)
-                })
-            }).catch(err => console.warn('[Contact] Client welcome failed:', err));
-
-            // 4. WhatsApp instant ping — non-blocking
-            fetch('/api/whatsapp/notify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'contact',
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone,
-                    message: formData.message
+                    }
                 })
             }).catch(() => {});
 

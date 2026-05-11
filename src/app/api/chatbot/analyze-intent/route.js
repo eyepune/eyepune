@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { sendWhatsAppMessage } from '@/lib/whatsapp-service';
+import { sendWhatsAppText } from '@/lib/whatsapp-service';
 
 /**
  * AI Sales Sniper: Intent Analysis API
@@ -24,11 +24,14 @@ export async function POST(request) {
         if (isHot) {
             console.log(`[SalesSniper] High intent detected: "${message}"`);
             
-            // 2. Trigger WhatsApp Alert
-            await sendWhatsAppMessage({
-                to: process.env.ADMIN_WHATSAPP_NUMBER || '919511210191',
-                templateName: 'ai_intent_alert', // You need to have this template or use a simple text message helper
-                body: `🔥 *AI SALES SNIPER* 🔥\n\n*User:* ${userIdentifier || 'Anonymous'}\n*Message:* "${message}"\n\n*Action:* Jump into CRM now to see live feed!\nhttps://eyepune.com/Admin_Dashboard`
+            // 2. Trigger WhatsApp Alert to Admin
+            // We use sendWhatsAppText for direct alerts to the admin
+            const adminNumber = process.env.ADMIN_WHATSAPP_NUMBER || '919511210191';
+            const alertText = `🔥 *AI SALES SNIPER* 🔥\n\n*User:* ${userIdentifier || 'Anonymous'}\n*Message:* "${message}"\n\n*Action:* Jump into CRM now to see live feed!\nhttps://eyepune.com/Admin_Dashboard`;
+
+            await sendWhatsAppText({
+                to: adminNumber,
+                text: alertText
             }).catch(err => console.warn('[SalesSniper] WhatsApp failed:', err.message));
 
             // 3. Update Session Score

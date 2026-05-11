@@ -202,6 +202,21 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 })
             }).catch(e => console.warn('Automation failed', e));
 
+            // Trigger Admin Notification (Sales Sniper)
+            fetch('/api/admin/notify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'assessment',
+                    payload: {
+                        name: formData.lead_name,
+                        business: formData.company_name,
+                        score: growthScore,
+                        challenge: answers.biggest_challenge
+                    }
+                })
+            }).catch(() => {});
+
             setReport({
                 score: growthScore,
                 content: cleanAiResponse
