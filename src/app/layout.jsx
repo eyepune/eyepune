@@ -3,6 +3,7 @@ import '@/index.css';
 import { Providers } from './providers';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import AIChatbot from '@/components/home/AIChatbot';
+import SEO_JSONLD from '@/components/seo/SEO_JSONLD';
 
 export const viewport = {
   width: 'device-width',
@@ -32,6 +33,13 @@ export const metadata = {
   authors: [{ name: 'EyE PunE' }],
   creator: 'EyE PunE',
   publisher: 'EyE PunE',
+  verification: {
+    google: 'ADD_YOUR_GOOGLE_VERIFICATION_CODE_HERE',
+    bing: 'ADD_YOUR_BING_VERIFICATION_CODE_HERE',
+  },
+  alternates: {
+    canonical: '/',
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -68,6 +76,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-[#040404] text-white antialiased">
+        <SEO_JSONLD />
         <GoogleAnalytics />
         <Providers>
           {children}
