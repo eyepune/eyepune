@@ -13,25 +13,44 @@ import ReactMarkdown from 'react-markdown';
 export default function AIChatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
-    const [messages, setMessages] = useState([
-        { 
-            role: 'assistant', 
-            content: "Namaste! 🙏 I'm EyE BoT, your AI growth assistant from EyE PunE. How can I help you transform your business today?" 
-        }
-    ]);
+    const [isVisible, setIsVisible] = useState(false);
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [sessionId, setSessionId] = useState(null);
     const scrollRef = useRef(null);
 
-    // Initialize Session
+    // 1. Delayed Visibility & Proactive Messaging
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(true);
+            
+            // Set proactive message based on current path
+            const path = window.location.pathname;
+            let initialMsg = "Namaste! 🙏 I'm EyE BoT, your AI growth assistant. How can I help you transform your business today?";
+            
+            if (path.includes('Service_AI')) {
+                initialMsg = "Looking to automate your Pune business with AI? 🤖 I'm here to show you how we can save you 20+ hours a week!";
+            } else if (path.includes('Service_WebDev')) {
+                initialMsg = "Need a high-performance website that actually ranks? 🚀 I can help you build a conversion engine today!";
+            } else if (path.includes('Booking')) {
+                initialMsg = "Ready to sync your vision? 📅 I'm here to help you prepare for your consultation!";
+            }
+
+            setMessages([{ role: 'assistant', content: initialMsg }]);
+        }, 3000); // 3-second delay for LCP performance
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    // 2. Initialize Session
     useEffect(() => {
         const initSession = async () => {
             try {
                 const { supabase } = await import('@/integrations/supabase/client');
                 const { data, error } = await supabase.from('chat_sessions').insert([{
                     user_identifier: 'Guest ' + Math.floor(Math.random() * 1000),
-                    metadata: { userAgent: navigator.userAgent }
+                    metadata: { userAgent: navigator.userAgent, path: window.location.pathname }
                 }]).select().single();
                 if (data) setSessionId(data.id);
             } catch (err) {
@@ -97,7 +116,6 @@ export default function AIChatbot() {
                     notes: `Captured via Chatbot: "${input}"`
                 }], { onConflict: 'email' });
 
-                // Add to inquiries for visibility in Admin Panel
                 await supabase.from('inquiries').insert([{
                     full_name: 'Chatbot Prospect',
                     email: emailMatch?.[0] || 'no-email@eyepune.com',
@@ -107,6 +125,21 @@ export default function AIChatbot() {
                     source: 'chatbot',
                     status: 'new'
                 }]).catch((err) => { console.warn('[Chatbot] Inquiry save failed:', err); });
+
+                // 3. Trigger Admin Notification (Sales Sniper)
+                fetch('/api/admin/notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'lead',
+                        payload: {
+                            name: 'Chatbot Prospect',
+                            email: emailMatch?.[0] || 'Email not provided',
+                            company: 'Captured via Chat',
+                            service: 'Chatbot Conversion'
+                        }
+                    })
+                }).catch(() => {});
             }
 
             const context = messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n');
@@ -168,6 +201,8 @@ Assistant:`;
             setIsLoading(false);
         }
     };
+
+    if (!isVisible) return null;
 
     return (
         <div className="fixed bottom-4 right-4 z-[9999] font-sans flex flex-col items-end pointer-events-none">

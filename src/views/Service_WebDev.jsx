@@ -4,8 +4,6 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Globe, Zap, ShieldCheck, Smartphone, Code2, BarChart3 } from 'lucide-react';
-import SEOHead from "@/components/seo/SEOHead";
-import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
@@ -32,47 +30,9 @@ const results = [
     { val: '5★', label: 'Client Satisfaction' },
 ];
 
-const faqSchema = {
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "FAQPage",
-            "mainEntity": faqs.map(f => ({
-                "@type": "Question",
-                "name": f.question,
-                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
-            }))
-        },
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
-                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services_Detail" },
-                { "@type": "ListItem", "position": 3, "name": "Website Development Pune", "item": "https://eyepune.com/Service_WebDev" }
-            ]
-        },
-        {
-            "@type": "Service",
-            "name": "Website Development Pune",
-            "description": "Custom website design and development in Pune. SEO-optimized business websites, e-commerce, and web applications starting from ₹25,000.",
-            "provider": { "@type": "LocalBusiness", "name": "EyE PunE", "url": "https://eyepune.com", "telephone": "+91-9284712033", "address": { "@type": "PostalAddress", "addressLocality": "Pune", "addressRegion": "Maharashtra", "addressCountry": "IN" } },
-            "areaServed": { "@type": "City", "name": "Pune" },
-            "offers": { "@type": "Offer", "price": "25000", "priceCurrency": "INR" }
-        }
-    ]
-};
-
 export default function Service_WebDev() {
     return (
         <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
-            <SEOHead
-                title="Website Development Pune | Custom Web Apps & Business Websites – EyE PunE"
-                description="Professional website development in Pune. EyE PunE builds fast, SEO-optimized business websites, e-commerce stores, and custom web applications. Starting from ₹25,000."
-                keywords="website development pune, web design pune, custom web app pune, ecommerce website pune, business website pune, responsive website design pune"
-                canonicalUrl="https://eyepune.com/Service_WebDev"
-                structuredData={faqSchema}
-            />
-
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
@@ -145,6 +105,46 @@ export default function Service_WebDev() {
                                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
                             </motion.div>
                         ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonials */}
+            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01]">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Social Proof</span>
+                            <h2 className="text-4xl font-black mb-6 italic">Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Performance</span></h2>
+                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                                "Our previous website was slow and didn't generate any leads. EyE PunE rebuilt it from scratch with a focus on speed and SEO. Our organic traffic increased by 150% in just two months."
+                            </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">AS</div>
+                                <div>
+                                    <div className="font-bold text-white text-lg italic">Anjali S.</div>
+                                    <div className="text-gray-500 text-sm">Marketing Director, Global Retail</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">150%</div>
+                                <div className="text-gray-500 text-sm">Traffic Growth</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">&lt;2s</div>
+                                <div className="text-gray-500 text-sm">Load Time</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">SEO</div>
+                                <div className="text-gray-500 text-sm">Rank #1 Ready</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">24/7</div>
+                                <div className="text-gray-500 text-sm">Uptime Support</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

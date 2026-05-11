@@ -4,6 +4,19 @@ import { Providers } from './providers';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import AIChatbot from '@/components/home/AIChatbot';
 import SEO_JSONLD from '@/components/seo/SEO_JSONLD';
+import { Outfit, Inter } from 'next/font/google';
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-outfit',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const viewport = {
   width: 'device-width',
@@ -74,8 +87,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen bg-[#040404] text-white antialiased">
+    <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
+      <body className="min-h-screen bg-[#040404] text-white antialiased font-sans">
         <SEO_JSONLD />
         <GoogleAnalytics />
         <Providers>

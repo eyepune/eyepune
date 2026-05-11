@@ -4,8 +4,6 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight, TrendingUp, Users, Heart, MessageSquare, BarChart3, Instagram } from 'lucide-react';
-import SEOHead from "@/components/seo/SEOHead";
-import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
@@ -32,47 +30,9 @@ const results = [
     { val: '98%', label: 'Client Retention Rate' },
 ];
 
-const faqSchema = {
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "FAQPage",
-            "mainEntity": faqs.map(f => ({
-                "@type": "Question",
-                "name": f.question,
-                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
-            }))
-        },
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
-                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services_Detail" },
-                { "@type": "ListItem", "position": 3, "name": "Social Media Management Pune", "item": "https://eyepune.com/Service_SocialMedia" }
-            ]
-        },
-        {
-            "@type": "Service",
-            "name": "Social Media Management Pune",
-            "description": "Professional social media management in Pune including content creation, community management, and growth strategy for Instagram, Facebook, and LinkedIn.",
-            "provider": { "@type": "LocalBusiness", "name": "EyE PunE", "url": "https://eyepune.com", "telephone": "+91-9284712033", "address": { "@type": "PostalAddress", "addressLocality": "Pune", "addressRegion": "Maharashtra", "addressCountry": "IN" } },
-            "areaServed": { "@type": "City", "name": "Pune" },
-            "offers": { "@type": "Offer", "price": "30000", "priceCurrency": "INR", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "30000", "priceCurrency": "INR", "unitText": "MONTH" } }
-        }
-    ]
-};
-
 export default function Service_SocialMedia() {
     return (
         <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
-            <SEOHead
-                title="Social Media Management Pune | Instagram, Facebook, LinkedIn – EyE PunE"
-                description="Professional social media management in Pune. EyE PunE creates engaging content, grows followers, and drives leads on Instagram, Facebook & LinkedIn. Packages from ₹30,000/month."
-                keywords="social media management pune, instagram marketing pune, facebook marketing pune, linkedin marketing pune, social media agency pune, content creation pune"
-                canonicalUrl="https://eyepune.com/Service_SocialMedia"
-                structuredData={faqSchema}
-            />
-
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
@@ -149,6 +109,46 @@ export default function Service_SocialMedia() {
                 </div>
             </section>
 
+            {/* Testimonials */}
+            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01]">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div className="order-2 lg:order-1 grid grid-cols-2 gap-4">
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">3x</div>
+                                <div className="text-gray-500 text-sm">Engagement</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">10k+</div>
+                                <div className="text-gray-500 text-sm">Followers</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">Viral</div>
+                                <div className="text-gray-500 text-sm">Reels Strategy</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">ROI</div>
+                                <div className="text-gray-500 text-sm">Driven Content</div>
+                            </div>
+                        </div>
+                        <div className="order-1 lg:order-2">
+                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Client Impact</span>
+                            <h2 className="text-4xl font-black mb-6 italic">Social Proof <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">That Speaks</span></h2>
+                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                                "EyE PunE took our Instagram from a ghost town to a lead-generating machine. Our DMs are now full of genuine inquiries, and our brand visibility in Pune has never been higher."
+                            </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">SM</div>
+                                <div>
+                                    <div className="font-bold text-white text-lg italic">Siddharth M.</div>
+                                    <div className="text-gray-500 text-sm">Founder, Pune Lifestyle Brand</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* FAQ */}
             <section className="py-24 border-t border-white/[0.06]">
                 <div className="max-w-3xl mx-auto px-6">
@@ -166,14 +166,6 @@ export default function Service_SocialMedia() {
                             </motion.div>
                         ))}
                     </div>
-                </div>
-            </section>
-
-            {/* Testimonials */}
-            <section className="py-16 border-t border-white/[0.06]">
-                <div className="max-w-7xl mx-auto px-6">
-                    <h2 className="text-3xl font-black text-center mb-10">What Our Clients Say</h2>
-                    <TestimonialDisplay limit={3} serviceType="social_media" />
                 </div>
             </section>
 

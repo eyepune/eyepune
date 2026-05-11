@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrendingUp, Target, BarChart3, DollarSign, Search, Megaphone } from 'lucide-react';
-import SEOHead from "@/components/seo/SEOHead";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
@@ -31,47 +30,9 @@ const results = [
     { val: '100+', label: 'Campaigns Managed' },
 ];
 
-const faqSchema = {
-    "@context": "https://schema.org",
-    "@graph": [
-        {
-            "@type": "FAQPage",
-            "mainEntity": faqs.map(f => ({
-                "@type": "Question",
-                "name": f.question,
-                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
-            }))
-        },
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
-                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services_Detail" },
-                { "@type": "ListItem", "position": 3, "name": "Google & Meta Ads Pune", "item": "https://eyepune.com/Service_PaidAds" }
-            ]
-        },
-        {
-            "@type": "Service",
-            "name": "Google Ads & Meta Ads Management Pune",
-            "description": "Expert Google Ads and Meta Ads management in Pune delivering 4x+ ROAS. PPC campaigns on Google, Facebook & Instagram.",
-            "provider": { "@type": "LocalBusiness", "name": "EyE PunE", "url": "https://eyepune.com", "telephone": "+91-9284712033", "address": { "@type": "PostalAddress", "addressLocality": "Pune", "addressRegion": "Maharashtra", "addressCountry": "IN" } },
-            "areaServed": { "@type": "City", "name": "Pune" },
-            "offers": { "@type": "Offer", "price": "8000", "priceCurrency": "INR", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "8000", "priceCurrency": "INR", "unitText": "MONTH" } }
-        }
-    ]
-};
-
 export default function Service_PaidAds() {
     return (
         <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
-            <SEOHead
-                title="Google Ads & Meta Ads Management Pune | PPC Agency – EyE PunE"
-                description="Expert Google Ads and Meta Ads management in Pune. EyE PunE delivers 4x+ ROAS with data-driven PPC campaigns on Google, Facebook & Instagram. Management from ₹8,000/month."
-                keywords="Google Ads pune, Meta Ads pune, Facebook Ads pune, Instagram Ads pune, PPC agency pune, paid advertising pune, Google Ads management pune"
-                canonicalUrl="https://eyepune.com/Service_PaidAds"
-                structuredData={faqSchema}
-            />
-
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
@@ -144,6 +105,46 @@ export default function Service_PaidAds() {
                                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
                             </motion.div>
                         ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonials */}
+            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01]">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">ROI Case Study</span>
+                            <h2 className="text-4xl font-black mb-6 italic">Precision <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">PPC Strategy</span></h2>
+                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                                "Our cost per lead dropped from ₹450 to ₹180 within the first 6 weeks of working with EyE PunE. Their Google Ads strategy is light-years ahead of the competition."
+                            </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">VP</div>
+                                <div>
+                                    <div className="font-bold text-white text-lg italic">Vikram P.</div>
+                                    <div className="text-gray-500 text-sm">Director, Pune Real Estate Group</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">4.2x</div>
+                                <div className="text-gray-500 text-sm">Avg ROAS</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">₹180</div>
+                                <div className="text-gray-500 text-sm">Cost Per Lead</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">Scalable</div>
+                                <div className="text-gray-500 text-sm">Growth Engines</div>
+                            </div>
+                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                                <div className="text-3xl font-black text-red-500 mb-1">Elite</div>
+                                <div className="text-gray-500 text-sm">Google Partners</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
