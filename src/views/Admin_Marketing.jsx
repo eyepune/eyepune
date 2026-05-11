@@ -550,7 +550,6 @@ function Admin_Marketing() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-                </TabsContent>
 
                 <TabsContent value="connections" className="mt-6 focus:outline-none">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

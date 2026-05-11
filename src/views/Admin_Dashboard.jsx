@@ -528,6 +528,7 @@ function Admin_Dashboard() {
                     </Card>
                 </div>
             </div>
+        </div>
 
             {/* System Health Row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
