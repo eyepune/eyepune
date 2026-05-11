@@ -195,6 +195,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
                     payload: {
                         name: formData.lead_name,
                         email: formData.lead_email,
+                        phone: formData.lead_phone,
                         business: formData.company_name || 'their business',
                         score: growthScore,
                         report: cleanAiResponse

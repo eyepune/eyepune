@@ -126,6 +126,7 @@ export default function Booking() {
                     payload: {
                         name: formData.name,
                         email: formData.email,
+                        phone: formData.phone,
                         date: selectedDate.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
                         time: timeStr,
                         company: formData.company || 'their business'

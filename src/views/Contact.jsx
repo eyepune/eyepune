@@ -72,6 +72,7 @@ export default function Contact() {
                     payload: {
                         name: formData.name,
                         email: formData.email,
+                        phone: formData.phone,
                         company: formData.company || 'their business',
                         service: formData.service_interest || 'General Inquiry'
                     }
