@@ -15,10 +15,10 @@ export const viewport = {
 export const metadata = {
   metadataBase: new URL('https://www.eyepune.com'),
   title: {
-    default: 'EyE PunE — Elite Digital Marketing & AI Agency in Pune',
+    default: 'EyE PunE – Digital Marketing Agency Pune | Global Growth & AI Automation',
     template: '%s | EyE PunE'
   },
-  description: 'EyE PunE is a premier digital growth agency in Pune specializing in AI-driven marketing, high-performance web development, B2B lead generation, and social media automation for global brands.',
+  description: 'Pune-based digital agency serving clients across the globe. We combine AI-driven marketing, web development, and sales systems to scale businesses worldwide.',
   keywords: [
     'AI marketing agency Pune', 
     'digital marketing agency Pune', 

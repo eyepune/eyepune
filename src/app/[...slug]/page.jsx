@@ -11,12 +11,79 @@ export async function generateMetadata({ params, searchParams }) {
   const baseRoute = slugArray[0];
   const identifier = searchParams?.slug || searchParams?.id || slugArray[1];
 
-  let title = baseRoute.replace(/-/g, ' ');
-  let description = `Explore ${title} at EyE PunE, Pune's premier digital agency.`;
+  const META_DEFAULTS = {
+    'Home': {
+      title: 'EyE PunE – Digital Marketing Agency Pune | Global Growth & AI Automation',
+      description: 'Pune-based digital agency serving clients across the globe. We combine AI-driven marketing, web development, and sales systems to scale businesses worldwide.'
+    },
+    'About': {
+      title: 'About EyE PunE | Our Mission & AI Vision',
+      description: 'Discover how EyE PunE combines human creativity with artificial intelligence to deliver unprecedented digital growth. Meet the team behind Pune\'s elite agency.'
+    },
+    'AI-Assessment': {
+      title: 'Free AI Business Assessment | EyE PunE',
+      description: 'Get a comprehensive AI-powered audit of your digital presence. Our assessment identifies growth bottlenecks and provides a custom roadmap for scaling your business.'
+    },
+    'Services': {
+      title: 'Premium Digital Services | AI, Web & Marketing',
+      description: 'Explore our suite of elite services including AI automation, full-stack web development, B2B performance marketing, and strategic branding for modern enterprises.'
+    },
+    'Contact': {
+      title: 'Contact EyE PunE | Start Your Growth Journey',
+      description: 'Ready to scale? Connect with our strategic consultants in Pune. We offer specialized solutions for AI integration, digital marketing, and business automation.'
+    },
+    'Pricing': {
+      title: 'Strategic Growth Packages & Pricing | EyE PunE',
+      description: 'Transparent pricing for elite digital services. From startup acceleration to enterprise AI automation, find the perfect package to scale your business operations.'
+    },
+    'Blog': {
+      title: 'EyE Intel | AI & Digital Strategy Blog',
+      description: 'Stay ahead of the curve with expert insights on AI marketing, web technology trends, and B2B growth hacks from the strategists at EyE PunE in Pune.'
+    },
+    'Booking': {
+      title: 'Book a Strategy Consultation | EyE PunE',
+      description: 'Schedule a private 1-on-1 session with our growth experts. We\'ll analyze your business model and identify high-impact opportunities for AI-driven scaling.'
+    },
+    'Testimonials': {
+      title: 'Client Success Stories | EyE PunE Reviews',
+      description: 'See how global brands and local leaders achieve massive growth with EyE PunE. Real results, real impact, and verified testimonials from our successful partners.'
+    },
+    'Service-SocialMedia': {
+      title: 'Social Media Marketing & Management | EyE PunE',
+      description: 'Build an elite social presence with AI-powered content strategy, high-impact community management, and performance-driven social ads that convert followers to fans.'
+    },
+    'Service-WebDev': {
+      title: 'High-Performance Web Development | EyE PunE',
+      description: 'We build fast, secure, and conversion-optimized websites and web apps. Our development team focuses on user experience and business-driven technology solutions.'
+    },
+    'Service-AI': {
+      title: 'AI Automation & Business Intelligence | EyE PunE',
+      description: 'Transform your operations with custom AI agents, automated sales pipelines, and smart data analytics. We help you work smarter, not harder, with AI solutions.'
+    },
+    'Service-PaidAds': {
+      title: 'Performance Marketing & Paid Ads | EyE PunE',
+      description: 'Maximized ROI through data-driven ad campaigns on Google, Meta, and LinkedIn. Our experts optimize every rupee to ensure your business reaches its target audience.'
+    },
+    'Service-Branding': {
+      title: 'Elite Brand Strategy & Design | EyE PunE',
+      description: 'Create a powerful brand identity that resonates globally. From visual design to strategic positioning, we build brands that stand out in crowded markets.'
+    },
+    'Service-Funnels': {
+      title: 'Conversion-Optimized Sales Funnels | EyE PunE',
+      description: 'Turn traffic into revenue with high-converting sales funnels and lead nurturing systems. We design seamless user journeys that drive measurable business results.'
+    }
+  };
+
+  const routeKey = Object.keys(META_DEFAULTS).find(k => k.toLowerCase() === baseRoute.toLowerCase());
+  let { title, description } = META_DEFAULTS[routeKey] || {
+    title: baseRoute.replace(/-/g, ' '),
+    description: `Explore ${baseRoute.replace(/-/g, ' ')} at EyE PunE, Pune's premier digital agency specializing in AI-driven marketing and custom web solutions.`
+  };
+
   let imageUrl = '/opengraph-image.png';
 
   // Dynamic SEO for Blog Posts (Fetch from DB for accurate meta tags)
-  if (baseRoute === 'Blog-Post' && identifier && !supabaseUrl.includes('placeholder')) {
+  if (baseRoute.toLowerCase() === 'blog-post' && identifier && !supabaseUrl.includes('placeholder')) {
     try {
       const supabase = createClient(supabaseUrl, supabaseAnonKey);
       const { data } = await supabase
@@ -36,10 +103,10 @@ export async function generateMetadata({ params, searchParams }) {
   }
 
   // Formatting for common routes
-  if (baseRoute === 'Services-Detail' && identifier) {
+  if (baseRoute.toLowerCase() === 'services-detail' && identifier) {
     title = `${identifier.replace(/-/g, ' ')} Services | EyE PunE`;
-    description = `Professional ${identifier.replace(/-/g, ' ')} services by EyE PunE. Transform your digital presence today.`;
-  } else if (!identifier) {
+    description = `Professional ${identifier.replace(/-/g, ' ')} services by EyE PunE. Our elite Pune-based team delivers high-impact digital solutions to transform your brand.`;
+  } else if (!identifier && !META_DEFAULTS[routeKey]) {
     title = `${title} | EyE PunE`;
   }
 
