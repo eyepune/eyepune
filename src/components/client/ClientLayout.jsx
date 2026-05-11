@@ -72,7 +72,7 @@ export default function ClientLayout({ children }) {
 
             {/* Sidebar */}
             <aside className={cn(
-                "fixed lg:relative z-50 h-screen flex flex-col bg-[#050505]/60 backdrop-blur-3xl border-r border-white/[0.04] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]",
+                "fixed lg:relative z-50 h-screen flex flex-col bg-[#050505]/60 backdrop-blur-3xl border-r border-white/[0.04] transition-all duration-500 ease-elite",
                 collapsed ? "w-20" : "w-72",
                 mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
             )}>

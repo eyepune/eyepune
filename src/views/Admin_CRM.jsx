@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail, Users, Target, Activity, Filter, CheckCircle2, Upload } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail, Users, Target, Activity, Filter, CheckCircle2, Upload, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -79,7 +79,26 @@ function Admin_CRM() {
             if (error) throw error;
             return result;
         },
-        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-leads'] }); resetForm(); toast.success('Lead updated successfully'); },
+        onSuccess: async (data, variables) => { 
+            queryClient.invalidateQueries({ queryKey: ['admin-leads'] }); 
+            resetForm(); 
+            toast.success('Lead updated successfully'); 
+
+            // Automate Onboarding for "Won" leads
+            if (variables.data.status === 'won') {
+                const { getClientKickoffTemplate } = await import('@/lib/email-templates');
+                fetch('/api/email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: variables.data.email || data.email,
+                        subject: "Welcome to the Elite | EyE PunE Command Center",
+                        html: getClientKickoffTemplate(variables.data.full_name || data.full_name)
+                    })
+                }).catch(err => console.error('[Onboarding] Email failed:', err));
+                toast.info('Onboarding email sent to client.');
+            }
+        },
         onError: (e) => toast.error(e.message),
     });
 
@@ -200,6 +219,33 @@ function Admin_CRM() {
         reader.readAsText(file);
     };
 
+    const handleExportCSV = () => {
+        if (filteredLeads.length === 0) return toast.error('No leads to export');
+        
+        const headers = ['Full Name', 'Email', 'Phone', 'Company', 'Source', 'Status', 'Created At'];
+        const csvRows = [
+            headers.join(','),
+            ...filteredLeads.map(l => [
+                `"${l.full_name || ''}"`,
+                `"${l.email || ''}"`,
+                `"${l.phone || ''}"`,
+                `"${l.company || ''}"`,
+                `"${l.source || ''}"`,
+                `"${l.status || ''}"`,
+                `"${new Date(l.created_at).toLocaleDateString()}"`
+            ].join(','))
+        ];
+        
+        const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `EyE_PunE_Leads_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        toast.success('Leads exported successfully');
+    };
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header */}
@@ -224,6 +270,13 @@ function Admin_CRM() {
                     >
                         {isUploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
                         Bulk Import
+                    </Button>
+                    <Button 
+                        onClick={handleExportCSV} 
+                        variant="outline"
+                        className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5 h-10 shadow-lg"
+                    >
+                        <Download className="w-4 h-4 mr-2" /> Export
                     </Button>
                     <Button 
                         onClick={() => { resetForm(); setIsDialogOpen(true); }} 

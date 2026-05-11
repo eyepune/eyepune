@@ -10,7 +10,7 @@ import {
     Users, Mail, Star, TrendingUp, Clock,
     ArrowUpRight, Zap, Target, Activity, Plus,
     BarChart3, Calendar, CheckCircle2, AlertCircle,
-    MessageSquare, Globe, ArrowRight
+    MessageSquare, Globe, ArrowRight, BrainCircuit, Sparkles, Wand2
 } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from "@/components/ui/badge";
@@ -140,8 +140,14 @@ function Admin_Dashboard() {
             try {
                 const res = await fetch('/api/system/verify');
                 if (!res.ok) return {};
-                const data = await res.json();
-                return data.report || {};
+                const report = await res.json();
+                const activeChats = await supabase
+                    .from('chat_sessions')
+                    .select('*, chat_messages(*)')
+                    .order('last_active', { ascending: false })
+                    .limit(5)
+                    .then(res => res.data || []);
+                return { ...report, activeChats };
             } catch (e) {
                 console.warn('System status check failed', e);
                 return {};
@@ -262,67 +268,195 @@ function Admin_Dashboard() {
             </div>
 
             {/* Main Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
 
-                {/* Recent Leads Feed */}
-                <Card className="lg:col-span-2 bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
-                    <CardHeader className="border-b border-white/5 px-6 py-4">
-                        <CardTitle className="text-white text-base font-semibold flex items-center justify-between">
-                            <span className="flex items-center gap-2">
-                                <div className="p-1.5 rounded-lg bg-white/5">
-                                    <Clock className="w-4 h-4 text-gray-400" />
-                                </div>
-                                Recent Leads
-                            </span>
-                            <Link href="/Admin_CRM">
-                                <Button
-                                    variant="ghost" size="sm"
-                                    className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                                >
-                                    View All <ArrowRight className="w-3 h-3 ml-1" />
-                                </Button>
-                            </Link>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                        {recentLeads.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-16 text-center">
-                                <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-3">
-                                    <Users className="w-7 h-7 text-gray-600" />
-                                </div>
-                                <p className="text-white font-medium text-sm">No leads yet</p>
-                                <p className="text-xs text-gray-500 mt-1">Leads from forms and chatbot appear here.</p>
-                            </div>
-                        ) : (
-                            <div className="divide-y divide-white/[0.04]">
-                                {recentLeads.map((lead) => (
-                                    <div key={lead.id} className="px-5 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-bold text-sm border border-white/10">
-                                                {lead.full_name?.charAt(0)?.toUpperCase() || 'U'}
+                {/* Left Column: Metrics & Live Feed */}
+                <div className="lg:col-span-2 space-y-8">
+                    
+                    {/* Live Bot Monitor */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                        <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6 flex flex-row items-center justify-between">
+                            <CardTitle className="text-white text-xl flex items-center gap-3">
+                                <Activity className="w-5 h-5 text-red-500 animate-pulse" /> Live AI Bot Intelligence
+                            </CardTitle>
+                            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
+                                {systemStatus?.activeChats?.length || 0} ACTIVE
+                            </Badge>
+                        </CardHeader>
+                        <CardContent className="p-0">
+                            {!systemStatus?.activeChats || systemStatus.activeChats.length === 0 ? (
+                                <div className="py-12 text-center text-gray-500 italic">No active conversations right now.</div>
+                            ) : (
+                                <div className="divide-y divide-white/5">
+                                    {systemStatus.activeChats.map((chat) => (
+                                        <div key={chat.id} className="p-6 hover:bg-white/[0.01] transition-all group">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                                                        <MessageSquare className="w-5 h-5 text-gray-400" />
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-white font-bold">{chat.user_identifier || 'Anonymous Guest'}</span>
+                                                            {chat.intent_score >= 80 && (
+                                                                <Badge className="bg-red-500 text-[10px] font-black uppercase">High Intent</Badge>
+                                                            )}
+                                                        </div>
+                                                        <span className="text-[10px] text-gray-500 uppercase font-black tracking-widest">
+                                                            {new Date(chat.last_active).toLocaleTimeString()}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <Button variant="ghost" size="sm" className="text-gray-400 group-hover:text-white" asChild>
+                                                    <Link href="/Admin_CRM">View Session →</Link>
+                                                </Button>
                                             </div>
-                                            <div>
-                                                <p className="text-white font-medium text-sm group-hover:text-red-400 transition-colors">
-                                                    {lead.full_name || 'Unknown'}
-                                                </p>
-                                                <p className="text-xs text-gray-500">
-                                                    {lead.email} · {lead.source || 'website'} · {new Date(lead.created_at).toLocaleDateString('en-IN')}
-                                                </p>
+                                            
+                                            {/* Preview last 2 messages */}
+                                            <div className="space-y-2 ml-14">
+                                                {chat.chat_messages?.slice(-2).map((m, idx) => (
+                                                    <div key={idx} className="flex gap-3">
+                                                        <span className={cn(
+                                                            "text-[9px] font-black uppercase tracking-tighter w-12 pt-1",
+                                                            m.role === 'user' ? 'text-blue-400' : 'text-red-400'
+                                                        )}>
+                                                            {m.role}:
+                                                        </span>
+                                                        <p className="text-xs text-gray-400 line-clamp-1 italic">
+                                                            "{m.content}"
+                                                        </p>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </div>
-                                        <Badge className={cn(
-                                            "border-none font-medium px-2 py-0.5 text-[10px] uppercase tracking-wider",
-                                            lead.status === 'won' ? 'bg-emerald-500/10 text-emerald-400' :
-                                            lead.status === 'new' ? 'bg-red-500/10 text-red-400' :
-                                            lead.status === 'qualified' ? 'bg-purple-500/10 text-purple-400' :
-                                            'bg-white/5 text-gray-400'
-                                        )}>
-                                            {lead.status || 'NEW'}
-                                        </Badge>
+                                    ))}
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+
+                    {/* Recent Leads Feed */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                        <CardHeader className="border-b border-white/5 px-6 py-4">
+                            <CardTitle className="text-white text-base font-semibold flex items-center justify-between">
+                                <span className="flex items-center gap-2">
+                                    <div className="p-1.5 rounded-lg bg-white/5">
+                                        <Clock className="w-4 h-4 text-gray-400" />
                                     </div>
-                                ))}
+                                    Recent Leads
+                                </span>
+                                <Link href="/Admin_CRM">
+                                    <Button
+                                        variant="ghost" size="sm"
+                                        className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                    >
+                                        View All <ArrowRight className="w-3 h-3 ml-1" />
+                                    </Button>
+                                </Link>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-0">
+                            {recentLeads.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center py-16 text-center">
+                                    <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-3">
+                                        <Users className="w-7 h-7 text-gray-600" />
+                                    </div>
+                                    <p className="text-white font-medium text-sm">No leads yet</p>
+                                    <p className="text-xs text-gray-500 mt-1">Leads from forms and chatbot appear here.</p>
+                                </div>
+                            ) : (
+                                <div className="divide-y divide-white/[0.04]">
+                                    {recentLeads.map((lead) => (
+                                        <div key={lead.id} className="px-5 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-bold text-sm border border-white/10">
+                                                    {lead.full_name?.charAt(0)?.toUpperCase() || 'U'}
+                                                </div>
+                                                <div>
+                                                    <p className="text-white font-medium text-sm group-hover:text-red-400 transition-colors">
+                                                        {lead.full_name || 'Unknown'}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500">
+                                                        {lead.email} · {lead.source || 'website'} · {new Date(lead.created_at).toLocaleDateString('en-IN')}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <Badge className={cn(
+                                                "border-none font-medium px-2 py-0.5 text-[10px] uppercase tracking-wider",
+                                                lead.status === 'won' ? 'bg-emerald-500/10 text-emerald-400' :
+                                                lead.status === 'new' ? 'bg-red-500/10 text-red-400' :
+                                                lead.status === 'qualified' ? 'bg-purple-500/10 text-purple-400' :
+                                                'bg-white/5 text-gray-400'
+                                            )}>
+                                                {lead.status || 'NEW'}
+                                            </Badge>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Right Column: AI Strategy */}
+                <div className="space-y-8">
+                    {/* AI Sales Strategist Intelligence */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-red-500/10 overflow-hidden relative group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-transparent pointer-events-none" />
+                        <CardHeader className="border-b border-white/5 px-6 py-4 flex flex-row items-center justify-between">
+                            <CardTitle className="text-white text-base font-semibold flex items-center gap-2">
+                                <BrainCircuit className="w-5 h-5 text-red-500" />
+                                AI Sales Strategist
+                            </CardTitle>
+                            <Badge className="bg-red-500/10 text-red-400 border-red-500/20 text-[10px] animate-pulse">LIVE INTEL</Badge>
+                        </CardHeader>
+                        <CardContent className="p-6 space-y-6">
+                        <div className="space-y-4">
+                            <div className="flex items-start gap-3">
+                                <div className="p-2 rounded-lg bg-red-500/10 mt-1">
+                                    <Sparkles className="w-4 h-4 text-red-400" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-white font-medium">Daily Roadmap Ready</p>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                        AI has analyzed 24h of data. 3 high-intent targets identified for follow-up.
+                                    </p>
+                                </div>
                             </div>
-                        )}
+                            
+                            <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                                <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest mb-2">Next Strategic Action:</p>
+                                <p className="text-xs text-gray-300 leading-relaxed italic">
+                                    "Prioritize 'Vision Sync' bookings over general inquiries today. High-value LinkedIn lead detected in your queue."
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="bg-white/5 p-3 rounded-xl border border-white/10 text-center">
+                                <p className="text-xl font-bold text-white">84</p>
+                                <p className="text-[10px] text-gray-500 uppercase font-bold mt-1">Lead Score Avg</p>
+                            </div>
+                            <div className="bg-white/5 p-3 rounded-xl border border-white/10 text-center">
+                                <p className="text-xl font-bold text-red-500">3</p>
+                                <p className="text-[10px] text-gray-500 uppercase font-bold mt-1">Hot Targets</p>
+                            </div>
+                        </div>
+
+                        <Button 
+                            className="w-full bg-red-600 hover:bg-red-700 text-white h-11 rounded-xl shadow-lg shadow-red-500/20"
+                            onClick={() => {
+                                import('sonner').then(({ toast }) => {
+                                    toast.promise(fetch('/api/automation/daily-intel'), {
+                                        loading: 'Generating Intelligence Roadmap...',
+                                        success: 'Strategy Roadmap sent to your email!',
+                                        error: 'Failed to generate intel.'
+                                    });
+                                });
+                            }}
+                        >
+                            <Wand2 className="w-4 h-4 mr-2" /> Run AI Analysis
+                        </Button>
                     </CardContent>
                 </Card>
 

@@ -37,12 +37,30 @@ export async function GET(request) {
         // Pass 2: Global Audience
         results.push(await generateAndPostBlog('global'));
 
+        // Log Success
+        await supabase.from('automation_logs').insert([{
+            type: 'blog',
+            status: 'success',
+            message: `Generated and published 2 blog posts (${results.map(r => r.audience).join(', ')}).`,
+            payload: { results }
+        }]);
+
         return NextResponse.json({
             success: true,
             posts: results
         });
     } catch (error) {
         console.error('[AI-Blog] Critical automation failure:', error);
+        
+        // Log Failure
+        try {
+            await supabase.from('automation_logs').insert([{
+                type: 'blog',
+                status: 'failure',
+                message: error.message
+            }]);
+        } catch (e) {}
+
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

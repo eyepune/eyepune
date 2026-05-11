@@ -13,13 +13,33 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL('https://www.eyepune.com'),
-  title: 'EyE PunE — Connect · Engage · Grow',
-  description: 'Pune-based digital agency serving clients across the globe. We specialize in AI-driven marketing, web development, SEO, and automation to scale businesses worldwide.',
-  keywords: 'digital marketing pune, social media marketing, website development, AI automation, branding, lead generation, eyepune',
+  title: {
+    default: 'EyE PunE — Elite Digital Marketing & AI Agency in Pune',
+    template: '%s | EyE PunE'
+  },
+  description: 'EyE PunE is a premier digital growth agency in Pune specializing in AI-driven marketing, high-performance web development, B2B lead generation, and social media automation for global brands.',
+  keywords: [
+    'AI marketing agency Pune', 
+    'digital marketing agency Pune', 
+    'B2B lead generation services', 
+    'website development Pune', 
+    'AI automation for business', 
+    'social media marketing Pune', 
+    'elite branding agency', 
+    'SEO services Pune',
+    'eyepune'
+  ],
   authors: [{ name: 'EyE PunE' }],
+  creator: 'EyE PunE',
+  publisher: 'EyE PunE',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: 'EyE PunE — Connect · Engage · Grow',
-    description: 'Pune-based premier digital agency serving clients across the globe with AI-driven marketing and custom automations.',
+    title: 'EyE PunE — Elite Digital Marketing & AI Agency',
+    description: 'Transform your business with AI-driven marketing and custom web solutions. Pune-based premier agency serving clients across the globe.',
     url: 'https://www.eyepune.com/',
     siteName: 'EyE PunE',
     locale: 'en_IN',
@@ -28,11 +48,19 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'EyE PunE — AI-Powered Digital Growth',
-    description: 'Pune-based premier digital agency serving clients across the globe with AI-driven marketing and custom automations.',
+    description: 'Premier digital agency in Pune serving clients across the globe with AI-driven marketing and custom automations.',
+    creator: '@eyepune',
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

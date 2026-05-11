@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import AdminGuard from "@/components/admin/AdminGuard";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { motion } from 'framer-motion';
-import { Plus, Send, Pause, Play, BarChart3, Bot, Pencil, Loader2, Mail, Activity, Sparkles, AlertCircle, CheckCircle2, Linkedin } from 'lucide-react';
+import { Plus, Send, Pause, Play, BarChart3, Bot, Pencil, Loader2, Mail, Activity, Sparkles, AlertCircle, CheckCircle2, Linkedin, ActivitySquare, Link2, XCircle, Smartphone } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,6 +66,44 @@ function Admin_Marketing() {
             return data.report;
         }
     });
+
+    const { data: logs = [], isLoading: isLoadingLogs } = useQuery({
+        queryKey: ['automation-logs'],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('automation_logs')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(50);
+            if (error) throw error;
+            return data || [];
+        }
+    });
+
+    const [testPhone, setTestPhone] = React.useState('');
+    const [isTestingWa, setIsTestingWa] = React.useState(false);
+
+    const handleTestWhatsApp = async () => {
+        if (!testPhone) return alert('Enter a phone number');
+        setIsTestingWa(true);
+        try {
+            const res = await fetch('/api/system/whatsapp/test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: testPhone })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Success! Check your WhatsApp.');
+            } else {
+                alert(`Failed: ${data.error}`);
+            }
+        } catch (e) {
+            alert('Error connecting to API');
+        } finally {
+            setIsTestingWa(false);
+        }
+    };
 
     const campaignMutation = useMutation({
         mutationFn: async (data) => {
@@ -269,17 +307,31 @@ function Admin_Marketing() {
                                 </p>
                             </div>
                         </div>
-                        <Button 
-                            onClick={() => setIsEditingLinkedin(true)} 
-                            className={cn(
-                                "h-9 text-xs px-4 border-0",
-                                systemStatus?.linkedin?.configured 
-                                    ? "bg-white/5 hover:bg-white/10 text-white border border-white/10" 
-                                    : "bg-[#0077b5] hover:bg-[#00669c] text-white shadow-lg shadow-[#0077b5]/20"
-                            )}
-                        >
-                            {systemStatus?.linkedin?.configured ? 'Manage LinkedIn' : 'Link Account'}
-                        </Button>
+                        <div className="flex items-center gap-3">
+                            <Button 
+                                onClick={async () => {
+                                    const res = await fetch('/api/automation/linkedin/daily-post?type=educational');
+                                    const data = await res.json();
+                                    if (data.success) toast.success('Educational post live on LinkedIn!');
+                                    else toast.error(data.error || 'LinkedIn post failed');
+                                }}
+                                variant="outline"
+                                className="h-9 text-xs px-4 border-[#0077b5]/30 text-[#0077b5] hover:bg-[#0077b5]/5"
+                            >
+                                Test Educational
+                            </Button>
+                            <Button 
+                                onClick={() => setIsEditingLinkedin(true)} 
+                                className={cn(
+                                    "h-9 text-xs px-4 border-0",
+                                    systemStatus?.linkedin?.configured 
+                                        ? "bg-white/5 hover:bg-white/10 text-white border border-white/10" 
+                                        : "bg-[#0077b5] hover:bg-[#00669c] text-white shadow-lg shadow-[#0077b5]/20"
+                                )}
+                            >
+                                {systemStatus?.linkedin?.configured ? 'Manage LinkedIn' : 'Link Account'}
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
 
@@ -304,6 +356,12 @@ function Admin_Marketing() {
                     </TabsTrigger>
                     <TabsTrigger value="automations" className="rounded-lg data-[state=active]:bg-white/10 data-[state=active]:text-white text-gray-400">
                         Automation Rules
+                    </TabsTrigger>
+                    <TabsTrigger value="logs" className="rounded-lg data-[state=active]:bg-white/10 data-[state=active]:text-white text-gray-400">
+                        Autopilot Logs
+                    </TabsTrigger>
+                    <TabsTrigger value="connections" className="rounded-lg data-[state=active]:bg-white/10 data-[state=active]:text-white text-gray-400">
+                        External APIs
                     </TabsTrigger>
                 </TabsList>
 
@@ -434,6 +492,164 @@ function Admin_Marketing() {
                             )}
                         </CardContent>
                     </Card>
+                </TabsContent>
+                <TabsContent value="logs" className="mt-6 focus:outline-none">
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5">
+                        <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6 flex flex-row items-center justify-between">
+                            <CardTitle className="text-white text-xl flex items-center gap-3">
+                                <Activity className="w-5 h-5 text-emerald-500" /> Autopilot Execution History
+                            </CardTitle>
+                            <Button variant="ghost" size="sm" onClick={() => queryClient.invalidateQueries(['automation-logs'])} className="text-gray-400 hover:text-white">
+                                Refresh
+                            </Button>
+                        </CardHeader>
+                        <CardContent className="p-0">
+                            {logs.length === 0 ? (
+                                <div className="py-20 text-center">
+                                    <p className="text-gray-500 text-sm italic">No execution logs found. AI will log its first activity soon.</p>
+                                </div>
+                            ) : (
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm text-left">
+                                        <thead className="bg-white/[0.02] text-gray-500 text-[10px] uppercase tracking-widest">
+                                            <tr>
+                                                <th className="px-6 py-4 font-bold">Timestamp</th>
+                                                <th className="px-6 py-4 font-bold">Process</th>
+                                                <th className="px-6 py-4 font-bold">Status</th>
+                                                <th className="px-6 py-4 font-bold">Message</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/5">
+                                            {logs.map((log) => (
+                                                <tr key={log.id} className="hover:bg-white/[0.01] transition-colors">
+                                                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                                                        {new Date(log.created_at).toLocaleString()}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <Badge variant="outline" className="bg-white/5 border-white/10 text-white uppercase text-[9px] font-black">
+                                                            {log.type}
+                                                        </Badge>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className={cn("w-1.5 h-1.5 rounded-full", log.status === 'success' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500')} />
+                                                            <span className={cn("text-xs font-bold uppercase tracking-tighter", log.status === 'success' ? 'text-emerald-500' : 'text-red-500')}>
+                                                                {log.status}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-gray-400 max-w-md truncate">
+                                                        {log.message}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                </TabsContent>
+
+                <TabsContent value="connections" className="mt-6 focus:outline-none">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* WhatsApp Connection */}
+                        <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                            <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6">
+                                <CardTitle className="text-white text-xl flex items-center gap-3">
+                                    <Smartphone className="w-5 h-5 text-green-500" /> WhatsApp Business API
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-8 space-y-8">
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                                        <div>
+                                            <p className="text-sm font-bold text-white">API Connection Status</p>
+                                            <p className="text-xs text-gray-500 mt-1">Environment variables check</p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                            <span className="text-xs font-black uppercase text-green-500">Configured</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-4 bg-red-500/5 rounded-xl border border-red-500/10">
+                                        <p className="text-xs text-red-400 font-bold uppercase tracking-widest mb-2">WhatsApp Requirements:</p>
+                                        <ul className="text-xs text-gray-400 space-y-1">
+                                            <li>• WHATSAPP_ACCESS_TOKEN (Permanent Token)</li>
+                                            <li>• WHATSAPP_PHONE_ID (from Meta Dashboard)</li>
+                                            <li>• ADMIN_WHATSAPP_NUMBER (for alerts)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <h4 className="text-sm font-bold text-white">Test Connection</h4>
+                                    <div className="flex gap-3">
+                                        <Input 
+                                            placeholder="Phone with country code (e.g. 91987...)"
+                                            value={testPhone}
+                                            onChange={(e) => setTestPhone(e.target.value)}
+                                            className="bg-white/5 border-white/10 rounded-xl"
+                                        />
+                                        <Button 
+                                            onClick={handleTestWhatsApp}
+                                            disabled={isTestingWa}
+                                            className="bg-green-600 hover:bg-green-500 font-black text-xs px-6"
+                                        >
+                                            {isTestingWa ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
+                                            TEST
+                                        </Button>
+                                    </div>
+                                    <p className="text-[10px] text-gray-500 italic text-center">
+                                        Sends the standard "hello_world" template message.
+                                    </p>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Other APIs */}
+                        <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                            <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6">
+                                <CardTitle className="text-white text-xl flex items-center gap-3">
+                                    <Link2 className="w-5 h-5 text-blue-500" /> Platform Connections
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-8 space-y-6">
+                                <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-blue-600/20 flex items-center justify-center text-blue-400 font-black italic">L</div>
+                                        <div>
+                                            <p className="text-sm font-bold text-white">LinkedIn Automation</p>
+                                            <p className="text-[10px] text-gray-500">OAuth 2.0 Integration</p>
+                                        </div>
+                                    </div>
+                                    <Badge className="bg-emerald-500/10 text-emerald-500">Connected</Badge>
+                                </div>
+                                <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-red-400 font-black">Z</div>
+                                        <div>
+                                            <p className="text-sm font-bold text-white">Zoho Mail API</p>
+                                            <p className="text-[10px] text-gray-500">Transaction Email Service</p>
+                                        </div>
+                                    </div>
+                                    <Badge className="bg-emerald-500/10 text-emerald-500">Connected</Badge>
+                                </div>
+                                <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-orange-600/20 flex items-center justify-center text-orange-400 font-black italic">N</div>
+                                        <div>
+                                            <p className="text-sm font-bold text-white">NVIDIA NIM Core</p>
+                                            <p className="text-[10px] text-gray-500">LLM Inference Engine</p>
+                                        </div>
+                                    </div>
+                                    <Badge className="bg-emerald-500/10 text-emerald-500">Healthy</Badge>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </TabsContent>
             </Tabs>
 

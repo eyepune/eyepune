@@ -25,7 +25,7 @@ export default function ChatbotWidget() {
     const [isLoading, setIsLoading] = useState(false);
     const [leadCaptured, setLeadCaptured] = useState(false);
     const [showLeadForm, setShowLeadForm] = useState(false);
-    const [leadData, setLeadData] = useState({ name: '', email: '' });
+    const [leadData, setLeadData] = useState({ name: '', email: '', hp_verification: '' });
     const [messageCount, setMessageCount] = useState(0);
     const scrollRef = useRef(null);
     const messageId = useRef(2);
@@ -61,7 +61,6 @@ export default function ChatbotWidget() {
             try {
                 await supabase.from('inquiries').insert([{
                     full_name: name,
-                    name: name,
                     email: email,
                     service_interest: 'AI Chatbot Inquiry',
                     message: `Lead captured via chatbot after ${messageCount} messages.`,
@@ -112,6 +111,15 @@ export default function ChatbotWidget() {
 
     const handleLeadSubmit = async (e) => {
         e.preventDefault();
+        
+        // Standardized honeypot check
+        if (leadData.hp_verification) {
+            console.warn('Bot detected in Chatbot lead form');
+            setLeadCaptured(true);
+            setShowLeadForm(false);
+            return;
+        }
+
         if (!leadData.name || !leadData.email) return;
 
         await saveLead(leadData.name, leadData.email);
@@ -170,7 +178,11 @@ Response rules:
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    prompt: `${systemPrompt}\n\nUser: ${input}`,
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        ...conversationHistory,
+                        { role: 'user', content: input }
+                    ],
                     temperature: 0.7
                 }),
             });
@@ -277,6 +289,16 @@ Response rules:
                                         <p className="text-white text-sm font-medium mb-1">🎯 Want a personalised quote?</p>
                                         <p className="text-gray-400 text-xs mb-3">Drop your details and we'll follow up within 2 hours.</p>
                                         <form onSubmit={handleLeadSubmit} className="space-y-2">
+                                            <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
+                                                <input
+                                                    type="text"
+                                                    name="hp_verification"
+                                                    value={leadData.hp_verification || ''}
+                                                    onChange={e => setLeadData(p => ({ ...p, hp_verification: e.target.value }))}
+                                                    tabIndex="-1"
+                                                    autoComplete="off"
+                                                />
+                                            </div>
                                             <input
                                                 type="text"
                                                 placeholder="Your name"

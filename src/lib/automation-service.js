@@ -55,8 +55,37 @@ export async function triggerAutomation(triggerType, payload) {
         content = content.replace(regex, String(value || ''));
       });
 
+      // Special handling for AI Assessment PDF attachment
+      let attachments = [];
+      if (triggerType === 'new_assessment' && payload.report) {
+        try {
+          const { generateStrategyPDF } = await import('./pdf-generator.js');
+          const pdfBuffer = await generateStrategyPDF({
+            name: payload.name,
+            business: payload.business,
+            score: payload.score,
+            report: payload.report
+          });
+          
+          attachments.push({
+            content: Buffer.from(pdfBuffer).toString('base64'),
+            filename: `EyE_PunE_Strategic_Roadmap.pdf`,
+            type: 'application/pdf',
+            disposition: 'attachment'
+          });
+          console.log('[AutomationService] PDF generated and attached to email.');
+        } catch (pdfErr) {
+          console.warn('[AutomationService] Failed to generate PDF attachment:', pdfErr.message);
+        }
+      }
+
       try {
-        const result = await sendEmail({ to: payload.email, subject, html: content });
+        const result = await sendEmail({ 
+          to: payload.email, 
+          subject, 
+          html: content,
+          attachments: attachments.length > 0 ? attachments : undefined 
+        });
         results.push({ ruleId: rule.id, type: 'email', success: true });
       } catch (sendErr) {
         results.push({ ruleId: rule.id, type: 'email', success: false, error: sendErr.message });

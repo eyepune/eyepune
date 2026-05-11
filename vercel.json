@@ -15,6 +15,18 @@
     {
       "path": "/api/automation/ai-blog",
       "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/automation/linkedin/daily-post?type=educational",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/automation/linkedin/daily-post?type=promotional",
+      "schedule": "0 18 * * *"
+    },
+    {
+      "path": "/api/automation/daily-intel",
+      "schedule": "30 2 * * *"
     }
   ]
 }

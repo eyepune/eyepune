@@ -8,12 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Mail, Phone, MapPin, Send, CheckCircle, ArrowRight, Bot, Zap, Sparkles, Command, Globe, Code, Database, MessageCircle, Instagram, Facebook, Linkedin, Twitter, Hash, ShieldCheck } from 'lucide-react';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import { getClientWelcomeTemplate, getAdminNotificationTemplate } from '@/lib/email-templates';
 
 export default function Contact() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const contentRef = React.useRef(null);
-    const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', service_interest: '', message: '' });
+    const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', service_interest: '', message: '', hp_verification: '' });
 
     React.useEffect(() => {
         if (contentRef.current && isSuccess) contentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -22,9 +23,9 @@ export default function Contact() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Honeypot spam protection (Renamed from website_url to avoid auto-fill)
-        if (formData.verification_token) {
-            console.warn('Bot detected by honeypot');
+        // Standardized honeypot check
+        if (formData.hp_verification) {
+            console.warn('Bot detected by hp_verification honeypot');
             setIsSuccess(true); 
             return;
         }
@@ -49,7 +50,6 @@ export default function Contact() {
             try {
                 await supabase.from('inquiries').insert([{
                     full_name: formData.name,
-                    name: formData.name,
                     email: formData.email,
                     phone: formData.phone,
                     company: formData.company,
@@ -84,25 +84,28 @@ export default function Contact() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     to: 'connect@eyepune.com',
-                    subject: `🔔 New Inquiry: ${formData.name} — ${formData.service_interest || 'General'}`,
-                    html: `
-                        <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px;">
-                            <h2 style="color: #ef4444; margin-top: 0;">🔔 New Website Inquiry</h2>
-                            <table style="width: 100%; border-collapse: collapse;">
-                                <tr><td style="padding: 8px 0; color: #6b7280; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: 600; color: #111827;">${formData.name}</td></tr>
-                                <tr><td style="padding: 8px 0; color: #6b7280;">Email</td><td style="padding: 8px 0; color: #111827;"><a href="mailto:${formData.email}">${formData.email}</a></td></tr>
-                                <tr><td style="padding: 8px 0; color: #6b7280;">Phone</td><td style="padding: 8px 0; color: #111827;">${formData.phone || '—'}</td></tr>
-                                <tr><td style="padding: 8px 0; color: #6b7280;">Company</td><td style="padding: 8px 0; color: #111827;">${formData.company || '—'}</td></tr>
-                                <tr><td style="padding: 8px 0; color: #6b7280;">Service</td><td style="padding: 8px 0; color: #111827;">${formData.service_interest || 'General'}</td></tr>
-                            </table>
-                            <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #ef4444; margin: 16px 0;">
-                                <p style="margin: 0; color: #374151;">${formData.message}</p>
-                            </div>
-                            <a href="https://eyepune.com/Admin_CRM" style="display: inline-block; padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Open CRM Dashboard →</a>
-                        </div>
-                    `
+                    subject: `🔔 New Inquiry: ${formData.name}`,
+                    html: getAdminNotificationTemplate('Website Inquiry', {
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone || 'Not provided',
+                        company: formData.company || 'Not provided',
+                        interest: formData.service_interest || 'General',
+                        message: formData.message
+                    })
                 })
             }).catch(err => console.warn('[Contact] Admin notification failed:', err));
+
+            // 3.1 Send client welcome email
+            fetch('/api/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: formData.email,
+                    subject: `EyE PunE | Thank you for your inquiry, ${formData.name}!`,
+                    html: getClientWelcomeTemplate(formData.name, formData.service_interest)
+                })
+            }).catch(err => console.warn('[Contact] Client welcome failed:', err));
 
             // 4. WhatsApp instant ping — non-blocking
             fetch('/api/whatsapp/notify', {
@@ -183,8 +186,8 @@ export default function Contact() {
                                     <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
                                         <input
                                             type="text"
-                                            name="verification_token"
-                                            value={formData.verification_token || ''}
+                                            name="hp_verification"
+                                            value={formData.hp_verification || ''}
                                             onChange={handleChange}
                                             tabIndex="-1"
                                             autoComplete="off"

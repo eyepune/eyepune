@@ -79,7 +79,7 @@ export async function sendViaZoho({ to, subject, html, text }) {
 /**
  * Sends email via Resend API
  */
-export async function sendViaResend({ to, subject, html, text, from, replyTo }) {
+export async function sendViaResend({ to, subject, html, text, from, replyTo, attachments }) {
   if (!RESEND_API_KEY) throw new Error('RESEND_API_KEY is missing');
   
   const response = await fetch('https://api.resend.com/emails', {
@@ -95,6 +95,7 @@ export async function sendViaResend({ to, subject, html, text, from, replyTo }) 
       ...(html && { html }),
       ...(text && { text }),
       ...(replyTo && { reply_to: replyTo }),
+      ...(attachments && { attachments })
     }),
   });
   
@@ -109,7 +110,18 @@ export async function sendViaResend({ to, subject, html, text, from, replyTo }) 
  * Unified send function that handles provider priority
  */
 export async function sendEmail(payload) {
-  // 1. Try Zoho first
+  // If there are attachments, we prioritize Resend as it handles them much easier via base44
+  if (payload.attachments && payload.attachments.length > 0 && RESEND_API_KEY) {
+    try {
+      console.log('[EmailService] Attachments detected, using Resend...');
+      return await sendViaResend(payload);
+    } catch (err) {
+      console.error('[EmailService] Resend with attachments failed:', err.message);
+      // If Resend fails, we still want to try Zoho but without attachments
+    }
+  }
+
+  // 1. Try Zoho first (normal flow)
   if (ZOHO_REFRESH_TOKEN && ZOHO_ACCOUNT_ID) {
     try {
       return await sendViaZoho(payload);
