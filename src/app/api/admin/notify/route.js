@@ -25,6 +25,9 @@ export async function POST(request) {
             case 'inquiry':
                 result = await notifyNewInquiry(payload);
                 break;
+            case 'booking':
+                result = await notifyNewBooking(payload);
+                break;
             default:
                 return NextResponse.json({ error: 'Invalid notification type' }, { status: 400 });
         }

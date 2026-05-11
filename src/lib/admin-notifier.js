@@ -33,3 +33,10 @@ export async function notifyNewInquiry({ name, email, service, message: userMess
     
     return await notifyAdmin(message);
 }
+
+export async function notifyNewBooking({ name, email, date, time, notes }) {
+    const message = `📅 *NEW BOOKING* 📅\n\n*Client:* ${name}\n*Date:* ${date}\n*Time:* ${time}\n*Email:* ${email}\n*Notes:* "${notes || 'No notes provided'}"\n\n*Action:* Block your calendar and prepare!\nhttps://eyepune.com/Admin_Dashboard`;
+    
+    return await notifyAdmin(message);
+}
+

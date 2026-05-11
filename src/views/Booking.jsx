@@ -117,7 +117,7 @@ export default function Booking() {
                 status: 'new'
             }]).catch((err) => { console.warn('Inquiry fallback failed:', err); });
 
-            // 3. Trigger booking confirmation automation (sends email to lead) — non-blocking
+            // 3. Trigger Automation (sends confirmation email to lead)
             fetch('/api/automation/trigger', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -133,34 +133,22 @@ export default function Booking() {
                 })
             }).catch(err => console.warn('[Booking] Automation trigger failed:', err));
 
-            // 3. Trigger booking confirmation email to client
-            fetch('/api/email', {
+            // 4. Trigger Admin Notification (Sales Sniper)
+            // Instant WhatsApp alert to the team
+            fetch('/api/admin/notify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    to: formData.email,
-                    subject: `📅 Confirmation: Your Discovery Call with EyE PunE`,
-                    html: getBookingConfirmationTemplate(formData.name, dateStr, timeStr)
-                })
-            }).catch(err => console.warn('[Booking] Confirmation email failed:', err));
-
-            // 4. Admin notification email
-            fetch('/api/email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    to: 'connect@eyepune.com',
-                    subject: `📅 New Booking: ${formData.name}`,
-                    html: getAdminNotificationTemplate('Consultation Booking', {
+                    type: 'booking',
+                    payload: {
                         name: formData.name,
                         email: formData.email,
-                        phone: formData.phone || 'Not provided',
                         date: dateStr,
                         time: timeStr,
-                        notes: formData.notes || 'No notes'
-                    })
+                        notes: formData.notes
+                    }
                 })
-            }).catch(err => console.warn('[Booking] Admin notification failed:', err));
+            }).catch(() => {});
 
             setMeetLink('https://meet.google.com/lookup/eyepune');
             setIsSuccess(true);
