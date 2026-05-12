@@ -24,9 +24,9 @@ export default function Login() {
     React.useEffect(() => {
         if (!isLoadingAuth && isAuthenticated && user) {
             if (user.role === 'admin') {
-                window.location.href = '/Admin_Dashboard';
+                window.location.href = '/Admin-Dashboard';
             } else {
-                window.location.href = '/Client_Dashboard';
+                window.location.href = '/Client-Dashboard';
             }
         }
     }, [isLoadingAuth, isAuthenticated, user]);

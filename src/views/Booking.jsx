@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Calendar as CalendarIcon, Clock, CheckCircle2, Video, Loader2 } from 'lucide-react';
 import { DatePicker } from "@/components/ui/date-picker";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import SEOHead from '@/components/seo/SEOHead';
 import { getBookingConfirmationTemplate, getAdminNotificationTemplate } from '@/lib/email-templates';
 
 export default function Booking() {
@@ -166,6 +167,14 @@ export default function Booking() {
     };
 
     return (
+        <SEOHead
+            title="Book a Free Discovery Call – Strategy & Growth Consultation"
+            description="Schedule a 30-minute free discovery call with EyE PunE. Discuss your business goals, get custom growth recommendations, and discover how our AI systems can scale your Pune business."
+            keywords="book marketing consultation pune, free discovery call pune, growth strategy session, digital marketing consultant pune, schedule business meeting"
+            canonicalUrl="https://eyepune.com/Booking"
+            structuredData={{"@context":"https://schema.org","@type":"WebPage","name":"Book a Consultation with EyE PunE","url":"https://eyepune.com/Booking"}}
+        />
+
         <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
             {/* Grid bg */}
             <div className="absolute inset-0 opacity-[0.03]"

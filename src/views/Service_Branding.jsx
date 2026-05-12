@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Palette, Layers, FileText, Star, Image, Sparkles } from 'lucide-react';
-import SEOHead from "@/components/seo/SEOHead";
+import SEOHead from '@/components/seo/SEOHead';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
@@ -46,8 +46,8 @@ const faqSchema = {
             "@type": "BreadcrumbList",
             "itemListElement": [
                 { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
-                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services_Detail" },
-                { "@type": "ListItem", "position": 3, "name": "Branding Agency Pune", "item": "https://eyepune.com/Service_Branding" }
+                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services-Detail" },
+                { "@type": "ListItem", "position": 3, "name": "Branding Agency Pune", "item": "https://eyepune.com/Service-Branding" }
             ]
         },
         {
@@ -63,14 +63,15 @@ const faqSchema = {
 
 export default function Service_Branding() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <>
             <SEOHead
                 title="Branding Agency Pune | Logo Design & Brand Identity – EyE PunE"
                 description="Professional branding agency in Pune. EyE PunE creates stunning logos, brand identities, and marketing collaterals that make your business stand out. Packages from ₹20,000."
                 keywords="branding agency pune, logo design pune, brand identity pune, logo designer pune, brand strategy pune, marketing collaterals pune, rebranding pune"
-                canonicalUrl="https://eyepune.com/Service_Branding"
+                canonicalUrl="https://eyepune.com/Service-Branding"
                 structuredData={faqSchema}
             />
+            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
 
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
@@ -189,5 +190,6 @@ export default function Service_Branding() {
                 </div>
             </section>
         </div>
+        </>
     );
 }

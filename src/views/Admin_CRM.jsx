@@ -86,17 +86,20 @@ function Admin_CRM() {
 
             // Automate Onboarding for "Won" leads
             if (variables.data.status === 'won') {
-                const { getClientKickoffTemplate } = await import('@/lib/email-templates');
-                fetch('/api/email', {
+                fetch('/api/automation/trigger', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        to: variables.data.email || data.email,
-                        subject: "Welcome to the Elite | EyE PunE Command Center",
-                        html: getClientKickoffTemplate(variables.data.full_name || data.full_name)
+                        trigger: 'lead_won',
+                        payload: {
+                            name: variables.data.full_name || data.full_name,
+                            email: variables.data.email || data.email,
+                            phone: variables.data.phone || data.phone,
+                            company: variables.data.company || data.company || 'your business'
+                        }
                     })
-                }).catch(err => console.error('[Onboarding] Email failed:', err));
-                toast.info('Onboarding email sent to client.');
+                }).catch(err => console.error('[Onboarding] Automation failed:', err));
+                toast.info('Onboarding sequence triggered (Email + WhatsApp).');
             }
         },
         onError: (e) => toast.error(e.message),

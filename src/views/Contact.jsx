@@ -107,6 +107,14 @@ export default function Contact() {
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     return (
+        <SEOHead
+            title="Contact EyE PunE – Get Your Free Business Growth Action Plan"
+            description="Ready to scale? Contact Pune's leading digital growth agency. Get a custom marketing strategy and AI assessment for your business within 24 hours. Let's talk growth."
+            keywords="contact eyepune, marketing agency contact pune, business growth consultation pune, hire marketing agency pune, digital strategy call pune"
+            canonicalUrl="https://eyepune.com/Contact"
+            structuredData={{"@context":"https://schema.org","@type":"ContactPage","name":"Contact EyE PunE","description":"Get in touch with EyE PunE for a free business growth consultation."}}
+        />
+
         <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
 
             {/* ── HERO ── */}

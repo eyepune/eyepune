@@ -28,12 +28,12 @@ import NotificationCenter from "@/components/client/NotificationCenter";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const NAV_ITEMS = [
-    { name: 'Dashboard', href: '/Client_Dashboard', icon: LayoutDashboard },
-    { name: 'Campaigns & Reports', href: '/Client_Reports', icon: BarChart3 },
-    { name: 'Project Files', href: '/Client_Files', icon: FolderKanban },
-    { name: 'Documents', href: '/Client_Documents', icon: FileText },
-    { name: 'Messages', href: '/Client_Messages', icon: MessageSquare },
-    { name: 'Client Feedback', href: '/Client_Feedback', icon: Star },
+    { name: 'Dashboard', href: '/Client-Dashboard', icon: LayoutDashboard },
+    { name: 'Campaigns & Reports', href: '/Client-Reports', icon: BarChart3 },
+    { name: 'Project Files', href: '/Client-Files', icon: FolderKanban },
+    { name: 'Documents', href: '/Client-Documents', icon: FileText },
+    { name: 'Messages', href: '/Client-Messages', icon: MessageSquare },
+    { name: 'Client Feedback', href: '/Client-Feedback', icon: Star },
 ];
 
 export default function ClientLayout({ children }) {

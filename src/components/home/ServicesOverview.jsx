@@ -18,42 +18,42 @@ const services = [
         title: "Social Media & Ads",
         description: "Performance-driven campaigns across Meta, Google & LinkedIn that deliver measurable ROI.",
         color: "from-red-500 to-orange-500",
-        page: "Service_SocialMedia"
+        page: "Service-SocialMedia"
     },
     {
         icon: Code2,
         title: "Web & App Development",
         description: "Stunning, conversion-optimized websites and mobile apps built for scale.",
         color: "from-red-600 to-red-400",
-        page: "Service_WebDev"
+        page: "Service-WebDev"
     },
     {
         icon: Bot,
         title: "AI Automations",
         description: "Smart workflows and lead generation systems powered by cutting-edge AI.",
         color: "from-red-500 to-pink-500",
-        page: "Service_AI"
+        page: "Service-AI"
     },
     {
         icon: Palette,
         title: "Branding & Content",
         description: "Memorable brand identities and content strategies that resonate with your audience.",
         color: "from-red-400 to-red-600",
-        page: "Service_Branding"
+        page: "Service-Branding"
     },
     {
         icon: TrendingUp,
         title: "Sales Funnels",
         description: "End-to-end sales funnel design — from awareness to conversion — built to maximize revenue.",
         color: "from-orange-500 to-red-500",
-        page: "Service_Funnels"
+        page: "Service-Funnels"
     },
     {
         icon: Workflow,
         title: "System Funnels",
         description: "Automated CRM pipelines, follow-up systems, and lead nurturing that work 24/7 for your business.",
         color: "from-red-700 to-pink-600",
-        page: "Service_Funnels"
+        page: "Service-Funnels"
     }
 ];
 

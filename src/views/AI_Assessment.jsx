@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from "@/utils";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import SEOHead from '@/components/seo/SEOHead';
 
 const questions = [
   { id: 'business_type', question: 'What type of business do you run?', type: 'input', placeholder: 'e.g., E-commerce, Consulting, SaaS, etc.' },
@@ -274,7 +275,16 @@ At the very bottom, output: [CRM_SCORE: number]` }
     }
 
     return (
-        <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
+        <>
+            <SEOHead
+                title="Free AI Business Assessment – Get Your Growth Roadmap | EyE PunE"
+                description="Take our 3-minute AI-powered business assessment and receive a personalized growth roadmap. Discover your growth score, identify barriers, and get a 90-day action plan to scale your business in Pune."
+                keywords="business assessment tool, free growth audit, AI business strategy, marketing performance score, business growth roadmap pune, scale your company"
+                canonicalUrl="https://eyepune.com/AI-Assessment"
+                structuredData={{ "@context": "https://schema.org", "@type": "WebPage", "name": "EyE PunE AI Business Assessment", "url": "https://eyepune.com/AI-Assessment" }}
+            />
+
+            <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
             <HeroFloatingIcons opacity={0.15} />
 
@@ -398,6 +408,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
                     )}
                 </AnimatePresence>
             </div>
-        </div>
+            </div>
+        </>
     );
 }

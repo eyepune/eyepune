@@ -75,7 +75,7 @@ export default function MakeAdmin() {
 
             // Redirect to admin dashboard after a short delay
             setTimeout(() => {
-                window.location.href = '/Admin_Dashboard';
+                window.location.href = '/Admin-Dashboard';
             }, 1500);
         } catch (error) {
             toast.error(error.message);
@@ -171,7 +171,7 @@ export default function MakeAdmin() {
                             You already have admin privileges!
                         </p>
                         <Button
-                            onClick={() => window.location.href = '/Admin_Dashboard'}
+                            onClick={() => window.location.href = '/Admin-Dashboard'}
                             className="w-full bg-red-600 hover:bg-red-700"
                         >
                             Go to Admin Dashboard

@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight, TrendingUp, Users, Heart, MessageSquare, BarChart3, Instagram } from 'lucide-react';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import SEOHead from '@/components/seo/SEOHead';
 
 const faqs = [
     { question: "How much does social media management cost in Pune?", answer: "EyE PunE's social media management packages start at ₹30,000/month for 2 platforms, including content creation, scheduling, and monthly reporting. Custom packages are available for enterprise clients." },
@@ -32,7 +33,16 @@ const results = [
 
 export default function Service_SocialMedia() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <>
+            <SEOHead
+                title="Social Media Management Pune – Grow Your Brand & Engagement"
+                description="Dominate Instagram, Facebook, and LinkedIn with Pune's top social media agency. We handle content creation, Reels strategy, community management, and growth analytics to turn followers into customers."
+                keywords="social media agency pune, instagram marketing pune, social media manager pune, best social media marketing pune, content creation services pune"
+                canonicalUrl="https://eyepune.com/Service-SocialMedia"
+                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Social Media Management", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+            />
+
+            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
@@ -190,5 +200,6 @@ export default function Service_SocialMedia() {
                 </div>
             </section>
         </div>
+        </>
     );
 }

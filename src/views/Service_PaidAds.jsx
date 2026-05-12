@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrendingUp, Target, BarChart3, DollarSign, Search, Megaphone } from 'lucide-react';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import SEOHead from '@/components/seo/SEOHead';
 
 const faqs = [
     { question: "What is the minimum budget for Google Ads in Pune?", answer: "We recommend a minimum ad spend of ₹15,000/month for Google Ads to see meaningful results. Our management fee starts at ₹8,000/month. Total minimum investment: ₹23,000/month." },
@@ -32,7 +33,16 @@ const results = [
 
 export default function Service_PaidAds() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <>
+            <SEOHead
+                title="Google & Meta Ads Management Pune – Achieve 4x ROI | EyE PunE"
+                description="Stop burning money on ads. Our Pune-based PPC experts manage Google Search, Meta Ads, and Performance Max campaigns that deliver measurable leads and 4.2x average ROAS. Get a free ads audit."
+                keywords="google ads agency pune, meta ads management pune, facebook ads company pune, PPC experts pune, best ad agency for ROI pune"
+                canonicalUrl="https://eyepune.com/Service-PaidAds"
+                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Paid Advertising Management", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+            />
+
+            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
@@ -190,5 +200,6 @@ export default function Service_PaidAds() {
                 </div>
             </section>
         </div>
+        </>
     );
 }

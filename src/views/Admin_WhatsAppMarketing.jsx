@@ -241,6 +241,7 @@ export default function Admin_WhatsAppMarketing() {
                                                 <SelectItem value="new_lead">New CRM Lead</SelectItem>
                                                 <SelectItem value="new_assessment">Completed AI Assessment</SelectItem>
                                                 <SelectItem value="new_booking">New Appointment</SelectItem>
+                                                <SelectItem value="lead_won">Lead Converted (Won)</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>

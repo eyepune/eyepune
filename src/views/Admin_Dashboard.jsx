@@ -228,7 +228,7 @@ function Admin_Dashboard() {
                     <Button variant="outline" className="bg-[#111] border-white/10 text-white hover:bg-white/5 hover:text-white h-10">
                         <Calendar className="w-4 h-4 mr-2 text-gray-400" /> Last 7 Days
                     </Button>
-                    <Link href="/Admin_Analytics">
+                    <Link href="/Admin-Analytics">
                         <Button
                             className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 border-0 h-10"
                         >
@@ -276,66 +276,97 @@ function Admin_Dashboard() {
                 {/* Left Column: Metrics & Live Feed */}
                 <div className="lg:col-span-2 space-y-8">
                     
-                    {/* Live Bot Monitor */}
-                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
-                        <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6 flex flex-row items-center justify-between">
-                            <CardTitle className="text-white text-xl flex items-center gap-3">
-                                <Activity className="w-5 h-5 text-red-500 animate-pulse" /> Live AI Bot Intelligence
+                    {/* Real-time Sales Sniper Feed */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-red-500/10 overflow-hidden shadow-[0_0_50px_rgba(239,68,68,0.05)]">
+                        <CardHeader className="border-b border-white/5 bg-gradient-to-r from-red-600/5 to-transparent px-8 py-6 flex flex-row items-center justify-between">
+                            <CardTitle className="text-white text-xl flex items-center gap-3 italic font-black tracking-tighter">
+                                <Target className="w-5 h-5 text-red-500 animate-pulse" /> SALES SNIPER FEED
                             </CardTitle>
-                            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
-                                {systemStatus?.activeChats?.length || 0} ACTIVE
-                            </Badge>
+                            <div className="flex gap-2">
+                                <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 font-black">
+                                    {systemStatus?.activeChats?.length || 0} LIVE VISITORS
+                                </Badge>
+                                <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20 font-black uppercase">
+                                    Real-time
+                                </Badge>
+                            </div>
                         </CardHeader>
                         <CardContent className="p-0">
                             {!systemStatus?.activeChats || systemStatus.activeChats.length === 0 ? (
-                                <div className="py-12 text-center text-gray-500 italic">No active conversations right now.</div>
+                                <div className="py-20 text-center flex flex-col items-center">
+                                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-dashed border-white/10">
+                                        <Globe className="w-8 h-8 text-gray-700" />
+                                    </div>
+                                    <p className="text-gray-500 text-sm font-medium">Scanning for high-intent activity...</p>
+                                </div>
                             ) : (
                                 <div className="divide-y divide-white/5">
                                     {systemStatus.activeChats.map((chat) => (
-                                        <div key={chat.id} className="p-6 hover:bg-white/[0.01] transition-all group">
+                                        <div key={chat.id} className="p-6 hover:bg-white/[0.015] transition-all group relative overflow-hidden">
+                                            {chat.intent_score >= 80 && (
+                                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-600 shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+                                            )}
+                                            
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                                                        <MessageSquare className="w-5 h-5 text-gray-400" />
+                                                    <div className={cn(
+                                                        "w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-110",
+                                                        chat.intent_score >= 80 ? "bg-red-500/10 border-red-500/20" : "bg-white/5 border-white/10"
+                                                    )}>
+                                                        {chat.intent_score >= 80 ? <Zap className="w-6 h-6 text-red-500" /> : <Users className="w-6 h-6 text-gray-400" />}
                                                     </div>
                                                     <div>
                                                         <div className="flex items-center gap-2">
-                                                            <span className="text-white font-bold">{chat.user_identifier || 'Anonymous Guest'}</span>
+                                                            <span className="text-white font-black text-lg tracking-tight">{chat.user_identifier || 'Unknown Prospect'}</span>
                                                             {chat.intent_score >= 80 && (
-                                                                <Badge className="bg-red-500 text-[10px] font-black uppercase">High Intent</Badge>
+                                                                <Badge className="bg-red-600 text-[10px] font-black uppercase shadow-lg shadow-red-500/20">HOT TARGET</Badge>
                                                             )}
                                                         </div>
-                                                        <span className="text-[10px] text-gray-500 uppercase font-black tracking-widest">
-                                                            {new Date(chat.last_active).toLocaleTimeString()}
-                                                        </span>
+                                                        <div className="flex items-center gap-3 mt-0.5">
+                                                            <span className="text-[10px] text-gray-500 uppercase font-black tracking-widest flex items-center gap-1">
+                                                                <Clock className="w-3 h-3" /> {new Date(chat.last_active).toLocaleTimeString()}
+                                                            </span>
+                                                            <span className="text-[10px] text-gray-500 uppercase font-black tracking-widest flex items-center gap-1">
+                                                                <Globe className="w-3 h-3" /> {chat.metadata?.path?.replace('/', '') || 'Home'}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <Button variant="ghost" size="sm" className="text-gray-400 group-hover:text-white" asChild>
-                                                    <Link href="/Admin_CRM">View Session →</Link>
-                                                </Button>
+                                                <div className="flex flex-col items-end gap-2">
+                                                    <div className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Intent Score</div>
+                                                    <div className="text-2xl font-black text-white">{chat.intent_score || 0}%</div>
+                                                </div>
                                             </div>
                                             
                                             {/* Preview last 2 messages */}
-                                            <div className="space-y-2 ml-14">
+                                            <div className="space-y-2 ml-16 bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                                 {chat.chat_messages?.slice(-2).map((m, idx) => (
                                                     <div key={idx} className="flex gap-3">
                                                         <span className={cn(
-                                                            "text-[9px] font-black uppercase tracking-tighter w-12 pt-1",
-                                                            m.role === 'user' ? 'text-blue-400' : 'text-red-400'
+                                                            "text-[9px] font-black uppercase tracking-widest w-16 pt-1 flex-shrink-0",
+                                                            m.role === 'user' ? 'text-blue-500' : 'text-red-500'
                                                         )}>
-                                                            {m.role}:
+                                                            {m.role === 'user' ? 'INCOMING' : 'EYE-BOT'}:
                                                         </span>
-                                                        <p className="text-xs text-gray-400 line-clamp-1 italic">
+                                                        <p className="text-xs text-gray-300 line-clamp-1 italic font-medium">
                                                             "{m.content}"
                                                         </p>
                                                     </div>
                                                 ))}
+                                                {(!chat.chat_messages || chat.chat_messages.length === 0) && (
+                                                    <p className="text-xs text-gray-600 italic">Browsing page actively...</p>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             )}
                         </CardContent>
+                        <CardHeader className="border-t border-white/5 bg-white/[0.01] px-8 py-4">
+                            <Button variant="ghost" className="w-full text-xs text-gray-500 hover:text-white" asChild>
+                                <Link href="/Admin-CRM">OPEN FULL PIPELINE CONTROL <ArrowRight className="w-3 h-3 ml-2" /></Link>
+                            </Button>
+                        </CardHeader>
                     </Card>
 
                     {/* Recent Leads Feed */}
@@ -348,7 +379,7 @@ function Admin_Dashboard() {
                                     </div>
                                     Recent Leads
                                 </span>
-                                <Link href="/Admin_CRM">
+                                <Link href="/Admin-CRM">
                                     <Button
                                         variant="ghost" size="sm"
                                         className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10"
@@ -596,9 +627,9 @@ function Admin_Dashboard() {
                             <CardContent className="pt-5 pb-4 space-y-2">
                                 <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">Quick Actions</p>
                                 {[
-                                    { label: 'Add Manual Lead', href: '/Admin_CRM', icon: Plus, color: 'text-red-400' },
-                                    { label: 'Send Campaign', href: '/Admin_Marketing', icon: Mail, color: 'text-blue-400' },
-                                    { label: 'View Analytics', href: '/Admin_Analytics', icon: Globe, color: 'text-emerald-400' },
+                                    { label: 'Add Manual Lead', href: '/Admin-CRM', icon: Plus, color: 'text-red-400' },
+                                    { label: 'Send Campaign', href: '/Admin-Marketing', icon: Mail, color: 'text-blue-400' },
+                                    { label: 'View Analytics', href: '/Admin-Analytics', icon: Globe, color: 'text-emerald-400' },
                                 ].map((action, i) => (
                                     <Link
                                         key={i}

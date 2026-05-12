@@ -3,15 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import Service_SocialMedia from './views/Service_SocialMedia';
-import Service_WebDev from './views/Service_WebDev';
-import Service_AI from './views/Service_AI';
-import Service_PaidAds from './views/Service_PaidAds';
-import Service_Branding from './views/Service_Branding';
-import Service_Funnels from './views/Service_Funnels';
-import Admin_Outreach from './views/Admin_Outreach';
 import SignProposal from './views/SignProposal';
-import Client_Portal from './views/Client_Portal';
 import { Button } from '@/components/ui/button';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
@@ -96,15 +88,7 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
-      <Route path="/Service_SocialMedia" element={<LayoutWrapper currentPageName="Service_SocialMedia"><Service_SocialMedia /></LayoutWrapper>} />
-      <Route path="/Service_WebDev" element={<LayoutWrapper currentPageName="Service_WebDev"><Service_WebDev /></LayoutWrapper>} />
-      <Route path="/Service_AI" element={<LayoutWrapper currentPageName="Service_AI"><Service_AI /></LayoutWrapper>} />
-      <Route path="/Service_PaidAds" element={<LayoutWrapper currentPageName="Service_PaidAds"><Service_PaidAds /></LayoutWrapper>} />
-      <Route path="/Service_Branding" element={<LayoutWrapper currentPageName="Service_Branding"><Service_Branding /></LayoutWrapper>} />
-      <Route path="/Service_Funnels" element={<LayoutWrapper currentPageName="Service_Funnels"><Service_Funnels /></LayoutWrapper>} />
-      <Route path="/Admin_Outreach" element={<LayoutWrapper currentPageName="Admin_Outreach"><Admin_Outreach /></LayoutWrapper>} />
       <Route path="/SignProposal" element={<SignProposal />} />
-      <Route path="/Client_Portal" element={<LayoutWrapper currentPageName="Client_Portal"><Client_Portal /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

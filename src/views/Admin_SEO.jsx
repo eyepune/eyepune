@@ -317,7 +317,7 @@ Content: ${data.content.substring(0, 2000)}`
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Target URL (Optional)</Label>
-                                    <Input value={analysisInput.page_url} onChange={(e) => setAnalysisInput({ ...analysisInput, page_url: e.target.value })} placeholder="https://eyepune.com/services/web-dev" className="bg-[#111] border-white/10 focus:border-purple-500/50 text-white h-11" />
+                                    <Input value={analysisInput.page_url} onChange={(e) => setAnalysisInput({ ...analysisInput, page_url: e.target.value })} placeholder="https://eyepune.com/Service-WebDev" className="bg-[#111] border-white/10 focus:border-purple-500/50 text-white h-11" />
                                 </div>
                                 <div className="space-y-2">
                                     <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Page Title <span className="text-purple-500">*</span></Label>

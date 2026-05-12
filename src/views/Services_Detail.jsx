@@ -13,11 +13,12 @@ import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const serviceLinks = [
     '/Booking',
-    '/Service_SocialMedia',
-    '/Service_WebDev',
-    '/Service_AI',
-    '/Service_PaidAds',
-    '/Service_Branding',
+    '/Service-SocialMedia',
+    '/Service-WebDev',
+    '/Service-AI',
+    '/Service-PaidAds',
+    '/Service-Branding',
+    '/Service-Funnels',
 ];
 
 const services = [
@@ -93,7 +94,7 @@ export default function Services_Detail() {
             title="Digital Marketing Services in Pune | Social Media, Web Dev, AI Automation – EyE PunE"
             description="EyE PunE offers complete digital marketing services in Pune: social media management, website development, AI automation, paid ads, branding and lead generation. Get a free consultation today."
             keywords="digital marketing services pune, social media management pune, website development pune, AI automation pune, Google Ads pune, Meta Ads pune, branding agency pune, lead generation pune"
-            canonicalUrl="https://eyepune.com/Services_Detail"
+            canonicalUrl="https://eyepune.com/Services-Detail"
             structuredData={servicesSchema}
         />
 

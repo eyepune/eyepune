@@ -21,26 +21,46 @@ export default function AIChatbot() {
     const scrollRef = useRef(null);
 
     // 1. Delayed Visibility & Proactive Messaging
+    // 1. Intelligent Visibility & Proactive Messaging
     useEffect(() => {
-        const timer = setTimeout(() => {
+        let hasTriggered = false;
+
+        const triggerProactive = () => {
+            if (hasTriggered) return;
+            hasTriggered = true;
             setIsVisible(true);
-            
+            setIsOpen(true); // Auto-expand for higher conversion
+
             // Set proactive message based on current path
             const path = window.location.pathname;
-            let initialMsg = "Namaste! 🙏 I'm EyE BoT, your AI growth assistant. How can I help you transform your business today?";
+            let initialMsg = "Namaste! 🙏 I'm EyE BoT, your AI growth assistant. I noticed you're exploring our ecosystem—how can I help you transform your business today?";
             
-            if (path.includes('Service_AI')) {
-                initialMsg = "Looking to automate your Pune business with AI? 🤖 I'm here to show you how we can save you 20+ hours a week!";
-            } else if (path.includes('Service_WebDev')) {
-                initialMsg = "Need a high-performance website that actually ranks? 🚀 I can help you build a conversion engine today!";
+            if (path.includes('Service-AI')) {
+                initialMsg = "Automating your business with AI can save you 20+ hours a week. 🤖 Want to see our case studies for Pune businesses?";
+            } else if (path.includes('Service-WebDev')) {
+                initialMsg = "A high-performance website is your 24/7 salesperson. 🚀 Should I analyze your current site speed?";
             } else if (path.includes('Booking')) {
-                initialMsg = "Ready to sync your vision? 📅 I'm here to help you prepare for your consultation!";
+                initialMsg = "Ready to sync your vision? 📅 I can help you prepare the right questions for our Discovery Call!";
+            } else if (path.includes('AI-Assessment')) {
+                initialMsg = "This assessment is the first step to your 90-day roadmap. 📊 Need help answering any of these?";
             }
 
             setMessages([{ role: 'assistant', content: initialMsg }]);
-        }, 3000); // 3-second delay for LCP performance
+        };
 
-        return () => clearTimeout(timer);
+        // Trigger after 8 seconds OR 30% scroll
+        const timer = setTimeout(triggerProactive, 8000);
+
+        const handleScroll = () => {
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            if (scrollPercent > 30) triggerProactive();
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     // 2. Initialize Session
@@ -158,7 +178,7 @@ Our Core Services (Promote these):
 4. **Social Media**: ROI-focused content creation and automated scheduling.
 
 Call-to-Action (CTA) Strategy:
-- If they are curious/researching: Send them to the AI Assessment (https://eyepune.com/AI_Assessment).
+- If they are curious/researching: Send them to the AI Assessment (https://eyepune.com/AI-Assessment).
 - If they are ready to talk business: Send them to the Vision Sync Booking (https://eyepune.com/Booking).
 
 Tone & Persona:

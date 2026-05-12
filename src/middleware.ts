@@ -46,21 +46,25 @@ export async function middleware(request: NextRequest) {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
+    const pathname = request.nextUrl.pathname;
+
+    // ── SEO Standardization: Redirect Underscore Routes to Hyphenated Routes ──
+    // e.g., /Admin_Dashboard -> /Admin-Dashboard
+    if (pathname.includes('_') && !pathname.startsWith('/api') && !pathname.includes('.')) {
+      const newPathname = pathname.replace(/_/g, '-');
+      const url = request.nextUrl.clone();
+      url.pathname = newPathname;
+      return NextResponse.redirect(url, 301); // Permanent redirect for SEO
+    }
+
     // Protect Admin Routes
-    const isAdminRoute = request.nextUrl.pathname.startsWith('/Admin_') || 
-                        request.nextUrl.pathname.startsWith('/Admin-') ||
-                        request.nextUrl.pathname === '/Admin_Dashboard';
+    const isAdminRoute = pathname.startsWith('/Admin-');
 
     if (isAdminRoute) {
       if (!user) {
         return NextResponse.redirect(new URL('/login', request.url));
       }
       
-      // We can't easily check the 'role' field from the 'users' table in middleware 
-      // without a database query (which we should avoid in middleware for performance).
-      // However, we can check for a specific admin email or a JWT claim if available.
-      // For now, we'll rely on the client-side AdminGuard for the role check,
-      // but blocking unauthenticated users here is a huge first step.
       const adminEmails = ['connect@eyepune.com', 'eyepune.contact@gmail.com']; 
       if (!adminEmails.includes(user.email || '')) {
          return NextResponse.redirect(new URL('/', request.url));

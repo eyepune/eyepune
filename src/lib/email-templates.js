@@ -80,7 +80,7 @@ export const getAdminNotificationTemplate = (type, data) => `
             `).join('')}
         </table>
         <div style="margin-top: 24px;">
-            <a href="https://eyepune.com/Admin_CRM" style="background: ${BRAND_COLOR}; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Manage in CRM</a>
+            <a href="https://eyepune.com/Admin-CRM" style="background: ${BRAND_COLOR}; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Manage in CRM</a>
         </div>
     </div>
 </div>
@@ -108,7 +108,7 @@ export const getClientKickoffTemplate = (name) => `
             <p style="color: #666; font-size: 14px;">Provide the necessary assets and access so our engineers can begin calibration.</p>
         </div>
 
-        <a href="https://eyepune.com/Client_Dashboard" style="display: block; background: #ef4444; color: #fff; text-align: center; padding: 20px; border-radius: 12px; text-decoration: none; font-weight: 900; font-size: 18px; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);">Open Dashboard →</a>
+        <a href="https://eyepune.com/Client-Dashboard" style="display: block; background: #ef4444; color: #fff; text-align: center; padding: 20px; border-radius: 12px; text-decoration: none; font-weight: 900; font-size: 18px; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);">Open Dashboard →</a>
         
         <p style="text-align: center; font-size: 12px; color: #444; margin-top: 40px;">
             This is an exclusive link for your account. Please do not share it.

@@ -15,19 +15,19 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const NAV_ITEMS = [
-    { name: 'Dashboard', href: '/Admin_Dashboard', icon: LayoutDashboard },
-    { name: 'CRM / Leads', href: '/Admin_CRM', icon: Users },
-    { name: 'Marketing & Automation', href: '/Admin_Marketing', icon: Mail },
-    { name: 'Drip Automations', href: '/Admin_DripAutomations', icon: Zap },
-    { name: 'WhatsApp Flows', href: '/Admin_WhatsAppMarketing', icon: MessageSquare },
-    { name: 'Automation Lab', href: '/Admin_TestAutomation', icon: Beaker },
-    { name: 'Documents', href: '/Admin_Documents', icon: FileText },
-    { name: 'Testimonials', href: '/Admin_Testimonials', icon: Star },
-    { name: 'Client Logos', href: '/Admin_ClientLogos', icon: ImageIcon },
-    { name: 'Forms & Assessments', href: '/Admin_Forms', icon: FileText },
-    { name: 'SEO Management', href: '/Admin_SEO', icon: Search },
-    { name: 'Admin Users', href: '/Admin_Users', icon: UserPlus },
-    { name: 'System Status', href: '/SystemStatus', icon: ShieldAlert },
+    { name: 'Dashboard', href: '/Admin-Dashboard', icon: LayoutDashboard },
+    { name: 'CRM / Leads', href: '/Admin-CRM', icon: Users },
+    { name: 'Marketing & Automation', href: '/Admin-Marketing', icon: Mail },
+    { name: 'Drip Automations', href: '/Admin-DripAutomations', icon: Zap },
+    { name: 'WhatsApp Flows', href: '/Admin-WhatsAppMarketing', icon: MessageSquare },
+    { name: 'Automation Lab', href: '/Admin-TestAutomation', icon: Beaker },
+    { name: 'Documents', href: '/Admin-Documents', icon: FileText },
+    { name: 'Testimonials', href: '/Admin-Testimonials', icon: Star },
+    { name: 'Client Logos', href: '/Admin-ClientLogos', icon: ImageIcon },
+    { name: 'Forms & Assessments', href: '/Admin-Forms', icon: FileText },
+    { name: 'SEO Management', href: '/Admin-SEO', icon: Search },
+    { name: 'Admin Users', href: '/Admin-Users', icon: UserPlus },
+    { name: 'System Status', href: '/System-Status', icon: ShieldAlert },
 ];
 
 export default function AdminLayout({ children }) {

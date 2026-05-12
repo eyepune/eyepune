@@ -23,7 +23,7 @@ import CustomCursor from "@/components/shared/CustomCursor";
 
 const publicNavLinks = [
     { name: 'Home', page: 'Home', icon: HomeIcon },
-    { name: 'Services', page: 'Services_Detail', icon: Briefcase },
+    { name: 'Services', page: 'Services-Detail', icon: Briefcase },
     { name: 'Pricing', page: 'Pricing', icon: Tag },
     { name: 'Blog', page: 'Blog', icon: BookOpen },
     { name: 'About', page: 'About', icon: Users },
@@ -31,46 +31,46 @@ const publicNavLinks = [
 ];
 
 const adminNavLinks = [
-    { name: 'Dashboard', page: 'Admin_Dashboard' },
-    { name: 'Users', page: 'Admin_Users' },
-    { name: 'CRM', page: 'Admin_CRM' },
-    { name: 'CRM Sync', page: 'Admin_CRMSync' },
-    { name: 'Sales Metrics', page: 'Admin_SalesMetrics' },
-    { name: 'Sales AI', page: 'Admin_SalesAssistant' },
-    { name: 'WhatsApp', page: 'Admin_WhatsAppSetup' },
-    { name: 'Package Builder', page: 'Admin_PackageBuilder' },
-    { name: 'Projects', page: 'Admin_Projects' },
-    { name: 'Documents', page: 'Admin_Documents' },
-    { name: 'Templates', page: 'Admin_Templates' },
-    { name: 'PM', page: 'Admin_ProjectManagement' },
-    { name: 'Blog', page: 'Admin_Blog' },
-    { name: 'Testimonials', page: 'Admin_Testimonials' },
-    { name: 'Feedback', page: 'Admin_Feedback' },
-    { name: 'Reports', page: 'Admin_Reports' },
-    { name: 'CMS', page: 'Admin_CMS' },
-    { name: 'Marketing', page: 'Admin_Marketing' },
-    { name: 'Email Templates', page: 'Admin_EmailTemplates' },
-    { name: 'Analytics', page: 'Admin_Analytics' },
-    { name: 'SEO', page: 'Admin_SEO' },
-    { name: 'Automation Lab', page: 'Admin_TestAutomation' },
+    { name: 'Dashboard', page: 'Admin-Dashboard' },
+    { name: 'Users', page: 'Admin-Users' },
+    { name: 'CRM', page: 'Admin-CRM' },
+    { name: 'CRM Sync', page: 'Admin-CRMSync' },
+    { name: 'Sales Metrics', page: 'Admin-SalesMetrics' },
+    { name: 'Sales AI', page: 'Admin-SalesAssistant' },
+    { name: 'WhatsApp', page: 'Admin-WhatsAppSetup' },
+    { name: 'Package Builder', page: 'Admin-PackageBuilder' },
+    { name: 'Projects', page: 'Admin-Projects' },
+    { name: 'Documents', page: 'Admin-Documents' },
+    { name: 'Templates', page: 'Admin-Templates' },
+    { name: 'PM', page: 'Admin-ProjectManagement' },
+    { name: 'Blog', page: 'Admin-Blog' },
+    { name: 'Testimonials', page: 'Admin-Testimonials' },
+    { name: 'Feedback', page: 'Admin-Feedback' },
+    { name: 'Reports', page: 'Admin-Reports' },
+    { name: 'CMS', page: 'Admin-CMS' },
+    { name: 'Marketing', page: 'Admin-Marketing' },
+    { name: 'Email Templates', page: 'Admin-EmailTemplates' },
+    { name: 'Analytics', page: 'Admin-Analytics' },
+    { name: 'SEO', page: 'Admin-SEO' },
+    { name: 'Automation Lab', page: 'Admin-TestAutomation' },
 
-    { name: 'Service Add-ons', page: 'Admin_ServiceAddons' },
-    { name: 'Outreach', page: 'Admin_Outreach' },
+    { name: 'Service Add-ons', page: 'Admin-ServiceAddons' },
+    { name: 'Outreach', page: 'Admin-Outreach' },
 ];
 
 const clientNavLinks = [
-    { name: 'Dashboard', page: 'Client_Dashboard' },
-    { name: 'My Portal', page: 'Client_Portal' },
+    { name: 'Dashboard', page: 'Client-Dashboard' },
+    { name: 'My Portal', page: 'Client-Portal' },
 ];
 
 const footerLinks = {
     Services: [
-        { name: 'Social Media Management', page: 'Service_SocialMedia' },
-        { name: 'Website Development', page: 'Service_WebDev' },
-        { name: 'AI Automation', page: 'Service_AI' },
-        { name: 'Google & Meta Ads', page: 'Service_PaidAds' },
-        { name: 'Branding & Design', page: 'Service_Branding' },
-        { name: 'Sales Funnels', page: 'Service_Funnels' },
+        { name: 'Social Media Management', page: 'Service-SocialMedia' },
+        { name: 'Website Development', page: 'Service-WebDev' },
+        { name: 'AI Automation', page: 'Service-AI' },
+        { name: 'Google & Meta Ads', page: 'Service-PaidAds' },
+        { name: 'Branding & Design', page: 'Service-Branding' },
+        { name: 'Sales Funnels', page: 'Service-Funnels' },
     ],
     Company: [
         { name: 'About Us', page: 'About' },
@@ -79,7 +79,7 @@ const footerLinks = {
         { name: 'Contact', page: 'Contact' },
     ],
     'Get Started': [
-        { name: 'Free AI Assessment', page: 'AI_Assessment' },
+        { name: 'Free AI Assessment', page: 'AI-Assessment' },
         { name: 'Book Consultation', page: 'Booking' },
         { name: 'Pricing', page: 'Pricing' },
     ],
@@ -89,22 +89,9 @@ function LayoutContent({ children, currentPageName }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
-    // Scroll to top and update title on every page navigation
+    // Scroll to top on every page navigation
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
-        
-        // Dynamic title logic
-        const siteName = 'EyE PunE';
-        if (currentPageName === 'Home') {
-            document.title = `${siteName} — AI-Powered Digital Growth`;
-        } else {
-            const formattedName = currentPageName
-                .replace(/_/g, ' ')
-                .replace('Admin ', 'Admin: ')
-                .replace('Service ', 'Service: ')
-                .replace(/\b\w/g, l => l.toUpperCase());
-            document.title = `${formattedName} | ${siteName}`;
-        }
     }, [currentPageName]);
 
     useEffect(() => {
@@ -115,8 +102,8 @@ function LayoutContent({ children, currentPageName }) {
 
     const { user } = useAuth();
 
-    const isAdminPage = currentPageName?.startsWith('Admin_');
-    const isClientPage = currentPageName?.startsWith('Client_');
+    const isAdminPage = currentPageName?.startsWith('Admin-');
+    const isClientPage = currentPageName?.startsWith('Client-');
 
     // Activity logging is now handled by NavigationTracker to avoid redundancy
 
@@ -181,12 +168,12 @@ function LayoutContent({ children, currentPageName }) {
                             {isPublicPage && (
                                 <>
                                     {user && (
-                                        <Link href={createPageUrl(user.role === 'admin' ? "Admin_Dashboard" : "Client_Dashboard")}>
+                                        <Link href={createPageUrl(user.role === 'admin' ? "Admin-Dashboard" : "Client-Dashboard")}>
                                             <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white rounded-full text-sm">Dashboard</Button>
                                         </Link>
                                     )}
                                     {user?.role === 'admin' && (
-                                        <Link href={createPageUrl("Admin_Dashboard")}>
+                                        <Link href={createPageUrl("Admin-Dashboard")}>
                                             <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white rounded-full w-9 h-9">
                                                 <LayoutDashboard className="w-4 h-4" />
                                             </Button>
@@ -274,7 +261,7 @@ function LayoutContent({ children, currentPageName }) {
                                     )}
                                     {user ? (
                                         <>
-                                            <Link href={createPageUrl(user.role === 'admin' ? "Admin_Dashboard" : "Client_Dashboard")} onClick={() => setMobileMenuOpen(false)}>
+                                            <Link href={createPageUrl(user.role === 'admin' ? "Admin-Dashboard" : "Client-Dashboard")} onClick={() => setMobileMenuOpen(false)}>
                                                 <Button className="w-full bg-white/[0.07] hover:bg-white/[0.1] text-white rounded-xl py-5 font-bold mb-3">
                                                     <LayoutDashboard className="w-4 h-4 mr-2" /> Dashboard
                                                 </Button>
@@ -389,9 +376,9 @@ function LayoutContent({ children, currentPageName }) {
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-white/[0.06] text-xs text-gray-600">
                             <p>© 2026 EyE PunE. All rights reserved.</p>
                             <div className="flex gap-6">
-                                <Link href={createPageUrl("CMSPage") + "?slug=privacy-policy"} className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
-                                <Link href={createPageUrl("CMSPage") + "?slug=terms-and-conditions"} className="hover:text-gray-400 transition-colors">Terms & Conditions</Link>
-                                <Link href={createPageUrl("CMSPage") + "?slug=cookie-policy"} className="hover:text-gray-400 transition-colors">Cookie Policy</Link>
+                                <Link href={createPageUrl("CMS-Page") + "?slug=privacy-policy"} className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
+                                <Link href={createPageUrl("CMS-Page") + "?slug=terms-and-conditions"} className="hover:text-gray-400 transition-colors">Terms & Conditions</Link>
+                                <Link href={createPageUrl("CMS-Page") + "?slug=cookie-policy"} className="hover:text-gray-400 transition-colors">Cookie Policy</Link>
                             </div>
                         </div>
                     </div>
@@ -402,7 +389,7 @@ function LayoutContent({ children, currentPageName }) {
 }
 
 export default function Layout(props) {
-    const isPublicPage = !props.currentPageName?.startsWith('Admin_') && !props.currentPageName?.startsWith('Client_');
+    const isPublicPage = !props.currentPageName?.startsWith('Admin-') && !props.currentPageName?.startsWith('Client-');
     return (
         <ThemeProvider>
             <CustomCursor />

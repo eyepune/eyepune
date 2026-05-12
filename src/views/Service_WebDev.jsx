@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Globe, Zap, ShieldCheck, Smartphone, Code2, BarChart3 } from 'lucide-react';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import SEOHead from '@/components/seo/SEOHead';
 
 const faqs = [
     { question: "How much does website development cost in Pune?", answer: "EyE PunE's website packages start at ₹25,000 for a professional 5-page website. E-commerce sites start at ₹50,000. Custom web applications are priced based on scope." },
@@ -32,7 +33,16 @@ const results = [
 
 export default function Service_WebDev() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <>
+            <SEOHead
+                title="Professional Web Development Pune – High-Performance Websites"
+                description="Scale your Pune business with a sub-2-second loading website. We build custom, SEO-optimized web applications and e-commerce sites that rank #1 and convert traffic into sales."
+                keywords="web development company pune, best website designers pune, e-commerce development pune, custom web application pune, technical SEO pune"
+                canonicalUrl="https://eyepune.com/Service-WebDev"
+                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Website Development & Design", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+            />
+
+            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
@@ -84,24 +94,37 @@ export default function Service_WebDev() {
                         </motion.div>
                     ))}
                 </div>
+            <            {/* Trust Bar */}
+            <section className="py-12 border-b border-white/[0.06] bg-[#080808]">
+                <div className="max-w-7xl mx-auto px-6">
+                    <p className="text-center text-[10px] font-bold tracking-[0.3em] uppercase text-gray-600 mb-8">PUNE BRANDS DOMINATING SEARCH</p>
+                    <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+                        <span className="text-xl font-black italic">PUNE-RETAIL</span>
+                        <span className="text-xl font-black italic">ELITE-DENTAL</span>
+                        <span className="text-xl font-black italic">MCORE-TECH</span>
+                        <span className="text-xl font-black italic">KOREGAON-CAFE</span>
+                    </div>
+                </div>
             </section>
 
             {/* Features */}
             <section className="py-24">
                 <div className="max-w-7xl mx-auto px-6">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-                        <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">What We Build</span>
-                        <h2 className="text-4xl md:text-5xl font-black">Websites That <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Work for You 24/7</span></h2>
+                        <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Core Strengths</span>
+                        <h2 className="text-4xl md:text-5xl font-black">Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Conversion</span></h2>
+                        <p className="text-gray-500 mt-4 max-w-2xl mx-auto">We don't build "pretty" websites. We build fast, high-performance sales engines that Rank, Engage, and Convert.</p>
                     </motion.div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {features.map((f, i) => (
                             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                                className="group p-7 rounded-2xl bg-white/[0.025] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all"
+                                className="group p-8 rounded-3xl bg-white/[0.02] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all relative overflow-hidden"
                             >
-                                <div className="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <f.icon className="w-5 h-5 text-red-400" />
+                                <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-red-500/5 rounded-full blur-2xl group-hover:bg-red-500/10 transition-all" />
+                                <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <f.icon className="w-6 h-6 text-red-400" />
                                 </div>
-                                <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
+                                <h3 className="text-xl font-bold text-white mb-3 tracking-tight">{f.title}</h3>
                                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
                             </motion.div>
                         ))}
@@ -109,41 +132,49 @@ export default function Service_WebDev() {
                 </div>
             </section>
 
-            {/* Testimonials */}
-            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01]">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Matrix */}
+            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01] relative">
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Social Proof</span>
-                            <h2 className="text-4xl font-black mb-6 italic">Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Performance</span></h2>
+                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Technical Authority</span>
+                            <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight italic">The Speed <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">& Conversion Matrix</span></h2>
                             <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                "Our previous website was slow and didn't generate any leads. EyE PunE rebuilt it from scratch with a focus on speed and SEO. Our organic traffic increased by 150% in just two months."
+                                Most websites in Pune lose 40% of their traffic because they take longer than 3 seconds to load. Our "Vision Core" architecture ensures sub-2-second loads, keeping users engaged and ready to buy.
                             </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">AS</div>
-                                <div>
-                                    <div className="font-bold text-white text-lg italic">Anjali S.</div>
-                                    <div className="text-gray-500 text-sm">Marketing Director, Global Retail</div>
-                                </div>
+                            <div className="space-y-4">
+                                {[
+                                    { label: 'Core Web Vitals', val: '98/100' },
+                                    { label: 'Mobile Responsiveness', val: 'FLAWLESS' },
+                                    { label: 'SEO Technical Audit', val: 'PASSED' }
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                                        <span className="text-gray-300 font-bold">{item.label}</span>
+                                        <span className="text-red-500 font-black">{item.val}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">150%</div>
-                                <div className="text-gray-500 text-sm">Traffic Growth</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">&lt;2s</div>
-                                <div className="text-gray-500 text-sm">Load Time</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">SEO</div>
-                                <div className="text-gray-500 text-sm">Rank #1 Ready</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">24/7</div>
-                                <div className="text-gray-500 text-sm">Uptime Support</div>
-                            </div>
+                            {[
+                                { val: '150%', label: 'Traffic Growth', icon: Zap },
+                                { val: '<2s', label: 'Load Time', icon: Code2 },
+                                { val: 'Elite', label: 'Security', icon: ShieldCheck },
+                                { val: '24/7', label: 'Uptime', icon: Globe }
+                            ].map((stat, i) => (
+                                <motion.div 
+                                    key={i} 
+                                    initial={{ scale: 0.9, opacity: 0 }} 
+                                    whileInView={{ scale: 1, opacity: 1 }} 
+                                    viewport={{ once: true }} 
+                                    transition={{ delay: i * 0.1 }}
+                                    className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all group text-center"
+                                >
+                                    <stat.icon className="w-5 h-5 text-red-500 mx-auto mb-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                                    <div className="text-4xl font-black text-white mb-1 tracking-tighter group-hover:text-red-500 transition-colors">{stat.val}</div>
+                                    <div className="text-gray-500 text-[10px] uppercase font-bold tracking-widest">{stat.label}</div>
+                                </motion.div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -190,5 +221,6 @@ export default function Service_WebDev() {
                 </div>
             </section>
         </div>
+        </>
     );
 }

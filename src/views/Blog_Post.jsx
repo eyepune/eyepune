@@ -188,7 +188,7 @@ export default function BlogPost() {
                 title={`${post.title} | EyE PunE Vision`}
                 description={post.excerpt}
                 ogImage={featuredImg}
-                canonicalUrl={`https://eyepune.com/Blog_Post?slug=${post.slug}`}
+                canonicalUrl={`https://eyepune.com/Blog-Post?slug=${post.slug}`}
             />
 
             {/* Reading Progress Bar */}
@@ -275,7 +275,7 @@ export default function BlogPost() {
                                 <h2 className="text-3xl font-black mb-12">Related Vision Insights</h2>
                                 <div className="grid md:grid-cols-2 gap-8">
                                     {relatedPosts.map((relatedPost) => (
-                                        <Link key={relatedPost.id} href={createPageUrl(`Blog_Post?slug=${relatedPost.slug}`)} className="group block">
+                                        <Link key={relatedPost.id} href={createPageUrl(`Blog-Post?slug=${relatedPost.slug}`)} className="group block">
                                             <div className="bg-white/5 border border-white/5 rounded-3xl p-6 hover:bg-white/10 transition-all h-full flex flex-col">
                                                 <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
                                                     <Image src={relatedPost.featured_image || featuredImg} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover group-hover:scale-105 transition-transform" alt={relatedPost.title || "Related Post"} />

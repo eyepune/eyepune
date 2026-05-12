@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrendingUp, Workflow, Target, Users, Zap, BarChart3, CheckCircle2, ArrowDownRight } from 'lucide-react';
-import SEOHead from "@/components/seo/SEOHead";
+import SEOHead from '@/components/seo/SEOHead';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const faqs = [
@@ -51,8 +51,8 @@ const faqSchema = {
             "@type": "BreadcrumbList",
             "itemListElement": [
                 { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
-                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services_Detail" },
-                { "@type": "ListItem", "position": 3, "name": "Sales & System Funnels Pune", "item": "https://eyepune.com/Service_Funnels" }
+                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services-Detail" },
+                { "@type": "ListItem", "position": 3, "name": "Sales & System Funnels Pune", "item": "https://eyepune.com/Service-Funnels" }
             ]
         },
         {
@@ -67,14 +67,15 @@ const faqSchema = {
 
 export default function Service_Funnels() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <>
             <SEOHead
                 title="Sales Funnels & System Funnels Pune | CRM Automation – EyE PunE"
                 description="Build high-converting sales funnels and automated system funnels in Pune. EyE PunE designs end-to-end conversion pipelines, CRM automation, lead nurturing & WhatsApp sequences."
                 keywords="sales funnel pune, system funnel pune, CRM automation pune, lead nurturing pune, WhatsApp automation pune, marketing funnel pune"
-                canonicalUrl="https://eyepune.com/Service_Funnels"
+                canonicalUrl="https://eyepune.com/Service-Funnels"
                 structuredData={faqSchema}
             />
+            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
 
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
@@ -218,5 +219,6 @@ export default function Service_Funnels() {
                 </div>
             </section>
         </div>
+        </>
     );
 }

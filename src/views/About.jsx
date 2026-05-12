@@ -40,11 +40,11 @@ export default function About() {
     return (
         <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
         <SEOHead
-            title="About EyE PunE – Digital Marketing Agency in Pune | Our Story & Mission"
-            description="EyE PunE is Pune's all-in-one digital growth agency founded in 2022. 100+ clients, 5x average ROI, 98% retention. Learn our story, mission and why businesses choose us."
-            keywords="about eyepune, digital marketing agency pune, growth agency pune, EyEPunE team, pune marketing company, digital agency pune india"
+            title="The Story of EyE PunE – Pune's Leading Business Growth Partners"
+            description="Founded in 2022, EyE PunE has helped 100+ businesses achieve 5x ROI through integrated sales, tech, and AI. Meet the Pune team behind India's most innovative growth agency."
+            keywords="about eyepune, best marketing agency pune, growth partners pune, eyepune founders, digital transformation pune, pune startup growth"
             canonicalUrl="https://eyepune.com/About"
-            structuredData={{"@context":"https://schema.org","@type":"AboutPage","name":"About EyE PunE","description":"EyE PunE is Pune's all-in-one digital growth agency, founded in 2022, serving 100+ clients across India.","url":"https://eyepune.com/About","mainEntity":{"@type":"Organization","name":"EyE PunE","foundingDate":"2022","areaServed":"India"}}}
+            structuredData={{"@context":"https://schema.org","@type":"AboutPage","name":"About EyE PunE","description":"EyE PunE is Pune's leading all-in-one digital growth agency, serving 100+ clients with AI-driven strategy.","url":"https://eyepune.com/About"}}
         />
 
             {/* ── HERO ── */}

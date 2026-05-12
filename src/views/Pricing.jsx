@@ -37,11 +37,11 @@ export default function Pricing() {
     return (
         <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
         <SEOHead
-            title="Pricing – Digital Marketing Services Pune | EyE PunE"
-            description="Transparent pricing for social media management (from ₹30,000/mo), website development (from ₹25,000), AI automation (from ₹40,000), paid ads, branding and more. EyE PunE, Pune."
-            keywords="digital marketing pricing pune, social media management cost pune, website development price pune, AI automation cost, marketing agency pricing india, EyEPunE pricing"
+            title="Growth Packages & Pricing – Web Design, AI & Marketing in Pune"
+            description="Explore transparent pricing for Social Media Growth (₹30k+), Custom Web Dev (₹25k+), and AI Business Automation (₹40k+). ROI-focused packages designed for Pune businesses of all sizes."
+            keywords="marketing packages pune, website development cost pune, social media management price pune, AI automation cost india, eyepune pricing plans"
             canonicalUrl="https://eyepune.com/Pricing"
-            structuredData={{"@context":"https://schema.org","@type":"WebPage","name":"EyE PunE Pricing","url":"https://eyepune.com/Pricing"}}
+            structuredData={{"@context":"https://schema.org","@type":"WebPage","name":"EyE PunE Pricing & Packages","url":"https://eyepune.com/Pricing"}}
         />
 
             {/* HERO */}

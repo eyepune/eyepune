@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, Zap, Settings, BarChart3, MessageSquare, RefreshCw } from 'lucide-react';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import SEOHead from '@/components/seo/SEOHead';
 
 const faqs = [
     { question: "What is AI automation for business?", answer: "AI automation uses artificial intelligence to handle repetitive tasks like lead follow-up, customer support, report generation, and data entry — saving you 20+ hours per week." },
@@ -32,7 +33,16 @@ const results = [
 
 export default function Service_AI() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <>
+            <SEOHead
+                title="AI Business Automation Pune – Save 20+ Hours Weekly | EyE PunE"
+                description="Transform your Pune business with AI automation. We build custom NVIDIA-powered workflows for lead qualification, customer support chatbots, and WhatsApp automation. Start your free AI assessment."
+                keywords="AI automation pune, business automation company pune, whatsapp automation pune, lead generation AI pune, CRM automation services"
+                canonicalUrl="https://eyepune.com/Service-AI"
+                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "AI Automation for Business", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+            />
+
+            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
@@ -84,24 +94,37 @@ export default function Service_AI() {
                         </motion.div>
                     ))}
                 </div>
+            </section>            {/* Trust Bar */}
+            <section className="py-12 border-b border-white/[0.06] bg-[#080808]">
+                <div className="max-w-7xl mx-auto px-6">
+                    <p className="text-center text-[10px] font-bold tracking-[0.3em] uppercase text-gray-600 mb-8">PUNE BUSINESSES SCALING WITH OUR AI</p>
+                    <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+                        <span className="text-xl font-black italic">TECH-PUNE</span>
+                        <span className="text-xl font-black italic">REALTY-SYNC</span>
+                        <span className="text-xl font-black italic">IND-AUTO</span>
+                        <span className="text-xl font-black italic">HINJEWADI-SAAS</span>
+                    </div>
+                </div>
             </section>
 
             {/* Features */}
             <section className="py-24">
                 <div className="max-w-7xl mx-auto px-6">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-                        <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">AI Solutions</span>
+                        <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">The AI Edge</span>
                         <h2 className="text-4xl md:text-5xl font-black">Automate the Work, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Scale the Results</span></h2>
+                        <p className="text-gray-500 mt-4 max-w-2xl mx-auto">We don't just give you tools; we build the custom NVIDIA-powered engines that run your business while you sleep.</p>
                     </motion.div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {features.map((f, i) => (
                             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                                className="group p-7 rounded-2xl bg-white/[0.025] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all"
+                                className="group p-8 rounded-3xl bg-white/[0.02] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all relative overflow-hidden"
                             >
-                                <div className="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <f.icon className="w-5 h-5 text-red-400" />
+                                <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-red-500/5 rounded-full blur-2xl group-hover:bg-red-500/10 transition-all" />
+                                <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                                    <f.icon className="w-6 h-6 text-red-400" />
                                 </div>
-                                <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
+                                <h3 className="text-xl font-bold text-white mb-3 tracking-tight">{f.title}</h3>
                                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
                             </motion.div>
                         ))}
@@ -110,40 +133,44 @@ export default function Service_AI() {
             </section>
 
             {/* Testimonials */}
-            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01]">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01] relative">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.03)_0%,transparent_70%)]" />
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Success Stories</span>
-                            <h2 className="text-4xl font-black mb-6 italic">What our Pune partners say about <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">AI Transformation</span></h2>
+                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Case Study</span>
+                            <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight italic">How we saved <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">80 hours/mo</span> for a Pune Logistics Firm</h2>
                             <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                "EyE PunE didn't just build a chatbot; they re-wired our entire lead follow-up process. We're now responding to inquiries in seconds, not hours. Our conversion rate jumped by 40% in the first month."
+                                "Our previous process required 3 full-time employees just to sort through incoming leads and assign them. EyE PunE automated the entire qualification process. Now, only 'Hot' leads hit our sales desk. We saved ₹2.5 Lakhs in overhead in the first quarter alone."
                             </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">RK</div>
+                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 w-fit">
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-red-600 to-orange-600 flex items-center justify-center font-bold text-white shadow-lg">VM</div>
                                 <div>
-                                    <div className="font-bold text-white text-lg italic">Rajesh K.</div>
-                                    <div className="text-gray-500 text-sm">CEO, Pune Tech Solutions</div>
+                                    <div className="font-bold text-white italic">Vikram M.</div>
+                                    <div className="text-gray-500 text-xs uppercase tracking-widest">Operations Lead, Pune Logistics</div>
                                 </div>
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-                                <div className="text-3xl font-black text-red-500 mb-1">40%</div>
-                                <div className="text-gray-500 text-sm">Higher Conversion</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-                                <div className="text-3xl font-black text-red-500 mb-1">20h</div>
-                                <div className="text-gray-500 text-sm">Saved Weekly</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-                                <div className="text-3xl font-black text-red-500 mb-1">10k+</div>
-                                <div className="text-gray-500 text-sm">Leads Managed</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-                                <div className="text-3xl font-black text-red-500 mb-1">Instant</div>
-                                <div className="text-gray-500 text-sm">Lead Response</div>
-                            </div>
+                            {[
+                                { val: '80h', label: 'Time Saved/Mo', icon: Zap },
+                                { val: '₹2.5L', label: 'Quarterly ROI', icon: BarChart3 },
+                                { val: '0', label: 'Manual Errors', icon: RefreshCw },
+                                { val: 'Instant', label: 'Lead Response', icon: MessageSquare }
+                            ].map((stat, i) => (
+                                <motion.div 
+                                    key={i} 
+                                    initial={{ scale: 0.9, opacity: 0 }} 
+                                    whileInView={{ scale: 1, opacity: 1 }} 
+                                    viewport={{ once: true }} 
+                                    transition={{ delay: i * 0.1 }}
+                                    className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all group text-center"
+                                >
+                                    <stat.icon className="w-5 h-5 text-red-500 mx-auto mb-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                                    <div className="text-4xl font-black text-white mb-1 tracking-tighter group-hover:text-red-500 transition-colors">{stat.val}</div>
+                                    <div className="text-gray-500 text-[10px] uppercase font-bold tracking-widest">{stat.label}</div>
+                                </motion.div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -190,5 +217,6 @@ export default function Service_AI() {
                 </div>
             </section>
         </div>
+        </>
     );
 }

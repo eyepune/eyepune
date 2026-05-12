@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Megaphone, Code2, Bot, Palette, Package } from 'lucide-react';
 import PackageCard from "@/components/services/PackageCard";
@@ -44,6 +45,14 @@ export default function Services() {
             
             <HeroFloatingIcons opacity={0.15} />
 
+
+            <SEOHead
+                title="Services & Pricing – High-Performance Marketing & Tech in Pune"
+                description="Choose from our ROI-driven marketing packages: Social Media Management, AI Business Automation, Custom Web Development, and Branding. Clear deliverables, transparent pricing, Pune expertise."
+                keywords="digital marketing services pune, AI automation services, web development packages pune, social media marketing cost, branding services pune"
+                canonicalUrl="https://eyepune.com/Services"
+                structuredData={{"@context":"https://schema.org","@type":"Service","serviceType":"Digital Marketing & Tech","provider":{"@type":"Organization","name":"EyE PunE"}}}
+            />
 
             {/* Header */}
             <div className="max-w-7xl mx-auto px-6 mb-16 relative z-10">
@@ -128,12 +137,12 @@ export default function Services() {
                         Every brand is unique. Let's discuss your specific requirements 
                         and create a tailored growth strategy.
                     </p>
-                    <a 
-                        href="/Contact"
+                    <Link 
+                        href={createPageUrl("Contact")}
                         className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors"
                     >
                         Get Custom Quote
-                    </a>
+                    </Link>
                 </div>
             </motion.div>
 
