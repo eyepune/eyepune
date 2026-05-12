@@ -167,228 +167,230 @@ export default function Booking() {
     };
 
     return (
-        <SEOHead
-            title="Book a Free Discovery Call – Strategy & Growth Consultation"
-            description="Schedule a 30-minute free discovery call with EyE PunE. Discuss your business goals, get custom growth recommendations, and discover how our AI systems can scale your Pune business."
-            keywords="book marketing consultation pune, free discovery call pune, growth strategy session, digital marketing consultant pune, schedule business meeting"
-            canonicalUrl="https://eyepune.com/Booking"
-            structuredData={{"@context":"https://schema.org","@type":"WebPage","name":"Book a Consultation with EyE PunE","url":"https://eyepune.com/Booking"}}
-        />
-
-        <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
-            {/* Grid bg */}
-            <div className="absolute inset-0 opacity-[0.03]"
-                style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+        <>
+            <SEOHead
+                title="Book a Free Discovery Call – Strategy & Growth Consultation"
+                description="Schedule a 30-minute free discovery call with EyE PunE. Discuss your business goals, get custom growth recommendations, and discover how our AI systems can scale your Pune business."
+                keywords="book marketing consultation pune, free discovery call pune, growth strategy session, digital marketing consultant pune, schedule business meeting"
+                canonicalUrl="https://eyepune.com/Booking"
+                structuredData={{"@context":"https://schema.org","@type":"WebPage","name":"Book a Consultation with EyE PunE","url":"https://eyepune.com/Booking"}}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404] pointer-events-none" />
-            
-            <HeroFloatingIcons opacity={0.15} />
 
-            <div className="max-w-4xl mx-auto px-6 relative z-10" ref={contentRef}>
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-12"
-                >
-                    <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-                        <CalendarIcon className="w-10 h-10 text-red-600" />
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                        Book Your Free Consultation
-                    </h1>
-                    <p className="text-xl text-muted-foreground">
-                        30-minute call to discuss your business goals
-                    </p>
-                </motion.div>
+            <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
+                {/* Grid bg */}
+                <div className="absolute inset-0 opacity-[0.03]"
+                    style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404] pointer-events-none" />
+                
+                <HeroFloatingIcons opacity={0.15} />
 
-                {isSuccess ? (
+                <div className="max-w-4xl mx-auto px-6 relative z-10" ref={contentRef}>
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="bg-card border rounded-2xl p-12 text-center"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center mb-12"
                     >
-                        <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
-                            <CheckCircle2 className="w-10 h-10 text-green-600" />
+                        <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
+                            <CalendarIcon className="w-10 h-10 text-red-600" />
                         </div>
-                        <h2 className="text-3xl font-bold mb-4">Booking Confirmed!</h2>
-                        <p className="text-muted-foreground mb-6">
-                            Calendar invite sent! Check your email for the Google Meet link and calendar details.
-                        </p>
-                        {meetLink && (
-                            <a 
-                                href={meetLink} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors mb-4"
-                            >
-                                <Video className="w-5 h-5" />
-                                Join Google Meet
-                            </a>
-                        )}
-                        <p className="text-sm text-muted-foreground">
-                            A calendar invite has been sent to your email with all the details.
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                            Book Your Free Consultation
+                        </h1>
+                        <p className="text-xl text-muted-foreground">
+                            30-minute call to discuss your business goals
                         </p>
                     </motion.div>
-                ) : (
-                    <div className="grid lg:grid-cols-2 gap-8">
-                        {/* Form */}
+
+                    {isSuccess ? (
                         <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="bg-card border rounded-2xl p-12 text-center"
                         >
-                            <form onSubmit={handleSubmit} className="bg-card border rounded-2xl p-8 space-y-6">
-                                {/* Honeypot field (hidden from users) */}
-                                <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
-                                    <input
-                                        type="text"
-                                        name="hp_verification"
-                                        value={formData.hp_verification || ''}
-                                        onChange={handleChange}
-                                        tabIndex="-1"
-                                        autoComplete="off"
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Full Name *</Label>
-                                    <Input
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        required
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Email *</Label>
-                                    <Input
-                                        name="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Phone Number *</Label>
-                                    <Input
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        required
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Company</Label>
-                                    <Input
-                                        name="company"
-                                        value={formData.company}
-                                        onChange={handleChange}
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Select Date *</Label>
-                                    <DatePicker
-                                        value={formData.scheduled_date}
-                                        onChange={(val) => setFormData(prev => ({ ...prev, scheduled_date: val, selectedSlot: null }))}
-                                        required
-                                        fromDate={new Date()}
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div>
-                                    <Label>Select Time Slot *</Label>
-                                    {loadingSlots ? (
-                                        <div className="flex items-center justify-center py-8">
-                                            <Loader2 className="w-6 h-6 animate-spin text-red-600" />
-                                        </div>
-                                    ) : !formData.scheduled_date ? (
-                                        <p className="text-sm text-muted-foreground mt-2">Select a date first</p>
-                                    ) : availableSlots.length === 0 ? (
-                                        <p className="text-sm text-muted-foreground mt-2">No available slots for this date</p>
-                                    ) : (
-                                        <div className="grid grid-cols-3 gap-2 mt-2">
-                                            {availableSlots.map((slot, i) => (
-                                                <button
-                                                    key={i}
-                                                    type="button"
-                                                    onClick={() => setFormData({ ...formData, selectedSlot: slot.start })}
-                                                    className={`px-3 py-2 text-sm rounded-lg border transition-all ${
-                                                        formData.selectedSlot === slot.start
-                                                            ? 'bg-red-600 text-white border-red-600'
-                                                            : 'bg-card border-border hover:border-red-500'
-                                                    }`}
-                                                >
-                                                    {slot.display}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                                <div>
-                                    <Label>What would you like to discuss?</Label>
-                                    <Textarea
-                                        name="notes"
-                                        value={formData.notes}
-                                        onChange={handleChange}
-                                        className="mt-2 min-h-[100px]"
-                                    />
-                                </div>
-                                <Button
-                                    type="submit"
-                                    disabled={isSubmitting || !formData.selectedSlot}
-                                    className="w-full bg-red-600 hover:bg-red-700"
+                            <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                                <CheckCircle2 className="w-10 h-10 text-green-600" />
+                            </div>
+                            <h2 className="text-3xl font-bold mb-4">Booking Confirmed!</h2>
+                            <p className="text-muted-foreground mb-6">
+                                Calendar invite sent! Check your email for the Google Meet link and calendar details.
+                            </p>
+                            {meetLink && (
+                                <a 
+                                    href={meetLink} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors mb-4"
                                 >
-                                    {isSubmitting ? (
-                                        <>
-                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                            Creating Calendar Event...
-                                        </>
-                                    ) : 'Confirm Booking'}
-                                </Button>
-                            </form>
+                                    <Video className="w-5 h-5" />
+                                    Join Google Meet
+                                </a>
+                            )}
+                            <p className="text-sm text-muted-foreground">
+                                A calendar invite has been sent to your email with all the details.
+                            </p>
                         </motion.div>
+                    ) : (
+                        <div className="grid lg:grid-cols-2 gap-8">
+                            {/* Form */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                            >
+                                <form onSubmit={handleSubmit} className="bg-card border rounded-2xl p-8 space-y-6">
+                                    {/* Honeypot field (hidden from users) */}
+                                    <div className="sr-only opacity-0 absolute -z-10 pointer-events-none">
+                                        <input
+                                            type="text"
+                                            name="hp_verification"
+                                            value={formData.hp_verification || ''}
+                                            onChange={handleChange}
+                                            tabIndex="-1"
+                                            autoComplete="off"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label>Full Name *</Label>
+                                        <Input
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            required
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label>Email *</Label>
+                                        <Input
+                                            name="email"
+                                            type="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            required
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label>Phone Number *</Label>
+                                        <Input
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            required
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label>Company</Label>
+                                        <Input
+                                            name="company"
+                                            value={formData.company}
+                                            onChange={handleChange}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label>Select Date *</Label>
+                                        <DatePicker
+                                            value={formData.scheduled_date}
+                                            onChange={(val) => setFormData(prev => ({ ...prev, scheduled_date: val, selectedSlot: null }))}
+                                            required
+                                            fromDate={new Date()}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label>Select Time Slot *</Label>
+                                        {loadingSlots ? (
+                                            <div className="flex items-center justify-center py-8">
+                                                <Loader2 className="w-6 h-6 animate-spin text-red-600" />
+                                            </div>
+                                        ) : !formData.scheduled_date ? (
+                                            <p className="text-sm text-muted-foreground mt-2">Select a date first</p>
+                                        ) : availableSlots.length === 0 ? (
+                                            <p className="text-sm text-muted-foreground mt-2">No available slots for this date</p>
+                                        ) : (
+                                            <div className="grid grid-cols-3 gap-2 mt-2">
+                                                {availableSlots.map((slot, i) => (
+                                                    <button
+                                                        key={i}
+                                                        type="button"
+                                                        onClick={() => setFormData({ ...formData, selectedSlot: slot.start })}
+                                                        className={`px-3 py-2 text-sm rounded-lg border transition-all ${
+                                                            formData.selectedSlot === slot.start
+                                                                ? 'bg-red-600 text-white border-red-600'
+                                                                : 'bg-card border-border hover:border-red-500'
+                                                        }`}
+                                                    >
+                                                        {slot.display}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label>What would you like to discuss?</Label>
+                                        <Textarea
+                                            name="notes"
+                                            value={formData.notes}
+                                            onChange={handleChange}
+                                            className="mt-2 min-h-[100px]"
+                                        />
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        disabled={isSubmitting || !formData.selectedSlot}
+                                        className="w-full bg-red-600 hover:bg-red-700"
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                Creating Calendar Event...
+                                            </>
+                                        ) : 'Confirm Booking'}
+                                    </Button>
+                                </form>
+                            </motion.div>
 
-                        {/* Info */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="space-y-6"
-                        >
-                            <div className="bg-card border rounded-2xl p-8">
-                                <h3 className="text-xl font-bold mb-4">What to Expect</h3>
-                                <ul className="space-y-4">
-                                    {[
-                                        'Free 30-minute consultation',
-                                        'Google Meet video call',
-                                        'Discussion of your business goals',
-                                        'Customized growth recommendations',
-                                        'No-pressure conversation'
-                                    ].map((item, i) => (
-                                        <li key={i} className="flex items-start gap-3">
-                                            <CheckCircle2 className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                            <span className="text-muted-foreground">{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                            {/* Info */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="space-y-6"
+                            >
+                                <div className="bg-card border rounded-2xl p-8">
+                                    <h3 className="text-xl font-bold mb-4">What to Expect</h3>
+                                    <ul className="space-y-4">
+                                        {[
+                                            'Free 30-minute consultation',
+                                            'Google Meet video call',
+                                            'Discussion of your business goals',
+                                            'Customized growth recommendations',
+                                            'No-pressure conversation'
+                                        ].map((item, i) => (
+                                            <li key={i} className="flex items-start gap-3">
+                                                <CheckCircle2 className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                                <span className="text-muted-foreground">{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
 
-                            <div className="bg-gradient-to-br from-red-600 to-red-500 rounded-2xl p-8 text-white">
-                                <Clock className="w-12 h-12 mb-4" />
-                                <h3 className="text-xl font-bold mb-2">Available Hours</h3>
-                                <p className="opacity-90">
-                                    Monday - Friday: 9:00 AM - 6:00 PM IST
-                                </p>
-                                <p className="opacity-90 mt-1">
-                                    We'll confirm your slot within 24 hours
-                                </p>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
+                                <div className="bg-gradient-to-br from-red-600 to-red-500 rounded-2xl p-8 text-white">
+                                    <Clock className="w-12 h-12 mb-4" />
+                                    <h3 className="text-xl font-bold mb-2">Available Hours</h3>
+                                    <p className="opacity-90">
+                                        Monday - Friday: 9:00 AM - 6:00 PM IST
+                                    </p>
+                                    <p className="opacity-90 mt-1">
+                                        We'll confirm your slot within 24 hours
+                                    </p>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
