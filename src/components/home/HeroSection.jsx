@@ -98,7 +98,7 @@ export default function HeroSection() {
     const y = useTransform(scrollY, [0, 600], [0, 100]);
     const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
-    const words = ["Precision", "Growth", "Systems"];
+    const words = ["Automation", "Intelligence", "Growth"];
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
@@ -134,7 +134,7 @@ export default function HeroSection() {
                             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-widest mb-8"
                         >
                             <Sparkles className="w-3 h-3" />
-                            Connect · Engage · Grow
+                            Global Growth Engine
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
@@ -149,14 +149,14 @@ export default function HeroSection() {
                                             duration: 0.6, 
                                             ease: [0.23, 1, 0.32, 1] 
                                         }}
-                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500"
+                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500"
                                     >
                                         {words[index]}
                                     </motion.span>
                                 </AnimatePresence>
                             </div>
                             <br />
-                            for Ambitious Brands
+                            for Global Visionaries
                         </h1>
 
                         <motion.p
@@ -165,7 +165,7 @@ export default function HeroSection() {
                             transition={{ duration: 1, delay: 0.8 }}
                             className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed"
                         >
-                            We combine deep-tech automation with elite sales strategy to scale your business predictably. No fluff, just performance-driven results.
+                            We empower Founders, Creators, and Global Startups with Multi-Model AI automation and elite marketing systems. Leveraging the power of OpenAI, Anthropic, and Google Gemini.
                         </motion.p>
 
                         <motion.div
@@ -180,13 +180,13 @@ export default function HeroSection() {
                                     <Globe className="w-5 h-5 text-gray-500 ml-4 hidden sm:block" />
                                     <input 
                                         type="text" 
-                                        placeholder="Enter your website URL (e.g. yoursite.com)"
+                                        placeholder="Enter your global business URL"
                                         className="bg-transparent border-none focus:ring-0 text-white text-base py-3 px-4 flex-1 placeholder:text-gray-600 outline-none"
                                     />
                                     <Link href={createPageUrl("AI_Assessment")}>
                                         <Button className="bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8">
-                                            <span className="hidden sm:inline">Claim Free AI Audit</span>
-                                            <span className="sm:hidden">Start</span>
+                                            <span className="hidden sm:inline">Start Global AI Audit</span>
+                                            <span className="sm:hidden">Audit</span>
                                             <ArrowRight className="w-4 h-4 ml-2" />
                                         </Button>
                                     </Link>
@@ -194,23 +194,23 @@ export default function HeroSection() {
                             </div>
                             <p className="text-[11px] text-gray-600 mt-4 ml-6 uppercase tracking-widest flex items-center gap-2">
                                 <Zap className="w-3 h-3 text-orange-500" />
-                                Instant AI Analysis · No Credit Card Required
+                                Instant Global Analysis · No Credit Card Required
                             </p>
                         </motion.div>
 
                         {/* Trust markers */}
                         <div className="flex items-center gap-8 border-t border-white/5 pt-4 mb-4">
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black text-white">100+</span>
-                                <span className="text-xs text-gray-500 uppercase tracking-widest">Global Clients</span>
+                                <span className="text-2xl font-black text-white">10+</span>
+                                <span className="text-xs text-gray-500 uppercase tracking-widest">Countries Served</span>
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-2xl font-black text-white">5X</span>
-                                <span className="text-xs text-gray-500 uppercase tracking-widest">Avg ROI</span>
+                                <span className="text-xs text-gray-500 uppercase tracking-widest">Avg Growth ROI</span>
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black text-white">24/7</span>
-                                <span className="text-xs text-gray-500 uppercase tracking-widest">AI Support</span>
+                                <span className="text-2xl font-black text-white">NVIDIA</span>
+                                <span className="text-xs text-gray-500 uppercase tracking-widest">Accelerated</span>
                             </div>
                         </div>
                     </motion.div>

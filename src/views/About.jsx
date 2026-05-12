@@ -12,22 +12,22 @@ const timeline = [
     { year: '2023', label: 'First Wins', event: 'Onboarded our first 20+ clients, built a reputation for results-driven social media, branding, and web development across Pune.' },
     { year: 'Mid 2023', label: 'Going Deeper', event: 'Launched WhatsApp automation, CRM integration, and lead nurturing systems — helping clients convert more leads with less effort.' },
     { year: '2024', label: 'AI Era', event: 'Introduced AI-powered tools including automated campaigns, smart analytics, and launched Lex Pro — India\'s AI contract management platform.' },
-    { year: '2025', label: 'Scale Up', event: 'Crossed 100+ happy clients across India. Expanded our team, refined our service bundles, and deepened our commitment to measurable ROI.' },
-    { year: '2026', label: 'Present', event: 'Today, EyE PunE operates as a full-stack growth engine — serving clients across India and globally, combining human strategy, AI automation, and technology to scale businesses predictably.' },
+    { year: '2025', label: 'Going Global', event: 'Crossed 100+ happy clients. Expanded operations to serve international brands across UAE, UK, and USA with dedicated growth engines.' },
+    { year: '2026', label: 'AI Intelligence Hub', event: 'Today, EyE PunE operates as a multi-model AI orchestration engine — leveraging OpenAI, Anthropic, Google, and Meta to scale global businesses predictably.' },
 ];
 
 const values = [
-    { icon: Target, title: "Our Vision", description: "To be India's most trusted all-in-one growth partner — combining human expertise with AI-powered tools that deliver real results.", num: '01' },
-    { icon: Heart, title: "Our Values", description: "Transparency, results-focus, long-term partnerships, and relentless innovation. Your success is our only metric.", num: '02' },
-    { icon: Zap, title: "Our Approach", description: "We don't just execute tactics. We become an extension of your team, building systems that scale predictably.", num: '03' },
-    { icon: Users, title: "Our Commitment", description: "24/7 support, dedicated account managers, and a focus on measurable outcomes that impact your bottom line.", num: '04' },
+    { icon: Target, title: "Global Vision", description: "To be the world's most trusted AI-agnostic growth partner — orchestrating the global AI ecosystem to deliver unmatched ROI for our clients.", num: '01' },
+    { icon: Heart, title: "Elite Values", description: "Transparency, deep technical precision, long-term global partnerships, and relentless innovation. Your scale is our mission.", num: '02' },
+    { icon: Zap, title: "Intelligent Approach", description: "We don't just use APIs. We build custom intelligence layers that become an unfair competitive advantage for your business.", num: '03' },
+    { icon: Users, title: "Global Commitment", description: "24/7 multi-time-zone support and a focus on measurable international outcomes that impact your global bottom line.", num: '04' },
 ];
 
 const differentiators = [
-    { icon: Shield, title: "All-in-One Solution", desc: "Stop juggling agencies. Get sales, marketing, tech, and AI under one roof." },
-    { icon: Target, title: "Results-Driven", desc: "Measured by your growth, not hours worked. Every rupee drives measurable ROI." },
-    { icon: Cpu, title: "AI-Powered", desc: "Cutting-edge AI tools for automation, insights, and scale without the complexity." },
-    { icon: Users, title: "Dedicated Support", desc: "Your own account manager who knows your business inside-out, responds within hours." },
+    { icon: Shield, title: "Intelligence Orchestration", desc: "Stop juggling models. We integrate OpenAI, Claude, Gemini, and Meta under one unified growth roof." },
+    { icon: Target, title: "Global ROI focus", desc: "Measured by your international growth, not hours. Every dollar spent drives multi-market success." },
+    { icon: Cpu, title: "Tech-Agnostic", desc: "We use the best tech for the job, from NVIDIA hardware acceleration to open-source LLM deployments." },
+    { icon: Users, title: "Strategic Elite Support", desc: "Access to a global team of growth engineers who know your business inside-out and respond in real-time." },
 ];
 
 function SectionTag({ children }) {
@@ -40,11 +40,11 @@ export default function About() {
     return (
         <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
         <SEOHead
-            title="The Story of EyE PunE – Pune's Leading Business Growth Partners"
-            description="Founded in 2022, EyE PunE has helped 100+ businesses achieve 5x ROI through integrated sales, tech, and AI. Meet the Pune team behind India's most innovative growth agency."
-            keywords="about eyepune, best marketing agency pune, growth partners pune, eyepune founders, digital transformation pune, pune startup growth"
-            canonicalUrl="https://eyepune.com/About"
-            structuredData={{"@context":"https://schema.org","@type":"AboutPage","name":"About EyE PunE","description":"EyE PunE is Pune's leading all-in-one digital growth agency, serving 100+ clients with AI-driven strategy.","url":"https://eyepune.com/About"}}
+            title="The Story of EyE PunE – Global AI Growth & Multi-Model Intelligence Hub"
+            description="Founded in 2022, EyE PunE has evolved into a global AI-agnostic growth engine. We orchestrate OpenAI, Anthropic, Google Gemini, and Meta systems to deliver 5x ROI for ambitious brands worldwide."
+            keywords="about eyepune, global AI marketing agency, multi-model AI growth partner, eyepune founders, digital transformation, international business scaling"
+            canonicalUrl="https://www.eyepune.com/About"
+            structuredData={{"@context":"https://schema.org","@type":"AboutPage","name":"About EyE PunE","description":"EyE PunE is a global all-in-one AI growth engine, serving clients worldwide with multi-model AI strategy and elite tech solutions.","url":"https://www.eyepune.com/About"}}
         />
 
             {/* ── HERO ── */}

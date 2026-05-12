@@ -83,6 +83,12 @@ const footerLinks = {
         { name: 'Book Consultation', page: 'Booking' },
         { name: 'Pricing', page: 'Pricing' },
     ],
+    Solutions: [
+        { name: 'For Founders', page: 'Solution-Founders' },
+        { name: 'For YouTubers', page: 'Solution-YouTubers' },
+        { name: 'For Startups', page: 'Solution-Startups' },
+        { name: 'AI Intelligence Hub', page: 'AI-Intelligence-Hub' },
+    ],
 };
 
 function LayoutContent({ children, currentPageName }) {

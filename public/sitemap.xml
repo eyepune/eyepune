@@ -52,6 +52,32 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Solutions & Intelligence -->
+  <url>
+    <loc>https://www.eyepune.com/Solution-Founders</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.eyepune.com/Solution-YouTubers</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.eyepune.com/Solution-Startups</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.eyepune.com/AI-Intelligence-Hub</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Legal Content -->
   <url>
     <loc>https://www.eyepune.com/Privacy-Policy</loc>

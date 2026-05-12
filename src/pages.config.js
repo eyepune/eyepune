@@ -103,6 +103,10 @@ import serviceAI from './views/Service_AI';
 import servicePaidAds from './views/Service_PaidAds';
 import serviceBranding from './views/Service_Branding';
 import serviceFunnels from './views/Service_Funnels';
+import solutionFounders from './views/Solution_Founders';
+import solutionYouTubers from './views/Solution_YouTubers';
+import solutionStartups from './views/Solution_Startups';
+import aiIntelligenceHub from './views/AI_Intelligence_Hub';
 import __Layout from './Layout.jsx';
 
 
@@ -163,6 +167,10 @@ export const PAGES = {
     "Service-PaidAds": servicePaidAds,
     "Service-Branding": serviceBranding,
     "Service-Funnels": serviceFunnels,
+    "Solution-Founders": solutionFounders,
+    "Solution-YouTubers": solutionYouTubers,
+    "Solution-Startups": solutionStartups,
+    "AI-Intelligence-Hub": aiIntelligenceHub,
 }
 
 export const pagesConfig = {

@@ -91,19 +91,23 @@ export function generateOrganizationSchema() {
         "url": "https://www.eyepune.com",
         "logo": "https://www.eyepune.com/icon",
         "image": "https://www.eyepune.com/opengraph-image",
-        "description": "Pune-based premier digital agency serving clients across the globe with AI-driven marketing, web development, and sales systems.",
-        "priceRange": "$$",
+        "description": "Global AI Growth Engine and Elite Digital Agency. We empower Founders, Creators, and Startups with NVIDIA-accelerated AI automation, custom web development, and performance-driven marketing systems.",
+        "priceRange": "$$$",
         "telephone": "+91-9284712033",
-        "openingHours": "Mo-Sa 10:00-20:00",
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "reviewCount": "124"
-        },
+        "url": "https://www.eyepune.com",
+        "knowsAbout": [
+            "AI Automation", 
+            "NVIDIA AI Systems", 
+            "B2B Lead Generation", 
+            "YouTube Growth Systems", 
+            "Next.js Development", 
+            "Founder Growth Strategy",
+            "Digital Marketing ROI"
+        ],
         "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+91-9284712033",
-            "contactType": "customer service",
+            "contactType": "global growth consulting",
             "areaServed": "Global",
             "availableLanguage": ["English", "Hindi"]
         },

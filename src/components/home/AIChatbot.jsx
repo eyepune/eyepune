@@ -14,6 +14,19 @@ export default function AIChatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+
+    // 0. Path check — Hide on Admin pages
+    const [isPathAllowed, setIsPathAllowed] = useState(true);
+    
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const path = window.location.pathname;
+            if (path.startsWith('/Admin') || path.startsWith('/Admin-') || path.startsWith('/SignProposal')) {
+                setIsPathAllowed(false);
+            }
+        }
+    }, []);
+
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -222,7 +235,7 @@ Assistant:`;
         }
     };
 
-    if (!isVisible) return null;
+    if (!isVisible || !isPathAllowed) return null;
 
     return (
         <div className="fixed bottom-4 right-4 z-[9999] font-sans flex flex-col items-end pointer-events-none">

@@ -30,6 +30,18 @@ export default function ChatbotWidget() {
     const scrollRef = useRef(null);
     const messageId = useRef(2);
 
+    // 0. Path check — Hide on Admin pages
+    const [isPathAllowed, setIsPathAllowed] = useState(true);
+    
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const path = window.location.pathname;
+            if (path.startsWith('/Admin') || path.startsWith('/Admin-') || path.startsWith('/SignProposal')) {
+                setIsPathAllowed(false);
+            }
+        }
+    }, []);
+
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -208,6 +220,8 @@ Response rules:
             setIsLoading(false);
         }
     };
+
+    if (!isPathAllowed) return null;
 
     return (
         <>

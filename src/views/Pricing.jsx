@@ -13,9 +13,8 @@ import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 const SERVICE_CATEGORIES = [
     { key: 'social_media', label: 'Social Media Management', icon: Share2, plans: ['Social Media Starter', 'Social Media Growth', 'Social Media Authority'] },
     { key: 'paid_ads', label: 'Paid Advertising', icon: TrendingUp, plans: ['Meta Ads Management', 'Google Ads Management'] },
-    { key: 'website', label: 'Website Development', icon: Code, plans: ['Starter Website', 'Business Website', 'Advanced Website', 'Web Platform / SaaS Development'] },
-    { key: 'sales', label: 'Sales & Growth Services', icon: Zap, plans: ['Sales & Growth Setup', 'Lead Generation', 'Appointment Generation'] },
-    { key: 'branding', label: 'Branding & Creative', icon: Palette, plans: ['Brand Starter', 'Brand Identity', 'Creative Content Package'] },
+    { key: 'website', label: 'Website Development', icon: Code, plans: ['Starter Website', 'Business Website', 'Advanced Website'] },
+    { key: 'branding', label: 'Branding & Creative', icon: Palette, plans: ['Brand Starter', 'Brand Identity'] },
     { key: 'ai', label: 'AI Solutions & Automation', icon: Bot, plans: ['AI Starter', 'AI Business Automation', 'AI Custom Systems'] },
 ];
 

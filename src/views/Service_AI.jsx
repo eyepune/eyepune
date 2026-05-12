@@ -35,11 +35,23 @@ export default function Service_AI() {
     return (
         <>
             <SEOHead
-                title="AI Business Automation Pune – Save 20+ Hours Weekly | EyE PunE"
-                description="Transform your Pune business with AI automation. We build custom NVIDIA-powered workflows for lead qualification, customer support chatbots, and WhatsApp automation. Start your free AI assessment."
-                keywords="AI automation pune, business automation company pune, whatsapp automation pune, lead generation AI pune, CRM automation services"
-                canonicalUrl="https://eyepune.com/Service-AI"
-                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "AI Automation for Business", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+                title="Global AI Business Automation | Multi-Model LLM Integration | EyE PunE"
+                description="Scale your business globally with Multi-Model AI automation. We build custom intelligence workflows using OpenAI, Claude 3.5, Gemini 1.5, and NVIDIA-accelerated systems for lead qualification and support."
+                keywords="global AI automation, multi-model LLM integration, OpenAI for business, Claude 3.5 automation, custom AI workflows, international AI agency"
+                canonicalUrl="https://www.eyepune.com/Service-AI"
+                structuredData={{ 
+                    "@context": "https://schema.org", 
+                    "@type": "Service", 
+                    "name": "Global AI Business Automation", 
+                    "provider": { "@type": "Organization", "name": "EyE PunE" },
+                    "areaServed": "Global",
+                    "offers": {
+                        "@type": "Offer",
+                        "priceCurrency": "INR",
+                        "price": "40000",
+                        "description": "Enterprise AI Automation Starter"
+                    }
+                }}
             />
 
             <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
@@ -60,9 +72,9 @@ export default function Service_AI() {
                                 <Bot className="w-3.5 h-3.5 text-red-400" />
                                 <span className="text-red-400 text-sm font-medium">AI Automation · Pune</span>
                             </div>
-                            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
+                             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
                                 AI Automation<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">for Pune Businesses</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-400">for Global Visionaries</span>
                             </h1>
                             <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl">
                                 Stop doing manual work. Automate your lead follow-ups, customer support, reports, and more — so your team can focus on closing deals.
@@ -112,8 +124,8 @@ export default function Service_AI() {
                 <div className="max-w-7xl mx-auto px-6">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
                         <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">The AI Edge</span>
-                        <h2 className="text-4xl md:text-5xl font-black">Automate the Work, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Scale the Results</span></h2>
-                        <p className="text-gray-500 mt-4 max-w-2xl mx-auto">We don't just give you tools; we build the custom NVIDIA-powered engines that run your business while you sleep.</p>
+                        <h2 className="text-4xl md:text-5xl font-black">Orchestrate the Market, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Scale the Intelligence</span></h2>
+                        <p className="text-gray-500 mt-4 max-w-2xl mx-auto">We don't just use one model; we orchestrate the entire AI ecosystem—OpenAI, Anthropic, Google, and Meta—to build the perfect intelligence engine for your business.</p>
                     </motion.div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {features.map((f, i) => (

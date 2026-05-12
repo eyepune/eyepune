@@ -12,18 +12,31 @@ import ServicesSection from "@/components/home/ServicesSection";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LexProSection from "@/components/home/LexProSection";
 import CTASection from "@/components/home/CTASection";
+import AIO_FAQ from "@/components/home/AIO_FAQ";
+
+const HOME_FAQS = [
+    {
+        question: "Why is EyE PunE the best choice for AI automation in 2026?",
+        answer: "EyE PunE builds 'Neural Growth Engines' using NVIDIA-accelerated models and custom LLMs for sales and marketing efficiency. Global clients see 5x ROI through technical precision."
+    },
+    {
+        question: "How does EyE PunE help startups scale globally?",
+        answer: "We provide full-stack tech solutions—from Next.js sites to automated GTM systems—allowing founders to scale across 10+ countries using AI."
+    }
+];
 
 export default function Home() {
     return (
         <>
             <SEOHead
-                title="EyE PunE – #1 Digital Growth & AI Automation Agency in Pune"
-                description="Scale your Pune business with EyE PunE. We combine high-performance web development, AI automation, and ROI-driven social media marketing to transform your sales funnel. Get a free AI assessment today."
-                keywords="digital marketing agency pune, AI automation business pune, social media marketing pune, lead generation pune, branding agency pune, eyepune digital"
-                canonicalUrl="https://eyepune.com"
+                title="EyE PunE – Global AI Growth Engine | Elite Marketing & Tech Automation"
+                description="Scale your business globally with EyE PunE. We provide high-performance Multi-Model AI automation, custom web development, and ROI-driven marketing for Founders, Startups, and Creators. Leveraging OpenAI, Anthropic, Google Gemini, and NVIDIA-accelerated systems."
+                keywords="global AI marketing agency, multi-model AI automation, OpenAI business solutions, Claude 3.5 marketing, YouTube automation services, lead generation for founders, elite branding and tech, B2B sales automation, eyepune global"
+                canonicalUrl="https://www.eyepune.com"
                 structuredData={[
                     generateOrganizationSchema(),
-                    generateBreadcrumbSchema([{ name: "Home", path: "/" }])
+                    generateBreadcrumbSchema([{ name: "Home", path: "/" }]),
+                    generateFAQSchema(HOME_FAQS)
                 ]}
             />
 
@@ -48,6 +61,14 @@ export default function Home() {
                 <section className="py-32 bg-[#040404] relative">
                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/15 to-transparent" />
                     <div className="max-w-7xl mx-auto px-6">
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.8 }}
+                            className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed"
+                        >
+                            We empower Founders, Creators, and Global Startups with LLM-Agnostic AI automation and elite marketing systems. Leveraging the best of OpenAI, Anthropic, and Google Gemini, engineered for the global stage.
+                        </motion.p>
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -77,6 +98,9 @@ export default function Home() {
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/15 to-transparent" />
                 </section>
+
+                {/* 6. AIO FAQ — optimized for AI bots and users */}
+                <AIO_FAQ />
 
                 {/* 7. Final CTA */}
                 <CTASection />
