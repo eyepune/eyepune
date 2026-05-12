@@ -94,6 +94,8 @@ export default function Service_WebDev() {
                         </motion.div>
                     ))}
                 </div>
+            </section>
+
             {/* Trust Bar */}
             <section className="py-12 border-b border-white/[0.06] bg-[#080808]">
                 <div className="max-w-7xl mx-auto px-6">
