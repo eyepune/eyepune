@@ -10,7 +10,7 @@ import SEOHead from '@/components/seo/SEOHead';
 const faqs = [
     { question: "How much does social media management cost in Pune?", answer: "EyE PunE's social media management packages start at ₹30,000/month for 2 platforms, including content creation, scheduling, and monthly reporting. Custom packages are available for enterprise clients." },
     { question: "Which social media platforms do you manage?", answer: "We manage Instagram, Facebook, LinkedIn, Twitter/X, YouTube, and WhatsApp Business. We recommend the best platform mix based on your target audience and industry." },
-    { question: "How many posts per week will you create?", answer: "Our starter package includes 12 posts/month (3/week). Growth packages include daily posting across multiple platforms including Reels, Stories, and carousels." },
+    { question: "How many posts per week will you create?", answer: "Our packages range from 12 to 24+ content pieces per month. The Starter package includes 12 deliverables (Posts, Carousels & Reels), while our Growth and Authority plans offer high-frequency posting including viral Reels strategy and story-driven content." },
     { question: "Do you run paid social media ads as well?", answer: "Yes! We offer combined organic + paid social packages. Our Meta Ads and Instagram Ads management delivers measurable ROI with detailed performance reporting." },
     { question: "How long before I see results from social media marketing?", answer: "Most clients see engagement improvements within 30-60 days. Significant follower growth and lead generation typically takes 3-6 months of consistent posting." }
 ];

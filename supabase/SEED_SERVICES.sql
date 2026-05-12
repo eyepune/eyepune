@@ -8,12 +8,12 @@ DELETE FROM public.pricing_plans;
 -- 2. SOCIAL MEDIA MANAGEMENT
 INSERT INTO public.pricing_plans (id, name, description, price, billing_cycle, features, is_active, is_popular)
 VALUES
-('550e8400-e29b-41d4-a716-446655440001', 'Social Media Starter', 'Perfect for small businesses starting their digital journey.', 30000, 'monthly', 
- ARRAY['3 Platforms (IG, FB, LI)', '12 High-Quality Posts/mo', 'Basic Engagement', 'Monthly Analytics Report'], true, false),
-('550e8400-e29b-41d4-a716-446655440002', 'Social Media Growth', 'Aggressive growth strategy for scaling brands.', 55000, 'monthly', 
- ARRAY['4 Platforms', '20 Posts + 8 Reels/mo', 'Active Community Management', 'Competitor Analysis', 'Bi-weekly Reports'], true, true),
-('550e8400-e29b-41d4-a716-446655440003', 'Social Media Authority', 'Full-service brand authority and thought leadership.', 95000, 'monthly', 
- ARRAY['All Major Platforms', 'Daily Content + Cinematic Reels', 'PR & Influencer Coordination', 'Personal Branding for Founders', 'Weekly Deep-dive Analytics'], true, false);
+('550e8400-e29b-41d4-a716-446655440001', 'Social Media Starter', 'Perfect for small businesses building a strong and consistent digital presence. Best for Startups & Local Brands.', 30000, 'monthly', 
+ ARRAY['Management of 2 platforms (IG, FB)', '6 Static Posts + 4 Carousels + 2 Reels', 'Monthly Content Calendar Planning', 'Professional Graphic Design', 'Caption Writing & Hashtag Optimization', 'Basic Community Engagement', 'Monthly Performance Analytics Report'], true, false),
+('550e8400-e29b-41d4-a716-446655440002', 'Social Media Growth', 'Performance-focused content system designed to scale reach and conversions. Best for Scaling Brands & B2B.', 60000, 'monthly', 
+ ARRAY['Management of 3 platforms (IG, FB, LI)', '6 Static Posts + 6 Carousels + 6 Reels', 'Advanced Monthly Content Calendar', 'Active Community Management', 'Competitor & Industry Analysis', 'Bi-weekly Performance Reports', 'Growth Strategy Recommendations'], true, true),
+('550e8400-e29b-41d4-a716-446655440003', 'Social Media Authority', 'Elite full-service content and authority-building system. Best for Premium Brands & High-Growth Founders.', 95000, 'monthly', 
+ ARRAY['Management of any 4 Platforms', '8 Static Posts + 8 Carousels + 8 Reels', 'Advanced Content Funnel Strategy', 'Founder Personal Branding Strategy', 'PR & Influencer Coordination', 'Full Community Management', 'Weekly Deep-Dive Analytics & Strategy Calls'], true, false);
 
 -- 3. PAID ADVERTISING
 INSERT INTO public.pricing_plans (id, name, description, price, billing_cycle, features, is_active, is_popular)
