@@ -8,7 +8,7 @@ import Logo from '@/components/shared/Logo';
 import {
     LayoutDashboard, Users, UserPlus, Mail, Star, Image as ImageIcon,
     FileText, LogOut, ChevronLeft, ChevronRight, MessageSquare, Search, ShieldAlert,
-    Bell, Settings, Menu, Beaker, Zap
+    Bell, Settings, Menu, Beaker, Zap, ActivitySquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const NAV_ITEMS = [
     { name: 'Dashboard', href: '/Admin-Dashboard', icon: LayoutDashboard },
     { name: 'CRM / Leads', href: '/Admin-CRM', icon: Users },
+    { name: 'Analytics & Insights', href: '/Admin-Analytics', icon: ActivitySquare },
     { name: 'Marketing & Automation', href: '/Admin-Marketing', icon: Mail },
     { name: 'Drip Automations', href: '/Admin-DripAutomations', icon: Zap },
     { name: 'WhatsApp Flows', href: '/Admin-WhatsAppMarketing', icon: MessageSquare },
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
     { name: 'Testimonials', href: '/Admin-Testimonials', icon: Star },
     { name: 'Client Logos', href: '/Admin-ClientLogos', icon: ImageIcon },
     { name: 'Forms & Assessments', href: '/Admin-Forms', icon: FileText },
+    { name: 'Blog Management', href: '/Admin-Blog', icon: FileText },
     { name: 'SEO Management', href: '/Admin-SEO', icon: Search },
     { name: 'Admin Users', href: '/Admin-Users', icon: UserPlus },
     { name: 'System Status', href: '/System-Status', icon: ShieldAlert },

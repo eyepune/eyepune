@@ -16,7 +16,9 @@ import { Input } from '@/components/ui/input';
 
 function Admin_Forms() {
     const queryClient = useQueryClient();
-    const [searchTerm, setSearchTerm] = useState('');
+    const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const initialSearch = searchParams?.get('search') || '';
+    const [searchTerm, setSearchTerm] = useState(initialSearch);
 
     const { data: inquiries = [], isLoading: loadingInquiries } = useQuery({
         queryKey: ['admin-inquiries'],

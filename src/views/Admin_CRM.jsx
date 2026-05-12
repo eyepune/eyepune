@@ -28,10 +28,14 @@ const STATUS_COLORS = {
 };
 
 function Admin_CRM() {
+    const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const initialSearch = searchParams?.get('search') || '';
+    const initialStatus = searchParams?.get('status') || 'all';
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingLead, setEditingLead] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('all');
+    const [searchTerm, setSearchTerm] = useState(initialSearch);
+    const [statusFilter, setStatusFilter] = useState(initialStatus);
     const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef(null);
     const queryClient = useQueryClient();
