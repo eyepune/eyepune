@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
@@ -13,8 +15,15 @@ const TABS = [
 ];
 
 export default function Client_Portal() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const [activeTab, setActiveTab] = useState(urlParams.get('tab') || 'proposals');
+  const [activeTab, setActiveTab] = useState('proposals');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab');
+      if (tab) setActiveTab(tab);
+    }
+  }, []);
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['portal-user'],

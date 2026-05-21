@@ -671,7 +671,10 @@ function buildDailyCount(rows, days) {
     const counts = Array(days).fill(0);
     const now = Date.now();
     rows.forEach(row => {
-        const diff = Math.floor((now - new Date(row.created_at).getTime()) / 86400000);
+        if (!row.created_at) return;
+        const time = new Date(row.created_at).getTime();
+        if (isNaN(time)) return;
+        const diff = Math.floor((now - time) / 86400000);
         if (diff >= 0 && diff < days) counts[days - 1 - diff]++;
     });
     return counts;

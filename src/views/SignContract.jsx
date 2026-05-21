@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState, useRef, useEffect } from 'react';
+import { toast } from 'sonner';
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
@@ -9,9 +12,15 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle, FileText, Loader2, PenTool } from 'lucide-react';
 
 export default function SignContract() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const contractId = urlParams.get('id');
+    const [contractId, setContractId] = useState(null);
     const [name, setName] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            setContractId(urlParams.get('id'));
+        }
+    }, []);
     const [isDrawing, setIsDrawing] = useState(false);
     const [signature, setSignature] = useState('');
     const canvasRef = useRef(null);

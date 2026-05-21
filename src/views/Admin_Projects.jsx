@@ -69,14 +69,18 @@ function Admin_Projects() {
             queryClient.invalidateQueries({ queryKey: ['all-projects'] });
             setIsEditing(false);
             setSelectedProject(null);
+            toast.success('Project updated successfully!');
         },
+        onError: (e) => toast.error('Failed to update project: ' + e.message),
     });
 
     const deleteProjectMutation = useMutation({
         mutationFn: (id) => base44.entities.ClientProject.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['all-projects'] });
+            toast.success('Project deleted successfully!');
         },
+        onError: (e) => toast.error('Failed to delete project: ' + e.message),
     });
 
     const initiateOnboardingMutation = useMutation({
@@ -84,6 +88,7 @@ function Admin_Projects() {
         onSuccess: () => {
             toast.success('Onboarding initiated successfully!');
         },
+        onError: (e) => toast.error('Failed to initiate onboarding: ' + e.message),
     });
 
     const applyTemplateMutation = useMutation({
@@ -94,6 +99,7 @@ function Admin_Projects() {
             toast.success(`Template applied: ${response.data.results.milestones.length} milestones, ${response.data.results.tasks.length} tasks, ${response.data.results.documents.length} documents created`);
             setSelectedTemplate('');
         },
+        onError: (e) => toast.error('Failed to apply template: ' + e.message),
     });
 
     const handleSave = (e) => {

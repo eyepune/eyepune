@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { toast } from 'sonner';
 
 function Admin_ProjectManagement() {
     const [selectedProject, setSelectedProject] = useState(null);
@@ -61,7 +62,9 @@ function Admin_ProjectManagement() {
             queryClient.invalidateQueries({ queryKey: ['project-tasks'] });
             setShowTaskDialog(false);
             setEditingTask(null);
+            toast.success('Task created successfully');
         },
+        onError: (e) => toast.error('Failed to create task: ' + e.message),
     });
 
     const updateTaskMutation = useMutation({
@@ -70,12 +73,18 @@ function Admin_ProjectManagement() {
             queryClient.invalidateQueries({ queryKey: ['project-tasks'] });
             setShowTaskDialog(false);
             setEditingTask(null);
+            toast.success('Task updated successfully');
         },
+        onError: (e) => toast.error('Failed to update task: ' + e.message),
     });
 
     const deleteTaskMutation = useMutation({
         mutationFn: (id) => base44.entities.ProjectTask.delete(id),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['project-tasks'] }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['project-tasks'] });
+            toast.success('Task deleted successfully');
+        },
+        onError: (e) => toast.error('Failed to delete task: ' + e.message),
     });
 
     const createTimeLogMutation = useMutation({
@@ -83,7 +92,9 @@ function Admin_ProjectManagement() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['time-logs'] });
             setShowTimeLogDialog(false);
+            toast.success('Time logged successfully');
         },
+        onError: (e) => toast.error('Failed to log time: ' + e.message),
     });
 
     // Calculate project health metrics

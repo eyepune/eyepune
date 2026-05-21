@@ -54,6 +54,7 @@ function Admin_DripAutomations() {
             return res;
         },
         onSuccess: () => { queryClient.invalidateQueries(['admin-drip-sequences']); setIsSeqDialogOpen(false); toast.success('Sequence created'); },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const createStepMutation = useMutation({
@@ -63,6 +64,7 @@ function Admin_DripAutomations() {
             return res;
         },
         onSuccess: () => { queryClient.invalidateQueries(['admin-drip-steps', selectedSeqId]); setIsStepDialogOpen(false); toast.success('Step added'); },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const toggleSeqMutation = useMutation({
@@ -70,6 +72,7 @@ function Admin_DripAutomations() {
             await supabase.from('drip_sequences').update({ is_active }).eq('id', id);
         },
         onSuccess: () => queryClient.invalidateQueries(['admin-drip-sequences']),
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     return (

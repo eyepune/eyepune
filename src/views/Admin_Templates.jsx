@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import AdminGuard from "@/components/admin/AdminGuard";
@@ -35,6 +36,7 @@ export default function AdminTemplates() {
             queryClient.invalidateQueries(['project-templates']);
             resetForm();
         },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const updateMutation = useMutation({
@@ -43,6 +45,7 @@ export default function AdminTemplates() {
             queryClient.invalidateQueries(['project-templates']);
             resetForm();
         },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const deleteMutation = useMutation({
@@ -50,6 +53,7 @@ export default function AdminTemplates() {
         onSuccess: () => {
             queryClient.invalidateQueries(['project-templates']);
         },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const resetForm = () => {

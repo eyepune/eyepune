@@ -84,7 +84,7 @@ function Admin_Marketing() {
     const [isTestingWa, setIsTestingWa] = React.useState(false);
 
     const handleTestWhatsApp = async () => {
-        if (!testPhone) return alert('Enter a phone number');
+        if (!testPhone) return toast.error('Enter a phone number');
         setIsTestingWa(true);
         try {
             const res = await fetch('/api/system/whatsapp/test', {
@@ -92,14 +92,14 @@ function Admin_Marketing() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone: testPhone })
             });
-            const data = await res.json();
-            if (data.success) {
-                alert('Success! Check your WhatsApp.');
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data.success) {
+                toast.success('Success! Check your WhatsApp.');
             } else {
-                alert(`Failed: ${data.error}`);
+                toast.error(`Failed: ${data.error || 'Server error'}`);
             }
         } catch (e) {
-            alert('Error connecting to API');
+            toast.error('Error connecting to API');
         } finally {
             setIsTestingWa(false);
         }
@@ -310,10 +310,14 @@ function Admin_Marketing() {
                         <div className="flex items-center gap-3">
                             <Button 
                                 onClick={async () => {
-                                    const res = await fetch('/api/automation/linkedin/daily-post?type=educational');
-                                    const data = await res.json();
-                                    if (data.success) toast.success('Educational post live on LinkedIn!');
-                                    else toast.error(data.error || 'LinkedIn post failed');
+                                    try {
+                                        const res = await fetch('/api/automation/linkedin/daily-post?type=educational');
+                                        const data = await res.json().catch(() => ({}));
+                                        if (res.ok && data.success) toast.success('Educational post live on LinkedIn!');
+                                        else toast.error(data.error || 'LinkedIn post failed');
+                                    } catch (err) {
+                                        toast.error('Network error during LinkedIn post');
+                                    }
                                 }}
                                 variant="outline"
                                 className="h-9 text-xs px-4 border-[#0077b5]/30 text-[#0077b5] hover:bg-[#0077b5]/5"

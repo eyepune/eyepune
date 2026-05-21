@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import AdminGuard from "@/components/admin/AdminGuard";
@@ -49,6 +50,7 @@ function Admin_Feedback() {
             setSelectedFeedback(null);
             setAdminResponse('');
         },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const handleRespond = async (status) => {

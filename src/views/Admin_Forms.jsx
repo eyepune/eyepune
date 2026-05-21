@@ -50,16 +50,19 @@ function Admin_Forms() {
     const deleteInquiryMutation = useMutation({
         mutationFn: async (id) => { const { error } = await supabase.from('inquiries').delete().eq('id', id); if (error) throw error; },
         onSuccess: () => { queryClient.invalidateQueries(['admin-inquiries']); toast.success('Inquiry deleted'); },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const deleteAssessmentMutation = useMutation({
         mutationFn: async (id) => { const { error } = await supabase.from('ai_assessments').delete().eq('id', id); if (error) throw error; },
         onSuccess: () => { queryClient.invalidateQueries(['admin-assessments']); toast.success('Assessment deleted'); },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const deleteBookingMutation = useMutation({
         mutationFn: async (id) => { const { error } = await supabase.from('bookings').delete().eq('id', id); if (error) throw error; },
         onSuccess: () => { queryClient.invalidateQueries(['admin-bookings']); toast.success('Booking deleted'); },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const filteredInquiries = inquiries.filter(i => 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import AdminGuard from "@/components/admin/AdminGuard";
@@ -33,6 +34,7 @@ function Admin_CMS() {
             setIsEditing(false);
             setSelectedPage(null);
         },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const updatePageMutation = useMutation({
@@ -42,6 +44,7 @@ function Admin_CMS() {
             setIsEditing(false);
             setSelectedPage(null);
         },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const deletePageMutation = useMutation({
@@ -49,6 +52,7 @@ function Admin_CMS() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['cms-pages'] });
         },
+        onError: (e) => toast.error(e.message || 'An error occurred'),
     });
 
     const filteredPages = pages.filter(page =>

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { CheckCircle2, AlertCircle, Loader2, Clock, Shield, Edit3, Save, X, Plus, Trash2 } from 'lucide-react';
@@ -24,8 +26,14 @@ const DEFAULT_TERMS = `1. Acceptance: By signing this proposal, the Client agree
 10. Force Majeure: Neither party shall be liable for delays caused by circumstances beyond their reasonable control.`;
 
 export default function SignProposal() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const proposalId = urlParams.get('id');
+  const [proposalId, setProposalId] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      setProposalId(urlParams.get('id'));
+    }
+  }, []);
 
   const [proposal, setProposal] = useState(null);
   const [loading, setLoading] = useState(true);

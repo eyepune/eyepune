@@ -28,16 +28,18 @@ export const viewport = {
 export const metadata = {
   metadataBase: new URL('https://www.eyepune.com'),
   title: {
-    default: 'EyE PunE – Digital Marketing Agency Pune | Global Growth & AI Automation',
+    default: 'EyE PunE | Global AI Growth Engine | Elite Marketing & Tech Automation',
     template: '%s | EyE PunE'
   },
-  description: 'Pune-based digital agency serving clients across the globe. We combine AI-driven marketing, web development, and sales systems to scale businesses worldwide.',
+  description: 'Pune-based elite digital agency. We combine AI-driven marketing, full-stack web development, and hyper-scalable sales systems to explode business growth worldwide.',
   keywords: [
     'AI marketing agency Pune', 
     'digital marketing agency Pune', 
     'B2B lead generation services', 
     'website development Pune', 
-    'AI automation for business', 
+    'AI automation for business',
+    'growth marketing',
+    'SaaS scaling',
     'social media marketing Pune', 
     'elite branding agency', 
     'SEO services Pune',
@@ -85,17 +87,21 @@ export const metadata = {
   },
 };
 
+import { CSPostHogProvider } from './PostHogProvider';
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-[#040404] text-white antialiased font-sans">
-        <SEO_JSONLD />
-        <GoogleAnalytics />
-        <Providers>
-          {children}
-          <AIChatbot />
-        </Providers>
-      </body>
+      <CSPostHogProvider>
+        <body className="min-h-screen bg-[#040404] text-white antialiased font-sans">
+          <SEO_JSONLD />
+          <GoogleAnalytics />
+          <Providers>
+            {children}
+            <AIChatbot />
+          </Providers>
+        </body>
+      </CSPostHogProvider>
     </html>
   );
 }
