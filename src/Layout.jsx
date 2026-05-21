@@ -87,6 +87,7 @@ const footerLinks = {
         { name: 'For Founders', page: 'Solution-Founders' },
         { name: 'For YouTubers', page: 'Solution-YouTubers' },
         { name: 'For Startups', page: 'Solution-Startups' },
+        { name: 'B2B Growth Engine', page: 'Solution-B2BGrowth' },
         { name: 'AI Intelligence Hub', page: 'AI-Intelligence-Hub' },
     ],
 };

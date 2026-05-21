@@ -71,6 +71,26 @@ export async function generateMetadata({ params, searchParams }) {
     'Service-Funnels': {
       title: 'Conversion-Optimized Sales Funnels | EyE PunE',
       description: 'Turn traffic into revenue with high-converting sales funnels and lead nurturing systems. We design seamless user journeys that drive measurable business results.'
+    },
+    'Solution-Founders': {
+      title: 'AI Growth Solutions for Founders | EyE PunE',
+      description: 'Scale your personal brand and automate your sales engine. We help elite founders build automated growth systems using multi-model AI orchestration.'
+    },
+    'Solution-YouTubers': {
+      title: 'Global Distribution for YouTubers | EyE PunE',
+      description: 'Dominate the global algorithm. Our Viral Slicer AI and automated distribution systems help creators reach millions of new viewers across 10+ countries.'
+    },
+    'Solution-Startups': {
+      title: 'Rapid Scaling for Global Startups | EyE PunE',
+      description: 'From MVP to Unicorn. We provide the Next.js and AI tech stacks that modern startups need to scale operations and dominate their niche globally.'
+    },
+    'Solution-B2BGrowth': {
+      title: '24/7 B2B Automated Growth Engine | EyE PunE',
+      description: 'Find, pitch, and qualify your ideal clients on LinkedIn and Email while you sleep. We build the ultimate automated outreach systems for Founders and Agencies.'
+    },
+    'AI-Intelligence-Hub': {
+      title: 'AI Intelligence Hub | The Global AI Frontier',
+      description: 'The master directory of EyE PunE\'s multi-model AI capabilities. Explore how we orchestrate OpenAI, Claude, Gemini, and Meta to build your unfair advantage.'
     }
   };
 

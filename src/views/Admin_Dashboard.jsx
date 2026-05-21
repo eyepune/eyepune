@@ -645,9 +645,9 @@ function Admin_Dashboard() {
                             <CardContent className="pt-5 pb-4 space-y-2">
                                 <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">Quick Actions</p>
                                 {[
+                                    { label: 'Growth Engine', href: '/Admin-Outreach', icon: Zap, color: 'text-yellow-400' },
                                     { label: 'Add Manual Lead', href: '/Admin-CRM', icon: Plus, color: 'text-red-400' },
                                     { label: 'Send Campaign', href: '/Admin-Marketing', icon: Mail, color: 'text-blue-400' },
-                                    { label: 'View Analytics', href: '/Admin-Analytics', icon: Globe, color: 'text-emerald-400' },
                                 ].map((action, i) => (
                                     <Link
                                         key={i}

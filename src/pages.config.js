@@ -106,6 +106,7 @@ import serviceFunnels from './views/Service_Funnels';
 import solutionFounders from './views/Solution_Founders';
 import solutionYouTubers from './views/Solution_YouTubers';
 import solutionStartups from './views/Solution_Startups';
+import solutionB2BGrowth from './views/Solution_B2BGrowth';
 import aiIntelligenceHub from './views/AI_Intelligence_Hub';
 import __Layout from './Layout.jsx';
 
@@ -170,6 +171,7 @@ export const PAGES = {
     "Solution-Founders": solutionFounders,
     "Solution-YouTubers": solutionYouTubers,
     "Solution-Startups": solutionStartups,
+    "Solution-B2BGrowth": solutionB2BGrowth,
     "AI-Intelligence-Hub": aiIntelligenceHub,
 }
 

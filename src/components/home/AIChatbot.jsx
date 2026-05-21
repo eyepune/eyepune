@@ -42,31 +42,32 @@ export default function AIChatbot() {
             if (hasTriggered) return;
             hasTriggered = true;
             setIsVisible(true);
-            setIsOpen(true); // Auto-expand for higher conversion
+            setIsOpen(true); // Proactive expansion for conversion
 
-            // Set proactive message based on current path
             const path = window.location.pathname;
-            let initialMsg = "Namaste! 🙏 I'm EyE BoT, your AI growth assistant. I noticed you're exploring our ecosystem—how can I help you transform your business today?";
+            let initialMsg = "Namaste! 🙏 I'm EyE BoT, your AI growth strategist. I noticed you're exploring our ecosystem—how can I help you transform your business today?";
             
-            if (path.includes('Service-AI')) {
-                initialMsg = "Automating your business with AI can save you 20+ hours a week. 🤖 Want to see our case studies for Pune businesses?";
-            } else if (path.includes('Service-WebDev')) {
-                initialMsg = "A high-performance website is your 24/7 salesperson. 🚀 Should I analyze your current site speed?";
-            } else if (path.includes('Booking')) {
-                initialMsg = "Ready to sync your vision? 📅 I can help you prepare the right questions for our Discovery Call!";
-            } else if (path.includes('AI-Assessment')) {
-                initialMsg = "This assessment is the first step to your 90-day roadmap. 📊 Need help answering any of these?";
+            if (path.includes('Solution-Founders')) {
+                initialMsg = "Founder, your time is elite. 🚀 Ready to build an automated sales engine that works while you sleep? I can audit your current systems right now.";
+            } else if (path.includes('Solution-YouTubers')) {
+                initialMsg = "Creator, your content is gold. 🎥 Ready to dominate the global algorithm with our Viral Slicer AI? Let's talk distribution.";
+            } else if (path.includes('Solution-Startups')) {
+                initialMsg = "Ready to go from MVP to Global? 🦄 We build the tech stacks that unicorns are made of. Want to see our startup roadmap?";
+            } else if (path.includes('AI-Intelligence-Hub')) {
+                initialMsg = "Welcome to the frontier. 🧠 We orchestrate OpenAI, Claude, Gemini, and Meta to build your unfair advantage. Which model are you curious about?";
+            } else if (path.includes('Service-AI')) {
+                initialMsg = "Stop doing manual work. 🤖 Our Multi-Model AI systems save businesses 20+ hours a week. Ready for your 90-day automation roadmap?";
             }
 
             setMessages([{ role: 'assistant', content: initialMsg }]);
         };
 
-        // Trigger after 8 seconds OR 30% scroll
-        const timer = setTimeout(triggerProactive, 8000);
+        // Trigger after 5 seconds OR 20% scroll
+        const timer = setTimeout(triggerProactive, 5000);
 
         const handleScroll = () => {
             const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-            if (scrollPercent > 30) triggerProactive();
+            if (scrollPercent > 20) triggerProactive();
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -176,29 +177,31 @@ export default function AIChatbot() {
             }
 
             const context = messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n');
-            const prompt = `You are "EyE BoT", the elite AI Growth Strategist for "EyE PunE". Your mission is to convert website visitors into high-value leads by showcasing our expertise in AI, Web, and Marketing.
+            const prompt = `You are "EyE BoT", the elite AI Growth Strategist for "EyE PunE". Your mission is to convert website visitors into high-value leads by showcasing our mastery in Global AI Orchestration.
 
-About EyE PunE:
-- HQ: Pune, India. Global operations.
-- USPs: We use NVIDIA-accelerated AI models. We don't just build sites; we build "Conversion Engines."
-- Pricing: Services start from ₹25,000/mo ($300/mo). Full-scale enterprise automation from ₹2.5L+.
-- Turnaround: Rapid 7-14 day deployment for most projects.
+Strategic Identity:
+- You are NOT a support bot. You are a High-Stakes Growth Consultant.
+- HQ: Pune, India. Servicing global markets (UAE, UK, USA, etc.).
+- USPs: Multi-Model Orchestration (OpenAI, Anthropic, Google, Meta, NVIDIA). We don't just use one AI; we build custom "Intelligence Hubs" tailored to business ROI.
 
-Our Core Services (Promote these):
-1. **AI Automation**: Custom NVIDIA-powered LLMs, auto-reply systems, and internal tool automation.
-2. **Elite Web Dev**: High-performance Next.js sites (like this one) built for speed and conversion.
-3. **B2B Lead Gen**: LinkedIn automation and strategic outbound engines.
-4. **Social Media**: ROI-focused content creation and automated scheduling.
+Our Core Solutions (Push these based on context):
+1. **Founder Sales Engines**: Automating outreach and CRM for busy CEOs.
+2. **Viral Slicer AI**: Global content distribution for YouTubers and Creators.
+3. **Startup Tech Stacks**: Rapid Next.js/AI deployments for scaling businesses.
+4. **B2B Growth Systems**: LinkedIn and Email automation that actually converts.
 
-Call-to-Action (CTA) Strategy:
-- If they are curious/researching: Send them to the AI Assessment (https://eyepune.com/AI-Assessment).
-- If they are ready to talk business: Send them to the Vision Sync Booking (https://eyepune.com/Booking).
+Sales Sniper Strategy:
+- **Always** ask about their business goal if they haven't shared it.
+- **Lead Capture**: If a user shows interest, ask for their WhatsApp or Email to send them a custom "AI Roadmap."
+- **Urgency**: Mention that we only take 5 new "Intelligence Audits" per week.
+- **CTAs**: 
+  - Researching? -> AI Assessment (https://eyepune.com/AI-Assessment)
+  - Ready to scale? -> Book Vision Sync (https://eyepune.com/Booking)
 
 Tone & Persona:
-- Professional yet bold. Use HSL (High Stakes Language) - "Revolutionize," "Accelerate," "Dominate."
-- You are a strategist, not just a support bot. 
-- Use Pune/Local references sparingly (e.g. "Better than a Chai at FC Road").
-- Keep responses concise but impactful.
+- Elite, confident, and ROI-obsessed. 
+- Use words like: "Engineered," "Dominate," "Orchestrate," "Unfair Advantage."
+- Keep it concise. Break long explanations into bullet points.
 
 User History:
 ${context}
@@ -328,18 +331,34 @@ Assistant:`;
                         )}
                     </motion.div>
                 ) : (
-                    <motion.button
-                        initial={{ scale: 0, rotate: -45 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => setIsOpen(true)}
-                        className="bg-gradient-to-tr from-red-600 to-orange-600 p-5 rounded-full shadow-2xl shadow-red-600/40 relative group pointer-events-auto"
-                    >
-                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 border-4 border-[#040404] rounded-full z-10" />
-                        <MessageSquare className="w-8 h-8 text-white group-hover:hidden" />
-                        <Sparkles className="w-8 h-8 text-white hidden group-hover:block animate-pulse" />
-                    </motion.button>
+                    <div className="relative flex flex-col items-end gap-3 pointer-events-auto">
+                        {/* Sales Sniper Hook Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.5, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ delay: 1, duration: 0.5 }}
+                            className="bg-white text-black px-4 py-2 rounded-2xl rounded-br-sm shadow-xl text-[11px] font-black uppercase tracking-tighter flex items-center gap-2 border border-red-500/20"
+                        >
+                            <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
+                            {window.location.pathname.includes('Solution-Founders') ? "Founder: Get your 5-min AI Audit" :
+                             window.location.pathname.includes('Solution-YouTubers') ? "Creators: Go Global with AI" :
+                             window.location.pathname.includes('Solution-Startups') ? "Startups: Scale 10x with LLMs" :
+                             "EyE BoT: Ready to Scale your ROI?"}
+                        </motion.div>
+                        
+                        <motion.button
+                            initial={{ scale: 0, rotate: -45 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => setIsOpen(true)}
+                            className="bg-gradient-to-tr from-red-600 to-orange-600 p-5 rounded-full shadow-2xl shadow-red-600/40 relative group"
+                        >
+                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 border-4 border-[#040404] rounded-full z-10" />
+                            <MessageSquare className="w-8 h-8 text-white group-hover:hidden" />
+                            <Sparkles className="w-8 h-8 text-white hidden group-hover:block animate-pulse" />
+                        </motion.button>
+                    </div>
                 )}
             </AnimatePresence>
         </div>

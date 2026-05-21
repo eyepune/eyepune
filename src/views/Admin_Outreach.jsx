@@ -8,6 +8,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Mail, MessageSquare, Send, Download, RefreshCw, CheckCircle2, AlertCircle, FileText, Users } from 'lucide-react';
 import { toast } from 'sonner';
+import GrowthEngine from '@/components/admin/GrowthEngine';
+import { Zap } from 'lucide-react';
 
 const PITCH_DECK_URL = 'https://media.base44.com/files/public/69697d1626923688ef1d9afa/cf0b23f7b_PitchDeck-PDF.pdf';
 
@@ -21,7 +23,7 @@ function OutreachContent() {
     const [customMessage, setCustomMessage] = useState('');
     const [customSubject, setCustomSubject] = useState('');
     const [search, setSearch] = useState('');
-    const [tab, setTab] = useState('leads');
+    const [tab, setTab] = useState('engine');
 
     const { data: leads = [] } = useQuery({
         queryKey: ['leads-outreach'],
@@ -136,13 +138,20 @@ function OutreachContent() {
 
                         <Tabs value={tab} onValueChange={setTab}>
                             <TabsList className="bg-white/[0.05] mb-4">
-                                <TabsTrigger value="leads" className="data-[state=active]:bg-red-500">
-                                    <Users className="w-3 h-3 mr-1" /> CRM Leads ({leads.length})
+                                <TabsTrigger value="engine" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-cyan-500 data-[state=active]:text-white rounded-xl transition-all">
+                                    <Zap className="w-3.5 h-3.5 mr-2" /> GROWTH ENGINE (AUTO)
                                 </TabsTrigger>
-                                <TabsTrigger value="wix" className="data-[state=active]:bg-red-500">
-                                    <FileText className="w-3 h-3 mr-1" /> Past Clients ({pastClients.length})
+                                <TabsTrigger value="leads" className="data-[state=active]:bg-red-600 data-[state=active]:text-white rounded-xl transition-all">
+                                    <Users className="w-3.5 h-3.5 mr-2" /> CRM PIPELINE ({leads.length})
+                                </TabsTrigger>
+                                <TabsTrigger value="wix" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white rounded-xl transition-all">
+                                    <FileText className="w-3.5 h-3.5 mr-2" /> LEGACY CLIENTS ({pastClients.length})
                                 </TabsTrigger>
                             </TabsList>
+
+                            <TabsContent value="engine">
+                                <GrowthEngine />
+                            </TabsContent>
 
                             <TabsContent value="leads">
                                 <div className="flex gap-2 mb-3">

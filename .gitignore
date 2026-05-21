@@ -33,3 +33,6 @@ out/
 *.sw?
 
 .vercel
+
+# Scratch directory
+scratch/

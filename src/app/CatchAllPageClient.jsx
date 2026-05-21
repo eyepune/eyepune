@@ -63,6 +63,11 @@ import Unsubscribe from '@/views/Unsubscribe';
 import Admin_Forms from '@/views/Admin_Forms';
 import Admin_Outreach from '@/views/Admin_Outreach';
 import SystemStatus from '@/views/SystemStatus';
+import Solution_Founders from '@/views/Solution_Founders';
+import Solution_YouTubers from '@/views/Solution_YouTubers';
+import Solution_Startups from '@/views/Solution_Startups';
+import Solution_B2BGrowth from '@/views/Solution_B2BGrowth';
+import AI_Intelligence_Hub from '@/views/AI_Intelligence_Hub';
 import PageNotFound from '@/lib/PageNotFound';
 
 // ── Route → Component mapping ──────────────────────────────────────────
@@ -124,6 +129,11 @@ const PAGE_MAP = {
   'Unsubscribe': Unsubscribe,
   'Admin-Outreach': Admin_Outreach,
   'System-Status': SystemStatus,
+  'Solution-Founders': Solution_Founders,
+  'Solution-YouTubers': Solution_YouTubers,
+  'Solution-Startups': Solution_Startups,
+  'Solution-B2BGrowth': Solution_B2BGrowth,
+  'AI-Intelligence-Hub': AI_Intelligence_Hub,
 };
 
 // Pages that should NOT be wrapped in the Layout
