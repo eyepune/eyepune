@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { notifyNewLead, notifyNewAssessment, notifyNewInquiry } from '@/lib/admin-notifier';
+import { notifyNewLead, notifyNewAssessment, notifyNewInquiry, notifyNewBooking } from '@/lib/admin-notifier';
 
 /**
  * API Route: /api/admin/notify

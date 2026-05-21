@@ -139,9 +139,16 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 })
             });
 
-            if (!response.ok) throw new Error('AI generation failed');
+            if (!response.ok) {
+                const errText = await response.text().catch(() => 'Unknown network error');
+                throw new Error(`AI generation failed (status ${response.status}): ${errText}`);
+            }
+
             const data = await response.json();
-            const aiResponse = data.content;
+            const aiResponse = data?.content;
+            if (!aiResponse) {
+                throw new Error('Server returned an empty or invalid report content.');
+            }
 
             const growthMatch = aiResponse.match(/Growth Score.*?(\d+)/i);
             const growthScore = growthMatch ? parseInt(growthMatch[1]) : 65;
@@ -170,24 +177,53 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 converted_to_lead: false
             };
 
-            const { data: savedAssessment } = await supabase.from('ai_assessments').insert([assessmentPayload]).select().single();
-            const { data: savedLead } = await supabase.from('leads').insert([{
-                full_name: formData.lead_name,
-                email: formData.lead_email,
-                phone: formData.lead_phone,
-                company: formData.company_name,
-                source: 'ai_assessment',
-                status: 'new',
-                score: crmScore,
-                notes: `Growth Score: ${growthScore}/100. Challenge: ${answers.biggest_challenge}`
-            }]).select().single();
+            // Non-blocking database insertion and mapping (errors here won't block report rendering)
+            try {
+                const { data: savedAssessment, error: assessmentError } = await supabase
+                    .from('ai_assessments')
+                    .insert([assessmentPayload])
+                    .select()
+                    .single();
+                
+                if (assessmentError) {
+                    console.error('Supabase ai_assessments insert failed:', assessmentError.message || assessmentError);
+                }
 
-            // Link assessment to lead
-            if (savedAssessment && savedLead) {
-                await supabase.from('ai_assessments').update({ converted_to_lead: true, lead_id: savedLead.id }).eq('id', savedAssessment.id);
+                const { data: savedLead, error: leadError } = await supabase
+                    .from('leads')
+                    .insert([{
+                        full_name: formData.lead_name,
+                        email: formData.lead_email,
+                        phone: formData.lead_phone,
+                        company: formData.company_name,
+                        source: 'ai_assessment',
+                        status: 'new',
+                        score: crmScore,
+                        notes: `Growth Score: ${growthScore}/100. Challenge: ${answers.biggest_challenge}`
+                    }])
+                    .select()
+                    .single();
+
+                if (leadError) {
+                    console.error('Supabase leads insert failed:', leadError.message || leadError);
+                }
+
+                // Link assessment to lead
+                if (savedAssessment && savedLead) {
+                    const { error: linkError } = await supabase
+                        .from('ai_assessments')
+                        .update({ converted_to_lead: true, lead_id: savedLead.id })
+                        .eq('id', savedAssessment.id);
+                    
+                    if (linkError) {
+                        console.error('Supabase update link failed:', linkError.message || linkError);
+                    }
+                }
+            } catch (dbError) {
+                console.error('Non-blocking database logging failed:', dbError);
             }
 
-            // Trigger automation
+            // Trigger automation (non-blocking)
             fetch('/api/automation/trigger', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -204,7 +240,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 })
             }).catch(e => console.warn('Automation failed', e));
 
-            // Trigger Admin Notification (Sales Sniper)
+            // Trigger Admin Notification (Sales Sniper) (non-blocking)
             fetch('/api/admin/notify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -227,8 +263,8 @@ At the very bottom, output: [CRM_SCORE: number]` }
             setIsSubmitting(false);
             handleNext();
         } catch (error) {
-            console.error('Error:', error);
-            alert('Failed to generate report. Please try again.');
+            console.error('Error in assessment submission:', error);
+            alert(`Failed to generate report: ${error.message || error}. Please try again.`);
             setIsGenerating(false);
             setIsSubmitting(false);
         }

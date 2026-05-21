@@ -51,22 +51,71 @@ async function getZohoAccessToken() {
 /**
  * Sends email via Zoho Mail API
  */
-export async function sendViaZoho({ to, subject, html, text }) {
+export async function sendViaZoho({ to, subject, html, text, attachments }) {
   if (!ZOHO_ACCOUNT_ID) throw new Error('ZOHO_MAIL_ACCOUNT_ID is missing');
   
   const { token, domain } = await getZohoAccessToken();
+  
+  let zohoAttachments = [];
+  
+  if (attachments && attachments.length > 0) {
+    for (const attachment of attachments) {
+      try {
+        console.log(`[EmailService] Uploading attachment ${attachment.filename} to Zoho...`);
+        const buffer = Buffer.from(attachment.content, 'base64');
+        const formData = new FormData();
+        const blob = new Blob([buffer], { type: attachment.type });
+        formData.append('attach', blob, attachment.filename);
+        
+        const uploadResponse = await fetch(`https://mail.${domain}/api/accounts/${ZOHO_ACCOUNT_ID}/messages/attachments?uploadType=multipart`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Zoho-oauthtoken ${token}`
+          },
+          body: formData
+        });
+        
+        const uploadResult = await uploadResponse.json();
+        if (!uploadResponse.ok) {
+          throw new Error(`Zoho Upload Error (${uploadResponse.status}): ${JSON.stringify(uploadResult)}`);
+        }
+        
+        console.log(`[EmailService] Zoho upload success:`, uploadResult);
+        
+        const attachmentList = Array.isArray(uploadResult.data) ? uploadResult.data : [uploadResult.data];
+        for (const item of attachmentList) {
+          if (item && item.attachmentPath) {
+            zohoAttachments.push({
+              attachmentName: item.attachmentName || attachment.filename,
+              attachmentPath: item.attachmentPath,
+              storeName: item.storeName
+            });
+          }
+        }
+      } catch (uploadErr) {
+        console.error(`[EmailService] Failed to upload attachment ${attachment.filename} to Zoho:`, uploadErr.message);
+      }
+    }
+  }
+
+  const messagePayload = {
+    fromAddress: ZOHO_USERNAME,
+    toAddress: Array.isArray(to) ? to.join(',') : to,
+    subject,
+    content: html || text,
+  };
+
+  if (zohoAttachments.length > 0) {
+    messagePayload.attachments = zohoAttachments;
+  }
+
   const response = await fetch(`https://mail.${domain}/api/accounts/${ZOHO_ACCOUNT_ID}/messages`, {
     method: 'POST',
     headers: {
       'Authorization': `Zoho-oauthtoken ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      fromAddress: ZOHO_USERNAME,
-      toAddress: Array.isArray(to) ? to.join(',') : to,
-      subject,
-      content: html || text,
-    }),
+    body: JSON.stringify(messagePayload),
   });
   
   const result = await response.json();

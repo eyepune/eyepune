@@ -29,6 +29,15 @@ export default async function sitemap() {
         { url: `${baseUrl}/Service-PaidAds`,           lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/Service-Branding`,          lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/Service-Funnels`,           lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${baseUrl}/Services-Detail`,           lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
+        // Solution landing pages
+        { url: `${baseUrl}/Solution-Founders`,         lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+        { url: `${baseUrl}/Solution-YouTubers`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+        { url: `${baseUrl}/Solution-Startups`,         lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+        { url: `${baseUrl}/Solution-B2BGrowth`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+        // AI & Legal pathways
+        { url: `${baseUrl}/AI-Intelligence-Hub`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+        { url: `${baseUrl}/Privacy-Policy`,            lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
     ];
 
     // Dynamic blog post URLs from Supabase

@@ -60,8 +60,15 @@ export async function POST(request) {
         }
     }
 
+    let body = null;
     try {
-        const body = await request.json();
+        body = await request.json();
+    } catch (parseError) {
+        console.error('[LLM Proxy] Failed to parse request JSON body:', parseError.message);
+        return NextResponse.json({ error: 'Invalid JSON request body' }, { status: 400 });
+    }
+
+    try {
         const { prompt, model, max_tokens, temperature, messages: bodyMessages } = body;
 
         console.log(`[LLM Proxy] Request received. Model: ${model || LLM_MODEL}. Prompt length: ${prompt?.length || 0}`);
@@ -83,8 +90,8 @@ export async function POST(request) {
             },
         ];
 
-        // Retry logic for transient upstream errors (502, 503, 504)
-        const MAX_RETRIES = 2;
+        // Strict timeout and 0 retries to prevent Vercel 504 serverless timeouts
+        const MAX_RETRIES = 0;
         let lastError = null;
 
         for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
@@ -93,12 +100,12 @@ export async function POST(request) {
 
             if (attempt > 0) {
                 console.log(`[LLM Proxy] Retry attempt ${attempt}/${MAX_RETRIES} for model ${currentModel}...`);
-                await new Promise(resolve => setTimeout(resolve, 1500 * attempt)); // Exponential backoff
+                await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
             }
 
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout
+                const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout safeguard
 
                 const response = await fetch(LLM_API_URL, {
                     method: 'POST',
@@ -170,38 +177,39 @@ export async function POST(request) {
         let crmUsage = 'spreadsheet';
         let salesProcess = 'Manual sales follow ups';
 
-        try {
-            const body = await request.clone().json();
-            const promptContent = body.prompt || body.messages?.[body.messages.length - 1]?.content || '';
-            
-            const typeMatch = promptContent.match(/Business Type:\s*(.*)/i);
-            if (typeMatch) businessType = typeMatch[1].trim();
+        if (body) {
+            try {
+                const promptContent = body.prompt || body.messages?.[body.messages.length - 1]?.content || '';
+                
+                const typeMatch = promptContent.match(/Business Type:\s*(.*)/i);
+                if (typeMatch) businessType = typeMatch[1].trim();
 
-            const revMatch = promptContent.match(/Annual Revenue:\s*(.*)/i);
-            if (revMatch) revenueRange = revMatch[1].trim();
+                const revMatch = promptContent.match(/Annual Revenue:\s*(.*)/i);
+                if (revMatch) revenueRange = revMatch[1].trim();
 
-            const teamMatch = promptContent.match(/Team Size:\s*(.*)/i);
-            if (teamMatch) teamSize = teamMatch[1].trim();
+                const teamMatch = promptContent.match(/Team Size:\s*(.*)/i);
+                if (teamMatch) teamSize = teamMatch[1].trim();
 
-            const challengeMatch = promptContent.match(/Biggest Challenge:\s*(.*)/i);
-            if (challengeMatch) biggestChallenge = challengeMatch[1].trim();
+                const challengeMatch = promptContent.match(/Biggest Challenge:\s*(.*)/i);
+                if (challengeMatch) biggestChallenge = challengeMatch[1].trim();
 
-            const goalsMatch = promptContent.match(/Growth Goals:\s*(.*)/i);
-            if (goalsMatch) growthGoals = goalsMatch[1].trim();
+                const goalsMatch = promptContent.match(/Growth Goals:\s*(.*)/i);
+                if (goalsMatch) growthGoals = goalsMatch[1].trim();
 
-            const channelMatch = promptContent.match(/Marketing Channels:\s*(.*)/i);
-            if (channelMatch) marketingChannels = channelMatch[1].trim();
+                const channelMatch = promptContent.match(/Marketing Channels:\s*(.*)/i);
+                if (channelMatch) marketingChannels = channelMatch[1].trim();
 
-            const presenceMatch = promptContent.match(/Online Presence:\s*(.*)/i);
-            if (presenceMatch) onlinePresence = presenceMatch[1].trim();
+                const presenceMatch = promptContent.match(/Online Presence:\s*(.*)/i);
+                if (presenceMatch) onlinePresence = presenceMatch[1].trim();
 
-            const crmUsageMatch = promptContent.match(/CRM Usage:\s*(.*)/i);
-            if (crmUsageMatch) crmUsage = crmUsageMatch[1].trim();
+                const crmUsageMatch = promptContent.match(/CRM Usage:\s*(.*)/i);
+                if (crmUsageMatch) crmUsage = crmUsageMatch[1].trim();
 
-            const salesMatch = promptContent.match(/Sales Process:\s*(.*)/i);
-            if (salesMatch) salesProcess = salesMatch[1].trim();
-        } catch (e) {
-            console.warn('[LLM Proxy] Failed to parse request body for fallback generation:', e.message);
+                const salesMatch = promptContent.match(/Sales Process:\s*(.*)/i);
+                if (salesMatch) salesProcess = salesMatch[1].trim();
+            } catch (e) {
+                console.warn('[LLM Proxy] Error extracting parameters from pre-parsed body:', e.message);
+            }
         }
 
         const score = Math.floor(Math.random() * 20) + 65; 
@@ -209,7 +217,7 @@ export async function POST(request) {
 
         const content = `# EyE PunE AI Growth Audit & Strategic Roadmap
 
-## Growth Maturity Score: ${score}/100
+## Growth Score: ${score}/100
 
 ---
 
@@ -249,4 +257,3 @@ Based on your digital blueprint, your **${businessType}** business displays exce
         return NextResponse.json({ content });
     }
 }
-

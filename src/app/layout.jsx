@@ -47,8 +47,8 @@ export const metadata = {
   creator: 'EyE PunE',
   publisher: 'EyE PunE',
   verification: {
-    google: 'ADD_YOUR_GOOGLE_VERIFICATION_CODE_HERE',
-    bing: 'ADD_YOUR_BING_VERIFICATION_CODE_HERE',
+    google: 'Y6xKuYwi-UqakzomtNF7IlQXA-d_uJ3q_dYpPfAXhRA',
+    bing: '4D3E7D51ACDBA311179798C9A1675D74',
   },
   alternates: {
     canonical: '/',
