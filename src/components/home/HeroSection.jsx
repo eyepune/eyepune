@@ -139,7 +139,7 @@ export default function HeroSection() {
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
-                            <div className="relative inline-flex flex-col h-[1.4em] overflow-hidden align-bottom">
+                            <div className="relative inline-flex flex-col h-[1.5em] overflow-hidden align-bottom">
                                 <AnimatePresence mode="wait">
                                     <motion.span
                                         key={words[index]}
