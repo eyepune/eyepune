@@ -244,13 +244,13 @@ Response rules:
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden"
+                        className="fixed bottom-20 right-0 sm:right-6 z-50 w-full sm:w-96 flex flex-col overflow-hidden"
                         style={{
-                            height: '560px',
-                            maxHeight: 'calc(100vh - 120px)',
+                            height: '70vh',
+                            maxHeight: '560px',
                             background: 'rgba(10,10,10,0.97)',
                             border: '1px solid rgba(239,68,68,0.15)',
-                            borderRadius: '20px',
+                            borderRadius: '20px 20px 0 0',
                             boxShadow: '0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03)',
                         }}
                     >
