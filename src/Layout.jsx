@@ -331,10 +331,10 @@ function LayoutContent({ children, currentPageName }) {
                     </div>
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-10 relative z-10">
-                        <div className="grid sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-12 mb-14">
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-12 mb-14">
 
                             {/* Brand col */}
-                            <div className="sm:col-span-2 md:col-span-2">
+                            <div className="sm:col-span-2 lg:col-span-2">
                                 <Logo variant="dark" size="sm" className="mb-5" />
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
                                     Pune-based all-in-one growth partner serving clients across the globe. Connect · Engage · Grow.
