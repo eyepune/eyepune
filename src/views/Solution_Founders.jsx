@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Target, Zap, TrendingUp, Users, Cpu, ShieldCheck, ChevronRight, MessageSquare } from 'lucide-react';
+import { Target, Zap, Cpu, ShieldCheck, MessageSquare } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";

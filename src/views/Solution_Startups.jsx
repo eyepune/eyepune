@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Rocket, Shield, Globe, Cpu, Zap, Target, BookOpen, ChevronRight, CheckCircle } from 'lucide-react';
+import { Rocket, Globe, Cpu, Zap, Target, BookOpen, ChevronRight, CheckCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
