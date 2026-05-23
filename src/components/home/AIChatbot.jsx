@@ -209,7 +209,7 @@ ${context}
 User: ${input}
 Assistant:`;
 
-            const response = await base44.integrations.Core.InvokeLLM({ prompt });
+            const response = await base44.integrations.Core.InvokeLLM({ prompt, max_tokens: 350 });
             
             // 3. Sync Assistant Message to DB
             if (sessionId) {

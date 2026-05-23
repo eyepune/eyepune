@@ -119,11 +119,11 @@ const integrations = {
     /**
      * Invoke LLM — proxies through our secure API route
      */
-    async InvokeLLM({ prompt, model }) {
+    async InvokeLLM({ prompt, model, max_tokens }) {
       const response = await fetch('/api/llm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, model }),
+        body: JSON.stringify({ prompt, model, max_tokens }),
       });
 
       if (!response.ok) {
