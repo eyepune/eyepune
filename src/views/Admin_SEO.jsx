@@ -26,7 +26,7 @@ function AdminSEO() {
     const analyzeMutation = useMutation({
         mutationFn: async (data) => {
             // Real SEO analysis via our AI proxy
-            const res = await fetch('/api/ai/chat', {
+            const res = await fetch('/api/llm', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

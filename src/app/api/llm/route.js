@@ -98,6 +98,106 @@ export async function POST(request) {
             // Switch to fallback model on the last retry attempt if the first two failed
             const currentModel = (attempt === MAX_RETRIES) ? FALLBACK_MODEL : useModel;
 
+/**
+ * Next.js API Route: /api/llm
+ *
+ * Proxies LLM requests to the NVIDIA API (OpenAI-compatible).
+ * The API key is stored server-side and never exposed to the client.
+ *
+ * Supports NVIDIA NIM models like qwen/qwen3.5-122b-a10b
+ */
+
+import { NextResponse } from 'next/server';
+
+const LLM_API_URL = process.env.LLM_API_URL || 'https://integrate.api.nvidia.com/v1/chat/completions';
+const LLM_API_KEY = process.env.LLM_API_KEY;
+const LLM_MODEL = process.env.LLM_MODEL || 'qwen/qwen3.5-122b-a10b';
+const FALLBACK_MODEL = 'meta/llama-3.1-70b-instruct'; // Reliable fallback model
+
+// Enhanced in-memory rate limiter for better user experience
+const rateLimiter = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 50; // Increased from 5 to 50 requests per minute
+
+function checkRateLimit(ip) {
+    const now = Date.now();
+    const record = rateLimiter.get(ip);
+
+    if (!record || now - record.timestamp > RATE_LIMIT_WINDOW) {
+        rateLimiter.set(ip, { timestamp: now, count: 1 });
+        return true;
+    }
+
+    if (record.count >= RATE_LIMIT_MAX) {
+        console.warn(`[LLM Proxy] Rate limit reached for IP: ${ip}`);
+        return false;
+    }
+
+    record.count++;
+    return true;
+}
+
+export async function POST(request) {
+    // Rate limiting
+    const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    if (!checkRateLimit(clientIp)) {
+        return new Response(JSON.stringify({ 
+            error: 'Rate limit exceeded. We are processing many requests right now. Please try again in a minute.',
+            code: 'rate_limit_exceeded'
+        }), {
+            status: 429,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
+    // Probabilistic cleanup of stale rate-limit entries to prevent memory leaks
+    if (Math.random() < 0.01) {
+        const now = Date.now();
+        for (const [key, value] of rateLimiter) {
+            if (now - value.timestamp > RATE_LIMIT_WINDOW * 2) {
+                rateLimiter.delete(key);
+            }
+        }
+    }
+
+    let body = null;
+    try {
+        body = await request.json();
+    } catch (parseError) {
+        console.error('[LLM Proxy] Failed to parse request JSON body:', parseError.message);
+        return NextResponse.json({ error: 'Invalid JSON request body' }, { status: 400 });
+    }
+
+    try {
+        const { prompt, model, max_tokens, temperature, messages: bodyMessages } = body;
+
+        console.log(`[LLM Proxy] Request received. Model: ${model || LLM_MODEL}. Prompt length: ${prompt?.length || 0}`);
+
+        if (!prompt && !bodyMessages) {
+            return NextResponse.json({ error: 'Prompt or messages are required' }, { status: 400 });
+        }
+
+        if (!LLM_API_KEY) {
+            console.error('[LLM Proxy] LLM_API_KEY is not configured in environment variables');
+            return NextResponse.json({ error: 'LLM API key not configured on server' }, { status: 500 });
+        }
+
+        const useModel = model || LLM_MODEL;
+        const messages = bodyMessages || [
+            {
+                role: 'user',
+                content: prompt,
+            },
+        ];
+
+        // Strict timeout and 0 retries to prevent Vercel 504 serverless timeouts
+        const MAX_RETRIES = 0;
+        let lastError = null;
+
+        for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+            // Switch to fallback model on the last retry attempt if the first two failed
+            const currentModel = (attempt === MAX_RETRIES) ? FALLBACK_MODEL : useModel;
+
             if (attempt > 0) {
                 console.log(`[LLM Proxy] Retry attempt ${attempt}/${MAX_RETRIES} for model ${currentModel}...`);
                 await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
@@ -105,7 +205,7 @@ export async function POST(request) {
 
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout safeguard
+                const timeoutId = setTimeout(() => controller.abort(), 9500); // 9.5s timeout safeguard
 
                 const response = await fetch(LLM_API_URL, {
                     method: 'POST',
@@ -166,6 +266,15 @@ export async function POST(request) {
     } catch (error) {
         console.error('[LLM Proxy] Upstream Failure or Timeout:', error.message);
         console.log('[LLM Proxy] Falling back to Premium Local AI Consultant generation...');
+
+        let isChatbot = false;
+        if (body?.messages && body.messages[0] && body.messages[0].content && body.messages[0].content.includes('EyE PunE AI Assistant')) {
+            isChatbot = true;
+        }
+
+        if (isChatbot) {
+            return NextResponse.json({ content: "I'm experiencing high traffic right now, but I'd love to help! Please leave your contact details or book a free consultation at https://eyepune.com/Booking" });
+        }
 
         let businessType = 'Scaling Business';
         let revenueRange = '10L-50L';

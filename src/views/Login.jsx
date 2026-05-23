@@ -210,7 +210,7 @@ export default function Login() {
                     <p className="text-xs text-gray-600">
                         Secure Client & Admin Authentication • EyE PunE
                     </p>
-                    <Link href="/SystemStatus" className="block text-[10px] text-gray-700 hover:text-red-500 transition-colors uppercase tracking-widest">
+                    <Link href="/System-Status" className="block text-[10px] text-gray-700 hover:text-red-500 transition-colors uppercase tracking-widest">
                         System Troubleshoot
                     </Link>
                 </div>

@@ -66,6 +66,7 @@ import adminWhatsAppMarketing from './views/Admin_WhatsAppMarketing';
 
 import adminFeedback from './views/Admin_Feedback';
 import adminMarketing from './views/Admin_Marketing';
+import adminOutreach from './views/Admin_Outreach';
 import adminPackagebuilder from './views/Admin_PackageBuilder';
 import adminProjectmanagement from './views/Admin_ProjectManagement';
 import adminProjects from './views/Admin_Projects';
@@ -131,6 +132,7 @@ export const PAGES = {
 
     "Admin-Feedback": adminFeedback,
     "Admin-Marketing": adminMarketing,
+    "Admin-Outreach": adminOutreach,
     "Admin-PackageBuilder": adminPackagebuilder,
     "Admin-ProjectManagement": adminProjectmanagement,
     "Admin-Projects": adminProjects,

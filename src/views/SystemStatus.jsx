@@ -214,7 +214,7 @@ export default function SystemStatus() {
                                     
                                     {!loading && !hasAdmin && (
                                         <div className="mt-auto pt-4">
-                                            <Link href="/MakeAdmin">
+                                            <Link href="/Make-Admin">
                                                 <Button className="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white shadow-lg shadow-amber-500/20 border-0 h-10">
                                                     Promote First Admin
                                                 </Button>
