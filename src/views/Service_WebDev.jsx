@@ -114,7 +114,7 @@ export default function Service_WebDev() {
                 <div className="max-w-7xl mx-auto px-6">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
                         <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Core Strengths</span>
-                        <h2 className="text-4xl md:text-5xl font-black">Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Conversion</span></h2>
+                        <h2 className="text-4xl md:text-5xl font-black">Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 pb-1">Conversion</span></h2>
                         <p className="text-gray-500 mt-4 max-w-2xl mx-auto">We don't build "pretty" websites. We build fast, high-performance sales engines that Rank, Engage, and Convert.</p>
                     </motion.div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -140,7 +140,7 @@ export default function Service_WebDev() {
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <div>
                             <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Technical Authority</span>
-                            <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight italic">The Speed <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">& Conversion Matrix</span></h2>
+                            <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight italic">The Speed <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 pb-1">& Conversion Matrix</span></h2>
                             <p className="text-gray-400 text-lg leading-relaxed mb-8">
                                 Most websites in Pune lose 40% of their traffic because they take longer than 3 seconds to load. Our "Vision Core" architecture ensures sub-2-second loads, keeping users engaged and ready to buy.
                             </p>
@@ -206,7 +206,7 @@ export default function Service_WebDev() {
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-[#040404]" />
                 <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-                    <h2 className="text-4xl md:text-5xl font-black mb-4">Let's Build Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Dream Website</span></h2>
+                    <h2 className="text-4xl md:text-5xl font-black mb-4">Let's Build Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400 pb-1">Dream Website</span></h2>
                     <p className="text-gray-400 mb-8">Get a free consultation and quote within 24 hours.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href={createPageUrl("Booking")}>

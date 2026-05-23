@@ -141,7 +141,7 @@ export default function ClientLayout({ children }) {
             {/* Main Content Wrapper */}
             <div className="flex-1 flex flex-col min-w-0 z-10">
                 {/* Premium Top Bar */}
-                <header className="h-24 flex items-center justify-between px-8 lg:px-12 border-b border-white/[0.04] bg-[#050505]/40 backdrop-blur-xl sticky top-0 z-30">
+                <header className="h-24 flex items-center justify-between px-4 sm:px-8 lg:px-12 border-b border-white/[0.04] bg-[#050505]/40 backdrop-blur-xl sticky top-0 z-30">
                     <div className="flex items-center gap-6">
                         <button 
                             className="lg:hidden p-3 -ml-2 text-gray-400 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all"
@@ -195,7 +195,7 @@ export default function ClientLayout({ children }) {
                 </header>
 
                 {/* Page Content */}
-                <main className="flex-1 overflow-y-auto p-8 lg:p-12 custom-scrollbar">
+                <main className="flex-1 overflow-y-auto p-4 sm:p-8 lg:p-12 custom-scrollbar">
                     <div className="max-w-[1400px] mx-auto">
                         {children}
                     </div>

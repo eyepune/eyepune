@@ -38,7 +38,7 @@ export default function AIO_FAQ() {
                     </motion.div>
                     <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
                         Everything You Need to Know About <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Global AI Growth</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 pb-1">Global AI Growth</span>
                     </h2>
                 </div>
 

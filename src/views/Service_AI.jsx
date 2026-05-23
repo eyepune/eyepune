@@ -124,7 +124,7 @@ export default function Service_AI() {
                 <div className="max-w-7xl mx-auto px-6">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
                         <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">The AI Edge</span>
-                        <h2 className="text-4xl md:text-5xl font-black">Orchestrate the Market, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Scale the Intelligence</span></h2>
+                        <h2 className="text-4xl md:text-5xl font-black">Orchestrate the Market, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 pb-1">Scale the Intelligence</span></h2>
                         <p className="text-gray-500 mt-4 max-w-2xl mx-auto">We don't just use one model; we orchestrate the entire AI ecosystem—OpenAI, Anthropic, Google, and Meta—to build the perfect intelligence engine for your business.</p>
                     </motion.div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

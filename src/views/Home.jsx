@@ -78,7 +78,7 @@ export default function Home() {
                             <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Testimonials</span>
                             <h2 className="text-5xl md:text-6xl font-black text-white mb-5">
                                 Real Clients,{' '}
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Real Results</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 pb-1">Real Results</span>
                             </h2>
                             <div className="flex items-center justify-center gap-1.5">
                                 {[...Array(5)].map((_, i) => (
