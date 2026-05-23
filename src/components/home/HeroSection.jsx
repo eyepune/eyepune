@@ -100,6 +100,7 @@ export default function HeroSection() {
 
     const words = ["Automation", "Intelligence", "Growth"];
     const [index, setIndex] = useState(0);
+    const [url, setUrl] = useState('');
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -138,7 +139,7 @@ export default function HeroSection() {
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
-                            <div className="relative inline-flex flex-col h-[1.2em] overflow-hidden align-bottom">
+                            <div className="relative inline-flex flex-col h-[1.4em] overflow-hidden align-bottom">
                                 <AnimatePresence mode="wait">
                                     <motion.span
                                         key={words[index]}
@@ -180,10 +181,12 @@ export default function HeroSection() {
                                     <Globe className="w-5 h-5 text-gray-500 ml-4 hidden sm:block" />
                                     <input 
                                         type="text" 
+                                        value={url}
+                                        onChange={(e) => setUrl(e.target.value)}
                                         placeholder="Enter your global business URL"
                                         className="bg-transparent border-none focus:ring-0 text-white text-base py-3 px-4 flex-1 placeholder:text-gray-600 outline-none"
                                     />
-                                    <Link href={createPageUrl("AI_Assessment")}>
+                                    <Link href={url ? `/AI-Assessment?url=${encodeURIComponent(url)}` : createPageUrl("AI_Assessment")}>
                                         <Button className="bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8">
                                             <span className="hidden sm:inline">Start Global AI Audit</span>
                                             <span className="sm:hidden">Audit</span>

@@ -45,10 +45,95 @@ export default function AI_Assessment() {
     const [isPdfGenerating, setIsPdfGenerating] = useState(false);
     const [user, setUser] = useState(null);
     const [checkingAuth, setCheckingAuth] = useState(true);
+    const [auditUrl, setAuditUrl] = useState('');
 
     React.useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [step]);
+
+    React.useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrl = urlParams.get('url');
+        
+        if (targetUrl) {
+            setAuditUrl(targetUrl);
+            setStep(-1); // Special loading step for URL Audit
+            handleUrlAudit(targetUrl);
+        }
+    }, []);
+
+    const handleUrlAudit = async (targetUrl) => {
+        setIsSubmitting(true);
+        setIsGenerating(true);
+        
+        try {
+            // 1. Scrape the URL
+            const scrapeRes = await fetch(`/api/scrape?url=${encodeURIComponent(targetUrl)}`);
+            if (!scrapeRes.ok) throw new Error('Failed to analyze website URL');
+            const scrapeData = await scrapeRes.json();
+            
+            if (!scrapeData.success) throw new Error(scrapeData.error || 'Failed to extract website data');
+            
+            const siteInfo = scrapeData.data;
+            
+            // 2. Generate LLM Report
+            const response = await fetch('/api/llm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [
+                        { role: 'system', content: 'You are an expert growth and tech consultant at EyE PunE.' },
+                        { role: 'user', content: `Analyze the following website and provide a detailed audit report. 
+Website URL: ${targetUrl}
+Title: ${siteInfo.title}
+Description: ${siteInfo.description}
+Extracted Content: ${siteInfo.content}
+
+Create a comprehensive report with:
+1. Website Performance & SEO Score (0-100)
+2. Executive Summary of their current digital presence
+3. Key Strengths
+4. Critical Tech & Marketing Gaps
+5. Strategic Recommendations - How EyE PunE's specific services (AI Automation, Next.js Web Dev, Viral Slicer, Funnels, Paid Ads) can help them scale and fix current issues.
+
+At the very bottom, output: [CRM_SCORE: number]` }
+                    ]
+                })
+            });
+
+            if (!response.ok) throw new Error('AI generation failed');
+
+            const data = await response.json();
+            const aiResponse = data?.content;
+            
+            const growthMatch = aiResponse.match(/Score.*?(\d+)/i);
+            const growthScore = growthMatch ? parseInt(growthMatch[1]) : 65;
+            
+            const cleanAiResponse = aiResponse.replace(/\[CRM_SCORE:\s*\d+\]/i, '').trim();
+
+            setReport({
+                score: growthScore,
+                content: cleanAiResponse
+            });
+            
+            // Link data
+            setFormData(prev => ({
+                ...prev,
+                company_name: siteInfo.title || targetUrl
+            }));
+            
+            setStep(questions.length + 1); // Go to report view
+            
+        } catch (error) {
+            console.error('Audit Error:', error);
+            alert(`Audit failed: ${error.message}`);
+            // Fall back to manual assessment
+            setStep(0);
+        } finally {
+            setIsGenerating(false);
+            setIsSubmitting(false);
+        }
+    };
 
     React.useEffect(() => {
         const checkAuth = async () => {
@@ -73,7 +158,8 @@ export default function AI_Assessment() {
     const isContactStep = step === 0;
     const isQuestionStep = step > 0 && step <= questions.length;
     const isReportStep = step > questions.length;
-    const currentQuestion = questions[step - 1];
+    const isAuditLoadingStep = step === -1;
+    const currentQuestion = step > 0 && step <= questions.length ? questions[step - 1] : null;
 
     const handleNext = () => {
         if (step < questions.length + 1) {
@@ -333,7 +419,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
                     <p className="text-xl text-gray-400">Personalized growth roadmap in 3 minutes</p>
                 </div>
 
-                {!isReportStep && (
+                {!isReportStep && !isAuditLoadingStep && (
                     <div className="mb-8">
                         <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                             <motion.div className="h-full bg-red-600" animate={{ width: `${(step / (questions.length + 1)) * 100}%` }} />
@@ -342,6 +428,16 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 )}
 
                 <AnimatePresence mode="wait">
+                    {isAuditLoadingStep && (
+                        <motion.div key="loading" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center py-20">
+                            <Bot className="w-20 h-20 text-red-600 animate-pulse mx-auto mb-8" />
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4 italic">Running Global AI Audit...</h2>
+                            <p className="text-xl text-gray-400 max-w-xl mx-auto mb-8">
+                                We are scraping {auditUrl} and analyzing its tech stack, SEO, and performance gaps.
+                            </p>
+                            <Loader2 className="w-12 h-12 animate-spin text-red-600 mx-auto" />
+                        </motion.div>
+                    )}
                     {isContactStep && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
                             <Card className="bg-[#0c0c0c] border-white/5 p-8">
