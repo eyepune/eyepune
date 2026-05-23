@@ -244,13 +244,14 @@ Response rules:
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        className="fixed bottom-20 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-96 flex flex-col overflow-hidden"
+                        className="fixed bottom-24 right-3 sm:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[380px] flex flex-col overflow-hidden"
                         style={{
-                            height: 'min(60vh, 520px)',
+                            height: 'min(70vh, 520px)',
+                            maxHeight: '520px',
                             background: 'rgba(10,10,10,0.97)',
-                            border: '1px solid rgba(239,68,68,0.15)',
+                            border: '1px solid rgba(239,68,68,0.2)',
                             borderRadius: '20px',
-                            boxShadow: '0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03)',
+                            boxShadow: '0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04)',
                         }}
                     >
                         {/* Header */}
