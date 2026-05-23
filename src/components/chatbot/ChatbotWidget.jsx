@@ -230,7 +230,7 @@ Response rules:
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-6 right-6 z-50 rounded-full bg-gradient-to-br from-red-600 to-red-500 text-white p-4 shadow-[0_4px_24px_rgba(239,68,68,0.5)] hover:shadow-[0_4px_32px_rgba(239,68,68,0.7)] transition-all"
+                className="fixed bottom-6 right-6 z-[60] rounded-full bg-gradient-to-br from-red-600 to-red-500 text-white p-4 shadow-[0_4px_24px_rgba(239,68,68,0.5)] hover:shadow-[0_4px_32px_rgba(239,68,68,0.7)] transition-all"
                 aria-label="Open AI Chat"
             >
                 {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
@@ -244,13 +244,12 @@ Response rules:
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        className="fixed bottom-20 right-0 sm:right-6 z-50 w-full sm:w-96 flex flex-col overflow-hidden"
+                        className="fixed bottom-20 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-96 flex flex-col overflow-hidden"
                         style={{
-                            height: '70vh',
-                            maxHeight: '560px',
+                            height: 'min(60vh, 520px)',
                             background: 'rgba(10,10,10,0.97)',
                             border: '1px solid rgba(239,68,68,0.15)',
-                            borderRadius: '20px 20px 0 0',
+                            borderRadius: '20px',
                             boxShadow: '0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03)',
                         }}
                     >
