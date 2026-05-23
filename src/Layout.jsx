@@ -305,7 +305,32 @@ function LayoutContent({ children, currentPageName }) {
                         style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.04) 0%, transparent 70%)' }}
                     />
 
-                    <div className="max-w-7xl mx-auto px-6 pt-16 pb-10 relative z-10">
+                    {/* Newsletter Capture Section for Content Marketing Strategy */}
+                    <div className="border-b border-white/[0.06] bg-[#080808]">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+                            <div className="grid md:grid-cols-2 gap-8 items-center">
+                                <div>
+                                    <h3 className="text-2xl md:text-3xl font-black mb-3 text-white">Join the Growth Insider</h3>
+                                    <p className="text-gray-400 text-sm md:text-base max-w-md">
+                                        Get exclusive AI automation strategies, SEO tips, and marketing funnels delivered straight to your inbox weekly.
+                                    </p>
+                                </div>
+                                <form className="flex gap-3 max-w-md md:ml-auto w-full" onSubmit={(e) => { e.preventDefault(); alert("Thanks for subscribing!"); }}>
+                                    <input 
+                                        type="email" 
+                                        placeholder="Enter your email address" 
+                                        className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 transition-colors"
+                                        required
+                                    />
+                                    <Button type="submit" className="bg-red-600 hover:bg-red-500 text-white px-6 py-3 h-auto rounded-xl font-bold transition-all">
+                                        Subscribe
+                                    </Button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-10 relative z-10">
                         <div className="grid sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-12 mb-14">
 
                             {/* Brand col */}
@@ -315,15 +340,15 @@ function LayoutContent({ children, currentPageName }) {
                                     Pune-based all-in-one growth partner serving clients across the globe. Connect · Engage · Grow.
                                 </p>
                                 <div className="space-y-2 text-sm">
-                                    <a href="mailto:connect@eyepune.com" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors">
+                                    <a href="mailto:connect@eyepune.com" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors py-1">
                                         <span className="w-4 h-4 text-red-500">✉</span> connect@eyepune.com
                                     </a>
                                     
-                                    <a href="tel:+919284712033" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors">
+                                    <a href="tel:+919284712033" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors py-1">
                                         <span className="w-4 h-4 text-red-500">📱</span> +91 9284712033
                                     </a>
 
-                                    <p className="flex items-center gap-2 text-gray-600">
+                                    <p className="flex items-center gap-2 text-gray-600 py-1">
                                         <span className="w-4 h-4 text-red-500">📍</span> Pune, India · Serving Globally
                                     </p>
                                 </div>
@@ -338,7 +363,7 @@ function LayoutContent({ children, currentPageName }) {
                                         <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                                             whileHover={{ y: -3, scale: 1.1 }}
                                             className={cn(
-                                                "w-10 h-10 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-500 transition-all",
+                                                "w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-500 transition-all",
                                                 s.color,
                                                 "hover:bg-white/[0.08] hover:border-white/20"
                                             )}
@@ -357,7 +382,7 @@ function LayoutContent({ children, currentPageName }) {
                                         {links.map((link, i) => (
                                             <li key={i}>
                                                 <Link href={createPageUrl(link.page)}
-                                                    className="text-gray-500 hover:text-white text-sm transition-colors hover:translate-x-1 inline-block"
+                                                    className="text-gray-500 hover:text-white text-sm transition-colors hover:translate-x-1 inline-block py-1"
                                                 >{link.name}</Link>
                                             </li>
                                         ))}
@@ -367,25 +392,25 @@ function LayoutContent({ children, currentPageName }) {
                         </div>
 
                         {/* CTA banner in footer */}
-                        <div className="rounded-2xl bg-gradient-to-r from-red-950/40 to-orange-950/20 border border-red-500/10 p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mb-10">
+                        <div className="rounded-2xl bg-gradient-to-r from-red-950/40 to-orange-950/20 border border-red-500/10 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
                             <div>
-                                <p className="text-white font-bold text-lg">Ready to grow your business?</p>
-                                <p className="text-gray-500 text-sm">Get a free AI-powered assessment today — no commitment.</p>
+                                <p className="text-white font-bold text-xl md:text-2xl mb-1">Ready to grow your business?</p>
+                                <p className="text-gray-400 text-sm md:text-base">Get a free AI-powered strategy assessment today — no commitment.</p>
                             </div>
-                            <Link href={createPageUrl("AI-Assessment")}>
-                                <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-7 py-2.5 rounded-full font-bold whitespace-nowrap shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all flex-shrink-0">
+                            <Link href={createPageUrl("AI-Assessment")} className="w-full md:w-auto">
+                                <Button className="w-full md:w-auto bg-gradient-to-r from-red-600 to-red-500 text-white px-8 py-6 rounded-xl font-bold whitespace-nowrap shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all flex-shrink-0 text-lg">
                                     Start Free Assessment →
                                 </Button>
                             </Link>
                         </div>
 
                         {/* Bottom bar */}
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-white/[0.06] text-xs text-gray-600">
-                            <p>© 2026 EyE PunE. All rights reserved.</p>
-                            <div className="flex gap-6">
-                                <Link href={createPageUrl("CMS-Page") + "?slug=privacy-policy"} className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
-                                <Link href={createPageUrl("CMS-Page") + "?slug=terms-and-conditions"} className="hover:text-gray-400 transition-colors">Terms & Conditions</Link>
-                                <Link href={createPageUrl("CMS-Page") + "?slug=cookie-policy"} className="hover:text-gray-400 transition-colors">Cookie Policy</Link>
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-white/[0.06] text-xs md:text-sm text-gray-500">
+                            <p>© {new Date().getFullYear()} EyE PunE. All rights reserved.</p>
+                            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+                                <Link href={createPageUrl("CMS-Page") + "?slug=privacy-policy"} className="hover:text-gray-300 transition-colors py-1">Privacy Policy</Link>
+                                <Link href={createPageUrl("CMS-Page") + "?slug=terms-and-conditions"} className="hover:text-gray-300 transition-colors py-1">Terms & Conditions</Link>
+                                <Link href={createPageUrl("CMS-Page") + "?slug=cookie-policy"} className="hover:text-gray-300 transition-colors py-1">Cookie Policy</Link>
                             </div>
                         </div>
                     </div>
