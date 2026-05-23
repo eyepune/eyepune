@@ -150,7 +150,7 @@ export default function HeroSection() {
                                             duration: 0.6, 
                                             ease: [0.23, 1, 0.32, 1] 
                                         }}
-                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500"
+                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500 pb-2"
                                     >
                                         {words[index]}
                                     </motion.span>

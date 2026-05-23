@@ -129,7 +129,7 @@ function LayoutContent({ children, currentPageName }) {
                     ? 'bg-[#040404]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
                     : 'bg-transparent'
             }`}>
-                <div className="max-w-7xl mx-auto px-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
                     <div className="flex items-center justify-between h-20">
 
                         {/* Logo — only show on public pages */}
@@ -262,7 +262,7 @@ function LayoutContent({ children, currentPageName }) {
                             exit={{ opacity: 0, y: -10 }}
                             className="lg:hidden bg-[#080808]/98 backdrop-blur-xl border-b border-white/[0.06]"
                         >
-                            <div className="px-6 py-6 space-y-1">
+                            <div className="px-4 sm:px-6 py-6 space-y-1">
                                 {navLinks.map((link) => (
                                     <div key={link.page}>
                                         <Link
