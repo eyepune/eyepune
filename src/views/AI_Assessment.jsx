@@ -82,7 +82,7 @@ export default function AI_Assessment() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: 'system', content: 'You are an elite AI Growth Consultant and Tech Strategist at EyE PunE (a premium AI automation and Next.js web development agency). Your goal is to analyze the provided website data and output a highly persuasive, visually structured markdown report that highlights critical gaps and directly pitches EyE PunE\\'s solutions to fix them.' },
+                        { role: 'system', content: "You are an elite AI Growth Consultant and Tech Strategist at EyE PunE (a premium AI automation and Next.js web development agency). Your goal is to analyze the provided website data and output a highly persuasive, visually structured markdown report that highlights critical gaps and directly pitches EyE PunE's solutions to fix them." },
                         { role: 'user', content: `Analyze this website data and generate a premium Strategy Report.
 
 Website URL: ${targetUrl}
