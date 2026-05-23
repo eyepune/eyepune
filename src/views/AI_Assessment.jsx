@@ -82,21 +82,37 @@ export default function AI_Assessment() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: 'system', content: 'You are an expert growth and tech consultant at EyE PunE.' },
-                        { role: 'user', content: `Analyze the following website and provide a detailed audit report. 
+                        { role: 'system', content: 'You are an elite AI Growth Consultant and Tech Strategist at EyE PunE (a premium AI automation and Next.js web development agency). Your goal is to analyze the provided website data and output a highly persuasive, visually structured markdown report that highlights critical gaps and directly pitches EyE PunE\\'s solutions to fix them.' },
+                        { role: 'user', content: `Analyze this website data and generate a premium Strategy Report.
+
 Website URL: ${targetUrl}
 Title: ${siteInfo.title}
 Description: ${siteInfo.description}
-Extracted Content: ${siteInfo.content}
+Content Snippet: ${siteInfo.content}
 
-Create a comprehensive report with:
-1. Website Performance & SEO Score (0-100)
-2. Executive Summary of their current digital presence
-3. Key Strengths
-4. Critical Tech & Marketing Gaps
-5. Strategic Recommendations - How EyE PunE's specific services (AI Automation, Next.js Web Dev, Viral Slicer, Funnels, Paid Ads) can help them scale and fix current issues.
+Format the report beautifully in Markdown with bolding, lists, and clear headers. 
+Use the exact following structure:
 
-At the very bottom, output: [CRM_SCORE: number]` }
+### 📊 Performance & SEO Score: [Insert Score 0-100]/100
+
+### 🎯 Executive Summary
+Provide a 2-3 sentence summary of what this business does and their current digital footprint.
+
+### 💪 Key Strengths
+* Bullet point 1
+* Bullet point 2
+
+### ⚠️ Critical Gaps Found
+Identify 2-3 specific technical, SEO, or marketing bottlenecks based on their site.
+
+### 🚀 EyE PunE Strategic Recommendations
+Provide 3 highly specific recommendations on how our agency can scale them. Explicitly mention these EyE PunE services where relevant:
+* **AI Automation** (AI Chatbots, CRM sync)
+* **Next.js Web Development** (High speed, premium aesthetics)
+* **Viral Slicer & Paid Ads** (Traffic generation)
+* **Sales Funnels**
+
+At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: <number>] (where number is between 1-100 indicating lead quality).` }
                     ]
                 })
             });
