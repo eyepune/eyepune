@@ -107,10 +107,10 @@ Identify 2-3 specific technical, SEO, or marketing bottlenecks based on their si
 
 ### 🚀 EyE PunE Strategic Recommendations
 Provide 3 highly specific recommendations on how our agency can scale them. Explicitly mention these EyE PunE services where relevant:
-* **AI Automation** (AI Chatbots, CRM sync)
-* **Next.js Web Development** (High speed, premium aesthetics)
-* **Viral Slicer & Paid Ads** (Traffic generation)
-* **Sales Funnels**
+* **AI & Tech Automation** (AI Chatbots, CRM sync, Automated Workflows)
+* **Custom & CMS Web Development** (Custom coding in any language, WordPress, Shopify, Wix)
+* **Platform & Hosting Migrations** (Seamlessly moving their site to better hosting or a new CMS)
+* **Elite Marketing Systems** (High-converting Sales Funnels, Paid Ads, Brand Scaling)
 
 At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: <number>] (where number is between 1-100 indicating lead quality).` }
                     ]
