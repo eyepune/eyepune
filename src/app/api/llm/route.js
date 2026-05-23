@@ -111,7 +111,7 @@ import { NextResponse } from 'next/server';
 
 const LLM_API_URL = process.env.LLM_API_URL || 'https://integrate.api.nvidia.com/v1/chat/completions';
 const LLM_API_KEY = process.env.LLM_API_KEY || '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';
-const LLM_MODEL = process.env.LLM_MODEL || 'qwen/qwen3.5-122b-a10b';
+const LLM_MODEL = process.env.LLM_MODEL || 'meta/llama-3.1-70b-instruct';
 const FALLBACK_MODEL = 'meta/llama-3.1-70b-instruct'; // Reliable fallback model
 
 // Enhanced in-memory rate limiter for better user experience
