@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Menu, X, LayoutDashboard, LogOut, LogIn, ChevronDown, Bot, 
     Home as HomeIcon, Briefcase, Tag, BookOpen, Users, Mail, Sparkles, Calendar,
-    Instagram, Linkedin, MessageCircle
+    Instagram, Linkedin, MessageCircle, Target
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -21,13 +21,42 @@ import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
 import CustomCursor from "@/components/shared/CustomCursor";
 
+const footerLinks = {
+    Services: [
+        { name: 'Social Media Management', page: 'Service-SocialMedia' },
+        { name: 'Website Development', page: 'Service-WebDev' },
+        { name: 'AI Automation', page: 'Service-AI' },
+        { name: 'Google & Meta Ads', page: 'Service-PaidAds' },
+        { name: 'Branding & Design', page: 'Service-Branding' },
+        { name: 'Sales Funnels', page: 'Service-Funnels' },
+    ],
+    Company: [
+        { name: 'About Us', page: 'About' },
+        { name: 'Blog', page: 'Blog' },
+        { name: 'Testimonials', page: 'Testimonials' },
+        { name: 'Contact', page: 'Contact' },
+    ],
+    'Get Started': [
+        { name: 'Free AI Assessment', page: 'AI-Assessment' },
+        { name: 'Book Consultation', page: 'Booking' },
+        { name: 'Pricing', page: 'Pricing' },
+    ],
+    Solutions: [
+        { name: 'For Founders', page: 'Solution-Founders' },
+        { name: 'For YouTubers', page: 'Solution-YouTubers' },
+        { name: 'For Startups', page: 'Solution-Startups' },
+        { name: 'B2B Growth Engine', page: 'Solution-B2BGrowth' },
+        { name: 'AI Intelligence Hub', page: 'AI-Intelligence-Hub' },
+    ],
+};
+
 const publicNavLinks = [
     { name: 'Home', page: 'Home', icon: HomeIcon },
-    { name: 'Services', page: 'Services-Detail', icon: Briefcase },
+    { name: 'Services', page: 'Services-Detail', icon: Briefcase, subLinks: footerLinks.Services },
+    { name: 'Solutions', page: 'Solution-B2BGrowth', icon: Target, subLinks: footerLinks.Solutions },
     { name: 'Pricing', page: 'Pricing', icon: Tag },
     { name: 'Blog', page: 'Blog', icon: BookOpen },
     { name: 'About', page: 'About', icon: Users },
-    { name: 'Contact', page: 'Contact', icon: Mail },
 ];
 
 const adminNavLinks = [
@@ -62,35 +91,6 @@ const clientNavLinks = [
     { name: 'Dashboard', page: 'Client-Dashboard' },
     { name: 'My Portal', page: 'Client-Portal' },
 ];
-
-const footerLinks = {
-    Services: [
-        { name: 'Social Media Management', page: 'Service-SocialMedia' },
-        { name: 'Website Development', page: 'Service-WebDev' },
-        { name: 'AI Automation', page: 'Service-AI' },
-        { name: 'Google & Meta Ads', page: 'Service-PaidAds' },
-        { name: 'Branding & Design', page: 'Service-Branding' },
-        { name: 'Sales Funnels', page: 'Service-Funnels' },
-    ],
-    Company: [
-        { name: 'About Us', page: 'About' },
-        { name: 'Blog', page: 'Blog' },
-        { name: 'Testimonials', page: 'Testimonials' },
-        { name: 'Contact', page: 'Contact' },
-    ],
-    'Get Started': [
-        { name: 'Free AI Assessment', page: 'AI-Assessment' },
-        { name: 'Book Consultation', page: 'Booking' },
-        { name: 'Pricing', page: 'Pricing' },
-    ],
-    Solutions: [
-        { name: 'For Founders', page: 'Solution-Founders' },
-        { name: 'For YouTubers', page: 'Solution-YouTubers' },
-        { name: 'For Startups', page: 'Solution-Startups' },
-        { name: 'B2B Growth Engine', page: 'Solution-B2BGrowth' },
-        { name: 'AI Intelligence Hub', page: 'AI-Intelligence-Hub' },
-    ],
-};
 
 function LayoutContent({ children, currentPageName }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -146,24 +146,41 @@ function LayoutContent({ children, currentPageName }) {
                         {isPublicPage && (
                             <div className="hidden lg:flex items-center gap-1">
                                 {navLinks.map((link) => (
-                                    <Link
-                                        key={link.page}
-                                        href={createPageUrl(link.page)}
-                                        className={`group relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all ${
-                                            currentPageName === link.page
-                                                ? 'text-white bg-white/[0.07]'
-                                                : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
-                                        }`}
-                                    >
-                                        {link.icon && <link.icon className={`w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110 ${currentPageName === link.page ? 'text-red-500' : 'text-gray-500 group-hover:text-red-400'}`} />}
-                                        {link.name}
-                                        {currentPageName === link.page && (
-                                            <motion.span
-                                                layoutId="nav-indicator"
-                                                className="absolute inset-0 rounded-full bg-white/[0.07] -z-10"
-                                            />
+                                    <div key={link.page} className="relative group/nav">
+                                        <Link
+                                            href={createPageUrl(link.page)}
+                                            className={`group relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all ${
+                                                currentPageName === link.page
+                                                    ? 'text-white bg-white/[0.07]'
+                                                    : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+                                            }`}
+                                        >
+                                            {link.icon && <link.icon className={`w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110 ${currentPageName === link.page ? 'text-red-500' : 'text-gray-500 group-hover:text-red-400'}`} />}
+                                            {link.name}
+                                            {link.subLinks && <ChevronDown className="w-3.5 h-3.5 text-gray-500 group-hover:text-white group-hover/nav:-rotate-180 transition-transform duration-300" />}
+                                            {currentPageName === link.page && (
+                                                <motion.span
+                                                    layoutId="nav-indicator"
+                                                    className="absolute inset-0 rounded-full bg-white/[0.07] -z-10"
+                                                />
+                                            )}
+                                        </Link>
+                                        {link.subLinks && (
+                                            <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 transform translate-y-2 group-hover/nav:translate-y-0">
+                                                <div className="bg-[#0c0c0c] border border-white/10 rounded-2xl p-2 w-64 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                                                    {link.subLinks.map(subLink => (
+                                                        <Link 
+                                                            key={subLink.page}
+                                                            href={createPageUrl(subLink.page)}
+                                                            className="block px-4 py-3 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
+                                                        >
+                                                            {subLink.name}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
                                         )}
-                                    </Link>
+                                    </div>
                                 ))}
                             </div>
                         )}
@@ -247,16 +264,33 @@ function LayoutContent({ children, currentPageName }) {
                         >
                             <div className="px-6 py-6 space-y-1">
                                 {navLinks.map((link) => (
-                                    <Link
-                                        key={link.page}
-                                        href={createPageUrl(link.page)}
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className={`block py-3 px-4 rounded-xl text-base font-medium transition-all ${
-                                            currentPageName === link.page
-                                                ? 'text-white bg-red-500/10 border border-red-500/20'
-                                                : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
-                                        }`}
-                                    >{link.name}</Link>
+                                    <div key={link.page}>
+                                        <Link
+                                            href={createPageUrl(link.page)}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className={`block py-3 px-4 rounded-xl text-base font-medium transition-all ${
+                                                currentPageName === link.page
+                                                    ? 'text-white bg-red-500/10 border border-red-500/20'
+                                                    : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+                                            }`}
+                                        >
+                                            {link.name}
+                                        </Link>
+                                        {link.subLinks && (
+                                            <div className="pl-6 pr-4 py-1 space-y-1 border-l border-white/5 ml-4 mb-2">
+                                                {link.subLinks.map(subLink => (
+                                                    <Link
+                                                        key={subLink.page}
+                                                        href={createPageUrl(subLink.page)}
+                                                        onClick={() => setMobileMenuOpen(false)}
+                                                        className="block py-2 px-4 text-sm text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                                                    >
+                                                        {subLink.name}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                                 <div className="pt-4 space-y-3">
                                     {isPublicPage && (
