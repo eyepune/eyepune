@@ -195,8 +195,8 @@ Sales Sniper Strategy:
 - **Lead Capture**: If a user shows interest, ask for their WhatsApp or Email to send them a custom "AI Roadmap."
 - **Urgency**: Mention that we only take 5 new "Intelligence Audits" per week.
 - **CTAs**: 
-  - Researching? -> AI Assessment (https://eyepune.com/AI-Assessment)
-  - Ready to scale? -> Book Vision Sync (https://eyepune.com/Booking)
+  - Researching? -> [AI Assessment](https://eyepune.com/AI-Assessment)
+  - Ready to scale? -> [Book Vision Sync](https://eyepune.com/Booking)
 
 Tone & Persona:
 - Elite, confident, and ROI-obsessed. 
@@ -289,7 +289,12 @@ Assistant:`;
                                                 ? 'bg-red-600 text-white rounded-tr-none' 
                                                 : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-none'
                                             }`}>
-                                                <ReactMarkdown className="prose prose-invert prose-sm max-w-none">
+                                                <ReactMarkdown 
+                                                    className="prose prose-invert prose-sm max-w-none"
+                                                    components={{
+                                                        a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" className="text-orange-300 underline underline-offset-2 hover:text-orange-200" {...props} />
+                                                    }}
+                                                >
                                                     {m.content}
                                                 </ReactMarkdown>
                                             </div>
