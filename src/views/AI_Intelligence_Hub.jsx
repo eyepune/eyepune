@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Cpu, Brain, Zap, Shield, Globe, Layers, BarChart, MessageSquare } from 'lucide-react';
+import { Cpu, Brain, Zap, Shield, Globe, Layers, BarChart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";

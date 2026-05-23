@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Sparkles, Brain } from 'lucide-react';
+import { MessageCircle, Brain } from 'lucide-react';
 
 const aiFaqs = [
     {
