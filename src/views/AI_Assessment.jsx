@@ -432,8 +432,12 @@ At the very bottom, output: [CRM_SCORE: number]` }
                     <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
                         <Bot className="w-10 h-10 text-red-600" />
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 italic tracking-tighter">AI Business Assessment</h1>
-                    <p className="text-xl text-gray-400">Personalized growth roadmap in 3 minutes</p>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 italic tracking-tighter">
+                        {auditUrl ? 'AI Website Assessment' : 'AI Business Assessment'}
+                    </h1>
+                    <p className="text-xl text-gray-400">
+                        {auditUrl ? 'Comprehensive tech & SEO audit in seconds' : 'Personalized growth roadmap in 3 minutes'}
+                    </p>
                 </div>
 
                 {!isReportStep && !isAuditLoadingStep && (
