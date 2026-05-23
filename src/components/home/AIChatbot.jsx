@@ -42,7 +42,7 @@ export default function AIChatbot() {
             if (hasTriggered) return;
             hasTriggered = true;
             setIsVisible(true);
-            setIsOpen(true); // Proactive expansion for conversion
+            // setIsOpen(true); // Removed: Don't auto-open the chat window aggressively
 
             const path = window.location.pathname;
             let initialMsg = "Namaste! 🙏 I'm EyE BoT, your AI growth strategist. I noticed you're exploring our ecosystem—how can I help you transform your business today?";
@@ -241,18 +241,19 @@ Assistant:`;
     if (!isVisible || !isPathAllowed) return null;
 
     return (
-        <div className="fixed bottom-4 right-4 z-[9999] font-sans flex flex-col items-end pointer-events-none">
+        <div className="fixed bottom-20 right-4 sm:right-6 z-[60] font-sans flex flex-col items-end pointer-events-none">
             <AnimatePresence>
                 {isOpen ? (
                     <motion.div
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className={`bg-[#0c0c0c] border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
+                        className={`bg-[#0c0c0c] border border-white/10 rounded-[20px] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
                             isMinimized 
-                                ? 'h-16 w-64 sm:h-20 sm:w-80' 
-                                : 'h-[calc(100vh-120px)] sm:h-[600px] w-[calc(100vw-2rem)] sm:w-[400px] max-h-[85vh]'
+                                ? 'h-16 w-[calc(100vw-2rem)] sm:w-80' 
+                                : 'w-[calc(100vw-2rem)] sm:w-[380px]'
                         }`}
+                        style={!isMinimized ? { height: 'min(520px, calc(100vh - 140px))' } : {}}
                     >
                         {/* Header */}
                         <div className="p-5 bg-gradient-to-r from-red-600 to-orange-600 flex items-center justify-between">
