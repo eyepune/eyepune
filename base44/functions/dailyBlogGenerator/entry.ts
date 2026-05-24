@@ -1,31 +1,31 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 const TOPICS = [
-    "Latest trends in digital marketing for Indian businesses in 2026",
-    "How AI automation is transforming small businesses in Pune",
-    "Social media marketing strategies for Indian SMEs",
-    "Why every Pune business needs a strong online presence",
-    "WhatsApp marketing: How to convert leads for Indian businesses",
-    "SEO tips for local businesses in Pune and Maharashtra",
-    "How EyE PunE helps businesses grow with AI-powered CRM",
-    "India's booming startup ecosystem: What businesses need to succeed",
-    "Lead generation strategies that work for Indian businesses",
-    "The rise of AI tools in Indian business operations",
-    "Content marketing trends shaping Indian brands in 2026",
-    "How to build a sales funnel that converts for Pune businesses",
-    "Email marketing vs WhatsApp: Which works better in India?",
-    "Branding strategies for Indian MSMEs to stand out",
-    "Web development trends every Indian business should know",
-    "Data-driven marketing: Using analytics to grow your business",
-    "Customer retention strategies for Pune-based businesses",
-    "How EyE PunE's growth bundle transforms businesses in 90 days",
-    "Pune business news: Digital transformation driving local economy",
-    "Video marketing for Indian businesses: Tips and best practices",
-    "Building a strong brand identity for Indian startups",
-    "AI chatbots and automation: The future of Indian customer service",
-    "How Lex Pro is revolutionizing contract management in India",
-    "Growth hacking strategies for Indian e-commerce businesses",
-    "The importance of CRM systems for Indian sales teams",
+    "Latest trends in digital marketing for global enterprises in 2026",
+    "How multi-model AI automation is transforming B2B lead generation",
+    "Scaling B2B sales funnels: The ultimate guide for tech startups",
+    "Why high-converting sub-2-second websites matter for global brands",
+    "WhatsApp CRM automation: How to close international leads instantly",
+    "Top technical SEO strategies for dominating global search results",
+    "How EyE PunE helps global visionaries scale with NVIDIA-accelerated AI",
+    "The future of AI agents in B2B customer retention",
+    "Lead generation strategies that guarantee 5X ROI",
+    "The rise of Anthropic and OpenAI tools in enterprise workflows",
+    "Content marketing frameworks for high-ticket service businesses",
+    "How to build an automated sales engine that converts while you sleep",
+    "Cold Outreach vs Inbound Funnels: The ultimate B2B strategy",
+    "Brand positioning strategies for startups to look like industry titans",
+    "Headless CMS and Next.js: The future of enterprise web development",
+    "Predictive analytics: Using AI to accurately forecast your sales",
+    "Customer retention automation for global SaaS companies",
+    "How EyE PunE's Growth Core transforms digital infrastructure in 90 days",
+    "The undeniable ROI of professional UI/UX in software applications",
+    "Video marketing algorithms: How to capture C-suite attention",
+    "Building an undeniable brand identity in a saturated global market",
+    "Custom AI chatbots: Replacing generic customer service with intelligence",
+    "How to optimize your ad spend for maximum Return on Ad Spend (ROAS)",
+    "Growth hacking architectures for rapid e-commerce scaling",
+    "Integrating OpenAI into your existing CRM system for seamless workflows",
 ];
 
 function slugify(text) {
@@ -51,18 +51,18 @@ Deno.serve(async (req) => {
 
         // Generate blog post using AI
         const aiResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
-            prompt: `Write a high-quality, engaging blog post for EyE PunE's website (a Pune-based digital growth agency offering sales, marketing, web development, AI automation, and CRM services).
+            prompt: `Write a high-quality, engaging, and highly technical blog post for EyE PunE's website (an elite global AI growth partner and digital agency offering multi-model AI automation, enterprise web development, and performance marketing).
 
 Topic: "${topic}"
 
 Requirements:
-- Title: Catchy, SEO-friendly (include relevant keywords)
-- Word count: 600-800 words
-- Tone: Professional yet conversational, relatable for Indian business owners
-- Structure: Intro, 3-4 subheadings with content, actionable tips, conclusion with a subtle CTA to contact EyE PunE
-- Naturally mention EyE PunE 1-2 times where relevant
-- Include relevant Indian business context, examples, or statistics where possible
-- End with a call to action like "Ready to grow your business? Connect with EyE PunE today."
+- Title: Catchy, highly professional, SEO-friendly (include relevant global B2B keywords)
+- Word count: 800-1200 words
+- Tone: Elite, authoritative, insightful, and targeted toward Founders, C-Suite, and startup visionaries.
+- Structure: Intro, 3-4 subheadings with deep content, actionable high-level strategies, conclusion with a subtle CTA to contact EyE PunE for a free AI Assessment.
+- Naturally mention EyE PunE 1-2 times as a global authority in AI and web architecture.
+- Include relevant global business context, tech industry examples (e.g. OpenAI, Vercel, NVIDIA), or high-level statistics where possible.
+- End with a call to action like "Ready to scale your global infrastructure? Run a free AI Assessment with EyE PunE today."
 - Insert the placeholder text [AD_SLOT_1] after the first subheading section
 - Insert the placeholder text [AD_SLOT_2] before the conclusion
 
@@ -99,7 +99,7 @@ Return JSON with these fields:
         let featuredImageUrl = '';
         try {
             const imgResult = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: post.image_prompt || `Professional digital marketing concept for Indian businesses, modern office setting, vibrant colors, high quality photography style`
+                prompt: post.image_prompt || `Premium minimal corporate workspace, high-end technology, AI automation concept, glowing blue and crimson accents, highly cinematic and elite aesthetic, 8k resolution, photorealistic`
             });
             featuredImageUrl = imgResult.url || '';
         } catch (imgErr) {
