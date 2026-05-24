@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Menu, X, LayoutDashboard, LogOut, LogIn, ChevronDown, Bot, 
     Home as HomeIcon, Briefcase, Tag, BookOpen, Users, Mail, Sparkles, Calendar,
-    Instagram, Linkedin, MessageCircle, Target
+    Instagram, Linkedin, MessageCircle, Target, Phone, MapPin
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -404,17 +404,20 @@ function LayoutContent({ children, currentPageName }) {
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
                                     Pune-based all-in-one growth partner serving clients across the globe.
                                 </p>
-                                <div className="space-y-2 text-sm flex flex-col items-center sm:items-start">
-                                    <a href="mailto:connect@eyepune.com" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors py-1">
-                                        <span className="w-4 h-4 text-red-500">✉</span> connect@eyepune.com
+                                <div className="space-y-3 text-sm flex flex-col items-center sm:items-start mt-4">
+                                    <a href="mailto:connect@eyepune.com" className="flex items-center gap-3 text-gray-600 hover:text-red-400 transition-colors py-1 group">
+                                        <Mail className="w-4 h-4 text-red-500 group-hover:text-red-400 transition-colors shrink-0" />
+                                        <span>connect@eyepune.com</span>
                                     </a>
                                     
-                                    <a href="tel:+919284712033" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors py-1">
-                                        <span className="w-4 h-4 text-red-500">📱</span> +91 9284712033
+                                    <a href="tel:+919284712033" className="flex items-center gap-3 text-gray-600 hover:text-red-400 transition-colors py-1 group">
+                                        <Phone className="w-4 h-4 text-red-500 group-hover:text-red-400 transition-colors shrink-0" />
+                                        <span>+91 9284712033</span>
                                     </a>
 
-                                    <p className="flex items-center gap-2 text-gray-600 py-1">
-                                        <span className="w-4 h-4 text-red-500">📍</span> Pune, India · Serving Globally
+                                    <p className="flex items-center gap-3 text-gray-600 py-1">
+                                        <MapPin className="w-4 h-4 text-red-500 shrink-0" />
+                                        <span>Pune, India · Serving Globally</span>
                                     </p>
                                 </div>
 
