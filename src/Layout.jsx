@@ -370,20 +370,20 @@ function LayoutContent({ children, currentPageName }) {
                     <div className="border-b border-white/[0.06] bg-white/[0.01] backdrop-blur-md">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
                             <div className="grid md:grid-cols-2 gap-8 items-center">
-                                <div>
+                                <div className="text-center md:text-left flex flex-col items-center md:items-start">
                                     <h3 className="text-2xl md:text-3xl font-black mb-3 text-white">Join the Growth Insider</h3>
                                     <p className="text-gray-400 text-sm md:text-base max-w-md">
                                         Get exclusive AI automation strategies, SEO tips, and marketing funnels delivered straight to your inbox weekly.
                                     </p>
                                 </div>
-                                <form className="flex gap-3 max-w-md md:ml-auto w-full" onSubmit={(e) => { e.preventDefault(); alert("Thanks for subscribing!"); }}>
+                                <form className="flex flex-col sm:flex-row gap-3 max-w-md md:ml-auto w-full mx-auto md:mx-0" onSubmit={(e) => { e.preventDefault(); alert("Thanks for subscribing!"); }}>
                                     <input 
                                         type="email" 
                                         placeholder="Enter your email address" 
-                                        className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 transition-colors"
+                                        className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 transition-colors text-center sm:text-left"
                                         required
                                     />
-                                    <Button type="submit" className="bg-red-600 hover:bg-red-500 text-white px-6 py-3 h-auto rounded-xl font-bold transition-all">
+                                    <Button type="submit" className="bg-red-600 hover:bg-red-500 text-white px-6 py-3 h-auto rounded-xl font-bold transition-all w-full sm:w-auto">
                                         Subscribe
                                     </Button>
                                 </form>
@@ -392,15 +392,17 @@ function LayoutContent({ children, currentPageName }) {
                     </div>
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-10 relative z-10">
-                        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-12 mb-14">
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-12 mb-14 text-center sm:text-left">
 
                             {/* Brand col */}
-                            <div className="sm:col-span-2 lg:col-span-2">
-                                <Logo variant="dark" size="sm" className="mb-5" />
+                            <div className="sm:col-span-2 lg:col-span-2 flex flex-col items-center sm:items-start">
+                                <div className="mb-5">
+                                    <Logo variant="dark" size="sm" />
+                                </div>
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
                                     Pune-based all-in-one growth partner serving clients across the globe. Connect · Engage · Grow.
                                 </p>
-                                <div className="space-y-2 text-sm">
+                                <div className="space-y-2 text-sm flex flex-col items-center sm:items-start">
                                     <a href="mailto:connect@eyepune.com" className="flex items-center gap-2 text-gray-600 hover:text-red-400 transition-colors py-1">
                                         <span className="w-4 h-4 text-red-500">✉</span> connect@eyepune.com
                                     </a>
@@ -415,7 +417,7 @@ function LayoutContent({ children, currentPageName }) {
                                 </div>
 
                                 {/* Social */}
-                                <div className="flex gap-4 mt-6">
+                                <div className="flex gap-4 mt-6 justify-center sm:justify-start">
                                     {[
                                         { icon: Instagram, href: 'https://instagram.com/eyepune', color: 'hover:text-pink-500', label: 'Instagram' },
                                         { icon: Linkedin, href: 'https://linkedin.com/company/eyepune', color: 'hover:text-blue-500', label: 'LinkedIn' },
@@ -438,9 +440,9 @@ function LayoutContent({ children, currentPageName }) {
 
                             {/* Link cols */}
                             {Object.entries(footerLinks).map(([heading, links]) => (
-                                <div key={heading}>
+                                <div key={heading} className="flex flex-col items-center sm:items-start">
                                     <h4 className="text-white font-bold text-sm mb-5 uppercase tracking-wider">{heading}</h4>
-                                    <ul className="space-y-3">
+                                    <ul className="space-y-3 flex flex-col items-center sm:items-start">
                                         {links.map((link, i) => (
                                             <li key={i}>
                                                 <Link href={createPageUrl(link.page)}
