@@ -43,41 +43,52 @@ function AnimatedEye() {
                 </g>
 
                 {/* Eye Shape */}
-                <motion.path
-                    d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z"
-                    stroke="#ef4444"
-                    strokeWidth="4"
-                    strokeLinejoin="round"
+                <motion.path 
                     initial={{ pathLength: 0, opacity: 0 }}
                     animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{ duration: 2, ease: "easeInOut" }}
+                    transition={{ duration: 3, delay: 1, ease: "easeOut" }}
+                    d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" 
+                    stroke="#DC143C" 
+                    strokeWidth="3" 
+                    strokeLinejoin="round" 
+                    fill="transparent"
                 />
 
                 {/* Iris */}
-                <motion.circle
-                    cx="50" cy="55" r="14"
-                    stroke="#ef4444"
-                    strokeWidth="3"
+                <motion.circle 
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 1, delay: 1 }}
+                    transition={{ duration: 1.5, delay: 2, ease: "easeOut" }}
+                    cx="50" cy="55" r="14" 
+                    stroke="#DC143C" 
+                    strokeWidth="2" 
+                    fill="transparent"
                 />
 
                 {/* Pupil */}
-                <motion.circle
-                    cx="50" cy="55" r="6"
-                    fill="#ef4444"
-                    animate={{ 
-                        scale: [1, 1.2, 1],
-                        opacity: [0.8, 1, 0.8]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                <motion.circle 
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 1, delay: 3.5, ease: "easeOut" }}
+                    cx="50" cy="55" r="6" 
+                    fill="#DC143C" 
+                />
+
+                {/* Dynamic Cyber Rings */}
+                <motion.circle 
+                    initial={{ r: 14, opacity: 0 }}
+                    animate={{ r: 40, opacity: [0, 0.5, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    cx="50" cy="55"
+                    stroke="#DC143C" 
+                    strokeWidth="1" 
+                    fill="transparent"
                 />
 
                 {/* Scanning Line Effect */}
                 <motion.line
                     x1="10" y1="55" x2="90" y2="55"
-                    stroke="#ef4444"
+                    stroke="#DC143C"
                     strokeWidth="1"
                     strokeDasharray="2 2"
                     animate={{ 

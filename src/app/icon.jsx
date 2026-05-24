@@ -26,7 +26,7 @@ export default function Icon() {
       >
         <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
           {/* Eyelashes/Rays (Thicker for small size) */}
-          <g stroke="#ef4444" strokeWidth="10" strokeLinecap="round">
+          <g stroke="#DC143C" strokeWidth="10" strokeLinecap="round">
             <line x1="15" y1="47" x2="5" y2="36" />
             <line x1="27" y1="40" x2="18" y2="28" />
             <line x1="38" y1="36" x2="33" y2="22" />
@@ -36,11 +36,11 @@ export default function Icon() {
             <line x1="85" y1="47" x2="95" y2="36" />
           </g>
           {/* Eye Shape */}
-          <path d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" stroke="#ef4444" strokeWidth="10" strokeLinejoin="round" />
+          <path d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" stroke="#DC143C" strokeWidth="10" strokeLinejoin="round" />
           {/* Iris */}
-          <circle cx="50" cy="55" r="14" stroke="#ef4444" strokeWidth="8" />
+          <circle cx="50" cy="55" r="14" stroke="#DC143C" strokeWidth="8" />
           {/* Pupil */}
-          <circle cx="50" cy="55" r="6" fill="#ef4444" />
+          <circle cx="50" cy="55" r="6" fill="#DC143C" />
         </svg>
       </div>
     ),

@@ -61,7 +61,7 @@ export default function Image() {
           <div style={{ display: 'flex', marginBottom: '30px', position: 'relative' }}>
             <svg width="180" height="180" viewBox="0 0 100 100" fill="none">
               {/* Eyelashes/Rays */}
-              <g stroke="#ef4444" strokeWidth="4" strokeLinecap="round" opacity="0.8">
+              <g stroke="#DC143C" strokeWidth="4" strokeLinecap="round" opacity="0.8">
                 <line x1="15" y1="47" x2="5" y2="36" />
                 <line x1="27" y1="40" x2="18" y2="28" />
                 <line x1="38" y1="36" x2="33" y2="22" />
@@ -73,14 +73,14 @@ export default function Image() {
               {/* Eye Shape */}
               <path 
                 d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" 
-                stroke="#ef4444" 
-                strokeWidth="5" 
+                stroke="#DC143C" 
+                strokeWidth="4" 
                 strokeLinejoin="round" 
               />
               {/* Iris */}
-              <circle cx="50" cy="55" r="14" stroke="#ef4444" strokeWidth="4" />
+              <circle cx="50" cy="55" r="14" stroke="#DC143C" strokeWidth="4" />
               {/* Pupil */}
-              <circle cx="50" cy="55" r="6" fill="#ef4444" />
+              <circle cx="50" cy="55" r="6" fill="#DC143C" />
             </svg>
           </div>
 
@@ -96,7 +96,7 @@ export default function Image() {
               letterSpacing: '-4px',
             }}
           >
-            EyE<span style={{ color: '#ef4444', marginLeft: '10px' }}>PunE</span>
+            EyE<span style={{ color: '#DC143C', marginLeft: '10px' }}>PunE</span>
           </h1>
 
           {/* Tagline */}
@@ -131,9 +131,9 @@ export default function Image() {
           }}
         >
           <span>AI AUTOMATION</span>
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
-          <span>DIGITAL MARKETING</span>
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#DC143C' }} />
+          <span style={{ color: '#a1a1aa' }}>Marketing</span>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#DC143C' }} />
           <span>SALES SYSTEMS</span>
         </div>
 
