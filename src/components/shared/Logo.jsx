@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function Logo({ variant = 'dark', size = 'md', className = '' }) {
+export default function Logo({ variant = 'dark', size = 'md', className = '', showTagline = false }) {
     const sizes = {
-        xs: { container: 'w-8 h-8', text: 'hidden' },
-        sm: { container: 'w-10 h-10', text: 'text-xl' },
-        md: { container: 'w-14 h-14', text: 'text-2xl' },
-        lg: { container: 'w-24 h-24', text: 'text-5xl' }
+        xs: { container: 'w-8 h-8', text: 'hidden', tagline: 'hidden' },
+        sm: { container: 'w-10 h-10', text: 'text-xl', tagline: 'text-[8px] sm:text-[9px]' },
+        md: { container: 'w-14 h-14', text: 'text-2xl', tagline: 'text-[10px]' },
+        lg: { container: 'w-24 h-24', text: 'text-5xl', tagline: 'text-xs' }
     };
 
     const s = sizes[size];
@@ -29,9 +29,16 @@ export default function Logo({ variant = 'dark', size = 'md', className = '' }) 
                     <circle cx="50" cy="55" r="6" fill="#DC143C" />
                 </svg>
             </div>
-            <span className={`${s.text} font-black tracking-tighter ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                EyE<span className="text-[#DC143C]">PunE</span>
-            </span>
+            <div className="flex flex-col items-center justify-center">
+                <span className={`${s.text} font-black tracking-tighter ${isDark ? 'text-white' : 'text-gray-900'} leading-none`}>
+                    EyE<span className="text-[#DC143C]">PunE</span>
+                </span>
+                {showTagline && (
+                    <span className={`${s.tagline} tracking-[0.2em] uppercase text-red-500 font-bold mt-1.5 ml-[0.2em] text-center whitespace-nowrap`}>
+                        Connect · Engage · Grow
+                    </span>
+                )}
+            </div>
         </div>
     );
 }
