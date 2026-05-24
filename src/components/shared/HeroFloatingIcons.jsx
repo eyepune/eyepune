@@ -9,21 +9,15 @@ import {
 } from 'lucide-react';
 
 const icons = [
-    { Icon: Bot, x: "15%", y: "15%", delay: 0 },
-    { Icon: Instagram, x: "35%", y: "10%", delay: 2 },
-    { Icon: Facebook, x: "55%", y: "15%", delay: 4 },
-    { Icon: Linkedin, x: "75%", y: "10%", delay: 1 },
-    { Icon: Twitter, x: "92%", y: "15%", delay: 3 },
-    { Icon: Cpu, x: "10%", y: "45%", delay: 5 },
-    { Icon: Code, x: "30%", y: "40%", delay: 2.5 },
-    { Icon: Globe, x: "50%", y: "45%", delay: 1.5 },
-    { Icon: Zap, x: "70%", y: "30%", delay: 0.5 },
-    { Icon: Sparkles, x: "65%", y: "55%", delay: 4 },
-    { Icon: Command, x: "35%", y: "70%", delay: 1.5 },
-    { Icon: Hash, x: "55%", y: "75%", delay: 2 },
-    { Icon: Database, x: "15%", y: "85%", delay: 5 },
-    { Icon: MessageCircle, x: "5%", y: "65%", delay: 3 },
-    { Icon: ShieldCheck, x: "85%", y: "25%", delay: 1.2 },
+    // Left side (strictly edge)
+    { Icon: Bot, x: "5%", y: "20%", delay: 0 },
+    { Icon: Database, x: "10%", y: "55%", delay: 2 },
+    { Icon: Globe, x: "8%", y: "85%", delay: 4 },
+    
+    // Right side (strictly edge)
+    { Icon: Linkedin, x: "85%", y: "15%", delay: 1 },
+    { Icon: ShieldCheck, x: "90%", y: "50%", delay: 3 },
+    { Icon: Instagram, x: "82%", y: "80%", delay: 1.5 },
 ];
 
 export default function HeroFloatingIcons({ opacity = 0.5 }) {
