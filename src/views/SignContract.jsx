@@ -182,7 +182,7 @@ export default function SignContract() {
     }
 
     return (
-        <div className="min-h-screen bg-background p-6">
+        <div className="min-h-screen bg-transparent p-6">
             <div className="max-w-4xl mx-auto">
                 <Card>
                     <CardHeader>

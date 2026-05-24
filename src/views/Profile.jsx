@@ -128,7 +128,7 @@ export default function Profile() {
     }
 
     return (
-        <div className="min-h-screen bg-background py-20">
+        <div className="min-h-screen bg-transparent py-20">
             <div className="max-w-5xl mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}

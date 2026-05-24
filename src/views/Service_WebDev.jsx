@@ -97,7 +97,7 @@ export default function Service_WebDev() {
             </section>
 
             {/* Trust Bar */}
-            <section className="py-12 border-b border-white/[0.06] bg-[#080808]">
+            <section className="py-12 border-b border-white/[0.06] bg-transparent">
                 <div className="max-w-7xl mx-auto px-6">
                     <p className="text-center text-[10px] font-bold tracking-[0.3em] uppercase text-gray-600 mb-8">PUNE BRANDS DOMINATING SEARCH</p>
                     <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">

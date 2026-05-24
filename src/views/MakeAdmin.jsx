@@ -146,7 +146,7 @@ export default function MakeAdmin() {
     // Loading state
     if (isLoadingAuth || checkingAdmins) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+            <div className="min-h-screen bg-transparent flex items-center justify-center">
                 <div className="text-center">
                     <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-red-600" />
                     <p className="text-gray-500">Loading...</p>
@@ -158,7 +158,7 @@ export default function MakeAdmin() {
     // Already admin
     if (user?.role === 'admin') {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6">
+            <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
                 <Card className="max-w-md bg-[#111] border-white/[0.06]">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-green-500">
@@ -185,7 +185,7 @@ export default function MakeAdmin() {
     // Admins already exist — can't self-promote
     if (adminsExist) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6">
+            <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
                 <Card className="max-w-md bg-[#111] border-white/[0.06]">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-yellow-500">
@@ -212,7 +212,7 @@ export default function MakeAdmin() {
     // Not logged in — show sign up / sign in form
     if (!user) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6">
+            <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
                 <div className="max-w-md w-full">
                     <div className="text-center mb-8">
                         <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
@@ -299,7 +299,7 @@ export default function MakeAdmin() {
 
     // Logged in but not admin, no admins exist — show promote button
     return (
-        <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6">
+        <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
             <Card className="max-w-md bg-[#111] border-white/[0.06]">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-white">

@@ -160,7 +160,7 @@ export default function Client_Dashboard() {
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-[#020202] flex items-center justify-center">
+            <div className="min-h-screen bg-transparent flex items-center justify-center">
                 <Loader2 className="w-10 h-10 animate-spin text-red-600" />
             </div>
         );
