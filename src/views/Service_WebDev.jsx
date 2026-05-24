@@ -35,8 +35,8 @@ export default function Service_WebDev() {
     return (
         <>
             <SEOHead
-                title="Professional Web Development Pune – High-Performance Websites"
-                description="Scale your Pune business with a sub-2-second loading website. We build custom, SEO-optimized web applications and e-commerce sites that rank #1 and convert traffic into sales."
+                title="Professional Web Development – High-Performance Websites"
+                description="Scale your global business with a sub-2-second loading website. We build custom, SEO-optimized web applications and e-commerce sites that rank #1 and convert traffic into sales."
                 keywords="web development company pune, best website designers pune, e-commerce development pune, custom web application pune, technical SEO pune"
                 canonicalUrl="https://eyepune.com/Service-WebDev"
                 structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Website Development & Design", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
@@ -58,11 +58,11 @@ export default function Service_WebDev() {
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-6">
                                 <Globe className="w-3.5 h-3.5 text-red-400" />
-                                <span className="text-red-400 text-sm font-medium">Website Development · Pune</span>
+                                <span className="text-red-400 text-sm font-medium">Website Development · Global</span>
                             </div>
                             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
                                 Website Development<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Pune</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Global</span>
                             </h1>
                             <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl">
                                 High-performance websites and web applications built to rank on Google and convert your visitors into paying customers.
@@ -142,7 +142,7 @@ export default function Service_WebDev() {
                             <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Technical Authority</span>
                             <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight italic">The Speed <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 pb-1">& Conversion Matrix</span></h2>
                             <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                Most websites in Pune lose 40% of their traffic because they take longer than 3 seconds to load. Our "Vision Core" architecture ensures sub-2-second loads, keeping users engaged and ready to buy.
+                                Most websites globally lose 40% of their traffic because they take longer than 3 seconds to load. Our "Vision Core" architecture ensures sub-2-second loads, keeping users engaged and ready to buy.
                             </p>
                             <div className="space-y-4">
                                 {[

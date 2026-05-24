@@ -35,8 +35,8 @@ export default function Service_PaidAds() {
     return (
         <>
             <SEOHead
-                title="Google & Meta Ads Management Pune – Achieve 4x ROI | EyE PunE"
-                description="Stop burning money on ads. Our Pune-based PPC experts manage Google Search, Meta Ads, and Performance Max campaigns that deliver measurable leads and 4.2x average ROAS. Get a free ads audit."
+                title="Google & Meta Ads Management – Achieve 4x ROI | EyE PunE"
+                description="Stop burning money on ads. Our global PPC experts manage Google Search, Meta Ads, and Performance Max campaigns that deliver measurable leads and 4.2x average ROAS. Get a free ads audit."
                 keywords="google ads agency pune, meta ads management pune, facebook ads company pune, PPC experts pune, best ad agency for ROI pune"
                 canonicalUrl="https://eyepune.com/Service-PaidAds"
                 structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Paid Advertising Management", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
@@ -58,11 +58,11 @@ export default function Service_PaidAds() {
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-6">
                                 <Target className="w-3.5 h-3.5 text-red-400" />
-                                <span className="text-red-400 text-sm font-medium">Google Ads & Meta Ads · Pune</span>
+                                <span className="text-red-400 text-sm font-medium">Google Ads & Meta Ads · Global</span>
                             </div>
                             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
                                 Paid Ads Management<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Pune</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Global</span>
                             </h1>
                             <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl">
                                 Stop burning money on ads that don't convert. Our PPC experts build campaigns that deliver measurable ROI on Google, Facebook, and Instagram.
@@ -133,7 +133,7 @@ export default function Service_PaidAds() {
                                 <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">VP</div>
                                 <div>
                                     <div className="font-bold text-white text-lg italic">Vikram P.</div>
-                                    <div className="text-gray-500 text-sm">Director, Pune Real Estate Group</div>
+                                    <div className="text-gray-500 text-sm">Director, Global Real Estate Group</div>
                                 </div>
                             </div>
                         </div>

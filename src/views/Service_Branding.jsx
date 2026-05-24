@@ -65,8 +65,8 @@ export default function Service_Branding() {
     return (
         <>
             <SEOHead
-                title="Branding Agency Pune | Logo Design & Brand Identity – EyE PunE"
-                description="Professional branding agency in Pune. EyE PunE creates stunning logos, brand identities, and marketing collaterals that make your business stand out. Packages from ₹20,000."
+                title="Branding Agency | Logo Design & Brand Identity – EyE PunE"
+                description="Professional branding agency. EyE PunE creates stunning logos, brand identities, and marketing collaterals that make your business stand out globally. Packages from ₹20,000."
                 keywords="branding agency pune, logo design pune, brand identity pune, logo designer pune, brand strategy pune, marketing collaterals pune, rebranding pune"
                 canonicalUrl="https://eyepune.com/Service-Branding"
                 structuredData={faqSchema}
@@ -88,11 +88,11 @@ export default function Service_Branding() {
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-6">
                                 <Palette className="w-3.5 h-3.5 text-red-400" />
-                                <span className="text-red-400 text-sm font-medium">Branding & Design · Pune</span>
+                                <span className="text-red-400 text-sm font-medium">Branding & Design · Global</span>
                             </div>
                             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
                                 Branding Agency<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Pune</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Global</span>
                             </h1>
                             <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl">
                                 Build a brand that people remember, trust, and choose over competitors. From logo to full brand identity — we create brands that drive business growth.

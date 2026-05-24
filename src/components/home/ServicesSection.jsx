@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 
 const services = [
-    { icon: TrendingUp, title: "Sales Systems", tag: "01", desc: "Funnels, CRM, lead scoring & automation that convert browsers into buyers.", accent: '#ef4444' },
-    { icon: Users, title: "Marketing Automation", tag: "02", desc: "Multi-channel campaigns — email, WhatsApp, social — that nurture and close.", accent: '#f97316' },
-    { icon: Globe, title: "Web & App Development", tag: "03", desc: "Lightning-fast, beautiful digital experiences built to convert and impress.", accent: '#ef4444' },
-    { icon: Bot, title: "AI Business Tools", tag: "04", desc: "Custom AI chatbots, automation, and predictive analytics to 10x your output.", accent: '#f97316' },
-    { icon: BarChart3, title: "Analytics & Reporting", tag: "05", desc: "Real-time dashboards, ROI tracking and insights that drive smarter decisions.", accent: '#ef4444' },
-    { icon: Zap, title: "Branding & Content", tag: "06", desc: "Brand identity, content strategy, and storytelling that makes you unforgettable.", accent: '#f97316' },
+    { icon: TrendingUp, title: "Sales Funnels", tag: "01", desc: "End-to-end funnels, CRM, lead scoring & automation that convert browsers into buyers.", accent: '#ef4444', page: 'Service-Funnels' },
+    { icon: Users, title: "Social Media Management", tag: "02", desc: "Multi-channel campaigns — organic, reels, and community growth — that nurture and close.", accent: '#f97316', page: 'Service-SocialMedia' },
+    { icon: Globe, title: "Website Development", tag: "03", desc: "Lightning-fast, beautiful digital experiences built to convert and impress.", accent: '#ef4444', page: 'Service-WebDev' },
+    { icon: Bot, title: "AI Automation", tag: "04", desc: "Custom AI chatbots, automation, and predictive analytics to 10x your output.", accent: '#f97316', page: 'Service-AI' },
+    { icon: BarChart3, title: "Google & Meta Ads", tag: "05", desc: "ROI-driven paid campaigns, retargeting, and insights that drive smarter decisions.", accent: '#ef4444', page: 'Service-PaidAds' },
+    { icon: Zap, title: "Branding & Design", tag: "06", desc: "Brand identity, logos, content strategy, and storytelling that makes you unforgettable.", accent: '#f97316', page: 'Service-Branding' },
 ];
 
 export default function ServicesSection() {
@@ -59,7 +59,7 @@ export default function ServicesSection() {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.08 }}
                         >
-                            <Link href={createPageUrl("Services_Detail")}>
+                            <Link href={createPageUrl(s.page)}>
                                 <div className="group relative flex items-start sm:items-center gap-4 sm:gap-8 py-7 sm:py-8 border-b border-white/[0.06] hover:border-red-500/20 transition-all cursor-pointer">
                                     <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 to-transparent opacity-0 group-hover:opacity-[0.04] transition-opacity rounded-xl" />
 

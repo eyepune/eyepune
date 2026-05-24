@@ -69,8 +69,8 @@ export default function Service_Funnels() {
     return (
         <>
             <SEOHead
-                title="Sales Funnels & System Funnels Pune | CRM Automation – EyE PunE"
-                description="Build high-converting sales funnels and automated system funnels in Pune. EyE PunE designs end-to-end conversion pipelines, CRM automation, lead nurturing & WhatsApp sequences."
+                title="Sales Funnels & System Funnels | CRM Automation – EyE PunE"
+                description="Build high-converting sales funnels and automated system funnels globally. EyE PunE designs end-to-end conversion pipelines, CRM automation, lead nurturing & WhatsApp sequences."
                 keywords="sales funnel pune, system funnel pune, CRM automation pune, lead nurturing pune, WhatsApp automation pune, marketing funnel pune"
                 canonicalUrl="https://eyepune.com/Service-Funnels"
                 structuredData={faqSchema}
@@ -92,11 +92,11 @@ export default function Service_Funnels() {
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-6">
                                 <Workflow className="w-3.5 h-3.5 text-red-400" />
-                                <span className="text-red-400 text-sm font-medium">Sales & System Funnels · Pune</span>
+                                <span className="text-red-400 text-sm font-medium">Sales & System Funnels · Global</span>
                             </div>
                             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
                                 Sales & System<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Funnels</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Global</span>
                             </h1>
                             <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl">
                                 Turn strangers into customers — automatically. We design high-converting sales funnels and build system funnels that automate your entire lead-to-revenue pipeline.

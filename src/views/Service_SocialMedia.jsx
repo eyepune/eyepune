@@ -20,7 +20,7 @@ const features = [
     { icon: TrendingUp, title: "Growth Strategy", desc: "Data-driven hashtag research, posting schedules, and audience targeting." },
     { icon: Users, title: "Community Management", desc: "Daily engagement, comment responses, and DM management." },
     { icon: BarChart3, title: "Monthly Analytics", desc: "Detailed reports with reach, engagement, follower growth, and ROI." },
-    { icon: MessageSquare, title: "Influencer Outreach", desc: "Connect with relevant micro and macro influencers in Pune and across India." },
+    { icon: MessageSquare, title: "Influencer Outreach", desc: "Connect with relevant micro and macro influencers globally." },
     { icon: Heart, title: "Brand Consistency", desc: "Cohesive visual identity across all platforms with custom templates." },
 ];
 
@@ -35,8 +35,8 @@ export default function Service_SocialMedia() {
     return (
         <>
             <SEOHead
-                title="Social Media Management Pune – Grow Your Brand & Engagement"
-                description="Dominate Instagram, Facebook, and LinkedIn with Pune's top social media agency. We handle content creation, Reels strategy, community management, and growth analytics to turn followers into customers."
+                title="Social Media Management – Grow Your Brand & Engagement"
+                description="Dominate Instagram, Facebook, and LinkedIn globally. We handle content creation, Reels strategy, community management, and growth analytics to turn followers into customers."
                 keywords="social media agency pune, instagram marketing pune, social media manager pune, best social media marketing pune, content creation services pune"
                 canonicalUrl="https://eyepune.com/Service-SocialMedia"
                 structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Social Media Management", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
@@ -58,11 +58,11 @@ export default function Service_SocialMedia() {
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-6">
                                 <Instagram className="w-3.5 h-3.5 text-red-400" />
-                                <span className="text-red-400 text-sm font-medium">Social Media Management · Pune</span>
+                                <span className="text-red-400 text-sm font-medium">Social Media Management · Global</span>
                             </div>
                             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
                                 Social Media<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Management Pune</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Global</span>
                             </h1>
                             <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl">
                                 From content creation to community management — we handle your entire social media presence so you can focus on running your business.
@@ -145,13 +145,13 @@ export default function Service_SocialMedia() {
                             <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Client Impact</span>
                             <h2 className="text-4xl font-black mb-6 italic">Social Proof <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">That Speaks</span></h2>
                             <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                "EyE PunE took our Instagram from a ghost town to a lead-generating machine. Our DMs are now full of genuine inquiries, and our brand visibility in Pune has never been higher."
+                                "EyE PunE took our Instagram from a ghost town to a lead-generating machine. Our DMs are now full of genuine inquiries, and our global brand visibility has never been higher."
                             </p>
                             <div className="flex items-center gap-4">
                                 <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">SM</div>
                                 <div>
                                     <div className="font-bold text-white text-lg italic">Siddharth M.</div>
-                                    <div className="text-gray-500 text-sm">Founder, Pune Lifestyle Brand</div>
+                                    <div className="text-gray-500 text-sm">Founder, Global Lifestyle Brand</div>
                                 </div>
                             </div>
                         </div>
