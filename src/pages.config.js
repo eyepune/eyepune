@@ -181,6 +181,9 @@ export const PAGES = {
     "Privacy-Policy": PrivacyPolicy,
     "Terms-and-Conditions": Terms,
     "Cookie-Policy": Cookies,
+    "privacy-policy": PrivacyPolicy,
+    "terms-and-conditions": Terms,
+    "cookie-policy": Cookies,
 }
 
 export const pagesConfig = {

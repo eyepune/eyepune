@@ -33,13 +33,13 @@ export default function Client_Portal() {
   });
 
   if (isLoading) return (
-    <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+    <div className="min-h-screen bg-transparent flex items-center justify-center">
       <div className="w-8 h-8 border-4 border-white/10 border-t-red-500 rounded-full animate-spin" />
     </div>
   );
 
   if (!user) return (
-    <div className="min-h-screen bg-[#040404] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
       <div className="text-center max-w-md">
         <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-6">
           <User className="w-8 h-8 text-red-400" />
@@ -57,9 +57,9 @@ export default function Client_Portal() {
   );
 
   return (
-    <div className="min-h-screen bg-[#040404]">
+    <div className="min-h-screen bg-transparent">
       {/* Header */}
-      <div className="border-b border-white/[0.06] bg-[#070707]">
+      <div className="border-b border-white/[0.06] bg-white/[0.01] backdrop-blur-lg">
         <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-white">Client Portal</h1>

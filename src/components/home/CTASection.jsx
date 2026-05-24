@@ -62,7 +62,7 @@ function Grid3D() {
 export default function CTASection() {
     return (
         <section className="py-32 relative overflow-hidden bg-transparent">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-950/40 via-[#040404] to-[#040404]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-red-950/40 via-transparent to-transparent" />
             <Grid3D />
 
             {/* Center glow */}

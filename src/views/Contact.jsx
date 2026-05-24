@@ -240,7 +240,7 @@ export default function Contact() {
                             {/* Info sidebar */}
                             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="space-y-5">
                                 {/* Quick contact */}
-                                <div className="p-7 rounded-2xl bg-gradient-to-br from-red-950/30 to-[#080808] border border-red-500/10">
+                                <div className="p-7 rounded-2xl bg-gradient-to-br from-red-950/30 to-transparent border border-red-500/10">
                                     <h3 className="text-lg font-bold text-white mb-6">Quick Contact</h3>
                                     <div className="space-y-5">
                                         {[

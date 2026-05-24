@@ -20,7 +20,7 @@ export default function ServiceLanding({ config }) {
     };
 
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
             <SEOHead
                 title={seo.title}
                 description={seo.description}
@@ -152,7 +152,7 @@ export default function ServiceLanding({ config }) {
 
             {/* ── CTA ── */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-[#040404]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
                     <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                         <h2 className="text-4xl sm:text-5xl font-black mb-5">

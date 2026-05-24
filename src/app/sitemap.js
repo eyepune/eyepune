@@ -37,7 +37,9 @@ export default async function sitemap() {
         { url: `${baseUrl}/Solution-B2BGrowth`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
         // AI & Legal pathways
         { url: `${baseUrl}/AI-Intelligence-Hub`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
-        { url: `${baseUrl}/Privacy-Policy`,            lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
+        { url: `${baseUrl}/privacy-policy`,            lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
+        { url: `${baseUrl}/terms-and-conditions`,      lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
+        { url: `${baseUrl}/cookie-policy`,            lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
     ];
 
     // Dynamic blog post URLs from Supabase

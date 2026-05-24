@@ -53,7 +53,7 @@ export default function About() {
                 <div className="absolute inset-0 opacity-[0.03]"
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404] pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent pointer-events-none" />
 
                 {/* Glow */}
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
@@ -225,7 +225,7 @@ export default function About() {
 
             {/* ── CTA ── */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-[#040404]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-[700px] h-[400px] rounded-full opacity-[0.08]"
                         style={{ background: 'radial-gradient(ellipse, #ef4444 0%, transparent 70%)' }}

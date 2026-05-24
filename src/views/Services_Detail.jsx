@@ -103,7 +103,7 @@ export default function Services_Detail() {
                 <div className="absolute inset-0 opacity-[0.03]"
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#040404] via-transparent to-[#040404]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent" />
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
@@ -186,13 +186,13 @@ export default function Services_Detail() {
             </section>
 
             {/* ── ROI CALCULATOR ── */}
-            <section className="py-24 border-t border-white/[0.06] bg-[#060606]">
+            <section className="py-24 border-t border-white/[0.06] bg-transparent">
                 <ROICalculator />
             </section>
 
             {/* ── LEX PRO PROMO ── */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-950/20 to-[#040404]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-950/20 to-transparent" />
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.07) 0%, transparent 70%)' }}
                 />
@@ -238,7 +238,7 @@ export default function Services_Detail() {
 
             {/* ── CTA ── */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-[#040404]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-[600px] h-[300px] opacity-[0.1]" style={{ background: 'radial-gradient(ellipse, #ef4444 0%, transparent 70%)' }} />
                 </div>

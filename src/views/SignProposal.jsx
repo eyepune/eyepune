@@ -112,13 +112,13 @@ export default function SignProposal() {
   const draftTotal = draft?.pricing_items?.reduce((s, i) => s + (Number(i.amount) || 0), 0) || 0;
 
   if (loading) return (
-    <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+    <div className="min-h-screen bg-transparent flex items-center justify-center">
       <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
     </div>
   );
 
   if (error) return (
-    <div className="min-h-screen bg-[#040404] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
       <div className="text-center max-w-md">
         <AlertCircle className="w-14 h-14 text-red-500 mx-auto mb-5" />
         <h1 className="text-2xl font-bold text-white mb-2">Proposal Not Found</h1>
@@ -129,7 +129,7 @@ export default function SignProposal() {
   );
 
   if (signed || proposal.status === 'accepted') return (
-    <div className="min-h-screen bg-[#040404] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
       <div className="text-center max-w-lg">
         <CheckCircle2 className="w-16 h-16 text-green-400 mx-auto mb-6" />
         <h1 className="text-2xl font-bold text-white mb-2">Proposal Signed!</h1>
@@ -151,7 +151,7 @@ export default function SignProposal() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-[#040404] py-5 px-6">
+      <div className="bg-black/80 backdrop-blur-md border-b border-white/5 py-5 px-6">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <img
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69697d1626923688ef1d9afa/627f406e8_Free_Sample_By_Wix_edited-removebg-preview.png"

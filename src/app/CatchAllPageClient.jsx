@@ -139,6 +139,9 @@ const PAGE_MAP = {
   'Privacy-Policy': PrivacyPolicy,
   'Terms-and-Conditions': Terms,
   'Cookie-Policy': Cookies,
+  'privacy-policy': PrivacyPolicy,
+  'terms-and-conditions': Terms,
+  'cookie-policy': Cookies,
 };
 
 // Pages that should NOT be wrapped in the Layout
@@ -146,7 +149,7 @@ const NO_LAYOUT_PAGES = ['Sign-Proposal', 'Sign-Contract', 'Login'];
 
 function LoadingSpinner() {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[#040404]">
+    <div className="fixed inset-0 flex items-center justify-center bg-transparent">
       <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
     </div>
   );
@@ -156,7 +159,10 @@ export default function CatchAllPageClient() {
   const pathname = usePathname();
   
   // Extract page name from path: "/Admin-Dashboard" → "Admin-Dashboard"
-  const pageName = pathname.startsWith('/') ? pathname.slice(1) : pathname;
+  let pageName = (pathname && pathname.startsWith('/')) ? pathname.slice(1) : (pathname || '');
+  if (pageName.endsWith('/')) {
+    pageName = pageName.slice(0, -1);
+  }
   
   // Root path → Home
   const rawPageName = !pageName ? 'Home' : pageName;

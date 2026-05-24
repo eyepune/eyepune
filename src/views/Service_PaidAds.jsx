@@ -181,7 +181,7 @@ export default function Service_PaidAds() {
 
             {/* CTA */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-[#040404]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
                     <h2 className="text-4xl md:text-5xl font-black mb-4">Ready to Get <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">4x ROI on Ads?</span></h2>
                     <p className="text-gray-400 mb-8">Get a free audit of your existing ad campaigns — we'll show you exactly where you're losing money.</p>

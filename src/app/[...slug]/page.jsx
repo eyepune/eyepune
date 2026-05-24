@@ -91,6 +91,18 @@ export async function generateMetadata({ params, searchParams }) {
     'AI-Intelligence-Hub': {
       title: 'AI Intelligence Hub | The Global AI Frontier',
       description: 'The master directory of EyE PunE\'s multi-model AI capabilities. Explore how we orchestrate OpenAI, Claude, Gemini, and Meta to build your unfair advantage.'
+    },
+    'Privacy-Policy': {
+      title: 'Privacy Policy | EyE PunE',
+      description: 'Privacy Policy for EyE PunE. Learn how we collect, use, protect, and handle your personal data when using our website and services.'
+    },
+    'Terms-and-Conditions': {
+      title: 'Terms & Conditions | EyE PunE',
+      description: 'Terms and Conditions of Service for EyE PunE. Read the agreements, rules, and guidelines for accessing and utilizing our growth and AI solutions.'
+    },
+    'Cookie-Policy': {
+      title: 'Cookie Policy | EyE PunE',
+      description: 'Cookie Policy for EyE PunE. Understand how we use cookies, tracking pixels, and interactive technologies to improve your experience.'
     }
   };
 

@@ -165,13 +165,13 @@ export default function BlogPost() {
     };
 
     if (isLoading) return (
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+        <div className="min-h-screen bg-transparent flex items-center justify-center">
             <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
         </div>
     );
 
     if (!post) return (
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-white p-6">
+        <div className="min-h-screen bg-transparent flex items-center justify-center text-white p-6">
             <div className="text-center max-w-md">
                 <h2 className="text-4xl font-black mb-6 tracking-tighter">Insight Not Found</h2>
                 <p className="text-gray-500 mb-8">The article you are looking for might have been moved or updated.</p>
@@ -183,7 +183,7 @@ export default function BlogPost() {
     const featuredImg = post.featured_image || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000';
 
     return (
-        <div className="min-h-screen bg-[#040404] text-white selection:bg-red-500/30 font-sans">
+        <div className="min-h-screen bg-transparent text-white selection:bg-red-500/30 font-sans">
             <SEOHead
                 title={`${post.title} | EyE PunE Vision`}
                 description={post.excerpt}

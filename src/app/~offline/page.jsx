@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function OfflineFallback() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#040404] p-4 text-center text-white">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-transparent p-4 text-center text-white">
       <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-500/10 mb-8">
         <svg
           xmlns="http://www.w3.org/2000/svg"

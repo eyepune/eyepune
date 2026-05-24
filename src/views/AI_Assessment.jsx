@@ -407,7 +407,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
 
     if (checkingAuth) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center">
+            <div className="min-h-screen bg-transparent flex items-center justify-center">
                 <Loader2 className="w-12 h-12 animate-spin text-red-600" />
             </div>
         );
@@ -423,7 +423,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 structuredData={{ "@context": "https://schema.org", "@type": "WebPage", "name": "EyE PunE AI Business Assessment", "url": "https://eyepune.com/AI-Assessment" }}
             />
 
-            <div className="min-h-screen bg-[#040404] text-white pt-20 relative overflow-hidden">
+            <div className="min-h-screen bg-transparent text-white pt-20 relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
             <HeroFloatingIcons opacity={0.15} />
 

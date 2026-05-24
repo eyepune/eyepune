@@ -122,8 +122,6 @@ function LayoutContent({ children, currentPageName }) {
 
     return (
         <div className="min-h-screen bg-transparent text-white">
-            <CustomCursor />
-            <ExitIntentPopup />
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 scrolled
                     ? 'bg-[#040404]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
@@ -330,7 +328,7 @@ function LayoutContent({ children, currentPageName }) {
 
             {/* ── FOOTER ── */}
             {isPublicPage && (
-                <footer className="relative z-20 bg-[#040404] border-t border-white/[0.06] overflow-hidden">
+                <footer className="relative z-20 bg-transparent border-t border-white/[0.06] overflow-hidden">
                     {/* Top glow */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
 
@@ -340,7 +338,7 @@ function LayoutContent({ children, currentPageName }) {
                     />
 
                     {/* Newsletter Capture Section for Content Marketing Strategy */}
-                    <div className="border-b border-white/[0.06] bg-[#080808]">
+                    <div className="border-b border-white/[0.06] bg-white/[0.01] backdrop-blur-md">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
                             <div className="grid md:grid-cols-2 gap-8 items-center">
                                 <div>
@@ -441,10 +439,10 @@ function LayoutContent({ children, currentPageName }) {
                         {/* Bottom bar */}
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-white/[0.06] text-xs md:text-sm text-gray-500">
                             <p>© {new Date().getFullYear()} EyE PunE. All rights reserved.</p>
-                            <div className="flex flex-wrap justify-center gap-4 md:gap-6 relative z-50">
-                                <a href={createPageUrl("Privacy-Policy")} className="hover:text-gray-300 transition-colors py-1 cursor-pointer">Privacy Policy</a>
-                                <a href={createPageUrl("Terms-and-Conditions")} className="hover:text-gray-300 transition-colors py-1 cursor-pointer">Terms & Conditions</a>
-                                <a href={createPageUrl("Cookie-Policy")} className="hover:text-gray-300 transition-colors py-1 cursor-pointer">Cookie Policy</a>
+                            <div className="flex flex-wrap justify-center gap-4 md:gap-6 relative z-50 pointer-events-auto">
+                                <Link href="/privacy-policy" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Privacy Policy</Link>
+                                <Link href="/terms-and-conditions" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Terms & Conditions</Link>
+                                <Link href="/cookie-policy" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Cookie Policy</Link>
                             </div>
                         </div>
                     </div>

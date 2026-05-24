@@ -171,7 +171,7 @@ export default function Service_Branding() {
 
             {/* CTA */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-[#040404]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
                     <h2 className="text-4xl md:text-5xl font-black mb-4">Let's Build a Brand <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Worth Remembering</span></h2>
                     <p className="text-gray-400 mb-8">Book a free consultation — we'll share brand strategy insights specific to your industry.</p>

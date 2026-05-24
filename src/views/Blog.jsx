@@ -65,7 +65,7 @@ export default function Blog() {
     const otherPosts = filteredPosts.filter(p => p.id !== featuredPost?.id);
 
     return (
-        <div className="min-h-screen bg-[#040404] text-white selection:bg-red-500/30">
+        <div className="min-h-screen bg-transparent text-white selection:bg-red-500/30">
             <SEOHead
                 title="EyE PunE Blog – AI, Marketing & Growth Insights"
                 description="Expert insights on digital growth, AI automation, and marketing strategy in Pune. Stay ahead of the curve with EyE PunE."

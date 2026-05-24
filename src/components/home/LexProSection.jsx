@@ -45,14 +45,14 @@ export default function LexProSection() {
                             <motion.div
                                 animate={{ y: [0, -8, 0] }}
                                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
-                                className="absolute top-4 left-4 right-4 bottom-4 rounded-3xl bg-gradient-to-br from-orange-900/30 to-red-900/30 border border-orange-500/15"
+                                className="absolute top-4 left-4 right-4 bottom-4 rounded-3xl bg-orange-900/20 backdrop-blur-sm border border-orange-500/15"
                             />
 
                             {/* Main card */}
                             <motion.div
                                 animate={{ y: [0, -10, 0] }}
                                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                                className="absolute inset-0 rounded-3xl overflow-hidden border border-orange-500/20 bg-[#0a0604]"
+                                className="absolute inset-0 rounded-3xl overflow-hidden border border-orange-500/20 bg-orange-950/25 backdrop-blur-sm"
                             >
                                 <img
                                     src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69697d1626923688ef1d9afa/b532a4c62_generated_image.png"
@@ -60,7 +60,7 @@ export default function LexProSection() {
                                     className="w-full h-full object-cover opacity-80"
                                 />
                                 {/* Overlay gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0604] via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent" />
                                 <div className="absolute bottom-6 left-6 right-6">
                                     <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-black/60 backdrop-blur-sm border border-orange-500/20">
                                         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
@@ -82,7 +82,7 @@ export default function LexProSection() {
                             <motion.div
                                 animate={{ y: [0, 6, 0] }}
                                 transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                                className="absolute -bottom-4 -left-4 px-4 py-3 rounded-2xl bg-[#111] border border-orange-500/20 shadow-xl z-10"
+                                className="absolute -bottom-4 -left-4 px-4 py-3 rounded-2xl bg-black/65 backdrop-blur-md border border-orange-500/20 shadow-xl z-10"
                             >
                                 <div className="text-xs text-gray-500 mb-1">Contract Risk Score</div>
                                 <div className="text-xl font-black text-orange-400">8.4 / 10 ✓</div>
