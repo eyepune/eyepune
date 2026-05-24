@@ -20,7 +20,7 @@ import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
 import CustomCursor from "@/components/shared/CustomCursor";
-import HeroFloatingIcons from "@/components/home/HeroFloatingIcons";
+import HeroFloatingIcons from "@/components/shared/HeroFloatingIcons";
 
 const footerLinks = {
     Services: [
