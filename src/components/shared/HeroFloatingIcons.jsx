@@ -8,19 +8,19 @@ import {
 } from 'lucide-react';
 
 const icons = [
-    // Evenly distributed across 100% of the screen width with a mix of Brand Colors
-    { Icon: Bot, x: "4%", delay: 0, duration: 28, color: "text-white" },
-    { Icon: TrendingUp, x: "12%", delay: 14, duration: 24, color: "text-red-500" },
-    { Icon: Cpu, x: "20%", delay: 5, duration: 32, color: "text-white" },
-    { Icon: Sparkles, x: "28%", delay: 18, duration: 25, color: "text-red-600" },
-    { Icon: Megaphone, x: "37%", delay: 2, duration: 30, color: "text-white" },
-    { Icon: Database, x: "46%", delay: 11, duration: 27, color: "text-red-500" },
-    { Icon: Target, x: "55%", delay: 7, duration: 33, color: "text-white" },
-    { Icon: Code, x: "64%", delay: 20, duration: 26, color: "text-red-600" },
-    { Icon: LineChart, x: "73%", delay: 4, duration: 31, color: "text-white" },
-    { Icon: Share2, x: "81%", delay: 16, duration: 28, color: "text-red-500" },
-    { Icon: Zap, x: "89%", delay: 9, duration: 34, color: "text-white" },
-    { Icon: Users, x: "96%", delay: 1, duration: 25, color: "text-red-600" },
+    // Mathematically perfect horizontal and vertical spacing to prevent clumping
+    { Icon: Bot, x: "4.1%", delay: 0, duration: 30, color: "text-white" },
+    { Icon: TrendingUp, x: "12.4%", delay: 15, duration: 30, color: "text-red-500", hideOnMobile: true },
+    { Icon: Cpu, x: "20.7%", delay: 7.5, duration: 30, color: "text-white" },
+    { Icon: Sparkles, x: "29.0%", delay: 22.5, duration: 30, color: "text-red-600", hideOnMobile: true },
+    { Icon: Megaphone, x: "37.3%", delay: 2.5, duration: 30, color: "text-white" },
+    { Icon: Database, x: "45.6%", delay: 17.5, duration: 30, color: "text-red-500", hideOnMobile: true },
+    { Icon: Target, x: "53.9%", delay: 10, duration: 30, color: "text-white" },
+    { Icon: Code, x: "62.2%", delay: 25, duration: 30, color: "text-red-600", hideOnMobile: true },
+    { Icon: LineChart, x: "70.5%", delay: 5, duration: 30, color: "text-white" },
+    { Icon: Share2, x: "78.8%", delay: 20, duration: 30, color: "text-red-500", hideOnMobile: true },
+    { Icon: Zap, x: "87.1%", delay: 12.5, duration: 30, color: "text-white" },
+    { Icon: Users, x: "95.4%", delay: 27.5, duration: 30, color: "text-red-600", hideOnMobile: true },
 ];
 
 export default function HeroFloatingIcons({ opacity = 0.5 }) {
@@ -36,13 +36,13 @@ export default function HeroFloatingIcons({ opacity = 0.5 }) {
             {icons.map((item, i) => (
                 <motion.div
                     key={i}
-                    className={`absolute ${item.color || "text-white"}`}
+                    className={`absolute ${item.color || "text-white"} ${item.hideOnMobile ? 'hidden md:block' : ''}`}
                     style={{ left: item.x, top: "-10%" }}
                     initial={{ opacity: 0, y: 0, rotate: 0 }}
                     animate={{ 
-                        opacity: [0, 0.5, 0.5, 0], 
-                        y: ["0vh", "120vh"],
-                        rotate: [0, 180]
+                        opacity: [0, 0.2, 0.6, 0.1, 0.5, 0.1, 0.4, 0], 
+                        y: ["-10vh", "120vh"],
+                        rotate: [0, 180, 360]
                     }}
                     transition={{ 
                         duration: item.duration, 
@@ -51,7 +51,7 @@ export default function HeroFloatingIcons({ opacity = 0.5 }) {
                         delay: item.delay
                     }}
                 >
-                    <item.Icon className="w-12 h-12 md:w-20 md:h-20 opacity-100" strokeWidth={0.2} />
+                    <item.Icon className="w-6 h-6 sm:w-10 sm:h-10 md:w-16 md:h-16 opacity-100" strokeWidth={0.3} />
                 </motion.div>
             ))}
         </div>

@@ -84,9 +84,9 @@ export default function Service_Branding() {
                 
                 
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="max-w-3xl">
+                    <div className="max-w-3xl mx-auto text-center">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-6">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-6 mx-auto">
                                 <Palette className="w-3.5 h-3.5 text-red-400" />
                                 <span className="text-red-400 text-sm font-medium">Branding & Design · Global</span>
                             </div>
@@ -94,10 +94,10 @@ export default function Service_Branding() {
                                 Branding Agency<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Global</span>
                             </h1>
-                            <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl">
+                            <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-2xl mx-auto">
                                 Build a brand that people remember, trust, and choose over competitors. From logo to full brand identity — we create brands that drive business growth.
                             </p>
-                            <div className="flex flex-wrap gap-4">
+                            <div className="flex flex-wrap justify-center gap-4">
                                 <Link href={createPageUrl("Booking")}>
                                     <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-8 py-5 rounded-full font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] text-base">
                                         Start Your Brand <ArrowRight className="w-4 h-4 ml-2" />

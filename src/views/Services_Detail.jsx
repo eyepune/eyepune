@@ -110,9 +110,9 @@ export default function Services_Detail() {
 
                 
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="max-w-3xl">
+                    <div className="max-w-3xl mx-auto text-center">
                         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-8">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-8 mx-auto">
                                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                                 <span className="text-red-400 text-sm font-medium">Full-Service Growth Agency</span>
                             </div>
@@ -120,7 +120,7 @@ export default function Services_Detail() {
                                 Our<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Services</span>
                             </h1>
-                            <p className="text-xl text-gray-400 max-w-2xl leading-relaxed">
+                            <p className="text-xl text-gray-400 max-w-2xl leading-relaxed mx-auto">
                                 Everything your business needs to Connect, Engage, and Grow — all under one roof with dedicated experts who treat your business like their own.
                             </p>
                         </motion.div>
