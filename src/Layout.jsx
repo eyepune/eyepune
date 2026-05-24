@@ -122,9 +122,9 @@ function LayoutContent({ children, currentPageName }) {
     const isPublicPage = !isAdminPage && !isClientPage;
 
     return (
-        <div className="min-h-screen bg-[#030000] text-white relative">
+        <div className="min-h-screen bg-transparent text-white relative">
             {/* Global Cinematic Background Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
+            <div className="fixed inset-0 pointer-events-none overflow-hidden bg-[#030000] z-[-1]">
                 {/* Dynamic Breathing Gradients */}
                 <motion.div 
                     animate={{ 
