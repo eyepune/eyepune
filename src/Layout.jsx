@@ -20,6 +20,7 @@ import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
 import CustomCursor from "@/components/shared/CustomCursor";
+import HeroFloatingIcons from "@/components/home/HeroFloatingIcons";
 
 const footerLinks = {
     Services: [
@@ -122,40 +123,12 @@ function LayoutContent({ children, currentPageName }) {
     const isPublicPage = !isAdminPage && !isClientPage;
 
     return (
-        <div className="min-h-screen bg-transparent text-white relative">
-            {/* Global Cinematic Background Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden bg-[#030000] z-[-1]">
-                {/* Dynamic Breathing Gradients */}
-                <motion.div 
-                    animate={{ 
-                        scale: [1, 1.1, 1],
-                        opacity: [0.3, 0.5, 0.3],
-                    }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vh] bg-red-900/30 rounded-full blur-[150px]" 
-                />
-                <motion.div 
-                    animate={{ 
-                        scale: [1, 1.2, 1],
-                        opacity: [0.2, 0.4, 0.2],
-                    }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute -bottom-[20%] -right-[10%] w-[70vw] h-[70vh] bg-red-600/20 rounded-full blur-[150px]" 
-                />
-                <motion.div 
-                    animate={{ 
-                        y: [0, -50, 0],
-                        opacity: [0.1, 0.25, 0.1],
-                    }}
-                    transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[20%] left-[30%] w-[40vw] h-[40vh] bg-orange-600/10 rounded-full blur-[120px]" 
-                />
-
-                {/* High-Tech Cyber Grid */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_10%,transparent_100%)] opacity-50" />
-
-                {/* Deep Cinematic Vignette */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#030000_100%)] opacity-80" />
+        <div className="min-h-screen bg-[#030000] text-white relative">
+            {/* Global Elegant Background Elements */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
+                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-800/20 rounded-full blur-[120px]" />
+                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
+                <HeroFloatingIcons opacity={0.25} />
             </div>
 
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
