@@ -217,6 +217,11 @@ export default function HeroSection() {
                         {/* Trust markers */}
                         <div className="flex items-center justify-center gap-6 md:gap-12 border-t border-white/10 pt-8 mt-4 w-full">
                             <div className="flex flex-col items-center">
+                                <span className="text-3xl font-black text-white drop-shadow-md">50+</span>
+                                <span className="text-xs text-gray-400 uppercase tracking-widest">Global Brands</span>
+                            </div>
+                            <div className="w-px h-8 bg-white/10" />
+                            <div className="flex flex-col items-center">
                                 <span className="text-3xl font-black text-white drop-shadow-md">10+</span>
                                 <span className="text-xs text-gray-400 uppercase tracking-widest">Countries</span>
                             </div>
