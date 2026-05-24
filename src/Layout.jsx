@@ -123,9 +123,9 @@ function LayoutContent({ children, currentPageName }) {
     const isPublicPage = !isAdminPage && !isClientPage;
 
     return (
-        <div className="min-h-screen bg-[#030000] text-white relative">
+        <div className="min-h-screen bg-transparent text-white relative">
             {/* Global Elegant Background Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
+            <div className="fixed inset-0 pointer-events-none overflow-hidden bg-[#030000] z-[-1]">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-800/20 rounded-full blur-[120px]" />
                 <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
                 <HeroFloatingIcons opacity={0.25} />
