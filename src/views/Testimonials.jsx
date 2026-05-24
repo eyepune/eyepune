@@ -18,7 +18,7 @@ export default function Testimonials() {
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent pointer-events-none" />
             
-            <HeroFloatingIcons opacity={0.15} />
+            
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 {/* Header */}

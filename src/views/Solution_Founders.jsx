@@ -41,7 +41,7 @@ export default function Solution_Founders() {
             {/* Hero Section */}
             <section className="py-20 px-6 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.05)_0%,transparent_70%)]" />
-                <HeroFloatingIcons opacity={0.5} />
+                
                 
                 <div className="max-w-5xl mx-auto text-center relative z-10">
                     <motion.div

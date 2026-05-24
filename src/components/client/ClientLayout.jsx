@@ -56,7 +56,7 @@ export default function ClientLayout({ children }) {
             <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202] pointer-events-none" />
             
             {/* Subtle Command Center Background Icons */}
-            <HeroFloatingIcons opacity={0.04} />
+            
 
             {/* Ambient Background Glow */}
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-red-600/[0.03] blur-[150px] pointer-events-none animate-pulse" />

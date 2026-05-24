@@ -78,7 +78,7 @@ export default function Blog() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#3b0000,transparent_70%)] opacity-40" />
                 
                 {/* Floating Icons */}
-                <HeroFloatingIcons opacity={0.2} />
+                
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                         <span className="inline-block py-1 px-3 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold tracking-widest uppercase mb-6">

@@ -60,7 +60,7 @@ export default function About() {
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%)' }}
                 />
 
-                <HeroFloatingIcons opacity={0.2} />
+                
 
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">

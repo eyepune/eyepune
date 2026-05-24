@@ -49,7 +49,7 @@ export default function Pricing() {
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
 
-                <HeroFloatingIcons opacity={0.2} />
+                
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
                     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-8">

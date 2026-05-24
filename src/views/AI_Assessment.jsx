@@ -444,7 +444,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
 
             <div className="min-h-screen bg-transparent text-white pt-20 relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
-            <HeroFloatingIcons opacity={0.15} />
+            
 
             <div className="max-w-3xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-12">

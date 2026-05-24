@@ -41,7 +41,7 @@ export default function Solution_Startups() {
             {/* Hero Section */}
             <section className="py-20 px-6 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(239,68,68,0.03)_0%,transparent_100%)]" />
-                <HeroFloatingIcons opacity={0.5} />
+                
                 
                 <div className="max-w-5xl mx-auto text-center relative z-10">
                     <motion.div
