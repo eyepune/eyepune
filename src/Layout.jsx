@@ -123,13 +123,9 @@ function LayoutContent({ children, currentPageName }) {
 
     return (
         <div className="min-h-screen bg-transparent text-white">
-            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                scrolled || mobileMenuOpen
-                    ? 'bg-black border-b border-white/[0.06] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
-                    : 'bg-transparent'
-            }`}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6">
-                    <div className="flex items-center justify-between h-20">
+            <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || mobileMenuOpen ? 'bg-black/80 backdrop-blur-xl border-b border-white/5 py-2 md:py-3' : 'bg-transparent py-4 md:py-5'}`}>
+                <div className="container mx-auto px-4 lg:px-6 xl:px-8">
+                    <div className="flex items-center justify-between gap-2 lg:gap-4 xl:gap-8">
 
                         {/* Logo — only show on public pages */}
                         {!isAdminPage && !isClientPage && (
@@ -148,7 +144,7 @@ function LayoutContent({ children, currentPageName }) {
                                     <div key={link.page} className="relative group/nav">
                                         <Link
                                             href={createPageUrl(link.page)}
-                                            className={`group relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all ${
+                                            className={`group relative flex items-center gap-1.5 xl:gap-2 px-2.5 xl:px-4 py-2 text-xs xl:text-sm font-medium rounded-full transition-all ${
                                                 currentPageName === link.page
                                                     ? 'text-white bg-white/[0.07]'
                                                     : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
@@ -187,7 +183,7 @@ function LayoutContent({ children, currentPageName }) {
 
 
                         {/* Right actions */}
-                        <div className="hidden lg:flex items-center gap-3">
+                        <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
                             {isPublicPage && (
                                 <>
                                     {user && (
@@ -204,9 +200,10 @@ function LayoutContent({ children, currentPageName }) {
                                     )}
                                     <Link href={createPageUrl("AI-Assessment")}>
                                         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-                                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all">
-                                                <Bot className="w-4 h-4 mr-1.5" />
-                                                Free Assessment
+                                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white px-4 xl:px-5 py-2 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all">
+                                                <Bot className="w-4 h-4 mr-1 xl:mr-1.5" />
+                                                <span className="hidden xl:inline">Free Assessment</span>
+                                                <span className="xl:hidden">Assessment</span>
                                             </Button>
                                         </motion.div>
                                     </Link>
@@ -235,9 +232,11 @@ function LayoutContent({ children, currentPageName }) {
                             ) : (
                                 <button
                                     onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
-                                    className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 hover:border-white/25 text-gray-400 hover:text-white text-sm transition-all"
+                                    className="flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-2 rounded-full border border-white/10 hover:border-white/25 text-gray-400 hover:text-white text-xs xl:text-sm whitespace-nowrap transition-all"
                                 >
-                                    <LogIn className="w-4 h-4" /> Sign In / Sign Up
+                                    <LogIn className="w-3 h-3 xl:w-4 xl:h-4" /> 
+                                    <span className="hidden xl:inline">Sign In / Sign Up</span>
+                                    <span className="xl:hidden">Sign In</span>
                                 </button>
                             )}
                         </div>
