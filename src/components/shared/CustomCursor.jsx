@@ -55,10 +55,10 @@ export default function CustomCursor() {
                 }}
                 className="absolute w-[50px] h-[50px] flex items-center justify-center"
             >
-                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_8px_rgba(220,20,60,0.5)]">
                     {/* Eyelashes/Rays */}
                     <motion.g 
-                        stroke="#ef4444" 
+                        stroke="#DC143C" 
                         strokeWidth="6" 
                         strokeLinecap="round"
                         animate={{ opacity: isHovering ? 1 : 0.6 }}
@@ -74,7 +74,7 @@ export default function CustomCursor() {
                     {/* Eye Shape */}
                     <motion.path 
                         d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" 
-                        stroke="#ef4444" 
+                        stroke="#DC143C" 
                         strokeWidth="6" 
                         strokeLinejoin="round" 
                         fill="rgba(5, 5, 5, 0.4)"
@@ -82,7 +82,7 @@ export default function CustomCursor() {
                     {/* Iris */}
                     <motion.circle 
                         cx="50" cy="55" r="14" 
-                        stroke="#ef4444" 
+                        stroke="#DC143C" 
                         strokeWidth="5"
                         style={{ transformOrigin: '50px 55px' }}
                         animate={{ scale: isHovering ? 1.14 : 1 }}
@@ -90,7 +90,7 @@ export default function CustomCursor() {
                     {/* Pupil */}
                     <motion.circle 
                         cx="50" cy="55" r="6" 
-                        fill="#ef4444"
+                        fill="#DC143C"
                         style={{ transformOrigin: '50px 55px' }}
                         animate={{ scale: isHovering ? 1.3 : 1 }}
                     />
@@ -109,7 +109,7 @@ export default function CustomCursor() {
                     opacity: isHovering ? 0.4 : 0.15,
                     scale: isHovering ? 1.4 : 1,
                 }}
-                className="absolute w-20 h-20 bg-red-600/20 rounded-full blur-2xl pointer-events-none"
+                className="absolute w-20 h-20 bg-[#DC143C]/20 rounded-full blur-2xl pointer-events-none"
             />
         </div>
     );

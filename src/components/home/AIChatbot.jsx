@@ -14,6 +14,7 @@ export default function AIChatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [isBadgeDismissed, setIsBadgeDismissed] = useState(false);
 
     // 0. Path check — Hide on Admin pages
     const [isPathAllowed, setIsPathAllowed] = useState(true);
@@ -337,20 +338,30 @@ Assistant:`;
                         )}
                     </motion.div>
                 ) : (
-                    <div className="relative flex flex-col items-end gap-3 pointer-events-none">
+                    <div className="relative pointer-events-none">
                         {/* Sales Sniper Hook Badge */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.5, y: 10 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            transition={{ delay: 1, duration: 0.5 }}
-                            className="hidden md:flex bg-white text-black px-4 py-2 rounded-2xl rounded-br-sm shadow-xl text-[11px] font-black uppercase tracking-tighter items-center gap-2 border border-red-500/20 pointer-events-auto"
-                        >
-                            <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
-                            {window.location.pathname.includes('Solution-Founders') ? "Founder: Get your 5-min AI Audit" :
-                             window.location.pathname.includes('Solution-YouTubers') ? "Creators: Go Global with AI" :
-                             window.location.pathname.includes('Solution-Startups') ? "Startups: Scale 10x with LLMs" :
-                             "EyE BoT: Ready to Scale your ROI?"}
-                        </motion.div>
+                        {!isBadgeDismissed && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.5, x: 20 }}
+                                animate={{ opacity: 1, scale: 1, x: 0 }}
+                                transition={{ delay: 1, duration: 0.5 }}
+                                className="hidden md:flex absolute right-full mr-4 bottom-2 bg-white text-black pl-4 pr-2 py-2 rounded-2xl rounded-tr-sm shadow-xl text-[11px] font-black uppercase tracking-tighter items-center gap-3 border border-red-500/20 pointer-events-auto whitespace-nowrap"
+                            >
+                                <span className="w-2 h-2 rounded-full bg-red-600 animate-ping flex-shrink-0" />
+                                <span>
+                                    {window.location.pathname.includes('Solution-Founders') ? "Founder: Get your 5-min AI Audit" :
+                                     window.location.pathname.includes('Solution-YouTubers') ? "Creators: Go Global with AI" :
+                                     window.location.pathname.includes('Solution-Startups') ? "Startups: Scale 10x with LLMs" :
+                                     "EyE BoT: Ready to Scale your ROI?"}
+                                </span>
+                                <button 
+                                    onClick={(e) => { e.stopPropagation(); setIsBadgeDismissed(true); }}
+                                    className="p-1 hover:bg-gray-100 rounded-full transition-colors opacity-50 hover:opacity-100"
+                                >
+                                    <X className="w-3 h-3" />
+                                </button>
+                            </motion.div>
+                        )}
                         
                         <motion.button
                             initial={{ scale: 0, rotate: -45 }}
@@ -358,12 +369,13 @@ Assistant:`;
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => setIsOpen(true)}
-                            className="bg-gradient-to-tr from-red-600 to-orange-600 p-5 rounded-full shadow-2xl shadow-red-600/40 relative group pointer-events-auto"
+                            className="bg-gradient-to-tr from-red-600 to-orange-600 p-5 rounded-full shadow-2xl shadow-red-600/40 relative group pointer-events-auto float-right"
                         >
                             <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 border-4 border-[#040404] rounded-full z-10" />
                             <MessageSquare className="w-8 h-8 text-white group-hover:hidden" />
                             <Sparkles className="w-8 h-8 text-white hidden group-hover:block animate-pulse" />
                         </motion.button>
+                        <div className="clear-both" />
                     </div>
                 )}
             </AnimatePresence>
