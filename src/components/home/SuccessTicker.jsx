@@ -7,9 +7,9 @@ import { TrendingUp, Globe, Users, Zap, Award, BarChart3 } from 'lucide-react';
 const stats = [
     { icon: Globe, text: "124+ Global Projects Delivered", color: "text-orange-500" },
     { icon: Users, text: "98.4% Client Retention Rate", color: "text-red-400" },
-    { icon: Award, text: "Top Rated Digital Agency in Pune", color: "text-orange-400" },
+    { icon: Award, text: "Top Rated Global Digital Agency", color: "text-orange-400" },
     { icon: BarChart3, text: "Avg 5X ROI Across All Industries", color: "text-red-500" },
-    { icon: Zap, text: "24/7 AI-Powered Support Systems", color: "text-orange-500" },
+    { icon: Zap, text: "24/7 Multi-Model AI Systems", color: "text-orange-500" },
 ];
 
 export default function SuccessTicker() {
