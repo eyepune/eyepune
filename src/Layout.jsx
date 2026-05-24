@@ -94,6 +94,7 @@ const clientNavLinks = [
 
 function LayoutContent({ children, currentPageName }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [expandedMobileMenu, setExpandedMobileMenu] = useState(null);
     const [scrolled, setScrolled] = useState(false);
 
     // Scroll to top on every page navigation
@@ -260,34 +261,53 @@ function LayoutContent({ children, currentPageName }) {
                             exit={{ opacity: 0, y: -10 }}
                             className="lg:hidden bg-black border-b border-white/[0.06] max-h-[calc(100vh-5rem)] overflow-y-auto custom-scrollbar"
                         >
-                            <div className="px-4 sm:px-6 py-6 space-y-1.5">
+                                <div className="px-4 sm:px-6 py-6 space-y-1.5">
                                 {navLinks.map((link) => (
                                     <div key={link.page}>
-                                        <Link
-                                            href={createPageUrl(link.page)}
-                                            onClick={() => setMobileMenuOpen(false)}
-                                            className={`block py-3.5 px-5 rounded-xl text-base font-bold transition-all active:scale-[0.98] ${
-                                                currentPageName === link.page
-                                                    ? 'text-white bg-red-500/10 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
-                                                    : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
-                                            }`}
-                                        >
-                                            {link.name}
-                                        </Link>
-                                        {link.subLinks && (
-                                            <div className="pl-6 pr-4 py-1 space-y-1 border-l border-white/5 ml-4 mb-2">
-                                                {link.subLinks.map(subLink => (
-                                                    <Link
-                                                        key={subLink.page}
-                                                        href={createPageUrl(subLink.page)}
-                                                        onClick={() => setMobileMenuOpen(false)}
-                                                        className="block py-2 px-4 text-sm text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-                                                    >
-                                                        {subLink.name}
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        )}
+                                        <div className="flex items-center">
+                                            <Link
+                                                href={createPageUrl(link.page)}
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className={`flex-1 block py-3.5 px-5 rounded-xl text-base font-bold transition-all active:scale-[0.98] ${
+                                                    currentPageName === link.page
+                                                        ? 'text-white bg-red-500/10 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
+                                                        : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+                                                }`}
+                                            >
+                                                {link.name}
+                                            </Link>
+                                            {link.subLinks && (
+                                                <button 
+                                                    onClick={() => setExpandedMobileMenu(expandedMobileMenu === link.name ? null : link.name)}
+                                                    className="p-4 ml-1 text-gray-400 hover:text-white rounded-xl active:bg-white/5 transition-colors"
+                                                >
+                                                    <ChevronDown className={`w-5 h-5 transition-transform ${expandedMobileMenu === link.name ? 'rotate-180' : ''}`} />
+                                                </button>
+                                            )}
+                                        </div>
+                                        <AnimatePresence>
+                                            {link.subLinks && expandedMobileMenu === link.name && (
+                                                <motion.div 
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="pl-6 pr-4 py-1 space-y-1 border-l border-white/5 ml-4 mb-2">
+                                                        {link.subLinks.map(subLink => (
+                                                            <Link
+                                                                key={subLink.page}
+                                                                href={createPageUrl(subLink.page)}
+                                                                onClick={() => setMobileMenuOpen(false)}
+                                                                className="block py-2 px-4 text-sm text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                                                            >
+                                                                {subLink.name}
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
                                 ))}
                                 <div className="pt-4 space-y-3">
