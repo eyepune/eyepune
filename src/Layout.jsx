@@ -422,22 +422,22 @@ function LayoutContent({ children, currentPageName }) {
                                 </div>
 
                                 {/* Social */}
-                                <div className="flex gap-4 mt-6 justify-center sm:justify-start">
+                                <div className="flex gap-4 mt-6 justify-center sm:justify-start group/social">
                                     {[
-                                        { icon: Instagram, href: 'https://instagram.com/eyepune', color: 'hover:text-pink-500', label: 'Instagram' },
-                                        { icon: Linkedin, href: 'https://linkedin.com/company/eyepune', color: 'hover:text-blue-500', label: 'LinkedIn' },
-                                        { icon: MessageCircle, href: 'https://wa.me/919284712033', color: 'hover:text-emerald-500', label: 'WhatsApp' },
+                                        { icon: Instagram, href: 'https://instagram.com/eyepune', color: 'hover:text-pink-500 hover:shadow-[0_0_15px_rgba(236,72,153,0.5)] hover:border-pink-500/50', label: 'Instagram' },
+                                        { icon: Linkedin, href: 'https://linkedin.com/company/eyepune', color: 'hover:text-blue-500 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:border-blue-500/50', label: 'LinkedIn' },
+                                        { icon: MessageCircle, href: 'https://wa.me/919284712033', color: 'hover:text-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] hover:border-emerald-500/50', label: 'WhatsApp' },
                                     ].map((s, i) => (
                                         <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                                             aria-label={`Follow us on ${s.label}`}
-                                            whileHover={{ y: -3, scale: 1.1 }}
+                                            whileHover={{ y: -5, scale: 1.1 }}
                                             className={cn(
-                                                "w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-500 transition-all",
+                                                "w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-500 transition-all duration-300",
                                                 s.color,
-                                                "hover:bg-white/[0.08] hover:border-white/20"
+                                                "group-hover/social:opacity-30 hover:!opacity-100 hover:bg-white/[0.1]"
                                             )}
                                         >
-                                            <s.icon className="w-5 h-5" />
+                                            <s.icon className="w-5 h-5 transition-colors" />
                                         </motion.a>
                                     ))}
                                 </div>
