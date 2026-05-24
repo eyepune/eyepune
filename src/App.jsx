@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -96,6 +97,37 @@ const AuthenticatedApp = () => {
 
 
 function App() {
+  useEffect(() => {
+    // Prevent Right Click
+    const handleContextMenu = (e) => e.preventDefault();
+    document.addEventListener('contextmenu', handleContextMenu);
+
+    // Prevent Keyboard Shortcuts (Copy, DevTools, View Source)
+    const handleKeyDown = (e) => {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && e.key === 'I') || // DevTools
+        (e.ctrlKey && e.shiftKey && e.key === 'C') || // Inspect Element
+        (e.ctrlKey && e.shiftKey && e.key === 'J') || // Console
+        (e.ctrlKey && e.key === 'u') || // View Source
+        (e.ctrlKey && e.key === 'c') || // Copy
+        (e.ctrlKey && e.key === 's') || // Save
+        (e.ctrlKey && e.key === 'p')    // Print
+      ) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Prevent Dragging
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('dragstart', (e) => e.preventDefault());
+    };
+  }, []);
 
   return (
     <AuthProvider>
