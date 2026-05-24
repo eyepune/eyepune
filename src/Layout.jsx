@@ -258,7 +258,7 @@ function LayoutContent({ children, currentPageName }) {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="lg:hidden bg-[#080808]/98 backdrop-blur-xl border-b border-white/[0.06]"
+                            className="lg:hidden bg-black border-b border-white/[0.06]"
                         >
                             <div className="px-4 sm:px-6 py-6 space-y-1">
                                 {navLinks.map((link) => (

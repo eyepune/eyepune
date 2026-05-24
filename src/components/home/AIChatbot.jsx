@@ -248,7 +248,7 @@ Assistant:`;
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className={`bg-black/60 backdrop-blur-xl border border-white/10 rounded-[20px] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
+                        className={`bg-black border border-white/10 rounded-[20px] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
                             isMinimized 
                                 ? 'h-16 w-[calc(100vw-2rem)] sm:w-80' 
                                 : 'w-[calc(100vw-2rem)] sm:w-[380px]'
@@ -312,7 +312,7 @@ Assistant:`;
                                 </div>
 
                                 {/* Input */}
-                                <div className="p-5 border-t border-white/5 bg-black/40 backdrop-blur-xl">
+                                <div className="p-5 border-t border-white/5 bg-black">
                                     <div className="relative flex items-center gap-3">
                                         <Input 
                                             value={input}
