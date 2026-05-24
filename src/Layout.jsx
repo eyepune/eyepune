@@ -258,17 +258,17 @@ function LayoutContent({ children, currentPageName }) {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="lg:hidden bg-black border-b border-white/[0.06]"
+                            className="lg:hidden bg-black border-b border-white/[0.06] max-h-[calc(100vh-5rem)] overflow-y-auto custom-scrollbar"
                         >
-                            <div className="px-4 sm:px-6 py-6 space-y-1">
+                            <div className="px-4 sm:px-6 py-6 space-y-1.5">
                                 {navLinks.map((link) => (
                                     <div key={link.page}>
                                         <Link
                                             href={createPageUrl(link.page)}
                                             onClick={() => setMobileMenuOpen(false)}
-                                            className={`block py-3 px-4 rounded-xl text-base font-medium transition-all ${
+                                            className={`block py-3.5 px-5 rounded-xl text-base font-bold transition-all active:scale-[0.98] ${
                                                 currentPageName === link.page
-                                                    ? 'text-white bg-red-500/10 border border-red-500/20'
+                                                    ? 'text-white bg-red-500/10 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
                                                     : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
                                             }`}
                                         >
