@@ -59,22 +59,126 @@ export default function Terms() {
                 ) : (
                     // ── HARDCODED FALLBACK ──
                     <div className="prose prose-lg prose-invert max-w-none text-gray-300">
-                        <p className="text-xl text-gray-400 mb-8">Last updated: May 24, 2026</p>
+                        <p className="text-xl text-gray-400 mb-8">Last Updated: 22nd Nov 2022</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">1. Agreement to Terms</h2>
-                        <p className="mb-6 leading-relaxed">By accessing or using our services at EyE PunE, you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree to these terms, please do not use our services.</p>
+                        <p className="mb-6 leading-relaxed">Welcome to EyE PunE. By accessing our website, engaging our services, or interacting with our digital platforms, you agree to comply with the following Terms & Conditions.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. Services</h2>
-                        <p className="mb-6 leading-relaxed">EyE PunE provides digital marketing, web development, AI automation, and business growth solutions. We reserve the right to modify or discontinue any part of our services without prior notice.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">1. Services</h2>
+                        <p className="mb-4 leading-relaxed">EyE PunE provides digital services including but not limited to:</p>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 pl-6 mb-6 text-gray-300">
+                            <li>• Social Media Marketing</li>
+                            <li>• Meta Ads Management</li>
+                            <li>• Google Ads Management</li>
+                            <li>• SEO Services</li>
+                            <li>• Website Design & Development</li>
+                            <li>• Branding & Creative Services</li>
+                            <li>• AI & Automation Solutions</li>
+                            <li>• Content Creation & Video Production</li>
+                            <li>• Consulting & Strategy Services</li>
+                        </ul>
+                        <p className="mb-6 leading-relaxed">The scope of services will be defined in individual proposals, invoices, agreements, or written communication.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Client Responsibilities</h2>
-                        <p className="mb-6 leading-relaxed">Clients agree to provide accurate information, cooperate with our team, and adhere to agreed-upon timelines. Failure to do so may result in project delays or termination of services.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. Payments & Billing</h2>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>All retainers, milestone payments, and project fees are payable in advance unless otherwise agreed in writing.</li>
+                            <li>Delayed payments may result in temporary suspension or termination of services.</li>
+                            <li>GST is applicable on all invoices as per Indian tax regulations.</li>
+                            <li>Advertising budgets are billed separately and paid directly to platforms such as Meta, Google, LinkedIn, or other advertising networks.</li>
+                            <li>EyE PunE reserves the right to revise pricing at any time with prior notice.</li>
+                        </ul>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Intellectual Property</h2>
-                        <p className="mb-6 leading-relaxed">Unless otherwise stated, EyE PunE and/or its licensors own the intellectual property rights for all material on the website. All intellectual property rights are reserved.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Late Payments</h2>
+                        <p className="mb-4 leading-relaxed">All invoices must be cleared within the agreed payment due date. A grace period of up to 7 calendar days from the invoice due date shall be provided.</p>
+                        <p className="mb-4 leading-relaxed">If payment remains unpaid after the grace period, EyE PunE reserves the right to charge a late payment penalty of 5% per day on the outstanding pending amount until full payment is received. EyE PunE further reserves the right to:</p>
+                        <ul className="list-disc pl-6 mb-4 space-y-1">
+                            <li>Suspend ongoing services</li>
+                            <li>Pause advertising campaigns</li>
+                            <li>Withhold deliverables</li>
+                            <li>Revoke access to files or systems</li>
+                            <li>Terminate the engagement</li>
+                            <li>Initiate legal recovery proceedings if necessary</li>
+                        </ul>
+                        <p className="mb-6 leading-relaxed font-semibold">Any legal, recovery, collection, or enforcement costs arising due to delayed payments shall be borne entirely by the client.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">5. Limitation of Liability</h2>
-                        <p className="mb-6 leading-relaxed">In no event shall EyE PunE, nor its directors, employees, or partners, be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your use of our services.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Refund Policy</h2>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>Payments made are non-refundable once work has commenced.</li>
+                            <li>No refunds are applicable for completed deliverables, consultations, campaigns, or approved creative work.</li>
+                            <li>Advertising spend paid to third-party platforms is non-refundable.</li>
+                            <li>Any disputes regarding billing must be raised within 7 days of invoice issuance.</li>
+                        </ul>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">5. Client Responsibilities</h2>
+                        <p className="mb-4 leading-relaxed font-semibold">Clients agree to:</p>
+                        <ul className="list-disc pl-6 mb-4 space-y-2">
+                            <li>Provide timely approvals and feedback</li>
+                            <li>Share required access credentials and assets</li>
+                            <li>Ensure legal ownership of submitted materials</li>
+                            <li>Respond within agreed timelines</li>
+                            <li>Review deliverables before publishing</li>
+                        </ul>
+                        <p className="mb-6 leading-relaxed">Delays in communication or approvals may affect project timelines and outcomes.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">6. Intellectual Property</h2>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>Final approved deliverables become the property of the client upon full payment.</li>
+                            <li>EyE PunE retains the right to showcase completed work in portfolios, case studies, social media, presentations, and marketing materials unless otherwise agreed in writing.</li>
+                            <li>Raw files, editable source files, proprietary systems, frameworks, automation workflows, and internal processes remain the intellectual property of EyE PunE unless explicitly transferred.</li>
+                        </ul>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">7. Revisions</h2>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>Revision limits depend on the selected package or proposal scope.</li>
+                            <li>Additional revisions outside the agreed scope may incur additional charges.</li>
+                            <li>Major changes requested after approval may require revised timelines and pricing.</li>
+                        </ul>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">8. Performance Disclaimer</h2>
+                        <p className="mb-4 leading-relaxed font-semibold">EyE PunE does not guarantee:</p>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 pl-6 mb-4">
+                            <li>• Specific search engine rankings</li>
+                            <li>• Guaranteed ROAS or conversion rates</li>
+                            <li>• Viral social media performance</li>
+                            <li>• Revenue outcomes</li>
+                            <li>• Lead volume</li>
+                            <li>• Platform approvals</li>
+                        </ul>
+                        <p className="mb-6 leading-relaxed">Results depend on multiple external variables including market conditions, algorithms, competition, audience behavior, and platform policies.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">9. Platform Liability</h2>
+                        <p className="mb-4 leading-relaxed font-semibold">EyE PunE shall not be held liable for:</p>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>Ad account bans or suspensions</li>
+                            <li>Platform policy violations</li>
+                            <li>Algorithm changes</li>
+                            <li>Third-party service disruptions</li>
+                            <li>Hosting failures</li>
+                            <li>API outages</li>
+                            <li>Cybersecurity incidents beyond reasonable control</li>
+                        </ul>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">10. Limitation of Liability</h2>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>EyE PunE’s total liability under any circumstance shall not exceed the amount paid by the client for the specific service giving rise to the claim.</li>
+                            <li>EyE PunE shall not be liable for indirect, incidental, consequential, or business losses including loss of revenue, profit, or data.</li>
+                        </ul>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">11. Confidentiality</h2>
+                        <p className="mb-6 leading-relaxed">Both parties agree to maintain confidentiality regarding sensitive business, operational, financial, and strategic information shared during the engagement.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">12. Force Majeure</h2>
+                        <p className="mb-4 leading-relaxed">EyE PunE shall not be held liable for delays or failure in performance resulting from causes beyond reasonable control, including but not limited to: Internet outages, platform disruptions, government restrictions, natural disasters, cyber incidents, third-party failures, labor shortages, or technical infrastructure failures.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">13. Termination</h2>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>Either party may terminate services with written notice as per agreed contractual terms.</li>
+                            <li>Outstanding invoices and completed work remain payable upon termination.</li>
+                        </ul>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">14. Governing Law & Jurisdiction</h2>
+                        <p className="mb-4 leading-relaxed">These Terms & Conditions shall be governed and interpreted in accordance with the laws of India.</p>
+                        <p className="mb-4 leading-relaxed">Any dispute, claim, or controversy arising out of or relating to EyE PunE’s services, website, agreements, deliverables, payments, or business interactions shall first be attempted to be resolved amicably through mutual discussion.</p>
+                        <p className="mb-6 leading-relaxed font-semibold text-white">If unresolved, such disputes shall be subject exclusively to the jurisdiction of the competent courts located in Pune, Maharashtra, India. By using this website or engaging EyE PunE’s services, the client/user expressly agrees to submit to the exclusive jurisdiction of the courts of Pune, Maharashtra.</p>
                     </div>
                 )}
             </div>

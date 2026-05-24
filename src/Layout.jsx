@@ -443,6 +443,8 @@ function LayoutContent({ children, currentPageName }) {
                                 <Link href="/privacy-policy" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Privacy Policy</Link>
                                 <Link href="/terms-and-conditions" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Terms & Conditions</Link>
                                 <Link href="/cookie-policy" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Cookie Policy</Link>
+                                <Link href="/refund-policy" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Refund Policy</Link>
+                                <Link href="/disclaimer" className="relative z-50 pointer-events-auto hover:text-gray-300 transition-colors py-1 cursor-pointer">Disclaimer</Link>
                             </div>
                         </div>
                     </div>

@@ -4,11 +4,11 @@ import { base44 } from '@/api/base44Client';
 import ReactMarkdown from 'react-markdown';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function Cookies() {
+export default function Disclaimer() {
     const { data: page, isLoading } = useQuery({
-        queryKey: ['cms-page', 'cookie-policy'],
+        queryKey: ['cms-page', 'disclaimer'],
         queryFn: async () => {
-            const pages = await base44.entities.CMS_Page.filter({ slug: 'cookie-policy' });
+            const pages = await base44.entities.CMS_Page.filter({ slug: 'disclaimer' });
             return pages.length > 0 ? pages[0] : null;
         },
         retry: 2,
@@ -26,7 +26,7 @@ export default function Cookies() {
         <div className="min-h-screen py-32 px-6 bg-transparent">
             <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">
-                    {page?.title || 'Cookie Policy'}
+                    {page?.title || 'Disclaimer'}
                 </h1>
                 
                 {isLoading ? (
@@ -61,31 +61,31 @@ export default function Cookies() {
                     <div className="prose prose-lg prose-invert max-w-none text-gray-300">
                         <p className="text-xl text-gray-400 mb-8">Last Updated: 22nd Nov 2022</p>
                         
-                        <p className="mb-6 leading-relaxed">EyE PunE uses cookies and similar technologies to improve website functionality, analytics, and advertising performance.</p>
+                        <p className="mb-6 leading-relaxed">All services provided by EyE PunE are based on professional expertise, industry practices, and strategic recommendations.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">1. What Are Cookies?</h2>
-                        <p className="mb-6 leading-relaxed">Cookies are small text files stored on your device that help improve browsing experience and website functionality.</p>
-                        
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. How We Use Cookies</h2>
-                        <p className="mb-4 leading-relaxed font-semibold">We may use cookies for:</p>
+                        <h2 className="text-2xl font-bold text-white mt-8 mb-4">Performance Disclaimers</h2>
+                        <p className="mb-6 leading-relaxed">EyE PunE does not guarantee:</p>
                         <ul className="list-disc pl-6 mb-6 space-y-2">
-                            <li>Website analytics</li>
-                            <li>Session management</li>
-                            <li>Advertising optimization</li>
-                            <li>Retargeting campaigns</li>
-                            <li>Performance tracking</li>
+                            <li>Specific revenue outcomes</li>
+                            <li>Search engine rankings</li>
+                            <li>Viral social media performance</li>
+                            <li>Platform approvals</li>
+                            <li>Guaranteed lead generation</li>
+                            <li>Platform stability or uptime</li>
                         </ul>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Third-Party Cookies</h2>
-                        <p className="mb-6 leading-relaxed">Third-party services such as Google Analytics, Meta Pixel, and advertising platforms may place cookies on your device.</p>
+                        <h2 className="text-2xl font-bold text-white mt-8 mb-4">External Variables</h2>
+                        <p className="mb-6 leading-relaxed">Results vary depending on:</p>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>Budget</li>
+                            <li>Competition</li>
+                            <li>Audience behavior</li>
+                            <li>Market conditions</li>
+                            <li>Platform algorithms</li>
+                            <li>Client responsiveness</li>
+                        </ul>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Managing Cookies</h2>
-                        <p className="mb-6 leading-relaxed">Users can disable or manage cookies through browser settings. Disabling cookies may affect certain website functionalities.</p>
-                        
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">Contact Information</h2>
-                        <p className="mb-2 leading-relaxed"><strong>EyE PunE</strong></p>
-                        <p className="mb-2 leading-relaxed">Website: <a href="https://www.eyepune.com" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300">https://www.eyepune.com</a></p>
-                        <p className="mb-6 leading-relaxed">Email: <a href="mailto:connect@eyepune.com" className="text-red-400 hover:text-red-300">connect@eyepune.com</a></p>
+                        <p className="mb-6 leading-relaxed font-semibold text-gray-400">All content and information provided on this website are for general informational purposes only.</p>
                     </div>
                 )}
             </div>

@@ -4,11 +4,11 @@ import { base44 } from '@/api/base44Client';
 import ReactMarkdown from 'react-markdown';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function Cookies() {
+export default function RefundPolicy() {
     const { data: page, isLoading } = useQuery({
-        queryKey: ['cms-page', 'cookie-policy'],
+        queryKey: ['cms-page', 'refund-policy'],
         queryFn: async () => {
-            const pages = await base44.entities.CMS_Page.filter({ slug: 'cookie-policy' });
+            const pages = await base44.entities.CMS_Page.filter({ slug: 'refund-policy' });
             return pages.length > 0 ? pages[0] : null;
         },
         retry: 2,
@@ -26,7 +26,7 @@ export default function Cookies() {
         <div className="min-h-screen py-32 px-6 bg-transparent">
             <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">
-                    {page?.title || 'Cookie Policy'}
+                    {page?.title || 'Refund & Cancellation Policy'}
                 </h1>
                 
                 {isLoading ? (
@@ -61,31 +61,23 @@ export default function Cookies() {
                     <div className="prose prose-lg prose-invert max-w-none text-gray-300">
                         <p className="text-xl text-gray-400 mb-8">Last Updated: 22nd Nov 2022</p>
                         
-                        <p className="mb-6 leading-relaxed">EyE PunE uses cookies and similar technologies to improve website functionality, analytics, and advertising performance.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">1. Service Payments</h2>
+                        <p className="mb-6 leading-relaxed">All retainers, consulting fees, milestone payments, and project charges are non-refundable once work has commenced.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">1. What Are Cookies?</h2>
-                        <p className="mb-6 leading-relaxed">Cookies are small text files stored on your device that help improve browsing experience and website functionality.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. Advertising Spend</h2>
+                        <p className="mb-6 leading-relaxed">Advertising budgets paid to Meta, Google, LinkedIn, YouTube, or other advertising platforms are non-refundable under any circumstances.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. How We Use Cookies</h2>
-                        <p className="mb-4 leading-relaxed font-semibold">We may use cookies for:</p>
-                        <ul className="list-disc pl-6 mb-6 space-y-2">
-                            <li>Website analytics</li>
-                            <li>Session management</li>
-                            <li>Advertising optimization</li>
-                            <li>Retargeting campaigns</li>
-                            <li>Performance tracking</li>
-                        </ul>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Subscription & Retainer Services</h2>
+                        <p className="mb-6 leading-relaxed">Monthly retainers automatically renew unless cancelled in writing prior to the next billing cycle.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Third-Party Cookies</h2>
-                        <p className="mb-6 leading-relaxed">Third-party services such as Google Analytics, Meta Pixel, and advertising platforms may place cookies on your device.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Cancellation Notice</h2>
+                        <p className="mb-6 leading-relaxed">Clients must provide written notice before cancellation. Work completed up to the cancellation date remains fully billable.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Managing Cookies</h2>
-                        <p className="mb-6 leading-relaxed">Users can disable or manage cookies through browser settings. Disabling cookies may affect certain website functionalities.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">5. Project Delays</h2>
+                        <p className="mb-6 leading-relaxed">EyE PunE is not responsible for delays caused by delayed approvals, missing assets, delayed communication, platform-related issues, or third-party service interruptions.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">Contact Information</h2>
-                        <p className="mb-2 leading-relaxed"><strong>EyE PunE</strong></p>
-                        <p className="mb-2 leading-relaxed">Website: <a href="https://www.eyepune.com" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300">https://www.eyepune.com</a></p>
-                        <p className="mb-6 leading-relaxed">Email: <a href="mailto:connect@eyepune.com" className="text-red-400 hover:text-red-300">connect@eyepune.com</a></p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">6. Chargebacks & Payment Disputes</h2>
+                        <p className="mb-6 leading-relaxed">Unauthorized chargebacks or payment disputes may result in immediate service suspension, legal recovery action, or termination of services.</p>
                     </div>
                 )}
             </div>

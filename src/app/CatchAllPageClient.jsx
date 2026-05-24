@@ -72,6 +72,8 @@ import PageNotFound from '@/lib/PageNotFound';
 import PrivacyPolicy from '@/views/PrivacyPolicy';
 import Terms from '@/views/Terms';
 import Cookies from '@/views/Cookies';
+import RefundPolicy from '@/views/RefundPolicy';
+import Disclaimer from '@/views/Disclaimer';
 // ── Route → Component mapping ──────────────────────────────────────────
 const PAGE_MAP = {
   'Home': Home,
@@ -139,9 +141,13 @@ const PAGE_MAP = {
   'Privacy-Policy': PrivacyPolicy,
   'Terms-and-Conditions': Terms,
   'Cookie-Policy': Cookies,
+  'Refund-Policy': RefundPolicy,
+  'Disclaimer': Disclaimer,
   'privacy-policy': PrivacyPolicy,
   'terms-and-conditions': Terms,
   'cookie-policy': Cookies,
+  'refund-policy': RefundPolicy,
+  'disclaimer': Disclaimer,
 };
 
 // Pages that should NOT be wrapped in the Layout

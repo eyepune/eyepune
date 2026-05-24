@@ -59,28 +59,79 @@ export default function PrivacyPolicy() {
                 ) : (
                     // ── HARDCODED FALLBACK ──
                     <div className="prose prose-lg prose-invert max-w-none text-gray-300">
-                        <p className="text-xl text-gray-400 mb-8">Last updated: May 24, 2026</p>
+                        <p className="text-xl text-gray-400 mb-8">Last Updated: 22nd Nov 2022</p>
+                        
+                        <p className="mb-6 leading-relaxed">EyE PunE respects your privacy and is committed to protecting your personal data.</p>
                         
                         <h2 className="text-2xl font-bold text-white mt-12 mb-4">1. Information We Collect</h2>
-                        <p className="mb-6 leading-relaxed">At EyE PunE, we collect information that you provide directly to us, including when you create an account, request a proposal, or contact us for support. This may include your name, email address, phone number, and company details.</p>
-                        
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. How We Use Your Information</h2>
-                        <p className="mb-6 leading-relaxed">We use the information we collect to:</p>
+                        <p className="mb-4 leading-relaxed">We may collect:</p>
                         <ul className="list-disc pl-6 mb-6 space-y-2">
-                            <li>Provide, maintain, and improve our services.</li>
-                            <li>Process transactions and send related information.</li>
-                            <li>Send technical notices, updates, and support messages.</li>
-                            <li>Communicate with you about products, services, offers, and events.</li>
+                            <li>Name</li>
+                            <li>Email address</li>
+                            <li>Phone number</li>
+                            <li>Company/business details</li>
+                            <li>Website information</li>
+                            <li>Billing information</li>
+                            <li>Marketing preferences</li>
+                            <li>Device/browser information</li>
                         </ul>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Data Security</h2>
-                        <p className="mb-6 leading-relaxed">We implement appropriate technical and organizational measures to maintain the safety of your personal information. However, please note that no method of transmission over the Internet is 100% secure.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. How We Use Information</h2>
+                        <p className="mb-4 leading-relaxed">Your information may be used for:</p>
+                        <ul className="list-disc pl-6 mb-6 space-y-2">
+                            <li>Service delivery</li>
+                            <li>Communication</li>
+                            <li>Proposal generation</li>
+                            <li>Marketing campaigns</li>
+                            <li>Analytics & optimization</li>
+                            <li>Customer support</li>
+                            <li>Internal business operations</li>
+                        </ul>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Sharing of Information</h2>
-                        <p className="mb-6 leading-relaxed">We do not share your personal information with third parties except as described in this privacy policy, such as with vendors, consultants, and other service providers who need access to such information to carry out work on our behalf.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Cookies & Tracking Technologies</h2>
+                        <p className="mb-4 leading-relaxed">We may use:</p>
+                        <ul className="list-disc pl-6 mb-4 space-y-2">
+                            <li>Cookies</li>
+                            <li>Meta Pixel</li>
+                            <li>Google Analytics</li>
+                            <li>Conversion tracking tools</li>
+                            <li>CRM integrations</li>
+                            <li>Retargeting technologies</li>
+                        </ul>
+                        <p className="mb-6 leading-relaxed">These tools help improve user experience, advertising performance, and website functionality.</p>
                         
-                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">5. Contact Us</h2>
-                        <p className="mb-6 leading-relaxed">If you have any questions about this Privacy Policy, please contact us at privacy@eyepune.com.</p>
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Data Sharing</h2>
+                        <p className="mb-4 leading-relaxed">EyE PunE does not sell personal data.</p>
+                        <p className="mb-6 leading-relaxed">Information may be shared with trusted third-party vendors, platforms, and service providers strictly for operational and service-related purposes.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">5. Data Security</h2>
+                        <p className="mb-6 leading-relaxed">We implement commercially reasonable security measures to protect user data. However, no online system can guarantee absolute security.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">6. Third-Party Platforms</h2>
+                        <p className="mb-4 leading-relaxed">Our website and services may integrate with:</p>
+                        <ul className="list-disc pl-6 mb-4 space-y-2">
+                            <li>Meta</li>
+                            <li>Google</li>
+                            <li>LinkedIn</li>
+                            <li>YouTube</li>
+                            <li>CRM platforms</li>
+                            <li>Automation tools</li>
+                            <li>Payment gateways</li>
+                        </ul>
+                        <p className="mb-6 leading-relaxed">Users are subject to the respective policies of those third-party services.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">7. User Rights</h2>
+                        <p className="mb-4 leading-relaxed">Users may request:</p>
+                        <ul className="list-disc pl-6 mb-4 space-y-2">
+                            <li>Data access</li>
+                            <li>Data correction</li>
+                            <li>Data deletion</li>
+                            <li>Marketing opt-out</li>
+                        </ul>
+                        <p className="mb-6 leading-relaxed">by contacting EyE PunE directly at connect@eyepune.com.</p>
+                        
+                        <h2 className="text-2xl font-bold text-white mt-12 mb-4">8. Policy Updates</h2>
+                        <p className="mb-6 leading-relaxed">EyE PunE reserves the right to update this Privacy Policy at any time. Continued use of the website constitutes acceptance of updated policies.</p>
                     </div>
                 )}
             </div>

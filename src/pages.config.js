@@ -112,6 +112,8 @@ import aiIntelligenceHub from './views/AI_Intelligence_Hub';
 import PrivacyPolicy from './views/PrivacyPolicy';
 import Terms from './views/Terms';
 import Cookies from './views/Cookies';
+import RefundPolicy from './views/RefundPolicy';
+import Disclaimer from './views/Disclaimer';
 import __Layout from './Layout.jsx';
 
 
@@ -181,9 +183,13 @@ export const PAGES = {
     "Privacy-Policy": PrivacyPolicy,
     "Terms-and-Conditions": Terms,
     "Cookie-Policy": Cookies,
+    "Refund-Policy": RefundPolicy,
+    "Disclaimer": Disclaimer,
     "privacy-policy": PrivacyPolicy,
     "terms-and-conditions": Terms,
     "cookie-policy": Cookies,
+    "refund-policy": RefundPolicy,
+    "disclaimer": Disclaimer,
 }
 
 export const pagesConfig = {
