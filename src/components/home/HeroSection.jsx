@@ -203,7 +203,7 @@ export default function HeroSection() {
                         </motion.div>
 
                         {/* Trust markers */}
-                        <div className="flex items-center justify-center gap-6 md:gap-12 border-t border-white/10 pt-8 mt-4 w-full backdrop-blur-sm">
+                        <div className="flex items-center justify-center gap-6 md:gap-12 border-t border-white/10 pt-8 mt-4 w-full">
                             <div className="flex flex-col items-center">
                                 <span className="text-3xl font-black text-white drop-shadow-md">10+</span>
                                 <span className="text-xs text-gray-400 uppercase tracking-widest">Countries</span>
