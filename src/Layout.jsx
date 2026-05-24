@@ -128,7 +128,7 @@ function LayoutContent({ children, currentPageName }) {
             <div className="fixed inset-0 pointer-events-none overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/20 via-[#030000] to-[#010000] z-[-1]">
                 <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-red-800/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-[150px]" />
-                <HeroFloatingIcons opacity={0.3} />
+                <HeroFloatingIcons opacity={1} />
             </div>
 
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
