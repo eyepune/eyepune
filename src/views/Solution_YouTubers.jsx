@@ -105,8 +105,8 @@ export default function Solution_YouTubers() {
                                 transition={{ delay: i * 0.1 }}
                                 className="p-8 rounded-3xl bg-white/[0.015] backdrop-blur-md border border-white/5 hover:bg-white/[0.03] transition-all"
                             >
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 to-red-500 flex items-center justify-center mb-6 shadow-lg shadow-red-600/20">
-                                    <tool.icon className="w-7 h-7 text-white" />
+                                <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <tool.icon className="w-6 h-6 text-white" />
                                 </div>
                                 <h3 className="text-2xl font-bold mb-4">{tool.title}</h3>
                                 <p className="text-gray-500 leading-relaxed">{tool.desc}</p>

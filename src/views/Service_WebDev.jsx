@@ -124,7 +124,7 @@ export default function Service_WebDev() {
                             >
                                 <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-red-500/5 rounded-full blur-2xl group-hover:bg-red-500/10 transition-all" />
                                 <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <f.icon className="w-6 h-6 text-red-400" />
+                                    <f.icon className="w-6 h-6 text-white" />
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-3 tracking-tight">{f.title}</h3>
                                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>

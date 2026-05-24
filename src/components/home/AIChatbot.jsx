@@ -343,7 +343,7 @@ Assistant:`;
                             initial={{ opacity: 0, scale: 0.5, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ delay: 1, duration: 0.5 }}
-                            className="bg-white text-black px-4 py-2 rounded-2xl rounded-br-sm shadow-xl text-[11px] font-black uppercase tracking-tighter flex items-center gap-2 border border-red-500/20 pointer-events-auto"
+                            className="hidden md:flex bg-white text-black px-4 py-2 rounded-2xl rounded-br-sm shadow-xl text-[11px] font-black uppercase tracking-tighter items-center gap-2 border border-red-500/20 pointer-events-auto"
                         >
                             <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
                             {window.location.pathname.includes('Solution-Founders') ? "Founder: Get your 5-min AI Audit" :

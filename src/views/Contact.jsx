@@ -254,7 +254,7 @@ export default function Contact() {
                                                 {item.href ? (
                                                     <a href={item.href} className="flex items-center gap-4 group">
                                                         <div className="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center group-hover:bg-red-500/20 transition-colors flex-shrink-0">
-                                                            <item.icon className="w-5 h-5 text-red-400" />
+                                                            <item.icon className="w-5 h-5 text-white" />
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-600 uppercase tracking-wider">{item.label}</p>
@@ -264,7 +264,7 @@ export default function Contact() {
                                                 ) : (
                                                     <div className="flex items-center gap-4">
                                                         <div className="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0">
-                                                            <item.icon className="w-5 h-5 text-red-400" />
+                                                            <item.icon className="w-5 h-5 text-white" />
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-600 uppercase tracking-wider">{item.label}</p>

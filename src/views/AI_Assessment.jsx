@@ -449,7 +449,7 @@ At the very bottom, output: [CRM_SCORE: number]` }
             <div className="max-w-3xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-12">
                     <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-                        <Bot className="w-10 h-10 text-red-600" />
+                        <Bot className="w-10 h-10 text-white" />
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold mb-4 italic tracking-tighter">
                         {auditUrl ? 'AI Website Assessment' : 'AI Business Assessment'}
@@ -470,9 +470,9 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 <AnimatePresence mode="wait">
                     {isAuditLoadingStep && (
                         <motion.div key="loading" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center py-10 max-w-xl mx-auto">
-                            <div className="w-24 h-24 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-8 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] relative">
-                                <Bot className="w-12 h-12 text-red-500 animate-pulse" />
-                                <div className="absolute inset-0 border-2 border-dashed border-red-500/40 rounded-full animate-[spin_10s_linear_infinite]" />
+                            <div className="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-8 border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.1)] relative">
+                                <Bot className="w-12 h-12 text-white animate-pulse" />
+                                <div className="absolute inset-0 border-2 border-dashed border-white/40 rounded-full animate-[spin_10s_linear_infinite]" />
                             </div>
                             
                             <h2 className="text-3xl font-black mb-4 tracking-tight uppercase">

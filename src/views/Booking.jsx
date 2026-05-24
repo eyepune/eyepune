@@ -194,7 +194,7 @@ export default function Booking() {
                         className="text-center mb-12"
                     >
                         <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-                            <CalendarIcon className="w-10 h-10 text-red-600" />
+                            <CalendarIcon className="w-10 h-10 text-white" />
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold mb-4">
                             Book Your Free Consultation

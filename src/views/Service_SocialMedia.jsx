@@ -109,7 +109,7 @@ export default function Service_SocialMedia() {
                                 className="group p-7 rounded-2xl bg-white/[0.025] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all"
                             >
                                 <div className="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <f.icon className="w-5 h-5 text-red-400" />
+                                    <f.icon className="w-5 h-5 text-white" />
                                 </div>
                                 <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
                                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>

@@ -107,7 +107,7 @@ export default function Solution_Founders() {
                                 className="p-8 rounded-3xl bg-white/[0.015] backdrop-blur-md border border-white/5 hover:border-red-500/20 transition-all group"
                             >
                                 <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <feature.icon className="w-6 h-6 text-red-500" />
+                                    <feature.icon className="w-6 h-6 text-white" />
                                 </div>
                                 <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
                                 <p className="text-gray-500 leading-relaxed">{feature.desc}</p>

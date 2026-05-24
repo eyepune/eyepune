@@ -89,7 +89,7 @@ export default function Pricing() {
                                 {/* Category header */}
                                 <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/[0.06]">
                                     <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0">
-                                        <Icon className="w-6 h-6 text-red-400" />
+                                        <Icon className="w-6 h-6 text-white" />
                                     </div>
                                     <div>
                                         <h2 className="text-2xl sm:text-3xl font-black text-white">{cat.label}</h2>
