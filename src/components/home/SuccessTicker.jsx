@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { TrendingUp, Globe, Users, Zap, Award, BarChart3 } from 'lucide-react';
 
 const stats = [
-    { icon: TrendingUp, text: "₹3.5Cr+ Client ROI Generated", color: "text-red-500" },
     { icon: Globe, text: "124+ Global Projects Delivered", color: "text-orange-500" },
     { icon: Users, text: "98.4% Client Retention Rate", color: "text-red-400" },
     { icon: Award, text: "Top Rated Digital Agency in Pune", color: "text-orange-400" },
