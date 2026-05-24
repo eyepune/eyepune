@@ -241,7 +241,7 @@ Assistant:`;
     if (!isVisible || !isPathAllowed) return null;
 
     return (
-        <div className="fixed bottom-20 right-4 sm:right-6 z-[60] font-sans flex flex-col items-end pointer-events-none">
+        <div className="fixed bottom-6 right-6 z-[60] font-sans flex flex-col items-end pointer-events-none">
             <AnimatePresence>
                 {isOpen ? (
                     <motion.div

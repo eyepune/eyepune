@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import SEOHead, { generateFAQSchema, generateBreadcrumbSchema } from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 export default function Solution_Founders() {
     const faqs = [
@@ -23,7 +24,7 @@ export default function Solution_Founders() {
     ];
 
     return (
-        <div className="bg-[#040404] min-h-screen text-white pt-24">
+        <div className="bg-transparent min-h-screen text-white pt-24">
             <SEOHead
                 title="AI Growth Systems for Founders & CEOs | EyE PunE"
                 description="Engineered for high-stakes growth. EyE PunE provides founders with Multi-Model AI automated sales engines (OpenAI, Claude, Gemini), personal brand amplification, and elite productivity systems."
@@ -40,6 +41,7 @@ export default function Solution_Founders() {
             {/* Hero Section */}
             <section className="py-20 px-6 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.05)_0%,transparent_70%)]" />
+                <HeroFloatingIcons opacity={0.5} />
                 
                 <div className="max-w-5xl mx-auto text-center relative z-10">
                     <motion.div

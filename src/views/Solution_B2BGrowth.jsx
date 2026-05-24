@@ -57,7 +57,7 @@ const STEPS = [
 
 export default function Solution_B2BGrowth() {
     return (
-        <div className="bg-[#040404] text-white overflow-hidden">
+        <div className="bg-transparent text-white overflow-hidden">
             <SEOHead 
                 title="B2B Automated Growth Engine | LinkedIn & Email Outreach by EyE PunE"
                 description="The ultimate 24/7 client acquisition system. We build automated LinkedIn and Email engines that find, pitch, and qualify your ideal B2B clients globally."

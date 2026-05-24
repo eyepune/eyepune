@@ -36,7 +36,7 @@ export default function Services() {
         : packages.filter(pkg => pkg.category === activeCategory);
 
     return (
-        <div className="min-h-screen bg-[#040404] text-white py-20 relative overflow-hidden">
+        <div className="min-h-screen bg-transparent text-white py-20 relative overflow-hidden">
             {/* Grid bg */}
             <div className="absolute inset-0 opacity-[0.03]"
                 style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}

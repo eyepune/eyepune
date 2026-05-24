@@ -110,35 +110,36 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section ref={heroRef} className="relative min-h-screen pt-20 pb-2 flex items-center justify-center overflow-hidden bg-[#040404]">
+        <section ref={heroRef} className="relative min-h-screen pt-20 pb-2 flex items-center justify-center overflow-hidden bg-transparent">
             {/* Background elements */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-orange-600/5 rounded-full blur-[120px]" />
+                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-800/20 rounded-full blur-[120px]" />
+                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
 
                 {/* Floating Tech & Social Symbols */}
-                <HeroFloatingIcons opacity={0.3} />
+                <HeroFloatingIcons opacity={0.5} />
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
                     
-                    {/* Left Column: Content */}
+                    {/* Centered Content */}
                     <motion.div 
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
+                        className="flex flex-col items-center"
                     >
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-widest mb-8"
+                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-900/30 border border-rose-900/50 text-rose-300 text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md"
                         >
                             <Sparkles className="w-3 h-3" />
                             Global Growth Engine
                         </motion.div>
 
-                        <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-6 tracking-tight drop-shadow-2xl">
                             <div className="relative inline-flex flex-col h-[1.5em] overflow-hidden align-bottom">
                                 <AnimatePresence mode="wait">
                                     <motion.span
@@ -150,7 +151,7 @@ export default function HeroSection() {
                                             duration: 0.6, 
                                             ease: [0.23, 1, 0.32, 1] 
                                         }}
-                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500 pb-2"
+                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400 pb-2"
                                     >
                                         {words[index]}
                                     </motion.span>
@@ -176,8 +177,8 @@ export default function HeroSection() {
                             className="w-full max-w-xl mb-12"
                         >
                             <div className="relative group">
-                                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-orange-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                                <div className="relative flex items-center bg-[#111] border border-white/10 rounded-full p-1.5 focus-within:border-red-500/50 transition-all">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-red-800 to-red-600 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200"></div>
+                                <div className="relative flex items-center bg-[#0a0000] border border-white/10 rounded-full p-1.5 focus-within:border-red-600/70 transition-all">
                                     <Globe className="w-5 h-5 text-gray-500 ml-4 hidden sm:block" />
                                     <input 
                                         type="text" 
@@ -187,7 +188,7 @@ export default function HeroSection() {
                                         className="bg-transparent border-none focus:ring-0 text-white text-base py-3 px-4 flex-1 placeholder:text-gray-600 outline-none"
                                     />
                                     <Link href={url ? `/AI-Assessment?url=${encodeURIComponent(url)}` : createPageUrl("AI_Assessment")}>
-                                        <Button className="bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8">
+                                        <Button className="magnetic bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8 hover:scale-105 active:scale-95 duration-300">
                                             <span className="hidden sm:inline">Start Global AI Audit</span>
                                             <span className="sm:hidden">Audit</span>
                                             <ArrowRight className="w-4 h-4 ml-2" />
@@ -196,60 +197,29 @@ export default function HeroSection() {
                                 </div>
                             </div>
                             <p className="text-[11px] text-gray-600 mt-4 ml-6 uppercase tracking-widest flex items-center gap-2">
-                                <Zap className="w-3 h-3 text-orange-500" />
+                                <Zap className="w-3 h-3 text-rose-500" />
                                 Instant Global Analysis · No Credit Card Required
                             </p>
                         </motion.div>
 
                         {/* Trust markers */}
-                        <div className="flex items-center gap-8 border-t border-white/5 pt-4 mb-4">
-                            <div className="flex flex-col">
-                                <span className="text-2xl font-black text-white">10+</span>
-                                <span className="text-xs text-gray-500 uppercase tracking-widest">Countries Served</span>
+                        <div className="flex items-center justify-center gap-6 md:gap-12 border-t border-white/10 pt-8 mt-4 w-full backdrop-blur-sm">
+                            <div className="flex flex-col items-center">
+                                <span className="text-3xl font-black text-white drop-shadow-md">10+</span>
+                                <span className="text-xs text-gray-400 uppercase tracking-widest">Countries</span>
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-2xl font-black text-white">5X</span>
-                                <span className="text-xs text-gray-500 uppercase tracking-widest">Avg Growth ROI</span>
+                            <div className="w-px h-8 bg-white/10" />
+                            <div className="flex flex-col items-center">
+                                <span className="text-3xl font-black text-white drop-shadow-md">5X</span>
+                                <span className="text-xs text-gray-400 uppercase tracking-widest">Avg ROI</span>
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-2xl font-black text-white">NVIDIA</span>
-                                <span className="text-xs text-gray-500 uppercase tracking-widest">Accelerated</span>
+                            <div className="w-px h-8 bg-white/10" />
+                            <div className="flex flex-col items-center">
+                                <span className="text-3xl font-black text-white drop-shadow-md">NVIDIA</span>
+                                <span className="text-xs text-gray-400 uppercase tracking-widest">Accelerated</span>
                             </div>
                         </div>
                     </motion.div>
-
-                    {/* Right Column: Animated Eye */}
-                    <motion.div 
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="flex justify-center lg:justify-end items-center"
-                    >
-                        <div className="relative group">
-                            {/* Floating decorative elements */}
-                            <motion.div
-                                animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute -top-10 -right-10 p-4 rounded-2xl bg-[#111] border border-white/10 shadow-2xl z-20 hidden md:block"
-                            >
-                                <Zap className="w-8 h-8 text-orange-500" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute -bottom-10 -left-10 p-4 rounded-2xl bg-[#111] border border-white/10 shadow-2xl z-20 hidden md:block"
-                            >
-                                <ShieldCheck className="w-8 h-8 text-red-500" />
-                            </motion.div>
-
-                            <AnimatedEye />
-                            
-                            {/* Orbital Rings */}
-                            <div className="absolute inset-0 border border-white/5 rounded-full scale-[1.5] pointer-events-none" />
-                            <div className="absolute inset-0 border border-white/5 rounded-full scale-[2] pointer-events-none opacity-50" />
-                        </div>
-                    </motion.div>
-
                 </div>
             </div>
 

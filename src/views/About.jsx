@@ -38,7 +38,7 @@ function SectionTag({ children }) {
 
 export default function About() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
         <SEOHead
             title="The Story of EyE PunE – Global AI Growth & Multi-Model Intelligence Hub"
             description="Founded in 2022, EyE PunE has evolved into a global AI-agnostic growth engine. We orchestrate OpenAI, Anthropic, Google Gemini, and Meta systems to deliver 5x ROI for ambitious brands worldwide."

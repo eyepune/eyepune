@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import SEOHead, { generateFAQSchema, generateBreadcrumbSchema } from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 const AI_ECOSYSTEMS = [
     {
@@ -41,7 +42,7 @@ const AI_ECOSYSTEMS = [
 
 export default function AI_Intelligence_Hub() {
     return (
-        <div className="bg-[#040404] min-h-screen text-white pt-24">
+        <div className="bg-transparent min-h-screen text-white pt-24">
             <SEOHead
                 title="Global AI Intelligence Hub | Multi-Model Automation by EyE PunE"
                 description="Explore EyE PunE's AI Intelligence Hub. We integrate the world's most powerful AI models—OpenAI, Claude, Gemini, Llama, and NVIDIA—to build elite growth engines for global businesses."

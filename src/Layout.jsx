@@ -121,7 +121,7 @@ function LayoutContent({ children, currentPageName }) {
     const isPublicPage = !isAdminPage && !isClientPage;
 
     return (
-        <div className="min-h-screen bg-[#040404] text-white">
+        <div className="min-h-screen bg-transparent text-white">
             <CustomCursor />
             <ExitIntentPopup />
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${

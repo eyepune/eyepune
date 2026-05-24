@@ -26,12 +26,12 @@ const icons = [
     { Icon: ShieldCheck, x: "85%", y: "25%", delay: 1.2 },
 ];
 
-export default function HeroFloatingIcons({ opacity = 0.25 }) {
+export default function HeroFloatingIcons({ opacity = 0.5 }) {
     return (
         <div 
             className="absolute inset-0 pointer-events-none overflow-hidden"
             style={{ 
-                opacity: 0.25,
+                opacity: opacity,
                 maskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)',
                 WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)'
             }}

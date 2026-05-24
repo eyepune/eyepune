@@ -34,7 +34,7 @@ export default function Pricing() {
         planNames.map(name => plans.find(p => p.name === name)).filter(Boolean);
 
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
         <SEOHead
             title="Growth Packages & Pricing – Web Design, AI & Marketing in Pune"
             description="Explore transparent pricing for Social Media Growth (₹30k+), Custom Web Dev (₹25k+), and AI Business Automation (₹40k+). ROI-focused packages designed for Pune businesses of all sizes."

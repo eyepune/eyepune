@@ -4,6 +4,9 @@ import { Providers } from './providers';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import AIChatbot from '@/components/home/AIChatbot';
 import SEO_JSONLD from '@/components/seo/SEO_JSONLD';
+import SmoothScroll from '@/components/3d/SmoothScroll';
+import GlobalCanvas from '@/components/3d/GlobalCanvas';
+import PremiumEffects from '@/components/shared/PremiumEffects';
 import { Outfit, Inter } from 'next/font/google';
 
 const outfit = Outfit({
@@ -93,12 +96,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
       <CSPostHogProvider>
-        <body className="min-h-screen bg-[#040404] text-white antialiased font-sans">
+        <body className="min-h-screen bg-transparent text-white antialiased font-sans">
           <SEO_JSONLD />
           <GoogleAnalytics />
           <Providers>
-            {children}
-            <AIChatbot />
+            <SmoothScroll>
+              <GlobalCanvas />
+              <PremiumEffects />
+              {children}
+              <AIChatbot />
+            </SmoothScroll>
           </Providers>
         </body>
       </CSPostHogProvider>

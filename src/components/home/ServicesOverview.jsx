@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
+import GlowCard from '@/components/shared/GlowCard';
 
 const services = [
     {
@@ -94,9 +95,8 @@ export default function ServicesOverview() {
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                         >
                             <Link href={createPageUrl(service.page)}>
-                                <div className="group relative p-8 rounded-3xl bg-white/[0.02] border border-white/[0.05] hover:border-red-500/30 transition-all duration-500 hover:bg-white/[0.04] cursor-pointer h-full">
-                                    {/* Glow effect on hover */}
-                                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-red-600/0 to-red-500/0 group-hover:from-red-600/5 group-hover:to-red-500/5 transition-all duration-500" />
+                                <GlowCard className="group p-8 h-full cursor-pointer">
+                                    {/* Glow effect on hover handled by GlowCard */}
                                     
                                     <div className="relative z-10">
                                         <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6`}>
@@ -115,7 +115,7 @@ export default function ServicesOverview() {
                                             <ArrowUpRight className="w-6 h-6 text-gray-600 group-hover:text-red-500 transition-all group-hover:translate-x-1 group-hover:-translate-y-1 flex-shrink-0 ml-4" />
                                         </div>
                                     </div>
-                                </div>
+                                </GlowCard>
                             </Link>
                         </motion.div>
                     ))}

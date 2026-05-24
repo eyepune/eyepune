@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 
 export default function GlowCard({ children, className = '', glowColor = 'rgba(239,68,68,0.3)' }) {
     const cardRef = useRef(null);
@@ -11,12 +12,14 @@ export default function GlowCard({ children, className = '', glowColor = 'rgba(2
     };
 
     return (
-        <div
+        <motion.div
             ref={cardRef}
-            className={`relative overflow-hidden ${className}`}
+            className={`relative overflow-hidden ${className} border border-white/5 transition-all duration-500 hover:border-red-500/30 group bg-white/[0.02] backdrop-blur-md`}
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+            whileHover={{ y: -6, scale: 1.01 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
             {hovered && (
                 <div
@@ -30,7 +33,7 @@ export default function GlowCard({ children, className = '', glowColor = 'rgba(2
                     }}
                 />
             )}
-            <div className="relative z-10">{children}</div>
-        </div>
+            <div className="relative z-10 h-full">{children}</div>
+        </motion.div>
     );
 }

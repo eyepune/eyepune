@@ -15,7 +15,7 @@ const services = [
 
 export default function ServicesSection() {
     return (
-        <section className="py-32 relative bg-[#040404] overflow-hidden">
+        <section className="py-32 relative bg-transparent overflow-hidden">
             {/* Section label watermark */}
             <div className="absolute -right-20 top-1/2 -translate-y-1/2 text-[180px] font-black text-white/[0.015] select-none pointer-events-none leading-none">
                 SERVICES

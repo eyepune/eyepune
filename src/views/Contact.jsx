@@ -117,7 +117,7 @@ export default function Contact() {
                 structuredData={{"@context":"https://schema.org","@type":"ContactPage","name":"Contact EyE PunE","description":"Get in touch with EyE PunE for a free business growth consultation."}}
             />
 
-            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+            <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
 
                 {/* ── HERO ── */}
                 <section className="relative py-24 overflow-hidden">

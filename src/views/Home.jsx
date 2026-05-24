@@ -13,6 +13,7 @@ import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LexProSection from "@/components/home/LexProSection";
 import CTASection from "@/components/home/CTASection";
 import AIO_FAQ from "@/components/home/AIO_FAQ";
+import Scroll3DReveal from "@/components/shared/Scroll3DReveal";
 
 const HOME_FAQS = [
     {
@@ -39,26 +40,33 @@ export default function Home() {
                     generateFAQSchema(HOME_FAQS)
                 ]}
             />
-
-            <div className="bg-[#040404] text-white overflow-x-hidden">
+            <div className="bg-transparent text-white">
 
                 {/* 1. Hero — animated eye canvas + typewriter */}
                 <HeroSection />
 
                 {/* 2. Success Ticker — Live ROI & Social Proof */}
-                <SuccessTicker />
+                <Scroll3DReveal direction="up" rotation={false} delay={0.2}>
+                    <SuccessTicker />
+                </Scroll3DReveal>
 
                 {/* 3. Services — editorial list layout */}
-                <ServicesSection />
+                <Scroll3DReveal direction="up" rotation={true} delay={0.1}>
+                    <ServicesSection />
+                </Scroll3DReveal>
 
                 {/* 4. Why EyE PunE */}
-                <WhyChooseUs />
+                <Scroll3DReveal direction="scale" rotation={true}>
+                    <WhyChooseUs />
+                </Scroll3DReveal>
 
                 {/* 5. Lex Pro product spotlight */}
-                <LexProSection />
+                <Scroll3DReveal direction="right" rotation={true}>
+                    <LexProSection />
+                </Scroll3DReveal>
 
                 {/* 6. Testimonials */}
-                <section className="py-32 bg-[#040404] relative">
+                <section className="py-32 bg-transparent relative">
                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/15 to-transparent" />
                     <div className="max-w-7xl mx-auto px-6">
                         <motion.p
@@ -100,10 +108,14 @@ export default function Home() {
                 </section>
 
                 {/* 6. AIO FAQ — optimized for AI bots and users */}
-                <AIO_FAQ />
+                <Scroll3DReveal direction="up" rotation={true}>
+                    <AIO_FAQ />
+                </Scroll3DReveal>
 
                 {/* 7. Final CTA */}
-                <CTASection />
+                <Scroll3DReveal direction="scale" rotation={false}>
+                    <CTASection />
+                </Scroll3DReveal>
 
             </div>
         </>

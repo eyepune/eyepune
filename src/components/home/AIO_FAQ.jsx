@@ -23,7 +23,7 @@ const aiFaqs = [
 
 export default function AIO_FAQ() {
     return (
-        <section className="py-32 px-6 bg-[#040404] relative overflow-hidden">
+        <section className="py-32 px-6 bg-transparent relative overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/5 blur-[120px] rounded-full pointer-events-none" />
             
             <div className="max-w-4xl mx-auto relative z-10">

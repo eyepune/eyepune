@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import SEOHead, { generateFAQSchema, generateBreadcrumbSchema } from "@/components/seo/SEOHead";
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 export default function Solution_YouTubers() {
     const faqs = [
@@ -23,7 +24,7 @@ export default function Solution_YouTubers() {
     ];
 
     return (
-        <div className="bg-[#040404] min-h-screen text-white pt-24">
+        <div className="bg-transparent min-h-screen text-white pt-24">
             <SEOHead
                 title="YouTube Growth & Content Automation Systems | EyE PunE"
                 description="Maximize your reach and minimize your workload. EyE PunE provides YouTubers and Creators with Multi-Model AI content engines (OpenAI, Anthropic, Meta), viral distribution, and growth systems."
@@ -168,7 +169,7 @@ export default function Solution_YouTubers() {
             {/* Final CTA */}
             <section className="py-32 px-6">
                 <div className="max-w-4xl mx-auto p-1 text-center bg-gradient-to-r from-red-600/20 via-orange-600/20 to-red-600/20 rounded-[3rem]">
-                    <div className="bg-[#040404] rounded-[2.9rem] p-12 sm:p-20">
+                    <div className="bg-transparent rounded-[2.9rem] p-12 sm:p-20">
                         <h2 className="text-4xl md:text-5xl font-black mb-8">Build Your Content Empire.</h2>
                         <p className="text-gray-400 text-lg mb-12">
                             Join 50+ creators who have automated their distribution and scaled their reach by 500%.

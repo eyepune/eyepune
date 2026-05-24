@@ -89,7 +89,7 @@ const servicesSchema = {
 
 export default function Services_Detail() {
     return (
-        <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+        <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
         <SEOHead
             title="Digital Marketing Services in Pune | Social Media, Web Dev, AI Automation – EyE PunE"
             description="EyE PunE offers complete digital marketing services in Pune: social media management, website development, AI automation, paid ads, branding and lead generation. Get a free consultation today."

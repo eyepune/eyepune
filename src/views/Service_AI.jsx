@@ -54,7 +54,7 @@ export default function Service_AI() {
                 }}
             />
 
-            <div className="min-h-screen bg-[#040404] text-white overflow-x-hidden pt-20">
+            <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03]"
