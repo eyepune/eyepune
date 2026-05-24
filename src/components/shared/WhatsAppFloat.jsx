@@ -22,7 +22,7 @@ export default function WhatsAppFloat() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 8, scale: 0.92 }}
                         transition={{ duration: 0.18 }}
-                        className="absolute bottom-16 left-0 w-52 bg-[#111] border border-white/10 rounded-2xl p-4 shadow-2xl text-left pointer-events-auto"
+                        className="absolute bottom-16 left-0 w-52 bg-black border border-white/10 rounded-2xl p-4 shadow-2xl text-left pointer-events-auto"
                         style={{ zIndex: 10 }}
                     >
                         <button
