@@ -84,12 +84,14 @@ export default function CustomCursor() {
                         cx="50" cy="55" r="14" 
                         stroke="#ef4444" 
                         strokeWidth="5"
-                        animate={{ r: isHovering ? 16 : 14 }}
+                        style={{ transformOrigin: '50px 55px' }}
+                        animate={{ scale: isHovering ? 1.14 : 1 }}
                     />
                     {/* Pupil */}
                     <motion.circle 
                         cx="50" cy="55" r="6" 
                         fill="#ef4444"
+                        style={{ transformOrigin: '50px 55px' }}
                         animate={{ scale: isHovering ? 1.3 : 1 }}
                     />
                 </svg>
