@@ -8,21 +8,19 @@ import {
 } from 'lucide-react';
 
 const icons = [
-    // Tech & AI
-    { Icon: Bot, x: "8%", delay: 0, duration: 25 },
-    { Icon: Cpu, x: "22%", delay: 10, duration: 22 },
-    { Icon: Database, x: "45%", delay: 7, duration: 35 },
-    { Icon: Code, x: "65%", delay: 8, duration: 29 },
-    { Icon: Zap, x: "85%", delay: 12, duration: 26 },
-    { Icon: Sparkles, x: "28%", delay: 15, duration: 27 },
-    
-    // Marketing & Growth
-    { Icon: TrendingUp, x: "15%", delay: 5, duration: 30 },
-    { Icon: Megaphone, x: "35%", delay: 2, duration: 28 },
-    { Icon: Target, x: "55%", delay: 1, duration: 24 },
-    { Icon: LineChart, x: "75%", delay: 4, duration: 31 },
-    { Icon: Users, x: "92%", delay: 6, duration: 33 },
-    { Icon: Share2, x: "80%", delay: 18, duration: 32 },
+    // Evenly distributed across 100% of the screen width
+    { Icon: Bot, x: "4%", delay: 0, duration: 28 },
+    { Icon: TrendingUp, x: "12%", delay: 14, duration: 24 },
+    { Icon: Cpu, x: "20%", delay: 5, duration: 32 },
+    { Icon: Sparkles, x: "28%", delay: 18, duration: 25 },
+    { Icon: Megaphone, x: "37%", delay: 2, duration: 30 },
+    { Icon: Database, x: "46%", delay: 11, duration: 27 },
+    { Icon: Target, x: "55%", delay: 7, duration: 33 },
+    { Icon: Code, x: "64%", delay: 20, duration: 26 },
+    { Icon: LineChart, x: "73%", delay: 4, duration: 31 },
+    { Icon: Share2, x: "81%", delay: 16, duration: 28 },
+    { Icon: Zap, x: "89%", delay: 9, duration: 34 },
+    { Icon: Users, x: "96%", delay: 1, duration: 25 },
 ];
 
 export default function HeroFloatingIcons({ opacity = 0.5 }) {
