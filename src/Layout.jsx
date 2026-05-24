@@ -20,7 +20,6 @@ import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
 import CustomCursor from "@/components/shared/CustomCursor";
-import HeroFloatingIcons from "@/components/shared/HeroFloatingIcons";
 
 const footerLinks = {
     Services: [
@@ -123,14 +122,7 @@ function LayoutContent({ children, currentPageName }) {
     const isPublicPage = !isAdminPage && !isClientPage;
 
     return (
-        <div className="min-h-screen bg-[#030000] text-white relative">
-            {/* Global Elegant Background Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
-                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-800/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
-                <HeroFloatingIcons opacity={0.25} />
-            </div>
-
+        <div className="min-h-screen bg-transparent text-white">
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 scrolled || mobileMenuOpen
                     ? 'bg-black border-b border-white/[0.06] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
