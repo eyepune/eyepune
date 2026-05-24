@@ -43,19 +43,19 @@ export async function generateAndPostToLinkedin(type = 'random') {
         }
 
         // 2. Generate Content via LLM
-        const prompt = `Act as an elite Social Media Manager for "EyE PunE", an AI-powered digital growth agency.
+        const prompt = `Act as an elite Global Social Media Manager for "EyE PunE", an enterprise AI Growth Partner.
 Generate a high-impact LinkedIn post of type: ${type.toUpperCase()}.
 
 Agency Context:
-- Services: AI Automations, Premium Web Dev, Social Media Mastery, Paid Ads, Branding.
-- Value Prop: We combine human creativity with AI efficiency to scale businesses.
-- Target: Business owners, entrepreneurs, and marketing directors.
+- Services: Multi-Model AI Automations (NVIDIA, OpenAI, Anthropic), Enterprise Web Architectures (Next.js, Vercel, Supabase), Performance Marketing.
+- Value Prop: We build sub-2-second loading digital infrastructure and AI-driven sales engines to scale global B2B brands.
+- Target: Founders, C-Suite executives, and Enterprise Directors.
 
 Rules:
-- Professional yet bold and futuristic tone.
-- Include 3-5 relevant hashtags.
-- Include a clear call to action (e.g., Book a Vision Sync call at eyepune.com/Booking).
-- Keep it engaging (use line breaks and emojis).
+- Professional, authoritative, visionary, and highly technical tone.
+- Include 3-5 relevant hashtags (e.g., #AIAutomation #EnterpriseGrowth).
+- Include a clear call to action (e.g., Run a Free AI Assessment for your business at eyepune.com/AI-Assessment).
+- Keep it engaging (use clean line breaks and spacing, avoid excessive emojis).
 - Do NOT use placeholders like [Link] or [Company Name]. Use "EyE PunE" and "eyepune.com".
 
 Return the result as a raw text string suitable for a LinkedIn post.`;
