@@ -216,7 +216,7 @@ function LayoutContent({ children, currentPageName }) {
                             {user ? (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <button className="w-9 h-9 rounded-full bg-gradient-to-br from-red-600 to-red-500 text-white flex items-center justify-center text-sm font-bold ring-2 ring-red-500/20 hover:ring-red-500/50 transition-all">
+                                        <button aria-label="Open User Menu" className="w-9 h-9 rounded-full bg-gradient-to-br from-red-600 to-red-500 text-white flex items-center justify-center text-sm font-bold ring-2 ring-red-500/20 hover:ring-red-500/50 transition-all">
                                             {user.full_name?.charAt(0) || user.email?.charAt(0)}
                                         </button>
                                     </DropdownMenuTrigger>
@@ -244,6 +244,7 @@ function LayoutContent({ children, currentPageName }) {
 
                         {/* Mobile hamburger */}
                         <button
+                            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                             className="lg:hidden w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-300 hover:border-red-500/40 transition-all"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
@@ -408,11 +409,12 @@ function LayoutContent({ children, currentPageName }) {
                                 {/* Social */}
                                 <div className="flex gap-4 mt-6">
                                     {[
-                                        { icon: Instagram, href: 'https://instagram.com/eyepune', color: 'hover:text-pink-500' },
-                                        { icon: Linkedin, href: 'https://linkedin.com/company/eyepune', color: 'hover:text-blue-500' },
-                                        { icon: MessageCircle, href: 'https://wa.me/919284712033', color: 'hover:text-emerald-500' },
+                                        { icon: Instagram, href: 'https://instagram.com/eyepune', color: 'hover:text-pink-500', label: 'Instagram' },
+                                        { icon: Linkedin, href: 'https://linkedin.com/company/eyepune', color: 'hover:text-blue-500', label: 'LinkedIn' },
+                                        { icon: MessageCircle, href: 'https://wa.me/919284712033', color: 'hover:text-emerald-500', label: 'WhatsApp' },
                                     ].map((s, i) => (
                                         <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+                                            aria-label={`Follow us on ${s.label}`}
                                             whileHover={{ y: -3, scale: 1.1 }}
                                             className={cn(
                                                 "w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-500 transition-all",
