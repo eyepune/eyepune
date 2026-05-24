@@ -125,10 +125,18 @@ function LayoutContent({ children, currentPageName }) {
     return (
         <div className="min-h-screen bg-transparent text-white relative">
             {/* Global Elegant Background Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden bg-[#030000] z-[-1]">
-                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-800/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
-                <HeroFloatingIcons opacity={0.25} />
+            <div className="fixed inset-0 pointer-events-none overflow-hidden bg-[#0a0000] z-[-1]">
+                {/* Subtle Grid Pattern */}
+                <div 
+                    className="absolute inset-0 opacity-20"
+                    style={{
+                        backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`,
+                        backgroundSize: '40px 40px'
+                    }}
+                />
+                <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-red-900/15 rounded-full blur-[140px]" />
+                <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[140px]" />
+                <HeroFloatingIcons opacity={0.3} />
             </div>
 
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
