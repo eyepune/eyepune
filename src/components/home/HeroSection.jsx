@@ -178,19 +178,20 @@ export default function HeroSection() {
                         >
                             <div className="relative group">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-red-800 to-red-600 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200"></div>
-                                <div className="relative flex items-center bg-[#0a0000] border border-white/10 rounded-full p-1.5 focus-within:border-red-600/70 transition-all">
-                                    <Globe className="w-5 h-5 text-gray-500 ml-4 hidden sm:block" />
-                                    <input 
-                                        type="text" 
-                                        value={url}
-                                        onChange={(e) => setUrl(e.target.value)}
-                                        placeholder="Enter your global business URL"
-                                        className="bg-transparent border-none focus:ring-0 text-white text-base py-3 px-4 flex-1 placeholder:text-gray-600 outline-none"
-                                    />
-                                    <Link href={url ? `/AI-Assessment?url=${encodeURIComponent(url)}` : createPageUrl("AI_Assessment")}>
-                                        <Button className="magnetic bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8 hover:scale-105 active:scale-95 duration-300">
-                                            <span className="hidden sm:inline">Start Global AI Audit</span>
-                                            <span className="sm:hidden">Audit</span>
+                                <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center bg-[#0a0000] border border-white/10 rounded-2xl sm:rounded-full p-2 gap-2 sm:gap-0 focus-within:border-red-600/70 transition-all">
+                                    <div className="flex items-center flex-1">
+                                        <Globe className="w-5 h-5 text-gray-500 ml-4 hidden sm:block" />
+                                        <input 
+                                            type="text" 
+                                            value={url}
+                                            onChange={(e) => setUrl(e.target.value)}
+                                            placeholder="Enter your global business URL"
+                                            className="bg-transparent border-none focus:ring-0 text-white text-base py-3.5 px-4 flex-1 placeholder:text-gray-600 outline-none w-full"
+                                        />
+                                    </div>
+                                    <Link href={url ? `/AI-Assessment?url=${encodeURIComponent(url)}` : createPageUrl("AI_Assessment")} className="w-full sm:w-auto">
+                                        <Button className="magnetic bg-red-600 hover:bg-red-700 text-white rounded-xl sm:rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8 hover:scale-105 active:scale-95 duration-300 w-full justify-center">
+                                            <span>Start Global AI Audit</span>
                                             <ArrowRight className="w-4 h-4 ml-2" />
                                         </Button>
                                     </Link>
