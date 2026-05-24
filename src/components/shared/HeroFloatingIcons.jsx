@@ -9,14 +9,21 @@ import {
 } from 'lucide-react';
 
 const icons = [
-    { Icon: Bot, x: "15%", y: "20%", delay: 0 },
-    { Icon: Instagram, x: "35%", y: "15%", delay: 2 },
-    { Icon: Linkedin, x: "75%", y: "15%", delay: 1 },
-    { Icon: ShieldCheck, x: "85%", y: "45%", delay: 3 },
-    { Icon: Globe, x: "10%", y: "60%", delay: 5 },
-    { Icon: MessageCircle, x: "50%", y: "75%", delay: 2.5 },
-    { Icon: Sparkles, x: "70%", y: "80%", delay: 4 },
-    { Icon: Database, x: "30%", y: "85%", delay: 1.5 },
+    { Icon: Bot, x: "15%", y: "15%", delay: 0 },
+    { Icon: Instagram, x: "35%", y: "10%", delay: 2 },
+    { Icon: Facebook, x: "55%", y: "15%", delay: 4 },
+    { Icon: Linkedin, x: "75%", y: "10%", delay: 1 },
+    { Icon: Twitter, x: "92%", y: "15%", delay: 3 },
+    { Icon: Cpu, x: "10%", y: "45%", delay: 5 },
+    { Icon: Code, x: "30%", y: "40%", delay: 2.5 },
+    { Icon: Globe, x: "50%", y: "45%", delay: 1.5 },
+    { Icon: Zap, x: "70%", y: "30%", delay: 0.5 },
+    { Icon: Sparkles, x: "65%", y: "55%", delay: 4 },
+    { Icon: Command, x: "35%", y: "70%", delay: 1.5 },
+    { Icon: Hash, x: "55%", y: "75%", delay: 2 },
+    { Icon: Database, x: "15%", y: "85%", delay: 5 },
+    { Icon: MessageCircle, x: "5%", y: "65%", delay: 3 },
+    { Icon: ShieldCheck, x: "85%", y: "25%", delay: 1.2 },
 ];
 
 export default function HeroFloatingIcons({ opacity = 0.5 }) {
@@ -25,8 +32,8 @@ export default function HeroFloatingIcons({ opacity = 0.5 }) {
             className="absolute inset-0 pointer-events-none overflow-hidden"
             style={{ 
                 opacity: opacity,
-                maskImage: 'radial-gradient(circle at center, black 30%, transparent 90%)',
-                WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 90%)'
+                maskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)'
             }}
         >
             {icons.map((item, i) => (
@@ -34,14 +41,12 @@ export default function HeroFloatingIcons({ opacity = 0.5 }) {
                     key={i}
                     initial={{ opacity: 0 }}
                     animate={{ 
-                        opacity: 1,
-                        y: [0, -40, 0],
-                        rotateX: [0, 20, -20, 0],
-                        rotateY: [0, 30, -30, 0],
-                        rotateZ: [0, 10, -10, 0]
+                        opacity: 1, // Container handles the 0.25 total
+                        y: [0, -30, 0],
+                        rotate: [0, 15, -15, 0]
                     }}
                     transition={{ 
-                        duration: 15 + Math.random() * 10, 
+                        duration: 12 + Math.random() * 8, 
                         repeat: Infinity, 
                         ease: "easeInOut",
                         delay: item.delay
@@ -49,7 +54,7 @@ export default function HeroFloatingIcons({ opacity = 0.5 }) {
                     className="absolute text-white"
                     style={{ left: item.x, top: item.y }}
                 >
-                    <item.Icon className="w-24 h-24 md:w-32 md:h-32 opacity-100" strokeWidth={0.5} />
+                    <item.Icon className="w-12 h-12 md:w-24 md:h-24 opacity-100" strokeWidth={0.2} />
                 </motion.div>
             ))}
         </div>
