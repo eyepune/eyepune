@@ -9,12 +9,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import ReactMarkdown from 'react-markdown';
-import { Bot, ChevronRight, ChevronLeft, CheckCircle, Loader2, TrendingUp, AlertCircle, Lightbulb, Target, Zap, Award, Sparkles, Clock, Phone } from 'lucide-react';
+import { Bot, ChevronRight, ChevronLeft, CheckCircle, Loader2, TrendingUp, AlertCircle, Lightbulb, Target, Zap, Award, Sparkles, Clock, Phone, Brain, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from "@/utils";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 import SEOHead from '@/components/seo/SEOHead';
+
+const auditSteps = [
+  { id: 0, label: "Resolving secure DNS records & domain endpoints..." },
+  { id: 1, label: "Crawling layout DOM, tag hierarchies & page meta..." },
+  { id: 2, label: "Simulating Lighthouse performance and server latency..." },
+  { id: 3, label: "Mapping strategic CRM integrations & funnel barriers..." },
+  { id: 4, label: "Compiling personalized 90-day neural growth roadmap..." }
+];
 
 const questions = [
   { id: 'business_type', question: 'What type of business do you run?', type: 'input', placeholder: 'e.g., E-commerce, Consulting, SaaS, etc.' },
@@ -46,6 +54,7 @@ export default function AI_Assessment() {
     const [user, setUser] = useState(null);
     const [checkingAuth, setCheckingAuth] = useState(true);
     const [auditUrl, setAuditUrl] = useState('');
+    const [auditStep, setAuditStep] = useState(0);
 
     React.useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -65,6 +74,15 @@ export default function AI_Assessment() {
     const handleUrlAudit = async (targetUrl) => {
         setIsSubmitting(true);
         setIsGenerating(true);
+        setAuditStep(0);
+        
+        let intervalId = setInterval(() => {
+            setAuditStep(prev => {
+                if (prev < 4) return prev + 1;
+                clearInterval(intervalId);
+                return prev;
+            });
+        }, 2200);
         
         try {
             // 1. Scrape the URL
@@ -147,6 +165,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
             // Fall back to manual assessment
             setStep(0);
         } finally {
+            clearInterval(intervalId);
             setIsGenerating(false);
             setIsSubmitting(false);
         }
@@ -450,13 +469,58 @@ At the very bottom, output: [CRM_SCORE: number]` }
 
                 <AnimatePresence mode="wait">
                     {isAuditLoadingStep && (
-                        <motion.div key="loading" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center py-20">
-                            <Bot className="w-20 h-20 text-red-600 animate-pulse mx-auto mb-8" />
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4 italic">Running Global AI Audit...</h2>
-                            <p className="text-xl text-gray-400 max-w-xl mx-auto mb-8">
-                                We are scraping {auditUrl} and analyzing its tech stack, SEO, and performance gaps.
+                        <motion.div key="loading" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center py-10 max-w-xl mx-auto">
+                            <div className="w-24 h-24 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-8 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] relative">
+                                <Bot className="w-12 h-12 text-red-500 animate-pulse" />
+                                <div className="absolute inset-0 border-2 border-dashed border-red-500/40 rounded-full animate-[spin_10s_linear_infinite]" />
+                            </div>
+                            
+                            <h2 className="text-3xl font-black mb-4 tracking-tight uppercase">
+                                Neural Audit Running...
+                            </h2>
+                            <p className="text-gray-400 mb-10 text-base leading-relaxed">
+                                Analyzing tech stack, performance scores, and strategic CRM growth channels for <strong className="text-white font-semibold">{auditUrl}</strong>.
                             </p>
-                            <Loader2 className="w-12 h-12 animate-spin text-red-600 mx-auto" />
+                            
+                            {/* Visual Timeline Checklist */}
+                            <div className="space-y-4 text-left p-6 sm:p-8 rounded-2xl bg-white/[0.015] border border-white/5 backdrop-blur-md mb-8">
+                                {auditSteps.map((s, idx) => {
+                                    const isDone = auditStep > idx;
+                                    const isActive = auditStep === idx;
+                                    return (
+                                        <div key={s.id} className="flex items-center gap-4 transition-all duration-300">
+                                            {isDone ? (
+                                                <div className="w-6 h-6 rounded-full bg-red-500/20 border border-red-500/60 flex items-center justify-center shrink-0">
+                                                    <CheckCircle className="w-3.5 h-3.5 text-red-400" />
+                                                </div>
+                                            ) : isActive ? (
+                                                <div className="w-6 h-6 rounded-full bg-orange-500/20 border border-orange-500/60 flex items-center justify-center shrink-0 animate-pulse">
+                                                    <Loader2 className="w-3.5 h-3.5 text-orange-400 animate-spin" />
+                                                </div>
+                                            ) : (
+                                                <div className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
+                                                </div>
+                                            )}
+                                            
+                                            <span className={`text-sm sm:text-base font-medium transition-colors duration-300 ${
+                                                isDone 
+                                                    ? 'text-gray-500 line-through decoration-white/10' 
+                                                    : isActive 
+                                                        ? 'text-orange-400 font-semibold' 
+                                                        : 'text-gray-600'
+                                            }`}>
+                                                {s.label}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <p className="text-xs text-gray-600 uppercase tracking-widest flex items-center justify-center gap-2">
+                                <Zap className="w-3.5 h-3.5 text-rose-500" />
+                                Custom recommendation pipeline engaged
+                            </p>
                         </motion.div>
                     )}
                     {isContactStep && (
