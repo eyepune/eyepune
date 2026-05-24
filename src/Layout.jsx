@@ -123,8 +123,8 @@ function LayoutContent({ children, currentPageName }) {
     return (
         <div className="min-h-screen bg-transparent text-white">
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                scrolled
-                    ? 'bg-[#040404]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
+                scrolled || mobileMenuOpen
+                    ? 'bg-black border-b border-white/[0.06] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
                     : 'bg-transparent'
             }`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6">
