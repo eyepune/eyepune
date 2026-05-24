@@ -328,7 +328,7 @@ function LayoutContent({ children, currentPageName }) {
 
             {/* ── FOOTER ── */}
             {isPublicPage && (
-                <footer className="relative z-20 bg-transparent border-t border-white/[0.06] overflow-hidden">
+                <footer className="relative z-30 bg-transparent border-t border-white/[0.06] overflow-hidden">
                     {/* Top glow */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
 

@@ -13,7 +13,7 @@ export default function WhatsAppFloat() {
     }, []);
 
     return (
-        <div className="fixed bottom-6 left-6 z-50" style={{ isolation: 'isolate' }}>
+        <div className="fixed bottom-6 left-6 z-50 pointer-events-none" style={{ isolation: 'isolate' }}>
             {/* Tooltip — floats above the button */}
             <AnimatePresence>
                 {showTooltip && (
@@ -52,7 +52,7 @@ export default function WhatsAppFloat() {
                 whileTap={{ scale: 0.95 }}
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
-                className="relative flex w-14 h-14 rounded-full items-center justify-center"
+                className="relative flex w-14 h-14 rounded-full items-center justify-center pointer-events-auto"
                 style={{
                     background: 'linear-gradient(135deg, #25D366, #128C7E)',
                     boxShadow: '0 0 0 0 rgba(37,211,102,0.5)',

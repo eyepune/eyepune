@@ -337,13 +337,13 @@ Assistant:`;
                         )}
                     </motion.div>
                 ) : (
-                    <div className="relative flex flex-col items-end gap-3 pointer-events-auto">
+                    <div className="relative flex flex-col items-end gap-3 pointer-events-none">
                         {/* Sales Sniper Hook Badge */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.5, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ delay: 1, duration: 0.5 }}
-                            className="bg-white text-black px-4 py-2 rounded-2xl rounded-br-sm shadow-xl text-[11px] font-black uppercase tracking-tighter flex items-center gap-2 border border-red-500/20"
+                            className="bg-white text-black px-4 py-2 rounded-2xl rounded-br-sm shadow-xl text-[11px] font-black uppercase tracking-tighter flex items-center gap-2 border border-red-500/20 pointer-events-auto"
                         >
                             <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
                             {window.location.pathname.includes('Solution-Founders') ? "Founder: Get your 5-min AI Audit" :
@@ -358,7 +358,7 @@ Assistant:`;
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => setIsOpen(true)}
-                            className="bg-gradient-to-tr from-red-600 to-orange-600 p-5 rounded-full shadow-2xl shadow-red-600/40 relative group"
+                            className="bg-gradient-to-tr from-red-600 to-orange-600 p-5 rounded-full shadow-2xl shadow-red-600/40 relative group pointer-events-auto"
                         >
                             <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 border-4 border-[#040404] rounded-full z-10" />
                             <MessageSquare className="w-8 h-8 text-white group-hover:hidden" />
