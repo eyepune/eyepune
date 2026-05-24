@@ -40,9 +40,9 @@ export default function HeroFloatingIcons({ opacity = 0.5 }) {
                     style={{ left: item.x, top: "-10%" }}
                     initial={{ opacity: 0, y: 0, rotate: 0 }}
                     animate={{ 
-                        opacity: [0, 0.2, 0.6, 0.1, 0.5, 0.1, 0.4, 0], 
+                        opacity: [0, 0.3, 0.15, 0.3, 0], 
                         y: ["-10vh", "120vh"],
-                        rotate: [0, 180, 360]
+                        rotate: [0, 90]
                     }}
                     transition={{ 
                         duration: item.duration, 

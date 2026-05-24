@@ -15,13 +15,13 @@ const FEATURES = [
         title: "Hyper-Targeted Sourcing",
         description: "We don't just 'search.' We use AI to identify prospects with high intent based on recent hiring, funding, or technology shifts.",
         icon: Target,
-        color: "from-blue-600 to-cyan-500"
+        color: "from-red-600 to-orange-500"
     },
     {
         title: "AI LinkedIn Persona",
         description: "Automated profile optimization and connection strategies that build trust before you even send a message.",
         icon: Linkedin,
-        color: "from-blue-500 to-blue-700"
+        color: "from-red-500 to-red-700"
     },
     {
         title: "Multi-Channel Sequences",
@@ -33,7 +33,7 @@ const FEATURES = [
         title: "Automated Qualification",
         description: "Our bots handle the 'tire-kickers.' Only high-intent, qualified leads ever reach your calendar.",
         icon: Filter,
-        color: "from-purple-600 to-pink-500"
+        color: "from-red-600 to-orange-500"
     }
 ];
 
@@ -77,16 +77,16 @@ export default function Solution_B2BGrowth() {
 
             {/* 1. Hero Section */}
             <section className="relative pt-32 pb-20 px-6">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none" />
                 
                 <div className="max-w-7xl mx-auto text-center relative z-10">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 mb-8"
                     >
-                        <Zap className="w-4 h-4 text-blue-400" />
-                        <span className="text-xs font-bold tracking-widest uppercase text-blue-400">24/7 Client Acquisition</span>
+                        <Zap className="w-4 h-4 text-red-400" />
+                        <span className="text-xs font-bold tracking-widest uppercase text-red-400">24/7 Client Acquisition</span>
                     </motion.div>
                     
                     <motion.h1 
@@ -96,7 +96,7 @@ export default function Solution_B2BGrowth() {
                         className="text-6xl md:text-8xl font-black mb-8 leading-[0.9]"
                     >
                         Automated <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">
                             Growth Engine
                         </span>
                     </motion.h1>
@@ -117,7 +117,7 @@ export default function Solution_B2BGrowth() {
                         className="flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
                         <Link href={createPageUrl("Booking")}>
-                            <Button size="lg" className="bg-blue-600 hover:bg-blue-500 text-white rounded-full px-10 h-16 text-lg font-bold shadow-xl shadow-blue-600/20">
+                            <Button size="lg" className="bg-red-600 hover:bg-red-500 text-white rounded-full px-10 h-16 text-lg font-bold shadow-xl shadow-red-600/20">
                                 Launch Your Engine <ArrowRight className="ml-2 w-5 h-5" />
                             </Button>
                         </Link>
@@ -133,7 +133,7 @@ export default function Solution_B2BGrowth() {
             {/* 2. Visual Hook - The "System" */}
             <section className="py-20 px-6">
                 <div className="max-w-6xl mx-auto bg-white/[0.02] border border-white/5 rounded-[3rem] p-8 md:p-16 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-3xl rounded-full" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-3xl rounded-full" />
                     
                     <div className="grid md:grid-cols-2 gap-16 items-center">
                         <div>
@@ -149,14 +149,14 @@ export default function Solution_B2BGrowth() {
                                     "Automated Meeting Booking (Calendly)"
                                 ].map((item, i) => (
                                     <li key={i} className="flex items-center gap-3 text-sm font-bold text-gray-300">
-                                        <CheckCircle2 className="w-5 h-5 text-blue-500" />
+                                        <CheckCircle2 className="w-5 h-5 text-red-500" />
                                         {item}
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <div className="relative group">
-                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                            <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-orange-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
                             <div className="relative bg-white/[0.015] backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl">
                                 <div className="flex items-center justify-between mb-8">
                                     <div className="flex items-center gap-3">
@@ -167,10 +167,10 @@ export default function Solution_B2BGrowth() {
                                     <div className="text-[10px] text-gray-600 font-mono tracking-widest uppercase">growth_engine_v2.log</div>
                                 </div>
                                 <div className="space-y-4 font-mono text-[12px]">
-                                    <div className="text-blue-400">[09:41] Scraping LinkedIn for "CEO" + "SaaS" in USA...</div>
+                                    <div className="text-red-400">[09:41] Scraping LinkedIn for "CEO" + "SaaS" in USA...</div>
                                     <div className="text-green-400">[09:42] Found 142 qualified leads. Syncing to CRM...</div>
-                                    <div className="text-purple-400">[09:45] AI drafting personalized connection for Mark Z...</div>
-                                    <div className="text-blue-400">[10:02] Mark Z accepted connection. Sending follow-up...</div>
+                                    <div className="text-orange-400">[09:45] AI drafting personalized connection for Mark Z...</div>
+                                    <div className="text-red-400">[10:02] Mark Z accepted connection. Sending follow-up...</div>
                                     <div className="text-orange-400">[10:15] REPLY DETECTED: "Tell me more about your AI."</div>
                                     <div className="text-red-500 font-bold animate-pulse">[10:16] FAST-TRACKING TO SALES CALENDAR...</div>
                                 </div>
@@ -181,7 +181,7 @@ export default function Solution_B2BGrowth() {
             </section>
 
             {/* 3. Features Grid */}
-            <section className="py-32 px-6 bg-gradient-to-b from-transparent to-blue-900/5">
+            <section className="py-32 px-6 bg-gradient-to-b from-transparent to-red-900/5">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-20">
                         <h2 className="text-5xl font-black mb-6">Engineered for Dominance</h2>
@@ -193,7 +193,7 @@ export default function Solution_B2BGrowth() {
                             <motion.div
                                 key={i}
                                 whileHover={{ y: -10 }}
-                                className="p-8 rounded-[2rem] bg-white/[0.03] border border-white/5 hover:border-blue-500/30 transition-all group"
+                                className="p-8 rounded-[2rem] bg-white/[0.03] border border-white/5 hover:border-red-500/30 transition-all group"
                             >
                                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center mb-6 shadow-lg shadow-black/50`}>
                                     <f.icon className="w-7 h-7 text-white" />
@@ -223,22 +223,22 @@ export default function Solution_B2BGrowth() {
 
             {/* 5. Final CTA */}
             <section className="py-32 px-6">
-                <div className="max-w-4xl mx-auto text-center bg-gradient-to-br from-blue-600 to-cyan-600 rounded-[3rem] p-16 shadow-2xl shadow-blue-600/20 relative overflow-hidden">
+                <div className="max-w-4xl mx-auto text-center bg-gradient-to-br from-red-600 to-orange-600 rounded-[3rem] p-16 shadow-2xl shadow-red-600/20 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
                     <Sparkles className="w-12 h-12 text-white/20 absolute top-10 right-10 animate-pulse" />
                     
                     <h2 className="text-4xl md:text-5xl font-black mb-8">Ready to Scale Your Sales?</h2>
-                    <p className="text-blue-100 text-lg mb-10 max-w-xl mx-auto">
+                    <p className="text-red-100 text-lg mb-10 max-w-xl mx-auto">
                         Stop wasting time on leads that don't convert. Let's build your 24/7 Growth Engine and start filling your calendar today.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                         <Link href={createPageUrl("Booking")}>
-                            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 rounded-full px-12 h-16 text-lg font-bold shadow-xl">
+                            <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 rounded-full px-12 h-16 text-lg font-bold shadow-xl">
                                 Book Your Growth Audit
                             </Button>
                         </Link>
                     </div>
-                    <p className="mt-8 text-blue-200/60 text-xs font-bold uppercase tracking-[0.2em]">Zero Setup Fee for First 5 Clients this Month</p>
+                    <p className="mt-8 text-red-200/60 text-xs font-bold uppercase tracking-[0.2em]">Zero Setup Fee for First 5 Clients this Month</p>
                 </div>
             </section>
         </div>

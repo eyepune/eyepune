@@ -47,7 +47,7 @@ export default function Solution_Startups() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-xs font-bold uppercase tracking-widest mb-8"
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-widest mb-8"
                     >
                         <Rocket className="w-3 h-3" />
                         From MVP to Unicorn
@@ -64,7 +64,7 @@ export default function Solution_Startups() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href={createPageUrl("AI_Assessment")}>
-                            <Button className="bg-orange-600 hover:bg-orange-700 text-white rounded-full px-10 py-7 font-bold text-lg shadow-[0_0_30px_rgba(249,115,22,0.3)] transition-all">
+                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-10 py-7 font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.3)] transition-all">
                                 Get Startup AI Roadmap →
                             </Button>
                         </Link>
@@ -101,12 +101,12 @@ export default function Solution_Startups() {
                             </ul>
                         </div>
                         <div className="relative">
-                            <div className="absolute -inset-4 bg-orange-600/10 blur-3xl rounded-full" />
-                            <div className="relative p-1 bg-gradient-to-br from-orange-600 to-red-600 rounded-[2.5rem]">
+                            <div className="absolute -inset-4 bg-red-600/10 blur-3xl rounded-full" />
+                            <div className="relative p-1 bg-gradient-to-br from-red-600 to-orange-500 rounded-[2.5rem]">
                                 <div className="bg-white/[0.01] backdrop-blur-md rounded-[2.4rem] p-10 border border-white/5">
                                     <div className="flex items-center gap-4 mb-8">
-                                        <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center">
-                                            <Cpu className="w-6 h-6 text-orange-500" />
+                                        <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center">
+                                            <Cpu className="w-6 h-6 text-red-500" />
                                         </div>
                                         <div>
                                             <h4 className="text-white font-bold">Sales Sniper AI</h4>
@@ -118,7 +118,7 @@ export default function Solution_Startups() {
                                             <motion.div 
                                                 initial={{ width: 0 }}
                                                 whileInView={{ width: "85%" }}
-                                                className="h-full bg-orange-500" 
+                                                className="h-full bg-red-500" 
                                             />
                                         </div>
                                         <div className="flex justify-between text-sm">
@@ -202,12 +202,12 @@ export default function Solution_Startups() {
             {/* Final CTA */}
             <section className="py-32 px-6 text-center">
                 <div className="max-w-4xl mx-auto relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-600 rounded-[3rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-orange-500 rounded-[3rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
                     <div className="relative bg-white/[0.01] backdrop-blur-md border border-white/10 rounded-[3rem] p-16 sm:p-24 overflow-hidden">
-                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-orange-600/10 rounded-full blur-3xl" />
+                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-600/10 rounded-full blur-3xl" />
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">Ready to Engineer <br />Your Success?</h2>
                         <Link href={createPageUrl("AI_Assessment")}>
-                            <Button className="bg-orange-600 hover:bg-orange-500 text-white rounded-full px-12 py-8 font-black text-xl flex items-center gap-3 mx-auto">
+                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-12 py-8 font-black text-xl flex items-center gap-3 mx-auto shadow-[0_0_30px_rgba(239,68,68,0.3)]">
                                 Claim Startup Audit <ChevronRight className="w-6 h-6" />
                             </Button>
                         </Link>
