@@ -148,7 +148,7 @@ function LayoutContent({ children, currentPageName }) {
                                     <div key={link.page} className="relative group/nav">
                                         <Link
                                             href={createPageUrl(link.page)}
-                                            className={`group relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all ${
+                                            className={`group relative flex items-center gap-1.5 xl:gap-2 px-2.5 xl:px-4 py-2 text-[13px] xl:text-sm font-medium rounded-full transition-all ${
                                                 currentPageName === link.page
                                                     ? 'text-white bg-white/[0.07]'
                                                     : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
@@ -187,7 +187,7 @@ function LayoutContent({ children, currentPageName }) {
 
 
                         {/* Right actions */}
-                        <div className="hidden lg:flex items-center gap-3">
+                        <div className="hidden lg:flex items-center gap-2 xl:gap-3">
                             {isPublicPage && (
                                 <>
                                     {user && (
@@ -204,7 +204,7 @@ function LayoutContent({ children, currentPageName }) {
                                     )}
                                     <Link href={createPageUrl("AI-Assessment")}>
                                         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-                                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all">
+                                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white px-4 xl:px-5 py-2 xl:py-2.5 rounded-full text-[13px] xl:text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all">
                                                 <Bot className="w-4 h-4 mr-1.5" />
                                                 Free Assessment
                                             </Button>
@@ -235,7 +235,7 @@ function LayoutContent({ children, currentPageName }) {
                             ) : (
                                 <button
                                     onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
-                                    className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 hover:border-white/25 text-gray-400 hover:text-white text-sm transition-all"
+                                    className="flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-2 rounded-full border border-white/10 hover:border-white/25 text-gray-400 hover:text-white text-[13px] xl:text-sm transition-all"
                                 >
                                     <LogIn className="w-4 h-4" /> Sign In / Sign Up
                                 </button>
