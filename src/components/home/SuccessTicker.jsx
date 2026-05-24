@@ -36,6 +36,7 @@ export default function SuccessTicker() {
                             <span className="text-sm font-bold text-gray-300 uppercase tracking-widest">
                                 {stat.text}
                             </span>
+                            <span className="text-red-500/40 ml-6 font-black select-none text-base shadow-sm">•</span>
                         </div>
                     ))}
                 </motion.div>
