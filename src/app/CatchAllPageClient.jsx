@@ -69,7 +69,9 @@ import Solution_Startups from '@/views/Solution_Startups';
 import Solution_B2BGrowth from '@/views/Solution_B2BGrowth';
 import AI_Intelligence_Hub from '@/views/AI_Intelligence_Hub';
 import PageNotFound from '@/lib/PageNotFound';
-
+import PrivacyPolicy from '@/views/PrivacyPolicy';
+import Terms from '@/views/Terms';
+import Cookies from '@/views/Cookies';
 // ── Route → Component mapping ──────────────────────────────────────────
 const PAGE_MAP = {
   'Home': Home,
@@ -134,6 +136,9 @@ const PAGE_MAP = {
   'Solution-Startups': Solution_Startups,
   'Solution-B2BGrowth': Solution_B2BGrowth,
   'AI-Intelligence-Hub': AI_Intelligence_Hub,
+  'Privacy-Policy': PrivacyPolicy,
+  'Terms-and-Conditions': Terms,
+  'Cookie-Policy': Cookies,
 };
 
 // Pages that should NOT be wrapped in the Layout

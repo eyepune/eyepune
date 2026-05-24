@@ -16,11 +16,27 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
             if (featured) query = query.eq('featured', true);
             if (serviceFilter) query = query.eq('service', serviceFilter);
             
-            query = query.order('created_at', { ascending: false }).limit(limit);
+            query = query.order('created_at', { ascending: false }); // Removed .limit() here
 
             const { data, error } = await query;
             if (error) throw error;
-            return data || [];
+            
+            let results = data || [];
+
+            // Enforce explicit ordering rules as requested
+            const vinothIndex = results.findIndex(t => t.customer_name?.toLowerCase().includes('vinoth'));
+            if (vinothIndex > -1) {
+                const vinoth = results.splice(vinothIndex, 1)[0];
+                results.unshift(vinoth);
+            }
+
+            const deepaIndex = results.findIndex(t => t.customer_name?.toLowerCase().includes('deepa'));
+            if (deepaIndex > -1) {
+                const deepa = results.splice(deepaIndex, 1)[0];
+                results.push(deepa);
+            }
+
+            return results.slice(0, limit); // Apply limit AFTER sorting
         }
     });
 

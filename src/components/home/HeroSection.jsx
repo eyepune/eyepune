@@ -110,7 +110,7 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section ref={heroRef} className="relative min-h-screen pt-20 pb-2 flex items-center justify-center overflow-hidden bg-transparent">
+        <section ref={heroRef} className="relative min-h-[100svh] pt-20 pb-32 flex items-center justify-center overflow-hidden bg-transparent">
             {/* Background elements */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-800/20 rounded-full blur-[120px]" />
@@ -228,7 +228,7 @@ export default function HeroSection() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5 }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
                 <div className="w-[1px] h-12 bg-gradient-to-b from-red-600 to-transparent" />
                 <span className="text-[10px] text-gray-600 uppercase tracking-[0.3em]">Discover</span>

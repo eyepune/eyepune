@@ -61,7 +61,7 @@ export default function GlobalCanvas() {
                             key={i}
                             initial={{ opacity: 0 }}
                             animate={{ 
-                                opacity: 0.25, // Exactly 25% opacity
+                                opacity: 0.5, // Updated to 50% opacity
                                 y: [0, -30, 0],
                                 rotate: [0, 15, -15, 0]
                             }}

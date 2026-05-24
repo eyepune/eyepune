@@ -324,7 +324,7 @@ function LayoutContent({ children, currentPageName }) {
             </nav>
 
             {/* ── PAGE CONTENT ── */}
-            <main className={`relative z-10 bg-transparent ${isPublicPage ? 'pb-20' : 'pt-20'}`}>
+            <main className={`relative z-10 bg-transparent ${isPublicPage ? '' : 'pt-20'}`}>
                 {children}
             </main>
 
@@ -441,10 +441,10 @@ function LayoutContent({ children, currentPageName }) {
                         {/* Bottom bar */}
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-white/[0.06] text-xs md:text-sm text-gray-500">
                             <p>© {new Date().getFullYear()} EyE PunE. All rights reserved.</p>
-                            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-                                <Link href={createPageUrl("CMS-Page") + "?slug=privacy-policy"} className="hover:text-gray-300 transition-colors py-1">Privacy Policy</Link>
-                                <Link href={createPageUrl("CMS-Page") + "?slug=terms-and-conditions"} className="hover:text-gray-300 transition-colors py-1">Terms & Conditions</Link>
-                                <Link href={createPageUrl("CMS-Page") + "?slug=cookie-policy"} className="hover:text-gray-300 transition-colors py-1">Cookie Policy</Link>
+                            <div className="flex flex-wrap justify-center gap-4 md:gap-6 relative z-50">
+                                <a href={createPageUrl("Privacy-Policy")} className="hover:text-gray-300 transition-colors py-1 cursor-pointer">Privacy Policy</a>
+                                <a href={createPageUrl("Terms-and-Conditions")} className="hover:text-gray-300 transition-colors py-1 cursor-pointer">Terms & Conditions</a>
+                                <a href={createPageUrl("Cookie-Policy")} className="hover:text-gray-300 transition-colors py-1 cursor-pointer">Cookie Policy</a>
                             </div>
                         </div>
                     </div>

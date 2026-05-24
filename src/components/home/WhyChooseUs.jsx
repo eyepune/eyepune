@@ -52,10 +52,10 @@ export default function WhyChooseUs() {
                         <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Why EyE PunE</span>
                         <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
                             We're Not an{' '}
-                            <span className="relative">
+                            <span className="relative inline-block mb-2">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Agency.</span>
                                 <motion.span
-                                    className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-red-500 to-orange-400"
+                                    className="absolute -bottom-2 left-0 right-0 h-px bg-gradient-to-r from-red-500 to-orange-400"
                                     initial={{ scaleX: 0 }}
                                     whileInView={{ scaleX: 1 }}
                                     viewport={{ once: true }}

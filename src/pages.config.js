@@ -109,6 +109,9 @@ import solutionYouTubers from './views/Solution_YouTubers';
 import solutionStartups from './views/Solution_Startups';
 import solutionB2BGrowth from './views/Solution_B2BGrowth';
 import aiIntelligenceHub from './views/AI_Intelligence_Hub';
+import PrivacyPolicy from './views/PrivacyPolicy';
+import Terms from './views/Terms';
+import Cookies from './views/Cookies';
 import __Layout from './Layout.jsx';
 
 
@@ -175,6 +178,9 @@ export const PAGES = {
     "Solution-Startups": solutionStartups,
     "Solution-B2BGrowth": solutionB2BGrowth,
     "AI-Intelligence-Hub": aiIntelligenceHub,
+    "Privacy-Policy": PrivacyPolicy,
+    "Terms-and-Conditions": Terms,
+    "Cookie-Policy": Cookies,
 }
 
 export const pagesConfig = {
