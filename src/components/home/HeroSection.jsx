@@ -194,9 +194,15 @@ export default function HeroSection() {
                                         />
                                     </div>
                                     <Link href={url ? `/AI-Assessment?url=${encodeURIComponent(url)}` : createPageUrl("AI_Assessment")} className="w-full sm:w-auto">
-                                        <Button className="magnetic bg-red-600 hover:bg-red-700 text-white rounded-xl sm:rounded-full px-6 py-4 font-bold transition-all shadow-lg sm:px-8 hover:scale-105 active:scale-95 duration-300 w-full justify-center">
-                                            <span>Start Global AI Audit</span>
-                                            <ArrowRight className="w-4 h-4 ml-2" />
+                                        <Button className="magnetic relative overflow-hidden group bg-red-600 hover:bg-red-700 text-white rounded-xl sm:rounded-full px-6 py-4 font-bold transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] sm:px-8 hover:scale-[1.02] active:scale-95 duration-300 w-full justify-center border border-red-500/50">
+                                            {/* Elite Shimmer Light-Beam Effect */}
+                                            <motion.div 
+                                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
+                                                animate={{ x: ["-200%", "300%"] }}
+                                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+                                            />
+                                            <span className="relative z-10 font-black tracking-wide">Start Global AI Audit</span>
+                                            <ArrowRight className="w-4 h-4 ml-2 relative z-10 group-hover:translate-x-1 transition-transform" />
                                         </Button>
                                     </Link>
                                 </div>
@@ -207,26 +213,26 @@ export default function HeroSection() {
                             </p>
                         </motion.div>
 
-                        {/* Trust markers */}
-                        <div className="flex items-center justify-center gap-6 md:gap-12 border-t border-white/10 pt-8 mt-4 w-full">
-                            <div className="flex flex-col items-center">
+                        {/* Trust markers (Mobile Optimized) */}
+                        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 border-t border-white/10 pt-8 mt-4 w-full">
+                            <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">50+</span>
-                                <span className="text-xs text-gray-400 uppercase tracking-widest">Global Brands</span>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Global Brands</span>
                             </div>
-                            <div className="w-px h-8 bg-white/10" />
-                            <div className="flex flex-col items-center">
+                            <div className="hidden sm:block w-px h-8 bg-white/10" />
+                            <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">10+</span>
-                                <span className="text-xs text-gray-400 uppercase tracking-widest">Countries</span>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Countries</span>
                             </div>
-                            <div className="w-px h-8 bg-white/10" />
-                            <div className="flex flex-col items-center">
+                            <div className="hidden md:block w-px h-8 bg-white/10" />
+                            <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">5X</span>
-                                <span className="text-xs text-gray-400 uppercase tracking-widest">Avg ROI</span>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Avg ROI</span>
                             </div>
-                            <div className="w-px h-8 bg-white/10" />
-                            <div className="flex flex-col items-center">
+                            <div className="hidden sm:block w-px h-8 bg-white/10" />
+                            <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">NVIDIA</span>
-                                <span className="text-xs text-gray-400 uppercase tracking-widest">Accelerated</span>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Accelerated</span>
                             </div>
                         </div>
                     </motion.div>
