@@ -203,7 +203,7 @@ export default function About() {
                             Why <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">EyE PunE?</span>
                         </h2>
                     </motion.div>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                         {differentiators.map((item, i) => (
                             <motion.div key={i}
                                 initial={{ opacity: 0, y: 30 }}
