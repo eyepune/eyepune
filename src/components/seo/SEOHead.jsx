@@ -2,9 +2,9 @@ import React from 'react';
 import { useEffect } from 'react';
 
 export default function SEOHead({ 
-    title = "EyE PunE - Connect Engage Grow | Digital Marketing & Web Solutions",
-    description = "Transform your business with EyE PunE's comprehensive digital solutions. Expert social media marketing, web app development, AI automation, and branding services in Pune, India.",
-    keywords = "digital marketing pune, web development pune, social media marketing, AI automation, branding services, business growth, lead generation, sales automation, CRM solutions, SEO services",
+    title = "EyE PunE - Elite Digital Marketing, Web Development & AI Automation Agency",
+    description = "Transform your business with EyE PunE's elite global digital solutions. We specialize in high-converting web applications, AI automation, B2B lead generation, and performance marketing to scale your growth.",
+    keywords = "global digital marketing agency, enterprise web development, AI automation services, B2B lead generation, performance marketing, CRM solutions, top SEO agency, brand strategy, sales funnels",
     ogImage = "/opengraph-image.png",
     canonicalUrl,
     structuredData,
@@ -158,11 +158,11 @@ export function generateServiceSchema(serviceName, description, price) {
             "@type": "Organization",
             "name": "EyE PunE"
         },
-        "areaServed": "IN",
+        "areaServed": "Global",
         "offers": price ? {
             "@type": "Offer",
             "price": price,
-            "priceCurrency": "INR"
+            "priceCurrency": "USD"
         } : undefined
     };
 }

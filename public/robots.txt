@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /Admin*
+Disallow: /Client*
+Disallow: /api/*
+
+Sitemap: https://eyepune.com/sitemap.xml
