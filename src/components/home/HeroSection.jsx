@@ -122,13 +122,11 @@ export default function HeroSection() {
 
     return (
         <section ref={heroRef} className="relative min-h-[100svh] pt-20 pb-32 flex items-center justify-center overflow-hidden bg-transparent">
-            {/* Background elements */}
+            {/* Floating Tech & Social Symbols */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-800/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
-
-                {/* Floating Tech & Social Symbols */}
-                <HeroFloatingIcons opacity={0.5} />
+                <div className="relative z-10">
+                    <HeroFloatingIcons opacity={0.3} />
+                </div>
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
