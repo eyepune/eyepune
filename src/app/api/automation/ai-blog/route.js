@@ -31,17 +31,14 @@ export async function GET(request) {
 
         const results = [];
 
-        // Pass 1: Indian Audience
-        results.push(await generateAndPostBlog('indian'));
-
-        // Pass 2: Global Audience
+        // Pass 1: Global Enterprise Audience
         results.push(await generateAndPostBlog('global'));
 
         // Log Success
         await supabase.from('automation_logs').insert([{
             type: 'blog',
             status: 'success',
-            message: `Generated and published 2 blog posts (${results.map(r => r.audience).join(', ')}).`,
+            message: `Generated and published 1 global blog post.`,
             payload: { results }
         }]);
 
@@ -66,24 +63,22 @@ export async function GET(request) {
 }
 
 async function generateAndPostBlog(audience) {
-    const topicPrompt = audience === 'indian' 
-        ? "digital marketing trends in India, AI for Indian SMBs, scaling business in Mumbai/Pune/Bangalore, or India's 2026 tech landscape."
-        : "global SaaS marketing, international branding for tech startups, AI automation for US/EU enterprises, or cross-border business growth strategies.";
+    const topicPrompt = "global SaaS marketing, multi-model AI automation, enterprise web development architectures, sub-2-second site speeds, NVIDIA-accelerated workflows, or cross-border B2B growth strategies.";
 
     const prompt = `
-        You are an expert content strategist for 'EyE PunE', a premium digital agency. 
-        Write a high-converting, insightful blog post for a ${audience} audience.
+        You are an expert content strategist for 'EyE PunE', an elite global digital agency and AI growth partner. 
+        Write a high-converting, highly technical, and insightful blog post for C-suite executives and tech founders.
         Topic area: ${topicPrompt}
         
         Requirements:
-        1. Tone: Professional, authoritative, yet visionary.
+        1. Tone: Elite, authoritative, visionary, and technical.
         2. Format: Return ONLY a valid JSON object with:
            {
              "title": "Compelling Title",
              "excerpt": "Hooking 2-sentence summary",
-             "content": "Full HTML content with <h2> and <p> tags. Must be 800+ words.",
+             "content": "Full HTML content with <h2> and <p> tags. Must be 1000+ words.",
              "category": "ai_automation",
-             "tags": ["AI", "Growth", "${audience === 'indian' ? 'India' : 'Global'}"],
+             "tags": ["AI", "Enterprise", "Global Scale", "Growth"],
              "meta_title": "SEO Optimized Title",
              "meta_description": "SEO Description"
            }
