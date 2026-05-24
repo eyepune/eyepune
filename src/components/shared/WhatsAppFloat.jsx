@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 export default function WhatsAppFloat() {
     const [showTooltip, setShowTooltip] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowTooltip(true);
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className="fixed bottom-6 left-6 z-50" style={{ isolation: 'isolate' }}>

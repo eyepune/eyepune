@@ -157,7 +157,7 @@ export default function Solution_B2BGrowth() {
                         </div>
                         <div className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                            <div className="relative bg-[#0c0c0c] border border-white/10 rounded-2xl p-6 shadow-2xl">
+                            <div className="relative bg-white/[0.015] backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl">
                                 <div className="flex items-center justify-between mb-8">
                                     <div className="flex items-center gap-3">
                                         <div className="w-3 h-3 rounded-full bg-red-500" />

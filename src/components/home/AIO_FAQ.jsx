@@ -50,7 +50,7 @@ export default function AIO_FAQ() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
-                            className="p-8 rounded-[2.5rem] bg-[#0c0c0c] border border-white/5 hover:border-red-500/20 transition-all group"
+                            className="p-8 rounded-[2.5rem] bg-white/[0.015] backdrop-blur-md border border-white/5 hover:border-red-500/20 transition-all group"
                         >
                             <h4 className="text-xl font-bold text-white mb-4 flex items-start gap-4">
                                 <MessageCircle className="w-6 h-6 text-red-500 shrink-0 mt-1" />

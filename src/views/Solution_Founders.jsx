@@ -78,7 +78,7 @@ export default function Solution_Founders() {
             </section>
 
             {/* Features Grid */}
-            <section className="py-24 px-6 bg-[#080808]">
+            <section className="py-24 px-6 bg-transparent">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
@@ -104,7 +104,7 @@ export default function Solution_Founders() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.1 }}
-                                className="p-8 rounded-3xl bg-[#0c0c0c] border border-white/5 hover:border-red-500/20 transition-all group"
+                                className="p-8 rounded-3xl bg-white/[0.015] backdrop-blur-md border border-white/5 hover:border-red-500/20 transition-all group"
                             >
                                 <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                     <feature.icon className="w-6 h-6 text-red-500" />
@@ -136,12 +136,12 @@ export default function Solution_Founders() {
             </section>
 
             {/* FAQ Section */}
-            <section className="py-24 px-6 bg-[#080808]">
+            <section className="py-24 px-6 bg-transparent">
                 <div className="max-w-3xl mx-auto">
                     <h2 className="text-3xl font-bold mb-12 text-center">Founder Intelligence FAQ</h2>
                     <div className="space-y-6">
                         {faqs.map((faq, i) => (
-                            <div key={i} className="p-6 rounded-2xl bg-[#0c0c0c] border border-white/5">
+                            <div key={i} className="p-6 rounded-2xl bg-white/[0.015] backdrop-blur-md border border-white/5">
                                 <h4 className="text-lg font-bold mb-2 text-white flex items-center gap-2">
                                     <MessageSquare className="w-4 h-4 text-red-500" />
                                     {faq.question}

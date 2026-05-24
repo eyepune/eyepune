@@ -248,7 +248,9 @@ Response rules:
                         style={{
                             height: 'calc(100vh - 140px)',
                             maxHeight: '520px',
-                            background: 'rgba(10,10,10,0.97)',
+                            background: 'rgba(10,10,10,0.65)',
+                            backdropFilter: 'blur(16px)',
+                            WebkitBackdropFilter: 'blur(16px)',
                             border: '1px solid rgba(239,68,68,0.2)',
                             borderRadius: '20px',
                             boxShadow: '0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04)',

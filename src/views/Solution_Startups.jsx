@@ -103,7 +103,7 @@ export default function Solution_Startups() {
                         <div className="relative">
                             <div className="absolute -inset-4 bg-orange-600/10 blur-3xl rounded-full" />
                             <div className="relative p-1 bg-gradient-to-br from-orange-600 to-red-600 rounded-[2.5rem]">
-                                <div className="bg-[#0c0c0c] rounded-[2.4rem] p-10">
+                                <div className="bg-white/[0.01] backdrop-blur-md rounded-[2.4rem] p-10 border border-white/5">
                                     <div className="flex items-center gap-4 mb-8">
                                         <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center">
                                             <Cpu className="w-6 h-6 text-orange-500" />
@@ -145,7 +145,7 @@ export default function Solution_Startups() {
             </section>
 
             {/* Startup Solutions Grid */}
-            <section className="py-24 px-6 bg-[#080808]">
+            <section className="py-24 px-6 bg-transparent">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
@@ -168,7 +168,7 @@ export default function Solution_Startups() {
                             <motion.div
                                 key={i}
                                 whileHover={{ y: -10 }}
-                                className="p-8 rounded-3xl bg-[#0c0c0c] border border-white/5 group transition-all"
+                                className="p-8 rounded-3xl bg-white/[0.015] backdrop-blur-md border border-white/5 group transition-all"
                             >
                                 <solution.icon className="w-10 h-10 text-orange-500 mb-6" />
                                 <h3 className="text-xl font-bold mb-4">{solution.title}</h3>
@@ -185,7 +185,7 @@ export default function Solution_Startups() {
                     <h2 className="text-3xl font-bold mb-12 text-center">Startup Intelligence FAQ</h2>
                     <div className="space-y-4">
                         {faqs.map((faq, i) => (
-                            <div key={i} className="p-6 rounded-2xl bg-[#080808] border border-white/5">
+                            <div key={i} className="p-6 rounded-2xl bg-white/[0.015] backdrop-blur-md border border-white/5">
                                 <h4 className="text-lg font-bold mb-3 text-white flex items-center gap-3">
                                     <BookOpen className="w-4 h-4 text-orange-500" />
                                     {faq.question}
@@ -203,7 +203,7 @@ export default function Solution_Startups() {
             <section className="py-32 px-6 text-center">
                 <div className="max-w-4xl mx-auto relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-600 rounded-[3rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
-                    <div className="relative bg-[#0c0c0c] border border-white/10 rounded-[3rem] p-16 sm:p-24 overflow-hidden">
+                    <div className="relative bg-white/[0.01] backdrop-blur-md border border-white/10 rounded-[3rem] p-16 sm:p-24 overflow-hidden">
                         <div className="absolute -top-24 -right-24 w-64 h-64 bg-orange-600/10 rounded-full blur-3xl" />
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">Ready to Engineer <br />Your Success?</h2>
                         <Link href={createPageUrl("AI_Assessment")}>

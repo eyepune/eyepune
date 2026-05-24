@@ -77,7 +77,7 @@ export default function Solution_YouTubers() {
             </section>
 
             {/* Creator Tools Grid */}
-            <section className="py-24 px-6 bg-[#080808]">
+            <section className="py-24 px-6 bg-transparent">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
@@ -103,7 +103,7 @@ export default function Solution_YouTubers() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.1 }}
-                                className="p-8 rounded-3xl bg-[#0c0c0c] border border-white/5 hover:bg-white/[0.02] transition-all"
+                                className="p-8 rounded-3xl bg-white/[0.015] backdrop-blur-md border border-white/5 hover:bg-white/[0.03] transition-all"
                             >
                                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 to-red-500 flex items-center justify-center mb-6 shadow-lg shadow-red-600/20">
                                     <tool.icon className="w-7 h-7 text-white" />
@@ -144,12 +144,12 @@ export default function Solution_YouTubers() {
             </section>
 
             {/* Creator FAQ */}
-            <section className="py-24 px-6 bg-[#080808]">
+            <section className="py-24 px-6 bg-transparent">
                 <div className="max-w-3xl mx-auto">
                     <h2 className="text-3xl font-bold mb-12 text-center">Creator Intelligence FAQ</h2>
                     <div className="space-y-4">
                         {faqs.map((faq, i) => (
-                            <details key={i} className="group p-6 rounded-2xl bg-[#0c0c0c] border border-white/5 cursor-pointer">
+                            <details key={i} className="group p-6 rounded-2xl bg-white/[0.015] backdrop-blur-md border border-white/5 cursor-pointer">
                                 <summary className="text-lg font-bold text-white flex items-center justify-between list-none">
                                     <span className="flex items-center gap-3">
                                         <MessageCircle className="w-5 h-5 text-red-500" />

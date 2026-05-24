@@ -91,7 +91,7 @@ export default function AI_Intelligence_Hub() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.1 }}
-                                className="p-10 rounded-[3rem] bg-[#0c0c0c] border border-white/5 hover:border-red-500/30 transition-all group"
+                                className="p-10 rounded-[3rem] bg-white/[0.015] backdrop-blur-md border border-white/5 hover:border-red-500/30 transition-all group"
                             >
                                 <div className="text-red-500 mb-6 group-hover:scale-110 transition-transform">
                                     {i === 0 && <Zap className="w-10 h-10" />}
@@ -111,7 +111,7 @@ export default function AI_Intelligence_Hub() {
             </section>
 
             {/* Strategic Implementation */}
-            <section className="py-32 px-6 bg-[#080808]">
+            <section className="py-32 px-6 bg-transparent">
                 <div className="max-w-5xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <div>

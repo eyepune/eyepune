@@ -60,7 +60,7 @@ const services = [
 
 export default function ServicesOverview() {
     return (
-        <section className="py-32 bg-[#0A0A0A] relative overflow-hidden">
+        <section className="py-32 bg-transparent relative overflow-hidden">
             {/* Background accent */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-red-900/5 to-transparent" />
             
