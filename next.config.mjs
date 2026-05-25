@@ -98,11 +98,6 @@ export default withPWA(withSentryConfig(nextConfig, {
   sentryUrl: "https://sentry.io/",
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  reactComponentAnnotation: {
-    enabled: true,
-  },
   tunnelRoute: "/monitoring",
   hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
 }));

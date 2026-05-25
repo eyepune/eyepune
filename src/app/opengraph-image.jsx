@@ -1,155 +1,62 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-
-export const alt = 'EyE PunE — AI-Powered Digital Growth';
+export const alt = 'EyE PunE - Elite Digital Marketing & AI Agency';
 export const size = {
   width: 1200,
   height: 630,
 };
-
 export const contentType = 'image/png';
 
-export default function Image() {
+export default async function Image() {
   return new ImageResponse(
     (
       <div
         style={{
-          height: '100%',
+          background: 'linear-gradient(to bottom right, #000000, #1a0505)',
           width: '100%',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'center',
-          backgroundColor: '#040404',
-          backgroundImage: 'radial-gradient(circle at 50% 50%, #150505 0%, #040404 100%)',
-          fontFamily: 'sans-serif',
-          position: 'relative',
-          overflow: 'hidden',
+          padding: '80px',
         }}
       >
-        {/* Futuristic Grid Overlay */}
         <div
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: 'linear-gradient(rgba(239, 68, 68, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(239, 68, 68, 0.05) 1px, transparent 1px)',
-            backgroundSize: '30px 30px',
-            maskImage: 'radial-gradient(circle, black, transparent 80%)',
-          }}
-        />
-
-        {/* Central Brand Container */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '60px 100px',
-            borderRadius: '40px',
-            border: '1px solid rgba(239, 68, 68, 0.2)',
-            background: 'rgba(5, 5, 5, 0.9)',
-            boxShadow: '0 0 80px rgba(239, 68, 68, 0.15)',
-            position: 'relative',
-          }}
-        >
-          {/* THE EYE LOGO (REPLICATED FROM SVG) */}
-          <div style={{ display: 'flex', marginBottom: '30px', position: 'relative' }}>
-            <svg width="180" height="180" viewBox="0 0 100 100" fill="none">
-              {/* Eyelashes/Rays */}
-              <g stroke="#DC143C" strokeWidth="4" strokeLinecap="round" opacity="0.8">
-                <line x1="15" y1="47" x2="5" y2="36" />
-                <line x1="27" y1="40" x2="18" y2="28" />
-                <line x1="38" y1="36" x2="33" y2="22" />
-                <line x1="50" y1="35" x2="50" y2="20" />
-                <line x1="62" y1="36" x2="67" y2="22" />
-                <line x1="73" y1="40" x2="82" y2="28" />
-                <line x1="85" y1="47" x2="95" y2="36" />
-              </g>
-              {/* Eye Shape */}
-              <path 
-                d="M 5 55 Q 50 15 95 55 Q 50 95 5 55 Z" 
-                stroke="#DC143C" 
-                strokeWidth="4" 
-                strokeLinejoin="round" 
-              />
-              {/* Iris */}
-              <circle cx="50" cy="55" r="14" stroke="#DC143C" strokeWidth="4" />
-              {/* Pupil */}
-              <circle cx="50" cy="55" r="6" fill="#DC143C" />
-            </svg>
-          </div>
-
-          {/* Main Title */}
-          <h1
-            style={{
-              fontSize: '90px',
-              fontWeight: 900,
-              color: '#ffffff',
-              margin: 0,
-              display: 'flex',
-              alignItems: 'center',
-              letterSpacing: '-4px',
-            }}
-          >
-            EyE<span style={{ color: '#DC143C', marginLeft: '10px' }}>PunE</span>
-          </h1>
-
-          {/* Tagline */}
-          <div
-            style={{
-              fontSize: '28px',
-              fontWeight: 600,
-              color: 'rgba(255, 255, 255, 0.6)',
-              letterSpacing: '8px',
-              textTransform: 'uppercase',
-              marginTop: '15px',
-            }}
-          >
-            Connect · Engage · Grow
-          </div>
-        </div>
-
-        {/* Dashboard Status Bar */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '40px',
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '40px',
-            alignItems: 'center',
-            color: 'rgba(255, 255, 255, 0.4)',
-            fontSize: '16px',
-            fontWeight: 700,
-            letterSpacing: '2px',
-          }}
-        >
-          <span>AI AUTOMATION</span>
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#DC143C' }} />
-          <span style={{ color: '#a1a1aa' }}>Marketing</span>
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#DC143C' }} />
-          <span>SALES SYSTEMS</span>
-        </div>
-
-        {/* Global Footer */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '20px',
-            color: 'rgba(255, 255, 255, 0.3)',
-            fontSize: '12px',
+            color: '#dc2626',
+            fontSize: 48,
             fontWeight: 800,
-            letterSpacing: '4px',
+            letterSpacing: '0.1em',
+            marginBottom: '20px',
             textTransform: 'uppercase',
           }}
         >
-          Pune-Based · Serving Globally
+          EyE PunE
+        </div>
+        <div
+          style={{
+            color: 'white',
+            fontSize: 72,
+            fontWeight: 900,
+            lineHeight: 1.1,
+            marginBottom: '40px',
+            maxWidth: '900px',
+          }}
+        >
+          Global AI Growth & Elite Digital Marketing
+        </div>
+        <div
+          style={{
+            color: '#a1a1aa',
+            fontSize: 32,
+            fontWeight: 400,
+            maxWidth: '800px',
+            lineHeight: 1.4,
+          }}
+        >
+          Transform your business with AI-driven marketing, full-stack web solutions, and scalable sales systems.
         </div>
       </div>
     ),
