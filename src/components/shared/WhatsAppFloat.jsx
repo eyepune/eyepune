@@ -18,11 +18,11 @@ export default function WhatsAppFloat() {
             <AnimatePresence>
                 {showTooltip && (
                     <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.92 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.92 }}
+                        initial={{ opacity: 0, scale: 0.92, y: 5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.92, y: 5 }}
                         transition={{ duration: 0.18 }}
-                        className="absolute bottom-16 left-0 w-52 bg-black border border-white/10 rounded-2xl p-4 shadow-2xl text-left pointer-events-auto"
+                        className="absolute bottom-16 left-0 md:bottom-0 md:left-[70px] w-52 bg-black border border-white/10 rounded-2xl p-4 shadow-2xl text-left pointer-events-auto"
                         style={{ zIndex: 10 }}
                     >
                         <button
