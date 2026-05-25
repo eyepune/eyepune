@@ -92,6 +92,25 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/service-page/:path*',
+        destination: '/Services',
+        permanent: true,
+      },
+      {
+        source: '/projects/:path*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/post/:path*',
+        destination: '/Blog',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 import { withSentryConfig } from '@sentry/nextjs';
