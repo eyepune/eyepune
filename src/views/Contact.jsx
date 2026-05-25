@@ -35,66 +35,24 @@ export default function Contact() {
 
         setIsSubmitting(true);
         try {
-            // 1. Save lead to Supabase CRM
-            const { error: dbError } = await supabase.from('leads').insert([{
-                full_name: formData.name,
-                email: formData.email,
-                phone: formData.phone,
-                company: formData.company,
-                source: 'website',
-                status: 'new',
-                notes: `Service Interest: ${formData.service_interest}\nMessage: ${formData.message}`
-            }]);
-            if (dbError) throw dbError;
-
-            // 1.1 Save to inquiries table for visibility in Admin Forms tab
-            try {
-                await supabase.from('inquiries').insert([{
-                    full_name: formData.name,
+            const response = await fetch('/api/leads/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
                     email: formData.email,
                     phone: formData.phone,
                     company: formData.company,
-                    service_interest: formData.service_interest || 'General Inquiry',
+                    service_interest: formData.service_interest,
                     message: formData.message,
-                    source: 'website',
-                    status: 'new'
-                }]);
-            } catch (err) {
-                console.warn('[Contact] Inquiry save failed:', err);
+                    hp_verification: formData.hp_verification
+                })
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.error || 'Failed to submit form');
             }
-
-            // 2. Trigger Automation (sends welcome email to lead)
-            // This relies on active rules in the 'email_sequences' table
-            fetch('/api/automation/trigger', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    trigger: 'new_inquiry',
-                    payload: {
-                        name: formData.name,
-                        email: formData.email,
-                        phone: formData.phone,
-                        company: formData.company || 'their business',
-                        service: formData.service_interest || 'General Inquiry'
-                    }
-                })
-            }).catch(err => console.warn('[Contact] Automation trigger failed:', err));
-
-            // 3. Trigger Admin Notification (Sales Sniper)
-            // Replaces multiple manual fetch calls with one centralized alert
-            fetch('/api/admin/notify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'inquiry',
-                    payload: {
-                        name: formData.name,
-                        email: formData.email,
-                        service: formData.service_interest || 'General Inquiry',
-                        message: formData.message
-                    }
-                })
-            }).catch(() => {});
 
             setIsSuccess(true);
         } catch (error) {

@@ -281,9 +281,10 @@ At the very bottom, output: [CRM_SCORE: number]` }
             const cleanAiResponse = aiResponse.replace(/\[CRM_SCORE:\s*\d+\]/i, '').trim();
 
             const assessmentPayload = {
-                full_name: formData.lead_name,
+                name: formData.lead_name,
                 email: formData.lead_email,
-                business_name: formData.company_name,
+                phone: formData.lead_phone,
+                company: formData.company_name,
                 business_type: answers.business_type,
                 revenue_range: answers.revenue_range,
                 lead_generation_method: answers.lead_generation_method,
@@ -296,86 +297,15 @@ At the very bottom, output: [CRM_SCORE: number]` }
                 growth_goals: answers.growth_goals,
                 score: growthScore,
                 ai_report: cleanAiResponse,
-                converted_to_lead: false
+                hp_verification: formData.hp_verification
             };
 
-            // Non-blocking database insertion and mapping (errors here won't block report rendering)
-            try {
-                const { data: savedAssessment, error: assessmentError } = await supabase
-                    .from('ai_assessments')
-                    .insert([assessmentPayload])
-                    .select()
-                    .single();
-                
-                if (assessmentError) {
-                    console.error('Supabase ai_assessments insert failed:', assessmentError.message || assessmentError);
-                }
-
-                const { data: savedLead, error: leadError } = await supabase
-                    .from('leads')
-                    .insert([{
-                        full_name: formData.lead_name,
-                        email: formData.lead_email,
-                        phone: formData.lead_phone,
-                        company: formData.company_name,
-                        source: 'ai_assessment',
-                        status: 'new',
-                        score: crmScore,
-                        notes: `Growth Score: ${growthScore}/100. Challenge: ${answers.biggest_challenge}`
-                    }])
-                    .select()
-                    .single();
-
-                if (leadError) {
-                    console.error('Supabase leads insert failed:', leadError.message || leadError);
-                }
-
-                // Link assessment to lead
-                if (savedAssessment && savedLead) {
-                    const { error: linkError } = await supabase
-                        .from('ai_assessments')
-                        .update({ converted_to_lead: true, lead_id: savedLead.id })
-                        .eq('id', savedAssessment.id);
-                    
-                    if (linkError) {
-                        console.error('Supabase update link failed:', linkError.message || linkError);
-                    }
-                }
-            } catch (dbError) {
-                console.error('Non-blocking database logging failed:', dbError);
-            }
-
-            // Trigger automation (non-blocking)
-            fetch('/api/automation/trigger', {
+            // Call secure backend API
+            fetch('/api/assessment/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    trigger: 'new_assessment',
-                    payload: {
-                        name: formData.lead_name,
-                        email: formData.lead_email,
-                        phone: formData.lead_phone,
-                        business: formData.company_name || 'their business',
-                        score: growthScore,
-                        report: cleanAiResponse
-                    }
-                })
-            }).catch(e => console.warn('Automation failed', e));
-
-            // Trigger Admin Notification (Sales Sniper) (non-blocking)
-            fetch('/api/admin/notify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'assessment',
-                    payload: {
-                        name: formData.lead_name,
-                        business: formData.company_name,
-                        score: growthScore,
-                        challenge: answers.biggest_challenge
-                    }
-                })
-            }).catch(() => {});
+                body: JSON.stringify(assessmentPayload)
+            }).catch(e => console.warn('Backend logging failed', e));
 
             setReport({
                 score: growthScore,
