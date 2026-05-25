@@ -18,7 +18,6 @@ export async function triggerAutomation(triggerType, payload) {
     // Lazy-load server-only modules to avoid client-side bundling issues
     const { createClient } = await import('@supabase/supabase-js');
     const { sendEmail } = await import('./email-service.js');
-    const { sendWhatsAppMessage } = await import('./whatsapp-service.js');
 
     const supabaseAdmin = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -89,30 +88,6 @@ export async function triggerAutomation(triggerType, payload) {
         results.push({ ruleId: rule.id, type: 'email', success: true });
       } catch (sendErr) {
         results.push({ ruleId: rule.id, type: 'email', success: false, error: sendErr.message });
-      }
-    }
-
-    // 3. Fetch and process WhatsApp Rules
-    const { data: waRules } = await supabaseAdmin
-      .from('whatsapp_sequences')
-      .select('*')
-      .eq('trigger_type', triggerType)
-      .eq('status', 'active');
-
-    if (waRules && waRules.length > 0 && payload.phone) {
-      for (const rule of waRules) {
-        try {
-          // Note: WhatsApp templates usually require pre-approval on Meta Panel
-          const result = await sendWhatsAppMessage({
-            to: payload.phone,
-            templateName: rule.template_name,
-            languageCode: rule.language_code || 'en_US',
-            components: rule.components || [] // You can pass dynamic components here
-          });
-          results.push({ ruleId: rule.id, type: 'whatsapp', success: result.success });
-        } catch (err) {
-          results.push({ ruleId: rule.id, type: 'whatsapp', success: false, error: err.message });
-        }
       }
     }
 

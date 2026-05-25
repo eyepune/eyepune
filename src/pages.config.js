@@ -62,8 +62,6 @@ import adminEmailtemplates from './views/Admin_EmailTemplates';
 import adminDripAutomations from './views/Admin_DripAutomations';
 import adminForms from './views/Admin_Forms';
 import adminTestAutomation from './views/Admin_TestAutomation';
-import adminWhatsAppMarketing from './views/Admin_WhatsAppMarketing';
-
 import adminFeedback from './views/Admin_Feedback';
 import adminMarketing from './views/Admin_Marketing';
 import adminOutreach from './views/Admin_Outreach';
@@ -78,7 +76,6 @@ import adminServiceaddons from './views/Admin_ServiceAddons';
 import adminTemplates from './views/Admin_Templates';
 import adminTestimonials from './views/Admin_Testimonials';
 import adminUsers from './views/Admin_Users';
-import adminWhatsappsetup from './views/Admin_WhatsAppSetup';
 import Blog from './views/Blog';
 import blogPost from './views/Blog_Post';
 import Booking from './views/Booking';
@@ -133,8 +130,6 @@ export const PAGES = {
     "Admin-DripAutomations": adminDripAutomations,
     "Admin-Forms": adminForms,
     "Admin-TestAutomation": adminTestAutomation,
-    "Admin-WhatsAppMarketing": adminWhatsAppMarketing,
-
     "Admin-Feedback": adminFeedback,
     "Admin-Marketing": adminMarketing,
     "Admin-Outreach": adminOutreach,
@@ -149,7 +144,6 @@ export const PAGES = {
     "Admin-Templates": adminTemplates,
     "Admin-Testimonials": adminTestimonials,
     "Admin-Users": adminUsers,
-    "Admin-WhatsAppSetup": adminWhatsappsetup,
     "Blog": Blog,
     "Blog-Post": blogPost,
     "Booking": Booking,
