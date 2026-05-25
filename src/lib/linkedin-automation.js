@@ -44,21 +44,23 @@ export async function generateAndPostToLinkedin(type = 'random') {
 
         // 2. Generate Content via LLM
         const prompt = `Act as an elite Global Social Media Manager for "EyE PunE", an enterprise AI Growth Partner.
-Generate a high-impact LinkedIn post of type: ${type.toUpperCase()}.
+Generate a high-impact, viral-optimized LinkedIn post of type: ${type.toUpperCase()}.
 
 Agency Context:
-- Services: Multi-Model AI Automations (NVIDIA, OpenAI, Anthropic), Enterprise Web Architectures (Next.js, Vercel, Supabase), Performance Marketing.
+- Services: Multi-Model AI Automations, Enterprise Web Architectures, Performance Marketing.
 - Value Prop: We build sub-2-second loading digital infrastructure and AI-driven sales engines to scale global B2B brands.
 - Target: Founders, C-Suite executives, and Enterprise Directors.
 
-Rules:
-- Professional, authoritative, visionary, and highly technical tone.
-- Include 3-5 relevant hashtags (e.g., #AIAutomation #EnterpriseGrowth).
-- Include a clear call to action (e.g., Run a Free AI Assessment for your business at eyepune.com/AI-Assessment).
-- Keep it engaging (use clean line breaks and spacing, avoid excessive emojis).
-- Do NOT use placeholders like [Link] or [Company Name]. Use "EyE PunE" and "eyepune.com".
+Elite Copywriting Rules:
+1. THE HOOK: Start with a bold, scroll-stopping one-liner (no emojis in the first line).
+2. THE BODY: Use short, punchy paragraphs (1-2 sentences max). Use clean line breaks.
+3. THE TONE: Professional, authoritative, visionary, and highly technical. Speak directly to founders.
+4. THE FORMAT: Use bullet points or numbered lists if explaining a concept. Minimal, strategic emojis only.
+5. THE CTA: Always end with a powerful call to action: "Run a Free AI Assessment at eyepune.com/AI-Assessment"
+6. NO PLACEHOLDERS: Do not use [Link] or [Company Name]. Always use "EyE PunE".
+7. HASHTAGS: Include exactly 3 highly targeted hashtags at the very bottom.
 
-Return the result as a raw text string suitable for a LinkedIn post.`;
+Return ONLY the raw text string for the LinkedIn post. Do not include introductory text.`;
 
         const llmResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/llm`, {
             method: 'POST',
