@@ -41,6 +41,41 @@ const results = [
     { val: '5★', label: 'Client Satisfaction' },
 ];
 
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(f => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
+                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services-Detail" },
+                { "@type": "ListItem", "position": 3, "name": "Website Development & Design", "item": "https://eyepune.com/Service-WebDev" }
+            ]
+        },
+        {
+            "@type": "Service",
+            "name": "Website Development & Design",
+            "description": "Scale your global business with a sub-2-second loading website. We build custom, SEO-optimized web applications and e-commerce sites.",
+            "provider": { "@type": "Organization", "name": "EyE PunE", "url": "https://eyepune.com" },
+            "areaServed": "Global",
+            "offers": {
+                "@type": "Offer",
+                "priceCurrency": "INR",
+                "price": "25000",
+                "description": "Professional 5-page business website"
+            }
+        }
+    ]
+};
+
 export default function Service_WebDev() {
     return (
         <>
@@ -49,7 +84,7 @@ export default function Service_WebDev() {
                 description="Scale your global business with a sub-2-second loading website. We build custom, SEO-optimized web applications and e-commerce sites that rank #1 and convert traffic into sales."
                 keywords="web development company pune, best website designers pune, e-commerce development pune, custom web application pune, technical SEO pune"
                 canonicalUrl="https://eyepune.com/Service-WebDev"
-                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Website Development & Design", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+                structuredData={faqSchema}
             />
 
             <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">

@@ -1,19 +1,21 @@
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Note: This script requires 'sharp' to be installed.
 // Run: npm install sharp --save-dev
 
+let sharp;
 try {
-  require.resolve('sharp');
+  sharp = (await import('sharp')).default;
 } catch (e) {
   console.error("The 'sharp' library is required to run this script.");
   console.error("Please run: npm install sharp --save-dev");
   process.exit(1);
 }
-
-const sharp = require('sharp');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 

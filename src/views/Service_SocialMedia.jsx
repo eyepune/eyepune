@@ -40,6 +40,41 @@ const results = [
     { val: '98%', label: 'Client Retention Rate' },
 ];
 
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(f => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
+                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services-Detail" },
+                { "@type": "ListItem", "position": 3, "name": "Social Media Management", "item": "https://eyepune.com/Service-SocialMedia" }
+            ]
+        },
+        {
+            "@type": "Service",
+            "name": "Social Media Management",
+            "description": "Dominate Instagram, Facebook, and LinkedIn globally. We handle content creation, Reels strategy, community management, and growth analytics.",
+            "provider": { "@type": "Organization", "name": "EyE PunE", "url": "https://eyepune.com" },
+            "areaServed": "Global",
+            "offers": {
+                "@type": "Offer",
+                "priceCurrency": "INR",
+                "price": "30000",
+                "description": "Social Media Management for 2 platforms"
+            }
+        }
+    ]
+};
+
 export default function Service_SocialMedia() {
     return (
         <>
@@ -48,7 +83,7 @@ export default function Service_SocialMedia() {
                 description="Dominate Instagram, Facebook, and LinkedIn globally. We handle content creation, Reels strategy, community management, and growth analytics to turn followers into customers."
                 keywords="social media agency pune, instagram marketing pune, social media manager pune, best social media marketing pune, content creation services pune"
                 canonicalUrl="https://eyepune.com/Service-SocialMedia"
-                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Social Media Management", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+                structuredData={faqSchema}
             />
 
             <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">

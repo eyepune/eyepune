@@ -7,11 +7,11 @@ export async function GET() {
     const destDir = path.join(process.cwd(), 'public', 'logos');
 
     const files = [
-        { src: 'media__1777377976894.png', dest: 'partner_1.png' },
-        { src: 'media__1777377976910.jpg', dest: 'partner_2.jpg' },
-        { src: 'media__1777377977079.png', dest: 'partner_3.png' },
-        { src: 'media__1777377977121.png', dest: 'partner_4.png' },
-        { src: 'media__1777377977139.jpg', dest: 'partner_5.jpg' }
+        { src: 'media__1777377976894.webp', dest: 'partner_1.webp' },
+        { src: 'media__1777377976910.webp', dest: 'partner_2.webp' },
+        { src: 'media__1777377977079.webp', dest: 'partner_3.webp' },
+        { src: 'media__1777377977121.webp', dest: 'partner_4.webp' },
+        { src: 'media__1777377977139.webp', dest: 'partner_5.webp' }
     ];
 
     const results = [];

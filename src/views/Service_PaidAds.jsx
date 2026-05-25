@@ -40,6 +40,35 @@ const results = [
     { val: '100+', label: 'Campaigns Managed' },
 ];
 
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(f => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eyepune.com" },
+                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://eyepune.com/Services-Detail" },
+                { "@type": "ListItem", "position": 3, "name": "Paid Advertising Management", "item": "https://eyepune.com/Service-PaidAds" }
+            ]
+        },
+        {
+            "@type": "Service",
+            "name": "Paid Advertising Management",
+            "description": "Stop burning money on ads. Our global PPC experts manage Google Search, Meta Ads, and Performance Max campaigns that deliver measurable leads and 4.2x average ROAS.",
+            "provider": { "@type": "Organization", "name": "EyE PunE", "url": "https://eyepune.com" },
+            "areaServed": "Global"
+        }
+    ]
+};
+
 export default function Service_PaidAds() {
     return (
         <>
@@ -48,7 +77,7 @@ export default function Service_PaidAds() {
                 description="Stop burning money on ads. Our global PPC experts manage Google Search, Meta Ads, and Performance Max campaigns that deliver measurable leads and 4.2x average ROAS. Get a free ads audit."
                 keywords="google ads agency pune, meta ads management pune, facebook ads company pune, PPC experts pune, best ad agency for ROI pune"
                 canonicalUrl="https://eyepune.com/Service-PaidAds"
-                structuredData={{ "@context": "https://schema.org", "@type": "Service", "name": "Paid Advertising Management", "provider": { "@type": "Organization", "name": "EyE PunE" } }}
+                structuredData={faqSchema}
             />
 
             <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">

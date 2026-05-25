@@ -65,5 +65,58 @@ export default async function sitemap() {
         }
     }
 
-    return [...staticRoutes, ...blogRoutes];
+    // Programmatic SEO Pages
+    const programmaticSeoQueries = [
+        "B2B paid ads agency India",
+        "Best Google Ads agency for startups",
+        "Meta Ads management services global",
+        "B2B SaaS performance marketing agency",
+        "Account-based marketing (ABM) paid advertising Pune",
+        "Top paid advertising company for lead generation",
+        "Performance-based marketing agency India",
+        "Website development AI tools in Pune",
+        "Website development and design services Pune",
+        "Free website development consultation Pune",
+        "Best website development company Pune",
+        "Website development course and training",
+        "Custom AI website development company",
+        "E-commerce website development services",
+        "Sales funnel optimization services India",
+        "Conversion rate optimization (CRO) agency global",
+        "B2B lead generation funnel builder",
+        "Top landing page optimization services Pune",
+        "Automated sales funnel strategy",
+        "E-commerce UX and funnel optimization",
+        "High-ticket client acquisition funnels",
+        "Social media marketing services in India",
+        "Best social media agency for global brands",
+        "B2B LinkedIn marketing agency Pune",
+        "Instagram marketing and management services",
+        "Social media content creation agency",
+        "Affordable digital marketing agency for startups",
+        "Influencer marketing and social analytics company",
+        "Brand identity design agency India",
+        "Startup branding agencies global",
+        "Custom logo design services Pune",
+        "Top brand strategy agencies",
+        "SaaS and Tech branding agency",
+        "Corporate B2B brand identity design",
+        "Brand style guide and positioning company",
+        "Top AI automation agencies India",
+        "AI business automation consultants global",
+        "Hire AI automation specialist Pune",
+        "Generative AI integration services",
+        "Best AI agency for small businesses",
+        "Business Process Automation (BPA) companies India",
+        "Custom AI agent development company"
+    ];
+
+    const programmaticRoutes = programmaticSeoQueries.map(query => ({
+        url: `${baseUrl}/Solutions/${query.split(' ').join('-')}`,
+        lastModified: now,
+        changeFrequency: 'weekly',
+        priority: 0.9,
+    }));
+
+    return [...staticRoutes, ...blogRoutes, ...programmaticRoutes];
 }

@@ -18,11 +18,11 @@ export async function GET() {
     const destDir = path.join(process.cwd(), 'public', 'logos');
 
     const filesToCopy = [
-        { src: 'media__1777377976894.png', dest: 'partner_1.png' },
-        { src: 'media__1777377976910.jpg', dest: 'partner_2.jpg' },
-        { src: 'media__1777377977079.png', dest: 'partner_3.png' },
-        { src: 'media__1777377977121.png', dest: 'partner_4.png' },
-        { src: 'media__1777377977139.jpg', dest: 'partner_5.jpg' }
+        { src: 'media__1777377976894.webp', dest: 'partner_1.webp' },
+        { src: 'media__1777377976910.webp', dest: 'partner_2.webp' },
+        { src: 'media__1777377977079.webp', dest: 'partner_3.webp' },
+        { src: 'media__1777377977121.webp', dest: 'partner_4.webp' },
+        { src: 'media__1777377977139.webp', dest: 'partner_5.webp' }
     ];
 
     for (const file of filesToCopy) {
@@ -79,11 +79,11 @@ export async function GET() {
 
         // B. Client Logos (Sync with fallback)
         const clientLogos = [
-            { company_name: 'Orbit Solutions', logo_url: '/logos/partner_1.png', display_order: 1, is_active: true },
-            { company_name: 'Dashes n Hyphens', logo_url: '/logos/partner_2.jpg', display_order: 2, is_active: true },
-            { company_name: 'Magniflex', logo_url: '/logos/partner_3.png', display_order: 3, is_active: true },
-            { company_name: 'Flow Dynamics', logo_url: '/logos/partner_4.png', display_order: 4, is_active: true },
-            { company_name: 'Body Perfect & Smile Lounge', logo_url: '/logos/partner_5.jpg', display_order: 5, is_active: true }
+            { company_name: 'Orbit Solutions', logo_url: '/logos/partner_1.webp', display_order: 1, is_active: true },
+            { company_name: 'Dashes n Hyphens', logo_url: '/logos/partner_2.webp', display_order: 2, is_active: true },
+            { company_name: 'Magniflex', logo_url: '/logos/partner_3.webp', display_order: 3, is_active: true },
+            { company_name: 'Flow Dynamics', logo_url: '/logos/partner_4.webp', display_order: 4, is_active: true },
+            { company_name: 'Body Perfect & Smile Lounge', logo_url: '/logos/partner_5.webp', display_order: 5, is_active: true }
         ];
 
         for (const logo of clientLogos) {

@@ -41,6 +41,41 @@ const results = [
     { val: '500+', label: 'Tools Integrated' },
 ];
 
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(f => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.eyepune.com" },
+                { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.eyepune.com/Services-Detail" },
+                { "@type": "ListItem", "position": 3, "name": "Global AI Business Automation", "item": "https://www.eyepune.com/Service-AI" }
+            ]
+        },
+        {
+            "@type": "Service",
+            "name": "Global AI Business Automation",
+            "description": "Scale your business globally with Multi-Model AI automation. We build custom intelligence workflows using OpenAI, Claude 3.5, Gemini 1.5, and NVIDIA-accelerated systems.",
+            "provider": { "@type": "Organization", "name": "EyE PunE", "url": "https://www.eyepune.com" },
+            "areaServed": "Global",
+            "offers": {
+                "@type": "Offer",
+                "priceCurrency": "INR",
+                "price": "40000",
+                "description": "Enterprise AI Automation Starter"
+            }
+        }
+    ]
+};
+
 export default function Service_AI() {
     return (
         <>
@@ -49,19 +84,7 @@ export default function Service_AI() {
                 description="Scale your business globally with Multi-Model AI automation. We build custom intelligence workflows using OpenAI, Claude 3.5, Gemini 1.5, and NVIDIA-accelerated systems for lead qualification and support."
                 keywords="global AI automation, multi-model LLM integration, OpenAI for business, Claude 3.5 automation, custom AI workflows, international AI agency"
                 canonicalUrl="https://www.eyepune.com/Service-AI"
-                structuredData={{ 
-                    "@context": "https://schema.org", 
-                    "@type": "Service", 
-                    "name": "Global AI Business Automation", 
-                    "provider": { "@type": "Organization", "name": "EyE PunE" },
-                    "areaServed": "Global",
-                    "offers": {
-                        "@type": "Offer",
-                        "priceCurrency": "INR",
-                        "price": "40000",
-                        "description": "Enterprise AI Automation Starter"
-                    }
-                }}
+                structuredData={faqSchema}
             />
 
             <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
