@@ -182,10 +182,10 @@ export default function Blog() {
                                                     <div className="bg-white/[0.02] border border-white/[0.05] rounded-[2rem] p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 h-full flex flex-col">
                                                         <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6">
                                                             <img 
-                                                                src={post.featured_image || getFallback(post.id)} 
+                                                                src={post.featured_image || fallbackImages[idx % fallbackImages.length]} 
                                                                 alt={post.title}
                                                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                                                onError={(e) => { e.target.src = getFallback(post.id) }}
+                                                                onError={(e) => { e.target.src = fallbackImages[idx % fallbackImages.length] }}
                                                             />
                                                         </div>
                                                         <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-gray-500 uppercase mb-4">
