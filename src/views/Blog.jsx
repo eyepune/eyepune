@@ -12,6 +12,15 @@ import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/seo/SEOHead";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
+const fallbackImages = [
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800', // Blue digital
+    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800', // Cyberpunk neon
+    'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800', // Tech circuit
+    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800', // Matrix code
+    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'  // Digital earth
+];
+const getFallback = (id) => fallbackImages[(String(id).charCodeAt(0) || 0) % fallbackImages.length];
+
 export default function Blog() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -166,10 +175,10 @@ export default function Blog() {
                                                     <div className="bg-white/[0.02] border border-white/[0.05] rounded-[2rem] p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 h-full flex flex-col">
                                                         <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6">
                                                             <img 
-                                                                src={post.featured_image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'} 
+                                                                src={post.featured_image || getFallback(post.id)} 
                                                                 alt={post.title}
                                                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                                                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800' }}
+                                                                onError={(e) => { e.target.src = getFallback(post.id) }}
                                                             />
                                                         </div>
                                                         <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-gray-500 uppercase mb-4">

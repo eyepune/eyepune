@@ -16,6 +16,15 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import SEOHead from "@/components/seo/SEOHead";
 
+const fallbackImages = [
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800',
+    'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800',
+    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800',
+    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'
+];
+const getFallback = (id) => fallbackImages[(String(id).charCodeAt(0) || 0) % fallbackImages.length];
+
 export default function BlogPost() {
     const searchParams = useSearchParams();
     const postId = searchParams.get('id');
@@ -180,7 +189,7 @@ export default function BlogPost() {
         </div>
     );
 
-    const featuredImg = post.featured_image || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000';
+    const featuredImg = post.featured_image || getFallback(post.id);
 
     return (
         <div className="min-h-screen bg-transparent text-white selection:bg-red-500/30 font-sans">
@@ -202,7 +211,7 @@ export default function BlogPost() {
                                 src={featuredImg} 
                                 className="absolute inset-0 w-full h-full object-cover brightness-[0.6]"
                                 alt={post.title || "Blog Post Header"}
-                                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000' }}
+                                onError={(e) => { e.target.src = getFallback(post.id) }}
                             />
                         </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#040404] via-[#040404]/80 to-transparent" />
@@ -276,7 +285,7 @@ export default function BlogPost() {
                                         <Link key={relatedPost.id} href={createPageUrl(`Blog-Post?slug=${relatedPost.slug}`)} className="group block">
                                             <div className="bg-white/5 border border-white/5 rounded-3xl p-6 hover:bg-white/10 transition-all h-full flex flex-col">
                                                 <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
-                                                    <img src={relatedPost.featured_image || featuredImg} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" alt={relatedPost.title || "Related Post"} onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000' }} />
+                                                    <img src={relatedPost.featured_image || getFallback(relatedPost.id)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" alt={relatedPost.title || "Related Post"} onError={(e) => { e.target.src = getFallback(relatedPost.id) }} />
                                                 </div>
                                                 <h3 className="text-xl font-bold group-hover:text-red-500 transition-colors line-clamp-2">{relatedPost.title}</h3>
                                             </div>
