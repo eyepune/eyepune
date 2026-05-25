@@ -339,29 +339,7 @@ Assistant:`;
                     </motion.div>
                 ) : (
                     <div className="relative pointer-events-none">
-                        {/* Sales Sniper Hook Badge */}
-                        {!isBadgeDismissed && (
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.5, x: 20 }}
-                                animate={{ opacity: 1, scale: 1, x: 0 }}
-                                transition={{ delay: 1, duration: 0.5 }}
-                                className="hidden md:flex absolute right-full mr-4 bottom-2 bg-white text-black pl-4 pr-2 py-2 rounded-2xl rounded-tr-sm shadow-xl text-[11px] font-black uppercase tracking-tighter items-center gap-3 border border-red-500/20 pointer-events-auto whitespace-nowrap"
-                            >
-                                <span className="w-2 h-2 rounded-full bg-red-600 animate-ping flex-shrink-0" />
-                                <span>
-                                    {window.location.pathname.includes('Solution-Founders') ? "Founder: Get your 5-min AI Audit" :
-                                     window.location.pathname.includes('Solution-YouTubers') ? "Creators: Go Global with AI" :
-                                     window.location.pathname.includes('Solution-Startups') ? "Startups: Scale 10x with LLMs" :
-                                     "EyE BoT: Ready to Scale your ROI?"}
-                                </span>
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); setIsBadgeDismissed(true); }}
-                                    className="p-1 hover:bg-gray-100 rounded-full transition-colors opacity-50 hover:opacity-100"
-                                >
-                                    <X className="w-3 h-3" />
-                                </button>
-                            </motion.div>
-                        )}
+
                         
                         <motion.button
                             initial={{ scale: 0, rotate: -45 }}
