@@ -69,14 +69,7 @@ export default function Home() {
                 <section className="py-32 bg-transparent relative">
                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/15 to-transparent" />
                     <div className="max-w-7xl mx-auto px-6">
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.8 }}
-                            className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed"
-                        >
-                            We empower Founders, Creators, and Global Startups with LLM-Agnostic AI automation and elite marketing systems. Leveraging the best of OpenAI, Anthropic, and Google Gemini, engineered for the global stage.
-                        </motion.p>
+
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
