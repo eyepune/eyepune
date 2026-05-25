@@ -44,25 +44,36 @@ export default function Pricing() {
         />
 
             {/* HERO */}
-            <section className="relative py-20 overflow-hidden">
+            <section className="relative py-24 overflow-hidden flex items-center justify-center min-h-[50vh]">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,rgba(239,68,68,0.15),transparent_50%)]" />
                 <div className="absolute inset-0 opacity-[0.03]"
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
-
                 
+                {/* Floating neon orbs */}
+                <motion.div 
+                    animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-1/4 left-1/4 w-64 h-64 bg-red-600/20 blur-[100px] rounded-full"
+                />
+                <motion.div 
+                    animate={{ y: [20, -20, 20], x: [10, -10, 10], opacity: [0.2, 0.5, 0.2] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/10 blur-[120px] rounded-full"
+                />
+
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 mb-8">
-                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                            <span className="text-red-400 text-sm font-medium">Transparent Pricing</span>
+                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
+                        <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-red-500/30 bg-black/40 backdrop-blur-xl mb-8 shadow-[0_0_30px_rgba(239,68,68,0.15)]">
+                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
+                            <span className="text-red-400 text-sm font-bold tracking-widest uppercase">Transparent Pricing</span>
                         </div>
-                        <h1 className="text-4xl sm:text-6xl md:text-8xl font-black mb-6 leading-[0.95]">
-                            Simple,{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Transparent</span>
-                            <br />Pricing
+                        <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] font-black mb-6 leading-[1.05] tracking-tight">
+                            Invest in <br className="hidden md:block" />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-red-600 bg-[length:200%_auto] animate-gradient">Unstoppable Growth</span>
                         </h1>
-                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                            Choose the services that fit your business. All plans include dedicated support and a satisfaction guarantee.
+                        <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed">
+                            No hidden fees. No retainer traps. Just raw, autonomous digital infrastructure built to scale your revenue.
                         </p>
                     </motion.div>
                 </div>
@@ -104,14 +115,17 @@ export default function Pricing() {
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
                                             transition={{ delay: i * 0.08 }}
-                                            className={`relative rounded-2xl overflow-hidden transition-all duration-500 group flex flex-col ${
+                                            className={`relative rounded-3xl overflow-hidden transition-all duration-500 group flex flex-col ${
                                                 plan.is_popular
-                                                    ? 'bg-gradient-to-br from-red-950/60 to-orange-950/30 border-2 border-red-500/40 shadow-[0_0_50px_rgba(239,68,68,0.15)]'
-                                                    : 'bg-white/[0.025] border border-white/[0.08] hover:border-red-500/25'
+                                                    ? 'bg-[#0a0a0a] border border-red-500/40 shadow-[0_0_50px_rgba(239,68,68,0.15)] hover:shadow-[0_0_80px_rgba(239,68,68,0.3)] hover:-translate-y-2'
+                                                    : 'bg-[#0a0a0a]/80 border border-white/[0.08] hover:border-red-500/30 hover:bg-[#0f0f0f] hover:-translate-y-1'
                                             }`}
                                         >
+                                            {/* Hover Glow Effect */}
+                                            <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 via-red-500/0 to-red-500/0 group-hover:from-red-500/5 group-hover:to-orange-500/5 transition-all duration-500 pointer-events-none" />
+                                            
                                             {plan.is_popular && (
-                                                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-red-400 to-orange-400" />
+                                                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-[length:200%_auto] animate-gradient" />
                                             )}
                                             <div className="p-7 flex flex-col flex-1">
                                                 {plan.is_popular && (
@@ -143,13 +157,18 @@ export default function Pricing() {
                                                     ))}
                                                 </ul>
                                                 <Button onClick={() => setSelectedPlan(plan)}
-                                                    className={`w-full py-5 rounded-xl font-bold mt-auto ${
+                                                    className={`w-full py-6 rounded-2xl font-black text-lg mt-auto relative overflow-hidden group/btn ${
                                                         plan.is_popular
-                                                            ? 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]'
-                                                            : 'bg-white/[0.07] hover:bg-white/[0.12] text-white border border-white/[0.08]'
-                                                    } transition-all`}
+                                                            ? 'bg-red-600 hover:bg-red-500 text-white shadow-[0_0_30px_rgba(239,68,68,0.4)]'
+                                                            : 'bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/[0.08]'
+                                                    } transition-all duration-300`}
                                                 >
-                                                    Get Started <ArrowRight className="w-4 h-4 ml-1 inline" />
+                                                    <span className="relative z-10 flex items-center justify-center">
+                                                        Deploy System <ArrowRight className="w-5 h-5 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                                    </span>
+                                                    {plan.is_popular && (
+                                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover/btn:translate-x-[150%] transition-transform duration-700 ease-in-out" />
+                                                    )}
                                                 </Button>
                                             </div>
                                         </motion.div>
