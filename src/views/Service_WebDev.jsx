@@ -25,7 +25,7 @@ const features = [
 ];
 
 const results = [
-    { val: '200+', label: 'Websites Delivered' },
+    { val: '25+', label: 'Websites Delivered' },
     { val: '<2s', label: 'Avg. Page Load Time' },
     { val: '40%', label: 'Avg. Conversion Lift' },
     { val: '5★', label: 'Client Satisfaction' },
