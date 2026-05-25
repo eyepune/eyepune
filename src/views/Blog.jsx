@@ -61,8 +61,7 @@ export default function Blog() {
         return matchesSearch && matchesCategory;
     });
 
-    const featuredPost = posts[0];
-    const otherPosts = filteredPosts.filter(p => p.id !== featuredPost?.id);
+    const otherPosts = filteredPosts;
 
     return (
         <div className="min-h-screen bg-transparent text-white selection:bg-red-500/30">
@@ -93,56 +92,6 @@ export default function Blog() {
                     </motion.div>
                 </div>
             </section>
-
-            {/* Featured Post — Cinematic Reveal */}
-            {featuredPost && selectedCategory === 'all' && !searchQuery && (
-                <section className="py-16 md:py-24 border-b border-white/[0.05]">
-                    <div className="max-w-7xl mx-auto px-6">
-                        <Link href={createPageUrl(`Blog_Post?slug=${featuredPost.slug}`)} className="group">
-                            <motion.div 
-                                initial={{ opacity: 0, y: 40 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="relative grid lg:grid-cols-2 gap-12 items-center bg-white/[0.02] border border-white/[0.05] rounded-[2.5rem] p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-700"
-                            >
-                                <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-red-900/10">
-                                    <Image 
-                                        src={featuredPost.featured_image || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200'} 
-                                        alt={featuredPost.title}
-                                        fill
-                                        sizes="(max-width: 1024px) 100vw, 50vw"
-                                        priority
-                                        className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#040404]/60 to-transparent" />
-                                    <div className="absolute top-6 left-6">
-                                        <Badge className="bg-red-600 text-white border-none px-4 py-1.5 text-sm font-bold shadow-lg">Featured</Badge>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-4 text-gray-500 text-sm font-medium mb-6">
-                                        <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-red-500" /> {formatDate(featuredPost.published_date)}</span>
-                                        <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-red-500" /> {getReadingTime(featuredPost.content)} min read</span>
-                                    </div>
-                                    <h2 className="text-4xl md:text-5xl font-black mb-6 group-hover:text-red-500 transition-colors leading-tight">
-                                        {featuredPost.title}
-                                    </h2>
-                                    <p className="text-gray-400 text-lg mb-10 line-clamp-3 leading-relaxed">
-                                        {featuredPost.excerpt}
-                                    </p>
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-orange-500 flex items-center justify-center font-bold">E</div>
-                                        <div>
-                                            <div className="text-sm font-bold text-white">{featuredPost.author || 'EyE PunE Team'}</div>
-                                            <div className="text-xs text-gray-500 uppercase tracking-widest">Growth Strategist</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </Link>
-                    </div>
-                </section>
-            )}
 
             {/* Filtering & Search — Sleek Sidebar Layout */}
             <section className="py-16 md:py-24">
