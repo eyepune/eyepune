@@ -158,9 +158,41 @@ export async function generateMetadata({ params, searchParams }) {
   };
 }
 
-// Enable fully dynamic server rendering (bypasses stale edge CDN caching)
 export const revalidate = 0;
 
-export default function CatchAllPage() {
-  return <CatchAllPageClient />;
+export default async function CatchAllPage({ params, searchParams }) {
+  const slugArray = params?.slug || [];
+  const baseRoute = slugArray[0];
+  const identifier = searchParams?.slug || searchParams?.id || slugArray[1];
+  
+  let initialData = null;
+
+  // Pre-fetch Blog Post on the server to prevent Soft 404s
+  if (baseRoute?.toLowerCase() === 'blog-post' && identifier && !supabaseUrl.includes('placeholder')) {
+    try {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      const { data } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('slug', identifier)
+        .single();
+      if (data) initialData = data;
+    } catch (e) {
+      console.error('Server fetch error:', e);
+    }
+  }
+
+  return (
+    <>
+      {/* SSR fallback for Googlebot to instantly read the content before React Hydration */}
+      {initialData && (
+        <article className="sr-only" aria-hidden="false">
+          <h1>{initialData.title}</h1>
+          <p>{initialData.excerpt}</p>
+          <div>{initialData.content}</div>
+        </article>
+      )}
+      <CatchAllPageClient initialData={initialData} />
+    </>
+  );
 }

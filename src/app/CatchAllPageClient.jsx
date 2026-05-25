@@ -161,7 +161,7 @@ function LoadingSpinner() {
   );
 }
 
-export default function CatchAllPageClient() {
+export default function CatchAllPageClient({ initialData }) {
   const pathname = usePathname();
   
   // Extract page name from path: "/Admin-Dashboard" → "Admin-Dashboard"
@@ -198,7 +198,7 @@ export default function CatchAllPageClient() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
         >
-          <PageComponent />
+          <PageComponent initialData={initialData} />
         </motion.div>
       </Suspense>
     );
@@ -213,7 +213,7 @@ export default function CatchAllPageClient() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <PageComponent />
+          <PageComponent initialData={initialData} />
         </motion.div>
       </Suspense>
     </Layout>

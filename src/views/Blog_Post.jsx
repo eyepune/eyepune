@@ -32,7 +32,7 @@ const getFallback = (id) => {
     return fallbackImages[sum % fallbackImages.length];
 };
 
-export default function BlogPost() {
+export default function BlogPost({ initialData }) {
     const searchParams = useSearchParams();
     const postId = searchParams.get('id');
     const postSlug = searchParams.get('slug');
@@ -87,6 +87,7 @@ export default function BlogPost() {
                 return null;
             }
         },
+        initialData: initialData,
         enabled: !!(postId || postSlug)
     });
 
