@@ -499,6 +499,7 @@ export default function Layout(props) {
             <LayoutContent {...props} />
             {isPublicPage && <WhatsAppFloat />}
             {isPublicPage && <ExitIntentPopup />}
+            {isPublicPage && <ChatbotWidget />}
         </ThemeProvider>
     );
 }

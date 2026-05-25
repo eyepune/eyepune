@@ -84,7 +84,7 @@ export default function SEOKeywordPage({ params }) {
         </div>
 
         {/* CTA Section */}
-        <div className="max-w-4xl mx-auto text-center p-12 rounded-3xl bg-gradient-to-b from-red-950/40 to-black border border-red-900/30 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center p-12 rounded-3xl bg-gradient-to-b from-red-950/40 to-black border border-red-900/30 relative overflow-hidden mb-24">
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
           <h2 className="text-3xl md:text-4xl font-bold mb-6 relative z-10">
             Ready to implement {keyword} in your business?
@@ -97,6 +97,50 @@ export default function SEOKeywordPage({ params }) {
               Claim Your Strategy Session Now
             </Button>
           </Link>
+        </div>
+
+        {/* SEO Internal Linking Engine */}
+        <div className="max-w-6xl mx-auto border-t border-white/10 pt-16 pb-8">
+          <div className="flex flex-col md:flex-row gap-12 justify-between">
+            <div className="md:w-1/3">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Target className="w-5 h-5 text-red-500" />
+                Related Core Services
+              </h3>
+              <ul className="space-y-3">
+                <li><Link href="/Service-AI" className="text-gray-400 hover:text-red-400 transition-colors">Global AI Business Automation</Link></li>
+                <li><Link href="/Service-Funnels" className="text-gray-400 hover:text-red-400 transition-colors">Sales & System Funnels</Link></li>
+                <li><Link href="/Service-PaidAds" className="text-gray-400 hover:text-red-400 transition-colors">Paid Advertising Management</Link></li>
+                <li><Link href="/Service-WebDev" className="text-gray-400 hover:text-red-400 transition-colors">Website Development & Design</Link></li>
+              </ul>
+            </div>
+            
+            <div className="md:w-1/3">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-red-500" />
+                Trending Solutions
+              </h3>
+              <ul className="space-y-3">
+                <li><Link href="/Solutions/ai-lead-generation-agency" className="text-gray-400 hover:text-red-400 transition-colors">AI Lead Generation Agency</Link></li>
+                <li><Link href="/Solutions/whatsapp-automation-services" className="text-gray-400 hover:text-red-400 transition-colors">WhatsApp Automation Services</Link></li>
+                <li><Link href="/Solutions/b2b-sales-funnel-design" className="text-gray-400 hover:text-red-400 transition-colors">B2B Sales Funnel Design</Link></li>
+                <li><Link href="/Solutions/high-converting-landing-pages" className="text-gray-400 hover:text-red-400 transition-colors">High Converting Landing Pages</Link></li>
+              </ul>
+            </div>
+
+            <div className="md:w-1/3">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-red-500" />
+                Digital Growth
+              </h3>
+              <ul className="space-y-3">
+                <li><Link href="/Service-SocialMedia" className="text-gray-400 hover:text-red-400 transition-colors">Social Media Management</Link></li>
+                <li><Link href="/Solutions/instagram-reels-strategy" className="text-gray-400 hover:text-red-400 transition-colors">Instagram Reels Strategy</Link></li>
+                <li><Link href="/Service-Branding" className="text-gray-400 hover:text-red-400 transition-colors">Premium Brand Identity</Link></li>
+                <li><Link href="/Blog" className="text-gray-400 hover:text-red-400 transition-colors">Latest Digital Insights</Link></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </main>
