@@ -48,7 +48,7 @@ export default function Client_Portal() {
         <p className="text-gray-500 mb-6">Sign in to view your proposals, invoices and payment history.</p>
         <button
           onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
-          className="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold mx-auto transition-all"
+          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white rounded-xl font-bold mx-auto transition-all shadow-[0_0_20px_rgba(239,68,68,0.3)]"
         >
           <LogIn className="w-4 h-4" /> Sign In to Continue
         </button>

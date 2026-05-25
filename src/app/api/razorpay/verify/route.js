@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { supabase } from '@/integrations/supabase/client';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(request) {
     try {
@@ -40,7 +40,7 @@ export async function POST(request) {
             created_at: new Date().toISOString()
         };
 
-        const { error: pError } = await supabase
+        const { error: pError } = await supabaseAdmin
             .from('payments')
             .insert([paymentData]);
 
@@ -49,7 +49,7 @@ export async function POST(request) {
         // 3. Update Invoice if provided
         let updatedInvoice = null;
         if (invoice_id) {
-            const { data, error: iError } = await supabase
+            const { data, error: iError } = await supabaseAdmin
                 .from('invoices')
                 .update({
                     status: 'paid',
