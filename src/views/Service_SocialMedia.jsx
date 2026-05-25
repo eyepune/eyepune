@@ -119,38 +119,7 @@ export default function Service_SocialMedia() {
                 </div>
             </section>
 
-            {/* Testimonials */}
-            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01]">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div className="order-2 lg:order-1 grid grid-cols-2 gap-4">
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">3x</div>
-                                <div className="text-gray-500 text-sm">Engagement</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">10k+</div>
-                                <div className="text-gray-500 text-sm">Followers</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">Viral</div>
-                                <div className="text-gray-500 text-sm">Reels Strategy</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">ROI</div>
-                                <div className="text-gray-500 text-sm">Driven Content</div>
-                            </div>
-                        </div>
-                        <div className="order-1 lg:order-2">
-                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Client Impact</span>
-                            <h2 className="text-4xl font-black mb-6 italic">Results <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">That Speak</span></h2>
-                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                We transform your social media from a ghost town into an active, lead-generating machine. Our proven strategies increase global brand visibility and drive genuine, high-quality inquiries straight to your DMs.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
 
             {/* FAQ */}
             <section className="py-24 border-t border-white/[0.06]">

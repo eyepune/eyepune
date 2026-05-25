@@ -106,17 +106,6 @@ export default function Service_AI() {
                         </motion.div>
                     ))}
                 </div>
-            </section>            {/* Trust Bar */}
-            <section className="py-12 border-b border-white/[0.06] bg-transparent">
-                <div className="max-w-7xl mx-auto px-6">
-                    <p className="text-center text-[10px] font-bold tracking-[0.3em] uppercase text-gray-600 mb-8">PUNE BUSINESSES SCALING WITH OUR AI</p>
-                    <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
-                        <span className="text-xl font-black italic">TECH-PUNE</span>
-                        <span className="text-xl font-black italic">REALTY-SYNC</span>
-                        <span className="text-xl font-black italic">IND-AUTO</span>
-                        <span className="text-xl font-black italic">HINJEWADI-SAAS</span>
-                    </div>
-                </div>
             </section>
 
             {/* Features */}
@@ -144,49 +133,7 @@ export default function Service_AI() {
                 </div>
             </section>
 
-            {/* Testimonials */}
-            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01] relative">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.03)_0%,transparent_70%)]" />
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <div>
-                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Case Study</span>
-                            <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight italic">How we saved <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">80 hours/mo</span> for a Pune Logistics Firm</h2>
-                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                "Our previous process required 3 full-time employees just to sort through incoming leads and assign them. EyE PunE automated the entire qualification process. Now, only 'Hot' leads hit our sales desk. We saved ₹2.5 Lakhs in overhead in the first quarter alone."
-                            </p>
-                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 w-fit">
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-red-600 to-orange-600 flex items-center justify-center font-bold text-white shadow-lg">VM</div>
-                                <div>
-                                    <div className="font-bold text-white italic">Vikram M.</div>
-                                    <div className="text-gray-500 text-xs uppercase tracking-widest">Operations Lead, Pune Logistics</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            {[
-                                { val: '80h', label: 'Time Saved/Mo', icon: Zap },
-                                { val: '₹2.5L', label: 'Quarterly ROI', icon: BarChart3 },
-                                { val: '0', label: 'Manual Errors', icon: RefreshCw },
-                                { val: 'Instant', label: 'Lead Response', icon: MessageSquare }
-                            ].map((stat, i) => (
-                                <motion.div 
-                                    key={i} 
-                                    initial={{ scale: 0.9, opacity: 0 }} 
-                                    whileInView={{ scale: 1, opacity: 1 }} 
-                                    viewport={{ once: true }} 
-                                    transition={{ delay: i * 0.1 }}
-                                    className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all group text-center"
-                                >
-                                    <stat.icon className="w-5 h-5 text-red-500 mx-auto mb-3 opacity-50 group-hover:opacity-100 transition-opacity" />
-                                    <div className="text-4xl font-black text-white mb-1 tracking-tighter group-hover:text-red-500 transition-colors">{stat.val}</div>
-                                    <div className="text-gray-500 text-[10px] uppercase font-bold tracking-widest">{stat.label}</div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </section>
+
 
             {/* FAQ */}
             <section className="py-24 border-t border-white/[0.06]">

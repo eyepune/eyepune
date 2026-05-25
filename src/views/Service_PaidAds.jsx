@@ -119,45 +119,7 @@ export default function Service_PaidAds() {
                 </div>
             </section>
 
-            {/* Testimonials */}
-            <section className="py-24 border-t border-white/[0.06] bg-white/[0.01]">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">ROI Case Study</span>
-                            <h2 className="text-4xl font-black mb-6 italic">Precision <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">PPC Strategy</span></h2>
-                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                "Our cost per lead dropped from ₹450 to ₹180 within the first 6 weeks of working with EyE PunE. Their Google Ads strategy is light-years ahead of the competition."
-                            </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">VP</div>
-                                <div>
-                                    <div className="font-bold text-white text-lg italic">Vikram P.</div>
-                                    <div className="text-gray-500 text-sm">Director, Global Real Estate Group</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">4.2x</div>
-                                <div className="text-gray-500 text-sm">Avg ROAS</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">₹180</div>
-                                <div className="text-gray-500 text-sm">Cost Per Lead</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">Scalable</div>
-                                <div className="text-gray-500 text-sm">Growth Engines</div>
-                            </div>
-                            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                                <div className="text-3xl font-black text-red-500 mb-1">Elite</div>
-                                <div className="text-gray-500 text-sm">Google Partners</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
 
             {/* FAQ */}
             <section className="py-24 border-t border-white/[0.06]">
