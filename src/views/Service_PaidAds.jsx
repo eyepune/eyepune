@@ -23,6 +23,15 @@ const features = [
     { icon: BarChart3, title: "Analytics & Reporting", desc: "Weekly reports with ROAS, CPL, conversions, and optimization recommendations." },
     { icon: DollarSign, title: "Budget Optimization", desc: "Smart bidding strategies to squeeze maximum ROI from every rupee spent." },
 ];
+const programmaticSeoQueries = [
+    "B2B paid ads agency India",
+    "Best Google Ads agency for startups",
+    "Meta Ads management services global",
+    "B2B SaaS performance marketing agency",
+    "Account-based marketing (ABM) paid advertising Pune",
+    "Top paid advertising company for lead generation",
+    "Performance-based marketing agency India"
+];
 
 const results = [
     { val: '4.2x', label: 'Average ROAS' },
