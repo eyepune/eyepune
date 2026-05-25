@@ -158,8 +158,8 @@ export async function generateMetadata({ params, searchParams }) {
   };
 }
 
-// Enable Incremental Static Regeneration (ISR) - cache page for 1 hour
-export const revalidate = 3600;
+// Enable fully dynamic server rendering (bypasses stale edge CDN caching)
+export const revalidate = 0;
 
 export default function CatchAllPage() {
   return <CatchAllPageClient />;
