@@ -491,11 +491,14 @@ function LayoutContent({ children, currentPageName }) {
     );
 }
 
+import AntiInspect from "@/components/shared/AntiInspect";
+
 export default function Layout(props) {
     const isPublicPage = !props.currentPageName?.startsWith('Admin-') && !props.currentPageName?.startsWith('Client-');
     return (
         <ThemeProvider>
             <CustomCursor />
+            <AntiInspect />
             <LayoutContent {...props} />
             {isPublicPage && <WhatsAppFloat />}
             {isPublicPage && <ExitIntentPopup />}
