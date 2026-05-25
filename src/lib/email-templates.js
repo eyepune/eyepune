@@ -116,3 +116,155 @@ export const getClientKickoffTemplate = (name) => `
     </div>
 </div>
 `;
+
+export const getLinkedinOutreachTemplate = (name, company) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: ${BG_COLOR}; padding: 30px;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: ${BRAND_COLOR}; margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -0.5px;">EyE PunE</h1>
+    </div>
+    <div style="color: #111827; font-size: 16px; line-height: 1.6;">
+        <p>Hi ${name},</p>
+        <p>I was researching the latest developments at <strong>${company}</strong> and wanted to reach out directly.</p>
+        <p>At EyE PunE, we partner with industry leaders to implement custom AI infrastructure and high-converting web systems that drastically reduce operational bottlenecks and scale revenue.</p>
+        <p>I'd love to share a few specific ideas on how we could automate ${company}'s sales pipelines using conversational AI and advanced CRM integrations.</p>
+        <p>Are you open to a brief 10-minute discovery chat next week?</p>
+        
+        <div style="margin-top: 30px; margin-bottom: 30px;">
+            <a href="https://eyepune.com/Booking" style="background: ${BRAND_COLOR}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Schedule a Quick Chat →</a>
+        </div>
+        
+        <p style="margin-bottom: 5px;">Best regards,</p>
+        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
+        <p style="color: #6b7280; font-size: 14px; margin-top: 0;">Founder, EyE PunE</p>
+    </div>
+</div>
+`;
+
+export const getFollowUpTemplate = (name) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: ${BG_COLOR}; padding: 30px;">
+    <div style="color: #111827; font-size: 16px; line-height: 1.6;">
+        <p>Hi ${name},</p>
+        <p>I wanted to float this to the top of your inbox.</p>
+        <p>We are currently taking on a few select clients this quarter for our AI Growth Engine implementation. If scaling your digital infrastructure is still a priority, I'd love to show you exactly how our system works under the hood.</p>
+        <p>Let me know if you have a few minutes this week to connect.</p>
+        
+        <div style="margin-top: 30px; margin-bottom: 30px;">
+            <a href="https://eyepune.com/Booking" style="background: ${TEXT_COLOR}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Find a time on my calendar</a>
+        </div>
+        
+        <p style="margin-bottom: 5px;">Best,</p>
+        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
+    </div>
+</div>
+`;
+
+export const getProposalTemplate = (name, link) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: #f9fafb; padding: 40px 20px; border-radius: 12px;">
+    <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
+        <h2 style="color: ${TEXT_COLOR}; margin-top: 0; font-size: 24px;">Your Strategic Proposal is Ready</h2>
+        <p style="color: #4b5563; line-height: 1.6; font-size: 16px; margin: 20px 0;">
+            Hi ${name}, based on our discussion, our engineering and strategy teams have finalized the scope and architecture for your project.
+        </p>
+        <div style="margin: 30px 0;">
+            <a href="${link || 'https://eyepune.com/Client-Portal'}" style="background: linear-gradient(135deg, ${BRAND_COLOR} 0%, ${ACCENT_COLOR} 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">View Digital Proposal</a>
+        </div>
+        <p style="color: #6b7280; font-size: 14px;">
+            You can review the scope, timeline, and electronically sign the agreement directly through the secure link above.
+        </p>
+    </div>
+</div>
+`;
+
+export const getMeetingReminderTemplate = (name, time) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: ${BG_COLOR}; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+    <div style="background: #111827; padding: 20px; text-align: center;">
+        <p style="color: white; margin: 0; font-weight: bold; font-size: 16px;">⏳ Meeting Reminder</p>
+    </div>
+    <div style="padding: 30px;">
+        <p style="color: #111827; font-size: 16px; margin-top: 0;">Hi ${name},</p>
+        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
+            Just a quick reminder that our strategy call begins in <strong>${time}</strong>.
+        </p>
+        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
+            I'm looking forward to diving into your current digital infrastructure and discussing exactly how we can automate your growth.
+        </p>
+        <div style="margin-top: 25px;">
+            <a href="https://meet.google.com/lookup/eyepune" style="background: ${BRAND_COLOR}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Join Google Meet</a>
+        </div>
+    </div>
+</div>
+`;
+
+export const getPostMeetingFollowUpTemplate = (name) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: ${BG_COLOR}; padding: 30px;">
+    <div style="color: #111827; font-size: 16px; line-height: 1.6;">
+        <p>Hi ${name},</p>
+        <p>It was fantastic speaking with you today. Thank you for walking me through the vision and current challenges of your business.</p>
+        <p>As discussed, our engineering and strategy teams are going to review the technical requirements we mapped out. We'll be drafting a strategic proposal detailing exactly how EyE PunE can streamline your operations and scale your revenue.</p>
+        <p>I'll send that over for your review within the next 24-48 hours.</p>
+        <p>In the meantime, if any other questions pop into your head, feel free to reply directly to this email!</p>
+        <br>
+        <p style="margin-bottom: 5px;">Best regards,</p>
+        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
+    </div>
+</div>
+`;
+
+export const getInvoiceTemplate = (name, amount, link) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: #f9fafb; padding: 40px 20px; border-radius: 12px;">
+    <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
+        <h2 style="color: ${TEXT_COLOR}; margin-top: 0; font-size: 22px;">Invoice Available</h2>
+        <div style="background: #fef2f2; color: ${BRAND_COLOR}; font-size: 28px; font-weight: 900; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            ₹${amount}
+        </div>
+        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
+            Hi ${name}, a new invoice has been generated for your account. You can view the breakdown and securely complete your payment below.
+        </p>
+        <div style="margin: 30px 0;">
+            <a href="${link || 'https://eyepune.com/Client-Portal'}" style="background: ${TEXT_COLOR}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Pay Securely via Razorpay</a>
+        </div>
+    </div>
+</div>
+`;
+
+export const getReactivationTemplate = (name) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: ${BG_COLOR}; padding: 30px;">
+    <div style="color: #111827; font-size: 16px; line-height: 1.6;">
+        <p>Hi ${name},</p>
+        <p>It’s been a while since we last connected, so I wanted to check in.</p>
+        <p>We recently rolled out several massive upgrades to our proprietary AI infrastructure, allowing our partners to automate their sales cycles and client onboarding entirely.</p>
+        <p>I know timing is everything in business. Have you made any progress on upgrading your digital infrastructure since we last spoke? If it’s back on the roadmap for this quarter, I’d love to show you the new systems we’ve built.</p>
+        <br>
+        <p style="margin-bottom: 5px;">Best,</p>
+        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
+    </div>
+</div>
+`;
+
+export const getAIReportDeliveryTemplate = (name, company, score) => `
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 600px; margin: 0 auto; background: ${BG_COLOR}; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+    <div style="background: #000; padding: 40px 20px; text-align: center;">
+        <h1 style="color: white; margin: 0; font-size: 22px;">AI Growth Assessment</h1>
+        <p style="color: #9ca3af; margin-top: 10px;">Confidential Report for ${company}</p>
+    </div>
+    <div style="padding: 40px 30px;">
+        <p style="color: #111827; font-size: 16px; font-weight: 500;">Hi ${name},</p>
+        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
+            Our AI engine has finished analyzing your current business infrastructure.
+        </p>
+        <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 24px; border-radius: 12px; margin: 24px 0; text-align: center;">
+            <div style="font-size: 14px; color: #6b7280; font-weight: 700; text-transform: uppercase;">Automation Potential Score</div>
+            <div style="font-size: 36px; font-weight: 900; color: ${BRAND_COLOR}; margin-top: 8px;">${score}/100</div>
+        </div>
+        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
+            Based on this score, there are massive operational bottlenecks in your current setup that are costing you both time and uncaptured revenue.
+        </p>
+        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
+            I've attached your personalized Strategic Roadmap (PDF) outlining exactly where AI and automation can be deployed in your business today.
+        </p>
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="https://eyepune.com/Booking" style="background: linear-gradient(135deg, ${BRAND_COLOR} 0%, ${ACCENT_COLOR} 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Review Report on a Call</a>
+        </div>
+    </div>
+</div>
+`;
