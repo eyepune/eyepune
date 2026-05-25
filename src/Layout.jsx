@@ -397,10 +397,10 @@ function LayoutContent({ children, currentPageName }) {
 
                             {/* Brand col */}
                             <div className="sm:col-span-2 lg:col-span-2 flex flex-col items-center sm:items-start">
-                                <div className="mb-5 flex flex-col items-center justify-center">
+                                <Link href={createPageUrl("Home")} className="flex-shrink-0 flex flex-col items-center justify-center mb-5">
                                     <Logo variant="dark" size="sm" />
-                                    <span className="text-[10px] tracking-[0.2em] uppercase text-red-500 font-bold mt-2 text-center ml-2">Connect · Engage · Grow</span>
-                                </div>
+                                    <span className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase text-red-500 font-bold mt-1 text-center ml-2">Connect · Engage · Grow</span>
+                                </Link>
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
                                     Pune-based all-in-one growth partner serving clients across the globe.
                                 </p>
