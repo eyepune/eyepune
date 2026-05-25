@@ -216,7 +216,7 @@ export default function Service_Funnels() {
                     </div>
                     <div className="flex flex-wrap gap-3">
                         {programmaticSeoQueries.map((query, i) => (
-                            <Link href={createPageUrl("Contact")} key={i}>
+                            <Link href={`/Solutions/${query.split(' ').join('-')}`} key={i}>
                                 <div className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] rounded-full text-sm text-gray-400 hover:text-red-400 hover:bg-white/[0.04] transition-all cursor-pointer flex items-center gap-2">
                                     <Search className="w-3 h-3" />
                                     {query}
