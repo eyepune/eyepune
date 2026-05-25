@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
     const hasDynamicContent = page && page.content;
 
     return (
-        <div className="min-h-screen py-32 px-6 bg-transparent">
+        <div className="min-h-screen pt-32 pb-64 px-6 bg-transparent">
             <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">
                     {page?.title || 'Privacy Policy'}
