@@ -148,7 +148,6 @@ export default function Service_PaidAds() {
                         ))}
                     </div>
                 </div>
-                </div>
             </section>
 
             {/* Programmatic SEO - Geo Targeting */}

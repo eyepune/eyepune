@@ -271,10 +271,10 @@ Assistant:`;
                                 </div>
                             </div>
                             <div className="flex items-center gap-1">
-                                <button onClick={() => setIsMinimized(!isMinimized)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                                <button aria-label={isMinimized ? "Maximize" : "Minimize"} onClick={() => setIsMinimized(!isMinimized)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
                                     {isMinimized ? <Maximize2 className="w-4 h-4 text-white" /> : <Minus className="w-4 h-4 text-white" />}
                                 </button>
-                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                                <button aria-label="Close" onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
                                     <X className="w-4 h-4 text-white" />
                                 </button>
                             </div>
@@ -323,6 +323,7 @@ Assistant:`;
                                             className="bg-white/5 border-white/10 rounded-2xl h-14 pl-5 pr-14 text-white placeholder:text-gray-600 focus:border-red-600/50"
                                         />
                                         <button 
+                                            aria-label="Send message"
                                             onClick={handleSend}
                                             disabled={isLoading || !input.trim()}
                                             className="absolute right-2 p-3 bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:bg-gray-800 rounded-xl transition-all"
@@ -342,6 +343,7 @@ Assistant:`;
 
                         
                         <motion.button
+                            aria-label="Open Chatbot"
                             initial={{ scale: 0, rotate: -45 }}
                             animate={{ scale: 1, rotate: 0 }}
                             whileHover={{ scale: 1.1, rotate: 5 }}

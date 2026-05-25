@@ -57,6 +57,9 @@ export default function LexProSection() {
                                 <img
                                     src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69697d1626923688ef1d9afa/b532a4c62_generated_image.png"
                                     alt="Lex Pro Dashboard"
+                                    loading="lazy"
+                                    width="800"
+                                    height="600"
                                     className="w-full h-full object-cover opacity-80"
                                 />
                                 {/* Overlay gradient */}

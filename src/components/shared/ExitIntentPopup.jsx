@@ -80,7 +80,7 @@ export default function ExitIntentPopup() {
                             style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 70%)' }}
                         />
 
-                        <button onClick={handleDismiss} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                        <button aria-label="Close" onClick={handleDismiss} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
                             <X className="w-4 h-4" />
                         </button>
 

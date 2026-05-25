@@ -176,7 +176,6 @@ export default function Service_Branding() {
                         ))}
                     </div>
                 </div>
-                </div>
             </section>
 
             {/* Programmatic SEO - Geo Targeting */}

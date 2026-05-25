@@ -163,7 +163,6 @@ export default function Service_AI() {
                         ))}
                     </div>
                 </div>
-                </div>
             </section>
 
             {/* Programmatic SEO - Geo Targeting */}

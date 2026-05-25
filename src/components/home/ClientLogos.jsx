@@ -71,6 +71,9 @@ export default function ClientLogos() {
                                         <img
                                             src={logo.logo_url}
                                             alt={logo.company_name}
+                                            loading="lazy"
+                                            width="112"
+                                            height="112"
                                             className="max-w-full max-h-full object-contain opacity-60 hover:opacity-90 transition-opacity duration-300 filter brightness-0 invert"
                                             onError={(e) => {
                                                 e.target.style.display = 'none';
@@ -83,6 +86,9 @@ export default function ClientLogos() {
                                     <img
                                         src={logo.logo_url}
                                         alt={logo.company_name}
+                                        loading="lazy"
+                                        width="112"
+                                        height="112"
                                         className="max-w-full max-h-full object-contain opacity-60 hover:opacity-90 transition-opacity duration-300 filter brightness-0 invert"
                                         onError={(e) => {
                                             e.target.style.display = 'none';

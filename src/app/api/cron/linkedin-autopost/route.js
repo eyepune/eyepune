@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
+export const dynamic = 'force-dynamic';
+
 // Vercel Cron Job Endpoint
 // This endpoint will be triggered automatically every day by Vercel
 export async function GET(request) {

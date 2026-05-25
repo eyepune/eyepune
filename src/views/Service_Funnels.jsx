@@ -205,7 +205,6 @@ export default function Service_Funnels() {
                         ))}
                     </div>
                 </div>
-                </div>
             </section>
 
             {/* Programmatic SEO - Geo Targeting */}
