@@ -53,7 +53,7 @@ export default function Cookies() {
                                 ),
                             }}
                         >
-                            {page.content}
+                            {page.content.replace(/Last Updated:/gi, 'Published Date:').replace(/Last Updated/gi, 'Published Date')}
                         </ReactMarkdown>
                     </div>
                 ) : (
