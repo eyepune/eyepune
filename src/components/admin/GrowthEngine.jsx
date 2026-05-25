@@ -127,7 +127,6 @@ export default function GrowthEngine() {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 w-full md:w-auto">
-                    <Button 
                     <Button onClick={() => setAutoPilot(!autoPilot)} variant={autoPilot ? "default" : "outline"} className={`h-12 px-6 rounded-2xl transition-all ${autoPilot ? 'bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 shadow-lg shadow-red-500/20' : 'border-white/10 text-gray-400 hover:text-white'}`}>
                         {autoPilot ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
                         {autoPilot ? 'Disable Auto-Pilot' : 'Enable AI Auto-Pilot'}
