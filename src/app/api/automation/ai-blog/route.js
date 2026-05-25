@@ -184,7 +184,7 @@ async function generateAndPostBlog(audience) {
 
     // ── STEP 3: IMAGE ASSIGNMENT & DB SAVE ──
     const imagePrompt = `Hyper-realistic futuristic digital art for a blog header. Theme: ${postData.title}. Aesthetic: Sleek high-tech dark mode with red neon accents`;
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1024&height=1024&nologo=true`;
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
 
     const slug = postData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(Math.random() * 1000);
     

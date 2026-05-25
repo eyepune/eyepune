@@ -165,12 +165,11 @@ export default function Blog() {
                                                 <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
                                                     <div className="bg-white/[0.02] border border-white/[0.05] rounded-[2rem] p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 h-full flex flex-col">
                                                         <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6">
-                                                            <Image 
+                                                            <img 
                                                                 src={post.featured_image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'} 
                                                                 alt={post.title}
-                                                                fill
-                                                                sizes="(max-width: 768px) 100vw, 50vw"
-                                                                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800' }}
                                                             />
                                                         </div>
                                                         <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-gray-500 uppercase mb-4">

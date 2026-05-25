@@ -198,13 +198,11 @@ export default function BlogPost() {
             <header className="relative w-full overflow-hidden min-h-[60vh] flex items-end">
                 <div className="absolute inset-0 z-0">
                         <div className="relative w-full h-full">
-                            <Image 
+                            <img 
                                 src={featuredImg} 
-                                fill
-                                sizes="100vw"
-                                priority
-                                className="object-cover brightness-[0.6]"
+                                className="absolute inset-0 w-full h-full object-cover brightness-[0.6]"
                                 alt={post.title || "Blog Post Header"}
+                                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000' }}
                             />
                         </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#040404] via-[#040404]/80 to-transparent" />
@@ -278,7 +276,7 @@ export default function BlogPost() {
                                         <Link key={relatedPost.id} href={createPageUrl(`Blog-Post?slug=${relatedPost.slug}`)} className="group block">
                                             <div className="bg-white/5 border border-white/5 rounded-3xl p-6 hover:bg-white/10 transition-all h-full flex flex-col">
                                                 <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
-                                                    <Image src={relatedPost.featured_image || featuredImg} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover group-hover:scale-105 transition-transform" alt={relatedPost.title || "Related Post"} />
+                                                    <img src={relatedPost.featured_image || featuredImg} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" alt={relatedPost.title || "Related Post"} onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000' }} />
                                                 </div>
                                                 <h3 className="text-xl font-bold group-hover:text-red-500 transition-colors line-clamp-2">{relatedPost.title}</h3>
                                             </div>
