@@ -114,23 +114,12 @@ export default function AIContentAssistant({ open, onClose, onApply, contentType
         if (!topic.trim()) return;
         setIsLoading(true);
         try {
-            const response = await fetch('/api/automation/test-schema', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'image_gen',
-                    prompt: `Hyper-realistic, futuristic digital art. Theme: ${topic}. Aesthetic: Sleek, high-tech, dark mode with red neon accents.`
-                })
-            });
-            const data = await response.json();
-            // Assuming the test-schema endpoint or a new proxy endpoint handles Modal
-            // We'll mock the UI display if the backend isn't fully proxying it yet, 
-            // but the user has MODAL_IMAGE_URL in their ai-blog route.
-            if(data.url) {
-                setGeneratedImageUrl(data.url);
-            } else {
-                setGeneratedImageUrl('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1024&auto=format&fit=crop'); // fallback for demo
-            }
+            const imagePrompt = `Hyper-realistic futuristic digital art. Theme: ${topic}. Aesthetic: Sleek high-tech dark mode with red neon accents`;
+            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1024&height=512&nologo=true`;
+            
+            // Just simulate a slight delay since it's an instant URL generation
+            await new Promise(r => setTimeout(r, 1000));
+            setGeneratedImageUrl(url);
         } catch (error) {
             console.error('Image Generation error:', error);
             alert('Failed to generate image');

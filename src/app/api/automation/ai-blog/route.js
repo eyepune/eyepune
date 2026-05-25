@@ -88,11 +88,19 @@ async function generateAndPostBlog(audience) {
     // 1. Generate Content
     const llmResponse = await fetch(LLM_API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${LLM_API_KEY}` },
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${LLM_API_KEY}`,
+            'Accept': 'application/json'
+        },
         body: JSON.stringify({
-            model: 'qwen/qwen3.5-122b-a10b',
+            model: 'moonshotai/kimi-k2.6',
             messages: [{ role: 'user', content: prompt }],
-            temperature: 0.8
+            max_tokens: 16384,
+            temperature: 0.8,
+            top_p: 1.0,
+            stream: false,
+            chat_template_kwargs: { thinking: true }
         })
     });
 
@@ -105,18 +113,10 @@ async function generateAndPostBlog(audience) {
         throw new Error(`Failed to parse AI content: ${e.message}`);
     }
 
-    // 2. Generate Image
-    const imageResponse = await fetch(MODAL_IMAGE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MODAL_API_KEY}` },
-        body: JSON.stringify({
-            model: 'dall-e-3',
-            prompt: `Hyper-realistic, futuristic digital art for a blog header. Theme: ${postData.title}. Aesthetic: Sleek, high-tech, dark mode with red neon accents (EyE PunE brand colors).`,
-            n: 1, size: '1024x1024'
-        })
-    });
-    const imageData = await imageResponse.json();
-    const imageUrl = imageData.data?.[0]?.url || '';
+    // 2. Generate Image (Using Pollinations AI - No API Key Required!)
+    const imagePrompt = `Hyper-realistic futuristic digital art for a blog header. Theme: ${postData.title}. Aesthetic: Sleek high-tech dark mode with red neon accents`;
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1024&height=1024&nologo=true`;
+
 
     // 3. Save to Database
     const slug = postData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(Math.random() * 1000);
