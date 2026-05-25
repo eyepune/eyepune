@@ -19,7 +19,14 @@ const fallbackImages = [
     'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800', // Matrix code
     'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'  // Digital earth
 ];
-const getFallback = (id) => fallbackImages[(String(id).charCodeAt(0) || 0) % fallbackImages.length];
+const getFallback = (id) => {
+    const str = String(id || Math.random());
+    let sum = 0;
+    for (let i = 0; i < str.length; i++) {
+        sum += str.charCodeAt(i);
+    }
+    return fallbackImages[sum % fallbackImages.length];
+};
 
 export default function Blog() {
     const [searchQuery, setSearchQuery] = useState('');
