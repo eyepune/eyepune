@@ -143,17 +143,10 @@ export default function Service_SocialMedia() {
                         </div>
                         <div className="order-1 lg:order-2">
                             <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Client Impact</span>
-                            <h2 className="text-4xl font-black mb-6 italic">Social Proof <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">That Speaks</span></h2>
+                            <h2 className="text-4xl font-black mb-6 italic">Results <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">That Speak</span></h2>
                             <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                                "EyE PunE took our Instagram from a ghost town to a lead-generating machine. Our DMs are now full of genuine inquiries, and our global brand visibility has never been higher."
+                                We transform your social media from a ghost town into an active, lead-generating machine. Our proven strategies increase global brand visibility and drive genuine, high-quality inquiries straight to your DMs.
                             </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center font-bold text-red-400">SM</div>
-                                <div>
-                                    <div className="font-bold text-white text-lg italic">Siddharth M.</div>
-                                    <div className="text-gray-500 text-sm">Founder, Global Lifestyle Brand</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
