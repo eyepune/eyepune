@@ -8,7 +8,7 @@ import {
     Zap, Target, MessageSquare, ArrowUpRight, 
     RefreshCw, Pause, Play, Users, Linkedin, Mail,
     TrendingUp, Search, Filter, CheckCircle2, Wand2,
-    ShieldCheck, Bot, Cpu, Sparkles
+    ShieldCheck, Bot, Cpu, Sparkles, Webhook, Copy
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { OUTREACH_PITCH_PROMPT } from '@/utils/prompts';
@@ -102,28 +102,12 @@ export default function GrowthEngine() {
         }
     });
 
-    // 6. Mock Action: Simulate Sourcing
-    const simulateSourcing = () => {
-        setIsSearching(true);
-        setTimeout(async () => {
-            const mockLeads = [
-                { full_name: 'Sarah Chen', company: 'Quantum SaaS', linkedin_url: 'https://linkedin.com/in/sarah-chen', status: 'sourcing' },
-                { full_name: 'David Miller', company: 'GrowthScale Agency', linkedin_url: 'https://linkedin.com/in/dmiller', status: 'sourcing' },
-                { full_name: 'Elena Rodriguez', company: 'CloudAI Systems', linkedin_url: 'https://linkedin.com/in/erodriguez', status: 'sourcing' }
-            ];
-            
-            for (const lead of mockLeads) {
-                await supabase.from('growth_leads').insert([{
-                    ...lead,
-                    campaign_id: campaigns[0]?.id,
-                    ai_qualification_score: Math.floor(Math.random() * 20) + 80 // High intent simulation
-                }]);
-            }
-            
-            queryClient.invalidateQueries(['growth-leads']);
-            setIsSearching(false);
-            toast.success('Found 3 new high-intent prospects!');
-        }, 2000);
+    // 6. Webhook Display
+    const webhookUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/webhooks/linkedin` : 'https://eyepune.com/api/webhooks/linkedin';
+    
+    const copyWebhook = () => {
+        navigator.clipboard.writeText(webhookUrl);
+        toast.success('LinkedIn Webhook URL copied to clipboard!');
     };
 
     return (
@@ -139,23 +123,17 @@ export default function GrowthEngine() {
                             Engine Status: {autoPilot ? 'Fully Autonomous' : 'Manual Control'}
                             {autoPilot && <Badge className="bg-red-600 text-[10px] animate-pulse">AUTO-PILOT ON</Badge>}
                         </h2>
-                        <p className="text-xs text-gray-500">LLM-driven client acquisition in progress</p>
+                        <p className="text-xs text-gray-500 mt-1">Connect PhantomBuster or HeyReach to the webhook to stream LinkedIn leads.</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3 w-full md:w-auto">
                     <Button 
-                        onClick={() => setAutoPilot(!autoPilot)}
-                        className={`flex-1 md:flex-none h-12 px-8 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${
-                            autoPilot 
-                            ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/20' 
-                            : 'bg-white/5 hover:bg-white/10 text-gray-400 border border-white/10'
-                        }`}
-                    >
+                    <Button onClick={() => setAutoPilot(!autoPilot)} variant={autoPilot ? "default" : "outline"} className={`h-12 px-6 rounded-2xl transition-all ${autoPilot ? 'bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 shadow-lg shadow-red-500/20' : 'border-white/10 text-gray-400 hover:text-white'}`}>
                         {autoPilot ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
                         {autoPilot ? 'Disable Auto-Pilot' : 'Enable AI Auto-Pilot'}
                     </Button>
-                    <Button onClick={simulateSourcing} disabled={isSearching} variant="outline" className="h-12 px-6 border-white/10 text-gray-400 rounded-2xl">
-                        {isSearching ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                    <Button onClick={copyWebhook} variant="outline" className="h-12 px-6 border-white/10 text-gray-400 rounded-2xl group hover:text-white hover:border-red-500/50 transition-all">
+                        <Webhook className="w-4 h-4 mr-2 group-hover:text-red-500 transition-colors" /> Copy Webhook
                     </Button>
                 </div>
             </div>

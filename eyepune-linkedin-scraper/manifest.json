@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "EyE PunE LinkedIn Scraper",
+  "version": "1.0",
+  "description": "Securely extract LinkedIn leads directly into your EyE PunE CRM",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://www.linkedin.com/*",
+    "http://localhost:3000/*",
+    "https://eyepune.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

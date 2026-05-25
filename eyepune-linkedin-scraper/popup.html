@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 300px; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #080808; color: white; }
+    h3 { margin-top: 0; color: #ef4444; font-weight: 900; letter-spacing: -0.5px; }
+    p { font-size: 12px; color: #a1a1aa; }
+    button { 
+      width: 100%; padding: 10px; background: linear-gradient(to right, #dc2626, #f97316);
+      color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+      margin-top: 10px; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+    }
+    button:hover { opacity: 0.9; }
+    #status { margin-top: 10px; font-size: 11px; font-weight: bold; text-align: center; color: #10b981; }
+  </style>
+</head>
+<body>
+  <h3>EyE PunE Scraper</h3>
+  <p>1. Search LinkedIn for leads<br/>2. Click the button below<br/>3. Leads will instantly sync to CRM</p>
+  
+  <label for="webhookUrl" style="font-size: 10px; color: #71717a;">Webhook URL:</label>
+  <input type="text" id="webhookUrl" value="http://localhost:3000/api/webhooks/linkedin" style="width: 100%; box-sizing: border-box; padding: 5px; margin-bottom: 10px; background: #18181b; border: 1px solid #27272a; color: white; border-radius: 4px; font-size: 10px;">
+  
+  <button id="scrapeBtn">Extract & Sync Leads</button>
+  <div id="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
