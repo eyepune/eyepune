@@ -164,7 +164,7 @@ export default function SystemStatus() {
                                                 "w-full h-10 shadow-lg border-0",
                                                 status?.zoho?.configured 
                                                     ? "bg-white/5 hover:bg-white/10 text-white" 
-                                                    : "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-red-500/20"
+                                                    : "bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]"
                                             )}
                                         >
                                             {status?.zoho?.configured ? 'Re-authorize Zoho' : 'Authorize Now'}

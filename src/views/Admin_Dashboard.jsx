@@ -234,7 +234,7 @@ function Admin_Dashboard() {
                     </Button>
                     <Link href="/Admin-Analytics">
                         <Button
-                            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 border-0 h-10"
+                            className="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)] border-0 h-10"
                         >
                             <BarChart3 className="w-4 h-4 mr-2" /> Full Analytics
                         </Button>
@@ -494,7 +494,7 @@ function Admin_Dashboard() {
                         </div>
 
                         <Button 
-                            className="w-full bg-red-600 hover:bg-red-700 text-white h-11 rounded-xl shadow-lg shadow-red-500/20"
+                            className="w-full bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white h-11 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.3)]"
                             onClick={() => {
                                 import('sonner').then(({ toast }) => {
                                     toast.promise(fetch('/api/automation/daily-intel', { method: 'POST' }), {
@@ -608,7 +608,7 @@ function Admin_Dashboard() {
                             className={cn("w-full h-8 text-xs font-medium",
                                 systemStatus?.zoho?.configured
                                     ? "bg-white/5 hover:bg-white/10 text-white border border-white/10"
-                                    : "bg-gradient-to-r from-red-600 to-red-500 text-white border-none"
+                                    : "bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white shadow-[0_0_15px_rgba(239,68,68,0.2)] border-none"
                             )}
                         >
                             {systemStatus?.zoho?.configured ? '✓ Connected' : 'Authorize Zoho'}
