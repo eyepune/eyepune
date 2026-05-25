@@ -44,9 +44,28 @@ export async function POST(request) {
             throw error;
         }
 
+        // 4. Trigger the Automated Email System asynchronously
+        const protocol = request.headers.get('x-forwarded-proto') || 'https';
+        const host = request.headers.get('host');
+        const baseUrl = `${protocol}://${host}`;
+
+        fetch(`${baseUrl}/api/automation/trigger`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                trigger: 'new_linkedin_lead',
+                payload: { 
+                    name: fullName, 
+                    email: payload.email || '', 
+                    company: company || 'your company', 
+                    linkedinUrl 
+                }
+            })
+        }).catch(err => console.warn('[LinkedIn Webhook] Automation trigger failed:', err.message));
+
         return NextResponse.json({
             success: true,
-            message: 'Lead ingested successfully into Growth Engine',
+            message: 'Lead ingested successfully into Growth Engine and automation triggered',
             lead: data
         });
     } catch (error) {
