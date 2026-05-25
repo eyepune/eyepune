@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, Workflow, Target, Users, Zap, BarChart3, CheckCircle2, ArrowDownRight } from 'lucide-react';
+import { ArrowRight, TrendingUp, Workflow, Target, Users, Zap, BarChart3, CheckCircle2, ArrowDownRight, Search } from 'lucide-react';
 import SEOHead from '@/components/seo/SEOHead';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
@@ -193,6 +193,27 @@ export default function Service_Funnels() {
                                 <h3 className="text-white font-bold mb-2">{faq.question}</h3>
                                 <p className="text-gray-400 text-sm leading-relaxed">{faq.answer}</p>
                             </motion.div>
+                        ))}
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            {/* Programmatic SEO - Geo Targeting */}
+            <section className="py-20 border-t border-white/[0.06] bg-black/40">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex items-center gap-3 mb-8">
+                        <Search className="w-5 h-5 text-red-500" />
+                        <h2 className="text-xl font-bold text-gray-300">People Also Search For (Global & India)</h2>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                        {programmaticSeoQueries.map((query, i) => (
+                            <Link href={createPageUrl("Contact")} key={i}>
+                                <div className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] rounded-full text-sm text-gray-400 hover:text-red-400 hover:bg-white/[0.04] transition-all cursor-pointer flex items-center gap-2">
+                                    <Search className="w-3 h-3" />
+                                    {query}
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Globe, Zap, ShieldCheck, Smartphone, Code2, BarChart3 } from 'lucide-react';
+import { ArrowRight, Globe, Zap, ShieldCheck, Smartphone, Code2, BarChart3, Search } from 'lucide-react';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 import SEOHead from '@/components/seo/SEOHead';
 
@@ -22,6 +22,16 @@ const features = [
     { icon: Zap, title: "Performance Optimized", desc: "Fast-loading pages with Core Web Vitals optimization for better rankings." },
     { icon: ShieldCheck, title: "Secure & Reliable", desc: "SSL certificates, security hardening, and regular backups included." },
     { icon: BarChart3, title: "Built-in Analytics", desc: "Google Analytics, Search Console setup, and conversion tracking." },
+];
+
+const programmaticSeoQueries = [
+    "Website development AI tools in Pune",
+    "Website development and design services Pune",
+    "Free website development consultation Pune",
+    "Best website development company Pune",
+    "Website development course and training",
+    "Custom AI website development company",
+    "E-commerce website development services"
 ];
 
 const results = [
@@ -185,6 +195,26 @@ export default function Service_WebDev() {
                                 <h3 className="text-white font-bold mb-2">{faq.question}</h3>
                                 <p className="text-gray-400 text-sm leading-relaxed">{faq.answer}</p>
                             </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Programmatic SEO - Geo Targeting */}
+            <section className="py-20 border-t border-white/[0.06] bg-black/40">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex items-center gap-3 mb-8">
+                        <Search className="w-5 h-5 text-red-500" />
+                        <h2 className="text-xl font-bold text-gray-300">People Also Search For in Pune</h2>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                        {programmaticSeoQueries.map((query, i) => (
+                            <Link href={createPageUrl("Contact")} key={i}>
+                                <div className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] rounded-full text-sm text-gray-400 hover:text-red-400 hover:bg-white/[0.04] transition-all cursor-pointer flex items-center gap-2">
+                                    <Search className="w-3 h-3" />
+                                    {query}
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

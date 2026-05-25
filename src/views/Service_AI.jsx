@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Bot, Zap, Settings, BarChart3, MessageSquare, RefreshCw } from 'lucide-react';
+import { ArrowRight, Bot, Zap, Search, Database, LineChart, Code, Cog, MessageSquare } from 'lucide-react';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 import SEOHead from '@/components/seo/SEOHead';
 
@@ -17,11 +17,21 @@ const faqs = [
 
 const features = [
     { icon: Bot, title: "AI Chatbots", desc: "24/7 customer support bots for WhatsApp, website, and social media." },
-    { icon: RefreshCw, title: "Workflow Automation", desc: "Automate repetitive tasks across CRM, email, and social platforms." },
     { icon: MessageSquare, title: "WhatsApp Automation", desc: "Automated follow-ups, broadcasts, and lead nurturing on WhatsApp." },
+    { icon: LineChart, title: "Predictive Analytics", desc: "AI models that analyze past data to predict future trends and customer behaviors." },
     { icon: Zap, title: "Lead Automation", desc: "Auto-qualify leads, assign to sales team, and trigger follow-up sequences." },
-    { icon: Settings, title: "CRM Integration", desc: "Connect and sync your CRM with all business tools for seamless data flow." },
-    { icon: BarChart3, title: "AI Reporting", desc: "Automated performance dashboards and weekly business insights." },
+    { icon: Cog, title: "Workflow Automation", desc: "Connecting your apps (CRM, Email, Slack) via Make/Zapier for zero-touch operations." },
+    { icon: Code, title: "Custom AI Agents", desc: "Specialized AI agents built for your exact use case, from data entry to customer support." },
+];
+
+const programmaticSeoQueries = [
+    "Top AI automation agencies India",
+    "AI business automation consultants global",
+    "Hire AI automation specialist Pune",
+    "Generative AI integration services",
+    "Best AI agency for small businesses",
+    "Business Process Automation (BPA) companies India",
+    "Custom AI agent development company"
 ];
 
 const results = [
@@ -150,6 +160,27 @@ export default function Service_AI() {
                                 <h3 className="text-white font-bold mb-2">{faq.question}</h3>
                                 <p className="text-gray-400 text-sm leading-relaxed">{faq.answer}</p>
                             </motion.div>
+                        ))}
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            {/* Programmatic SEO - Geo Targeting */}
+            <section className="py-20 border-t border-white/[0.06] bg-black/40">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex items-center gap-3 mb-8">
+                        <Search className="w-5 h-5 text-red-500" />
+                        <h2 className="text-xl font-bold text-gray-300">People Also Search For (Global & India)</h2>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                        {programmaticSeoQueries.map((query, i) => (
+                            <Link href={createPageUrl("Contact")} key={i}>
+                                <div className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] rounded-full text-sm text-gray-400 hover:text-red-400 hover:bg-white/[0.04] transition-all cursor-pointer flex items-center gap-2">
+                                    <Search className="w-3 h-3" />
+                                    {query}
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

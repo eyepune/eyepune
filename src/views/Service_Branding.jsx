@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Palette, Layers, FileText, Star, Image, Sparkles } from 'lucide-react';
+import { ArrowRight, Palette, Layers, FileText, Star, Image, Sparkles, Search, PenTool, Briefcase, Zap } from 'lucide-react';
 import SEOHead from '@/components/seo/SEOHead';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
@@ -18,10 +18,19 @@ const faqs = [
 const features = [
     { icon: Sparkles, title: "Logo Design", desc: "Distinctive, memorable logos that capture your brand's essence and values." },
     { icon: Palette, title: "Brand Identity", desc: "Complete visual identity including colors, typography, and design system." },
-    { icon: Layers, title: "Brand Guidelines", desc: "Comprehensive brand manual for consistent application across all touchpoints." },
-    { icon: Image, title: "Marketing Collaterals", desc: "Business cards, brochures, banners, presentation templates, and more." },
-    { icon: FileText, title: "Social Media Kit", desc: "Custom templates for posts, Stories, covers, and profile assets." },
-    { icon: Star, title: "Brand Strategy", desc: "Positioning, messaging, tone of voice, and competitive differentiation." },
+    { icon: Briefcase, title: "Brand Guidelines", desc: "Comprehensive brand books ensuring consistency across all future marketing materials." },
+    { icon: PenTool, title: "Copywriting & Tone", desc: "Developing a unique brand voice that resonates with your specific target audience." },
+    { icon: Zap, title: "Rebranding", desc: "Modernizing outdated brands to reconnect with current markets and drive new growth." },
+];
+
+const programmaticSeoQueries = [
+    "Brand identity design agency India",
+    "Startup branding agencies global",
+    "Custom logo design services Pune",
+    "Top brand strategy agencies",
+    "SaaS and Tech branding agency",
+    "Corporate B2B brand identity design",
+    "Brand style guide and positioning company"
 ];
 
 const results = [
@@ -164,6 +173,27 @@ export default function Service_Branding() {
                                 <h3 className="text-white font-bold mb-2">{faq.question}</h3>
                                 <p className="text-gray-400 text-sm leading-relaxed">{faq.answer}</p>
                             </motion.div>
+                        ))}
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            {/* Programmatic SEO - Geo Targeting */}
+            <section className="py-20 border-t border-white/[0.06] bg-black/40">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex items-center gap-3 mb-8">
+                        <Search className="w-5 h-5 text-red-500" />
+                        <h2 className="text-xl font-bold text-gray-300">People Also Search For (Global & India)</h2>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                        {programmaticSeoQueries.map((query, i) => (
+                            <Link href={createPageUrl("Contact")} key={i}>
+                                <div className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] rounded-full text-sm text-gray-400 hover:text-red-400 hover:bg-white/[0.04] transition-all cursor-pointer flex items-center gap-2">
+                                    <Search className="w-3 h-3" />
+                                    {query}
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
