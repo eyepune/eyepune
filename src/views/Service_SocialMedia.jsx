@@ -23,6 +23,15 @@ const features = [
     { icon: MessageSquare, title: "Influencer Outreach", desc: "Connect with relevant micro and macro influencers globally." },
     { icon: Heart, title: "Brand Consistency", desc: "Cohesive visual identity across all platforms with custom templates." },
 ];
+const programmaticSeoQueries = [
+    "Social media marketing services in India",
+    "Best social media agency for global brands",
+    "B2B LinkedIn marketing agency Pune",
+    "Instagram marketing and management services",
+    "Social media content creation agency",
+    "Affordable digital marketing agency for startups",
+    "Influencer marketing and social analytics company"
+];
 
 const results = [
     { val: '3x', label: 'Avg. Engagement Increase' },

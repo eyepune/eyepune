@@ -28,6 +28,15 @@ const systemFeatures = [
     { icon: Users, title: "Lead Scoring", desc: "AI-driven scoring to prioritize your hottest prospects for your sales team." },
     { icon: CheckCircle2, title: "Task & Notification Systems", desc: "Automatic reminders and alerts so no lead ever falls through the cracks." },
 ];
+const programmaticSeoQueries = [
+    "Sales funnel optimization services India",
+    "Conversion rate optimization (CRO) agency global",
+    "B2B lead generation funnel builder",
+    "Top landing page optimization services Pune",
+    "Automated sales funnel strategy",
+    "E-commerce UX and funnel optimization",
+    "High-ticket client acquisition funnels"
+];
 
 const results = [
     { val: '3x', label: 'Avg. Lead Conversion Lift' },
