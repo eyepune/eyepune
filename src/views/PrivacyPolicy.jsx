@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
                 ) : (
                     // ── HARDCODED FALLBACK ──
                     <div className="prose prose-lg prose-invert max-w-none text-gray-300">
-                        <p className="text-xl text-gray-400 mb-8">Last Updated: 22nd Nov 2022</p>
+                        <p className="text-xl text-gray-400 mb-8">Published Date: 22nd Nov 2022</p>
                         
                         <p className="mb-6 leading-relaxed">EyE PunE respects your privacy and is committed to protecting your personal data.</p>
                         

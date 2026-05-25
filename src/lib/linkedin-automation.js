@@ -1,6 +1,7 @@
 /**
  * LinkedIn Automation Service
  * Handles AI-powered content generation and publishing to LinkedIn.
+ * Engineered to run safely inside Serverless and Cron workflows with full fallback setups.
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -10,6 +11,9 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+const LLM_API_URL = process.env.LLM_API_URL || 'https://integrate.api.nvidia.com/v1/chat/completions';
+const LLM_API_KEY = process.env.LLM_API_KEY;
+
 /**
  * Generates and publishes a LinkedIn post using AI.
  * @param {string} type - 'educational', 'promotional', 'news', or 'random'
@@ -18,7 +22,7 @@ export async function generateAndPostToLinkedin(type = 'random') {
     console.log(`[LinkedIn-Automation] Starting ${type} post generation...`);
 
     try {
-        // 1. Get LinkedIn Config
+        // 1. Get LinkedIn Config from Database
         const { data: config } = await supabase
             .from('crm_sync_configs')
             .select('api_key')
@@ -42,7 +46,7 @@ export async function generateAndPostToLinkedin(type = 'random') {
             throw new Error('LinkedIn integration not connected. Please provide an Access Token in the Marketing Dashboard.');
         }
 
-        // 2. Generate Content via LLM
+        // 2. Generate Content via LLM Prompt
         const prompt = `Act as an elite Global Social Media Manager for "EyE PunE", an enterprise AI Growth Partner.
 Generate a high-impact, viral-optimized LinkedIn post of type: ${type.toUpperCase()}.
 
@@ -62,19 +66,50 @@ Elite Copywriting Rules:
 
 Return ONLY the raw text string for the LinkedIn post. Do not include introductory text.`;
 
-        const llmResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/llm`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                messages: [{ role: 'user', content: prompt }],
-                temperature: 0.8
-            })
-        });
+        let postContent = null;
+        let success = false;
 
-        const llmData = await llmResponse.json();
-        const postContent = llmData.content;
+        // Perform direct server-to-server call to Nvidia NIM API (bypasses HTTP self-fetch deadlock on Vercel)
+        if (LLM_API_KEY) {
+            try {
+                console.log('[LinkedIn-Automation] Calling NVIDIA NIM directly for content...');
+                const llmResponse = await fetch(LLM_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${LLM_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'meta/llama-3.1-8b-instruct',
+                        messages: [{ role: 'user', content: prompt }],
+                        max_tokens: 1024,
+                        temperature: 0.8,
+                        stream: false
+                    })
+                });
 
-        if (!postContent) throw new Error('Failed to generate content via AI');
+                if (llmResponse.ok) {
+                    const llmData = await llmResponse.json();
+                    postContent = llmData.choices?.[0]?.message?.content || '';
+                    if (postContent) {
+                        postContent = postContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+                        success = true;
+                        console.log('[LinkedIn-Automation] Content generated successfully via Llama 3.1.');
+                    }
+                } else {
+                    const errText = await llmResponse.text();
+                    console.warn(`[LinkedIn-Automation] NIM API returned non-OK status: ${llmResponse.status} - ${errText}`);
+                }
+            } catch (llmErr) {
+                console.warn('[LinkedIn-Automation] Direct LLM fetch failed. Falling back to local premium templates:', llmErr.message);
+            }
+        }
+
+        // If LLM or API Key fails, use premium local copywriting templates
+        if (!success || !postContent) {
+            console.log('[LinkedIn-Automation] Activating local premium copywriting engine.');
+            postContent = getLocalPremiumLinkedinPost(type);
+        }
 
         // 3. Resolve Author URN if missing
         let authorUrn = urn;
@@ -86,9 +121,10 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
             if (meData.id) authorUrn = `urn:li:person:${meData.id}`;
         }
 
-        if (!authorUrn) throw new Error('Could not resolve LinkedIn Author URN');
+        if (!authorUrn) throw new Error('Could not resolve LinkedIn Author URN. Make sure your profile token is active.');
 
         // 4. Publish to LinkedIn
+        console.log(`[LinkedIn-Automation] Publishing post content to LinkedIn for author ${authorUrn}...`);
         const publishRes = await fetch('https://api.linkedin.com/v2/ugcPosts', {
             method: 'POST',
             headers: {
@@ -112,27 +148,96 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
         });
 
         const publishData = await publishRes.json();
-        if (!publishRes.ok) throw new Error(publishData.message || 'LinkedIn publishing failed');
+        if (!publishRes.ok) throw new Error(publishData.message || 'LinkedIn UGC API rejected share request.');
 
-        // 5. Log the action
+        // 5. Log Success in activity_logs
         await supabase.from('activity_logs').insert([{
             action: 'linkedin_auto_post',
-            details: `Posted ${type} content to LinkedIn. ID: ${publishData.id}`,
+            details: `Successfully published ${type} post to LinkedIn. URN: ${publishData.id}`,
             status: 'success'
         }]);
 
         return { success: true, postId: publishData.id, content: postContent };
 
     } catch (error) {
-        console.error('[LinkedIn-Automation] Error:', error.message);
+        console.error('[LinkedIn-Automation] Critical Failure:', error.message);
         
-        // Log failure
-        await supabase.from('activity_logs').insert([{
-            action: 'linkedin_auto_post_failed',
-            details: error.message,
-            status: 'error'
-        }]);
+        // Log failure in activity_logs
+        try {
+            await supabase.from('activity_logs').insert([{
+                action: 'linkedin_auto_post_failed',
+                details: error.message,
+                status: 'error'
+            }]);
+        } catch (e) {}
 
         return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Premium Local LinkedIn Post Copywriter
+ * Selects pre-written, highly persuasive B2B sales copy tailored to our services.
+ */
+function getLocalPremiumLinkedinPost(type) {
+    const educationalPosts = [
+        `If your landing page takes more than 2 seconds to load, you're donating conversions to your competitors.
+
+In digital business, site latency is a direct leak of revenue. A 100ms delay can slash your checkouts by 1%. 
+
+Monolithic sites compile pages on each click, locking databases and slowing down responses. The future is headless: next-gen Jamstack frameworks pre-rendered globally across serverless edge networks.
+
+Stop leaking growth. Optimize your Core Web Vitals to 100% and accelerate your pipeline velocity.
+
+Run a Free AI Assessment at eyepune.com/AI-Assessment
+
+#WebPerformance #EnterpriseScale #B2BGrowth`,
+        `Autonomous agents aren't science fiction—they are actively replacing traditional B2B sales funnels today.
+
+Most growth teams take hours to qualify and follow up with hot leads. By then, the prospect's interest has already decayed.
+
+Elite growth networks use multi-model AI architectures. A prospect fills out an assessment, specialized agents score it instantly,中央 CRM is synchronized, and custom roadmaps are delivered to their WhatsApp in under 3 minutes.
+
+Scale your acquisitions, minimize friction, and let software handle the high-effort, low-value pipelines.
+
+Run a Free AI Assessment at eyepune.com/AI-Assessment
+
+#AIAutomation #SalesOperations #PipelineVelocity`
+    ];
+
+    const promotionalPosts = [
+        `Why are standard digital agencies failing high-growth brands in 2026?
+
+Because modern B2B growth demands a unified combination of speed, deep software automation, and creative performance marketing.
+
+At EyE PunE, we don't build standard company websites. We engineer high-speed digital assets with sub-2-second loading guarantees and custom AI sales integrations.
+
+Discover the hidden bottlenecks in your digital acquisition funnel.
+
+Run a Free AI Assessment at eyepune.com/AI-Assessment
+
+#DigitalTransformation #SoftwareEngineering #SalesGrowth`,
+        `How do you double your sales pipeline without doubling your sales team?
+
+The answer is structural integration. When you connect your marketing platforms directly to autonomous lead enrichment engines, your sales representatives only meet with qualified, pre-warmed B2B prospects.
+
+Stop managing databases with static spreadsheets. centralize your operations, automate follow-ups, and elevate conversion rates across every channel.
+
+Get a complete analysis of your acquisition channels today.
+
+Run a Free AI Assessment at eyepune.com/AI-Assessment
+
+#SalesEfficiency #CentralizedCRM #BusinessScaling`
+    ];
+
+    const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    if (type === 'educational') {
+        return pickRandom(educationalPosts);
+    } else if (type === 'promotional') {
+        return pickRandom(promotionalPosts);
+    } else {
+        const combined = [...educationalPosts, ...promotionalPosts];
+        return pickRandom(combined);
     }
 }

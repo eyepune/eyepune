@@ -59,7 +59,7 @@ export default function Disclaimer() {
                 ) : (
                     // ── HARDCODED FALLBACK ──
                     <div className="prose prose-lg prose-invert max-w-none text-gray-300">
-                        <p className="text-xl text-gray-400 mb-8">Last Updated: 22nd Nov 2022</p>
+                        <p className="text-xl text-gray-400 mb-8">Published Date: 22nd Nov 2022</p>
                         
                         <p className="mb-6 leading-relaxed">All services provided by EyE PunE are based on professional expertise, industry practices, and strategic recommendations.</p>
                         

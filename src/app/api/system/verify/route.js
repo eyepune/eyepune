@@ -40,8 +40,8 @@ export async function GET() {
 
     // Check Database Settings for Overrides
     const { data: dbSettings } = await supabase.from('crm_sync_configs').select('provider, api_key');
-    const dbLinkedIn = dbSettings?.find(s => s.provider === 'linkedin_token')?.api_key;
-    const dbZoho = dbSettings?.find(s => s.provider === 'zoho_config')?.api_key;
+    const dbLinkedIn = dbSettings?.find(s => s.provider === 'linkedin_token' || s.provider === 'linkedin_config')?.api_key;
+    const dbZoho = dbSettings?.find(s => s.provider === 'zoho_config' || s.provider === 'zoho_token')?.api_key;
 
     // Check Zoho Configuration
     report.zoho = {

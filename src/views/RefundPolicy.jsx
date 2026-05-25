@@ -59,7 +59,7 @@ export default function RefundPolicy() {
                 ) : (
                     // ── HARDCODED FALLBACK ──
                     <div className="prose prose-lg prose-invert max-w-none text-gray-300">
-                        <p className="text-xl text-gray-400 mb-8">Last Updated: 22nd Nov 2022</p>
+                        <p className="text-xl text-gray-400 mb-8">Published Date: 22nd Nov 2022</p>
                         
                         <h2 className="text-2xl font-bold text-white mt-12 mb-4">1. Service Payments</h2>
                         <p className="mb-6 leading-relaxed">All retainers, consulting fees, milestone payments, and project charges are non-refundable once work has commenced.</p>
