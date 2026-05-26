@@ -86,7 +86,7 @@ export default function Service_PaidAds() {
                 <div className="absolute inset-0 opacity-[0.03]"
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
+                <div className="absolute top-0 right-0 w-full max-w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
                 
@@ -98,7 +98,7 @@ export default function Service_PaidAds() {
                                 <Target className="w-3.5 h-3.5 text-red-400" />
                                 <span className="text-red-400 text-sm font-medium">Google Ads & Meta Ads · Global</span>
                             </div>
-                            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
+                            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-6 leading-[0.95]">
                                 Paid Ads Management<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Global</span>
                             </h1>
@@ -139,7 +139,7 @@ export default function Service_PaidAds() {
                 <div className="max-w-7xl mx-auto px-6">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
                         <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Our Services</span>
-                        <h2 className="text-4xl md:text-5xl font-black">Full-Funnel <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Paid Advertising</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-black">Full-Funnel <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Paid Advertising</span></h2>
                     </motion.div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {features.map((f, i) => (
@@ -203,7 +203,7 @@ export default function Service_PaidAds() {
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-                    <h2 className="text-4xl md:text-5xl font-black mb-4">Ready to Get <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">4x ROI on Ads?</span></h2>
+                    <h2 className="text-3xl md:text-5xl font-black mb-4">Ready to Get <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">4x ROI on Ads?</span></h2>
                     <p className="text-gray-400 mb-8">Get a free audit of your existing ad campaigns — we'll show you exactly where you're losing money.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href={createPageUrl("Booking")}>

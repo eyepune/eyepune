@@ -53,7 +53,7 @@ export default function Solution_Founders() {
                         Built for Visionaries
                     </motion.div>
                     
-                    <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight">
                         Scale Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Output,</span><br /> 
                         Not Your Hours.
                     </h1>
@@ -64,12 +64,12 @@ export default function Solution_Founders() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href={createPageUrl("AI_Assessment")}>
-                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-10 py-7 font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.3)]">
+                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-6 py-4 md:px-10 md:py-7 font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.3)]">
                                 Claim Founder AI Audit →
                             </Button>
                         </Link>
                         <Link href={createPageUrl("Booking")}>
-                            <Button variant="outline" className="border-white/10 text-white rounded-full px-10 py-7 font-bold text-lg hover:bg-white/5">
+                            <Button variant="outline" className="border-white/10 text-white rounded-full px-6 py-4 md:px-10 md:py-7 font-bold text-lg hover:bg-white/5">
                                 Book Vision Sync
                             </Button>
                         </Link>
