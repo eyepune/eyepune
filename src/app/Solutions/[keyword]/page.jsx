@@ -92,11 +92,13 @@ export default function SEOKeywordPage({ params }) {
           <p className="text-xl text-gray-400 mb-8 relative z-10">
             Book a 15-minute discovery call and we'll map out a custom blueprint for you.
           </p>
-          <Link href="/Contact">
-            <Button size="lg" className="bg-white text-black hover:bg-gray-200 font-bold h-14 px-8 text-lg rounded-full relative z-10">
-              Claim Your Strategy Session Now
-            </Button>
-          </Link>
+          <div className="flex justify-center w-full relative z-10 mt-8">
+            <Link href="/Contact" className="w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-black hover:bg-gray-200 font-bold h-14 px-8 text-lg rounded-full w-full sm:w-auto shadow-2xl hover:scale-105 transition-all">
+                Claim Your Strategy Session Now
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* SEO Internal Linking Engine */}
