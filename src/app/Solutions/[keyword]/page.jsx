@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, TrendingUp, Zap, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 
 export async function generateMetadata({ params }) {
   const rawKeyword = params.keyword;
@@ -24,6 +25,7 @@ export default function SEOKeywordPage({ params }) {
     <main className="min-h-screen pt-32 pb-20 overflow-hidden relative">
       {/* Background Gradients */}
       <div className="absolute top-0 left-0 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full -translate-y-1/2 pointer-events-none" />
+      <HeroFloatingIcons />
       
       <div className="container mx-auto px-6 relative z-10">
         {/* Hero Section */}
@@ -94,7 +96,7 @@ export default function SEOKeywordPage({ params }) {
           </p>
           <div className="flex justify-center w-full relative z-10 mt-8">
             <Link href="/Contact" className="w-full sm:w-auto">
-              <Button size="lg" className="bg-white text-black hover:bg-gray-200 font-bold h-14 px-8 text-lg rounded-full w-full sm:w-auto shadow-2xl hover:scale-105 transition-all">
+              <Button size="lg" className="bg-white text-black hover:bg-gray-200 font-bold h-auto min-h-[56px] py-3 px-4 sm:px-8 text-base sm:text-lg rounded-[28px] w-full sm:w-auto shadow-2xl hover:scale-105 transition-all whitespace-normal text-center leading-tight">
                 Claim Your Strategy Session Now
               </Button>
             </Link>
