@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, CheckCircle2, TrendingUp, Zap, Target } from 'lucide-react';
+import { ArrowRight, CheckCircle2, TrendingUp, Zap, Target, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import ClientLogos from '@/components/home/ClientLogos';
 
 export async function generateMetadata({ params }) {
   const rawKeyword = params.keyword;
@@ -20,12 +21,72 @@ export async function generateMetadata({ params }) {
 export default function SEOKeywordPage({ params }) {
   const rawKeyword = params.keyword;
   const keyword = rawKeyword.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const keywordLower = keyword.toLowerCase();
+
+  let dynamicFeatures = [];
+  if (keywordLower.includes('web') || keywordLower.includes('design') || keywordLower.includes('app') || keywordLower.includes('site')) {
+    dynamicFeatures = [
+      {
+        icon: <Target className="w-8 h-8 text-red-500" />,
+        title: "High-Performance Architecture",
+        desc: `Every ${keyword} build is optimized for lightning-fast load speeds, flawless mobile responsiveness, and technical SEO mastery.`
+      },
+      {
+        icon: <TrendingUp className="w-8 h-8 text-red-500" />,
+        title: "Conversion-Optimized UX",
+        desc: "We don't just build pretty pages. We engineer user journeys designed to turn cold traffic into paying customers."
+      },
+      {
+        icon: <Zap className="w-8 h-8 text-red-500" />,
+        title: "Scalable Infrastructure",
+        desc: "Built on modern, robust frameworks that can handle massive traffic spikes without breaking a sweat."
+      }
+    ];
+  } else if (keywordLower.includes('ai') || keywordLower.includes('automation') || keywordLower.includes('bot') || keywordLower.includes('lead')) {
+    dynamicFeatures = [
+      {
+        icon: <Target className="w-8 h-8 text-red-500" />,
+        title: "Intelligent Workflows",
+        desc: `Our ${keyword} systems eliminate repetitive manual tasks, saving you hundreds of hours every single month.`
+      },
+      {
+        icon: <TrendingUp className="w-8 h-8 text-red-500" />,
+        title: "24/7 Operational Scale",
+        desc: "Your AI never sleeps. Capture leads, answer queries, and process data automatically around the clock."
+      },
+      {
+        icon: <Zap className="w-8 h-8 text-red-500" />,
+        title: "Custom AI Models",
+        desc: "We train our AI solutions on your specific business data so it sounds, acts, and sells exactly like your best employee."
+      }
+    ];
+  } else {
+    dynamicFeatures = [
+      {
+        icon: <Target className="w-8 h-8 text-red-500" />,
+        title: "Laser-Targeted Strategy",
+        desc: `We don't do guesswork. Every ${keyword} campaign is backed by hard data and AI-driven predictive modeling.`
+      },
+      {
+        icon: <TrendingUp className="w-8 h-8 text-red-500" />,
+        title: "Hyper-Scalable Systems",
+        desc: "Built to handle massive influxes of traffic and leads without breaking a sweat or increasing your overhead."
+      },
+      {
+        icon: <CheckCircle2 className="w-8 h-8 text-red-500" />,
+        title: "Guaranteed ROI Focus",
+        desc: "Vanity metrics don't pay the bills. We map every action directly to revenue generation and customer acquisition."
+      }
+    ];
+  }
 
   return (
-    <main className="min-h-screen pt-32 pb-20 overflow-hidden relative">
-      {/* Background Gradients */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full -translate-y-1/2 pointer-events-none" />
-      <HeroFloatingIcons />
+    <main className="min-h-screen pt-32 pb-20 relative">
+      {/* Background Gradients & Effects */}
+      <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full -translate-y-1/2" />
+        <HeroFloatingIcons />
+      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         {/* Hero Section */}
@@ -53,25 +114,14 @@ export default function SEOKeywordPage({ params }) {
           </div>
         </div>
 
-        {/* Value Proposition Grid */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-24">
-          {[
-            {
-              icon: <Target className="w-8 h-8 text-red-500" />,
-              title: "Laser-Targeted Strategy",
-              desc: `We don't do guesswork. Every ${keyword} campaign is backed by hard data and AI-driven predictive modeling.`
-            },
-            {
-              icon: <TrendingUp className="w-8 h-8 text-red-500" />,
-              title: "Hyper-Scalable Systems",
-              desc: "Built to handle massive influxes of traffic and leads without breaking a sweat or increasing your overhead."
-            },
-            {
-              icon: <CheckCircle2 className="w-8 h-8 text-red-500" />,
-              title: "Guaranteed ROI Focus",
-              desc: "Vanity metrics don't pay the bills. We map every action directly to revenue generation and customer acquisition."
-            }
-          ].map((feature, idx) => (
+        {/* Social Proof injected for Cold Traffic */}
+        <div className="mb-24">
+            <ClientLogos />
+        </div>
+
+        {/* Value Proposition Grid (Dynamic) */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-24 px-4">
+          {dynamicFeatures.map((feature, idx) => (
             <div key={idx} className="p-8 rounded-2xl bg-card border border-border/50 hover:border-red-500/30 transition-colors group">
               <div className="w-16 h-16 rounded-xl bg-red-950/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 {feature.icon}
@@ -80,6 +130,34 @@ export default function SEOKeywordPage({ params }) {
               <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
             </div>
           ))}
+        </div>
+
+        {/* Dynamic SEO FAQ Section */}
+        <div className="max-w-4xl mx-auto mb-24 px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Frequently Asked Questions</h2>
+            <p className="text-gray-400">Everything you need to know about our {keyword} solutions.</p>
+          </div>
+          <div className="space-y-4">
+            {[
+              { q: `How long does it take to see results from your ${keyword} services?`, a: `We prioritize rapid deployment. While exact timelines depend on your specific infrastructure, most of our ${keyword} clients begin seeing measurable ROI within the first 14 to 30 days of implementation.` },
+              { q: `Do you provide custom ${keyword} strategies for my specific industry?`, a: `Absolutely. We never use cookie-cutter templates. We analyze your market, competitors, and unit economics to build a bespoke ${keyword} system tailored strictly to your business goals.` },
+              { q: `What makes EyE PunE different from other ${keyword} agencies?`, a: `We are a high-performance growth engine, not a traditional agency. We integrate deeply with your team, leverage cutting-edge AI, and tie our ${keyword} frameworks directly to your bottom-line revenue.` },
+              { q: `How do I get started with your ${keyword} solutions?`, a: `Simply click the "Claim Your Strategy Session" button below. We'll hop on a quick 15-minute discovery call to audit your current setup and determine if our ${keyword} frameworks are a fit for your business.` }
+            ].map((faq, i) => (
+              <details key={i} className="group rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-white/[0.04] transition-colors outline-none">
+                  <h3 className="text-lg font-semibold pr-4">{faq.q}</h3>
+                  <div className="text-gray-400 transition-transform duration-300 group-open:rotate-180">
+                    <ChevronDown className="w-5 h-5" />
+                  </div>
+                </summary>
+                <div className="p-6 pt-0 text-gray-400 leading-relaxed border-t border-white/[0.05] bg-white/[0.01]">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
 
         {/* CTA Section */}
