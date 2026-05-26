@@ -35,15 +35,12 @@ export default function SEOKeywordPage({ params }) {
             <span>Premium Business Solutions</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight">
-            Dominate With <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">
-              {keyword}
-            </span>
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-6 leading-[1.2] md:leading-tight tracking-tight px-2">
+            Dominate With <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">{keyword}</span>
           </h1>
           
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Stop losing ground to competitors. Our elite {keyword} frameworks are designed to aggressively scale your revenue, automate your workflows, and establish absolute market authority.
+          <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed px-4">
+            Stop losing ground to competitors. Our elite <strong>{keyword}</strong> frameworks are designed to aggressively scale your revenue, automate your workflows, and establish absolute market authority.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -88,10 +85,10 @@ export default function SEOKeywordPage({ params }) {
         {/* CTA Section */}
         <div className="max-w-4xl mx-auto text-center p-12 rounded-3xl bg-gradient-to-b from-red-950/40 to-black border border-red-900/30 relative overflow-hidden mb-24">
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 relative z-10">
-            Ready to implement {keyword} in your business?
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 relative z-10 px-2">
+            Ready to implement <span className="text-red-500">{keyword}</span> in your business?
           </h2>
-          <p className="text-xl text-gray-400 mb-8 relative z-10">
+          <p className="text-lg md:text-xl text-gray-400 mb-8 relative z-10 px-4">
             Book a 15-minute discovery call and we'll map out a custom blueprint for you.
           </p>
           <div className="flex justify-center w-full relative z-10 mt-8">
