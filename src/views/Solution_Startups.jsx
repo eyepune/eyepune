@@ -53,7 +53,7 @@ export default function Solution_Startups() {
                         From MVP to Unicorn
                     </motion.div>
                     
-                    <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight">
                         Launch <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">Smarter.</span><br /> 
                         Scale Faster.
                     </h1>
@@ -64,12 +64,12 @@ export default function Solution_Startups() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href={createPageUrl("AI_Assessment")}>
-                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-10 py-7 font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.3)] transition-all">
+                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-6 py-4 md:px-10 md:py-7 font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.3)] transition-all">
                                 Get Startup AI Roadmap →
                             </Button>
                         </Link>
                         <Link href={createPageUrl("Services")}>
-                            <Button variant="outline" className="border-white/10 text-white rounded-full px-10 py-7 font-bold text-lg hover:bg-white/5">
+                            <Button variant="outline" className="border-white/10 text-white rounded-full px-6 py-4 md:px-10 md:py-7 font-bold text-lg hover:bg-white/5">
                                 Explore Services
                             </Button>
                         </Link>
@@ -207,7 +207,7 @@ export default function Solution_Startups() {
                         <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-600/10 rounded-full blur-3xl" />
                         <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">Ready to Engineer <br />Your Success?</h2>
                         <Link href={createPageUrl("AI_Assessment")}>
-                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-12 py-8 font-black text-xl flex items-center gap-3 mx-auto shadow-[0_0_30px_rgba(239,68,68,0.3)]">
+                            <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-full px-8 py-5 md:px-12 md:py-8 font-black text-xl flex items-center gap-3 mx-auto shadow-[0_0_30px_rgba(239,68,68,0.3)]">
                                 Claim Startup Audit <ChevronRight className="w-6 h-6" />
                             </Button>
                         </Link>

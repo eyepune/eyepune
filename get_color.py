@@ -6,7 +6,7 @@ def get_dominant_color(image_path):
     img = Image.open(image_path)
     img = img.convert('RGB')
     
-    pixels = img.getdata()
+    pixels = img.get_flattened_data()
     
     # Filter out near-white and near-black pixels to find the actual color
     filtered_pixels = []

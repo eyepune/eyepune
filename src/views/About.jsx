@@ -56,7 +56,7 @@ export default function About() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent pointer-events-none" />
 
                 {/* Glow */}
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
+                <div className="absolute top-0 right-0 w-full max-w-[600px] h-[600px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%)' }}
                 />
 
@@ -69,7 +69,7 @@ export default function About() {
                                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                                 <span className="text-red-400 text-sm font-medium">Our Story</span>
                             </div>
-                            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-[0.95]">
+                            <h1 className="text-4xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-[0.95]">
                                 About<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">EyE PunE</span>
                             </h1>
@@ -227,7 +227,7 @@ export default function About() {
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-[700px] h-[400px] rounded-full opacity-[0.08]"
+                    <div className="w-full max-w-[700px] h-[400px] rounded-full opacity-[0.08]"
                         style={{ background: 'radial-gradient(ellipse, #ef4444 0%, transparent 70%)' }}
                     />
                 </div>

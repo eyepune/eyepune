@@ -104,7 +104,7 @@ export default function Services_Detail() {
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent" />
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
+                <div className="absolute top-0 right-0 w-full max-w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
 
@@ -116,7 +116,7 @@ export default function Services_Detail() {
                                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                                 <span className="text-red-400 text-sm font-medium">Full-Service Growth Agency</span>
                             </div>
-                            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black mb-6 leading-[0.95]">
+                            <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 leading-[0.95]">
                                 Our<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Services</span>
                             </h1>
@@ -193,7 +193,7 @@ export default function Services_Detail() {
             {/* ── LEX PRO PROMO ── */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-950/20 to-transparent" />
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full max-w-[500px] h-[500px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.07) 0%, transparent 70%)' }}
                 />
                 <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
@@ -240,7 +240,7 @@ export default function Services_Detail() {
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-[600px] h-[300px] opacity-[0.1]" style={{ background: 'radial-gradient(ellipse, #ef4444 0%, transparent 70%)' }} />
+                    <div className="w-full max-w-[600px] h-[300px] opacity-[0.1]" style={{ background: 'radial-gradient(ellipse, #ef4444 0%, transparent 70%)' }} />
                 </div>
                 <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
                     <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>

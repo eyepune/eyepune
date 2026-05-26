@@ -82,7 +82,7 @@ export default function Contact() {
                     <div className="absolute inset-0 opacity-[0.03]"
                         style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                     />
-                    <div className="absolute top-0 left-0 w-[500px] h-[500px] pointer-events-none"
+                    <div className="absolute top-0 left-0 w-full max-w-[500px] h-[500px] pointer-events-none"
                         style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%)' }}
                     />
 
@@ -94,7 +94,7 @@ export default function Contact() {
                                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                                     <span className="text-red-400 text-sm font-medium">Get in Touch</span>
                                 </div>
-                                <h1 className="text-5xl sm:text-6xl md:text-7xl font-black mb-5 leading-[0.95]">
+                                <h1 className="text-4xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-5 leading-[0.95]">
                                     Let's Grow<br />
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">Together</span>
                                 </h1>

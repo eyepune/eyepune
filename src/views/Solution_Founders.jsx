@@ -161,7 +161,7 @@ export default function Solution_Founders() {
                         Get your custom 90-day AI Growth Roadmap today. No fluff, just results.
                     </p>
                     <Link href={createPageUrl("AI_Assessment")}>
-                        <Button className="bg-white text-red-600 hover:bg-gray-100 rounded-full px-12 py-8 font-black text-xl">
+                        <Button className="bg-white text-red-600 hover:bg-gray-100 rounded-full px-8 py-5 md:px-12 md:py-8 font-black text-xl">
                             Start Free Assessment
                         </Button>
                     </Link>
