@@ -34,7 +34,7 @@ export default function ServiceLanding({ config }) {
                 <div className="absolute inset-0 opacity-[0.03]"
                     style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
                 />
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
+                <div className="absolute top-0 right-0 w-full max-w-[600px] h-[600px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
                 />
                 

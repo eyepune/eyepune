@@ -16,7 +16,7 @@ export default function LexProSection() {
             {/* Orange accent glow */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent" />
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px]"
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full max-w-[600px] h-[600px]"
                     style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)' }}
                 />
             </div>

@@ -252,7 +252,7 @@ Assistant:`;
                         className={`bg-black border border-white/10 rounded-[20px] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
                             isMinimized 
                                 ? 'h-16 w-[calc(100vw-2rem)] sm:w-80' 
-                                : 'w-[calc(100vw-2rem)] sm:w-[380px]'
+                                : 'w-[calc(100vw-2rem)] sm:w-full max-w-[380px]'
                         }`}
                         style={!isMinimized ? { height: 'min(520px, calc(100vh - 140px))' } : {}}
                     >

@@ -197,10 +197,10 @@ export default function Service_AI() {
                     </div>
                     <div className="flex flex-wrap gap-3">
                         {programmaticSeoQueries.map((query, i) => (
-                            <Link href={`/Solutions/${query.split(' ').join('-')}`} key={i}>
-                                <div className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] rounded-full text-sm text-gray-400 hover:text-red-400 hover:bg-white/[0.04] transition-all cursor-pointer flex items-center gap-2">
-                                    <Search className="w-3 h-3" />
-                                    {query}
+                            <Link href={`/Solutions/${query.toLowerCase().split(' ').join('-')}`} key={i} className="max-w-full">
+                                <div className="px-4 py-2 h-auto bg-white/[0.02] border border-white/[0.05] rounded-3xl text-sm text-gray-400 hover:text-red-400 hover:bg-white/[0.04] transition-all cursor-pointer flex items-start sm:items-center gap-2 max-w-full">
+                                    <Search className="w-3 h-3 flex-shrink-0 mt-1 sm:mt-0" />
+                                    <span className="whitespace-normal text-left">{query}</span>
                                 </div>
                             </Link>
                         ))}

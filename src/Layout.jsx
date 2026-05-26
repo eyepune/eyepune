@@ -98,9 +98,10 @@ function LayoutContent({ children, currentPageName }) {
     const [expandedMobileMenu, setExpandedMobileMenu] = useState(null);
     const [scrolled, setScrolled] = useState(false);
 
-    // Scroll to top on every page navigation
+    // Scroll to top and close mobile menu on every page navigation
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
+        setMobileMenuOpen(false);
     }, [currentPageName]);
 
     useEffect(() => {
@@ -126,8 +127,8 @@ function LayoutContent({ children, currentPageName }) {
         <div className="min-h-screen bg-transparent text-white relative">
             {/* Global Elegant Background Elements */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/20 via-[#030000] to-[#010000] z-[-1]">
-                <div className="absolute top-0 left-1/4 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-red-800/10 rounded-full blur-[80px] md:blur-[150px]" />
-                <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-red-600/5 rounded-full blur-[80px] md:blur-[150px]" />
+                <div className="absolute top-0 left-1/4 w-full max-w-[300px] h-[300px] md:w-full max-w-[600px] md:h-[600px] bg-red-800/10 rounded-full blur-[80px] md:blur-[150px]" />
+                <div className="absolute bottom-0 right-1/4 w-full max-w-[300px] h-[300px] md:w-full max-w-[600px] md:h-[600px] bg-red-600/5 rounded-full blur-[80px] md:blur-[150px]" />
                 <HeroFloatingIcons opacity={1} />
             </div>
 
@@ -360,10 +361,10 @@ function LayoutContent({ children, currentPageName }) {
             {isPublicPage && (
                 <footer className="relative z-30 bg-transparent border-t border-white/[0.06] overflow-hidden">
                     {/* Top glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[600px] h-[1px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
 
                     {/* BG accent */}
-                    <div className="absolute bottom-0 left-0 w-[400px] h-[300px] pointer-events-none"
+                    <div className="absolute bottom-0 left-0 w-full max-w-[400px] h-[300px] pointer-events-none"
                         style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.04) 0%, transparent 70%)' }}
                     />
 

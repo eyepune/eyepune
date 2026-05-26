@@ -156,7 +156,7 @@ export default function About() {
 
             {/* ── TIMELINE ── */}
             <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full max-w-[400px] h-[400px] pointer-events-none"
                     style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.05) 0%, transparent 70%)' }}
                 />
                 <div className="max-w-4xl mx-auto px-6 relative z-10">

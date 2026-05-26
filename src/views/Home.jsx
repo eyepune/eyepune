@@ -77,7 +77,7 @@ export default function Home() {
                             className="text-center mb-16"
                         >
                             <span className="text-red-500 text-xs font-bold tracking-[0.4em] uppercase block mb-4">Testimonials</span>
-                            <h2 className="text-5xl md:text-6xl font-black text-white mb-5">
+                            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-5 leading-tight">
                                 Real Clients,{' '}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 pb-1">Real Results</span>
                             </h2>

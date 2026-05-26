@@ -52,7 +52,7 @@ export default function GanttChart({ tasks, projects }) {
 
     return (
         <Card className="p-6 overflow-x-auto">
-            <div className="min-w-[800px]">
+            <div className="min-w-full max-w-[800px]">
                 {/* Header */}
                 <div className="flex border-b pb-4 mb-4">
                     <div className="w-64 font-semibold">Task / Project</div>

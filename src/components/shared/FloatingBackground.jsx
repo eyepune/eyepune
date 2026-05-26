@@ -27,8 +27,8 @@ export default function FloatingBackground() {
     return (
         <div className="absolute inset-0 pointer-events-none z-[1] overflow-hidden">
             {/* Background Glows */}
-            <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-red-600/[0.015] rounded-full blur-[150px]" />
-            <div className="absolute bottom-0 right-1/4 w-[800px] h-[800px] bg-orange-600/[0.015] rounded-full blur-[150px]" />
+            <div className="absolute top-0 left-1/4 w-full max-w-[800px] h-[800px] bg-red-600/[0.015] rounded-full blur-[150px]" />
+            <div className="absolute bottom-0 right-1/4 w-full max-w-[800px] h-[800px] bg-orange-600/[0.015] rounded-full blur-[150px]" />
 
             {/* Icons */}
             {ICONS.map((item, i) => (

@@ -29,7 +29,7 @@ export default function AIO_FAQ() {
     return (
         <section className="py-32 px-6 bg-transparent relative overflow-hidden">
             {/* Glowing background radial accent */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/5 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] h-[800px] bg-red-600/5 blur-[120px] rounded-full pointer-events-none" />
             
             <div className="max-w-4xl mx-auto relative z-10">
                 <div className="text-center mb-16">

@@ -67,7 +67,7 @@ export default function CTASection() {
 
             {/* Center glow */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[800px] h-[500px] rounded-full opacity-[0.12]"
+                <div className="w-full max-w-[800px] h-[500px] rounded-full opacity-[0.12]"
                     style={{ background: 'radial-gradient(ellipse, #ef4444 0%, transparent 70%)' }}
                 />
             </div>
