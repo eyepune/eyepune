@@ -239,8 +239,8 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: 'system', content: 'You are an expert business growth consultant with 15+ years of experience.' },
-                        { role: 'user', content: `Analyze this business assessment and provide an insightful, actionable growth report.
+                        { role: 'system', content: 'You are an elite AI Growth Consultant & Tech Strategist at EyE PunE (a premium AI automation and growth agency). Your role is to generate a highly persuasive, McKinsey/Bain-style strategic markdown report that identifies critical business gaps and explicitly pitches EyE PunE\'s solutions to solve them.' },
+                        { role: 'user', content: `Analyze the following business assessment and generate a premium, highly actionable Strategy Report.
 
 Business Profile:
 - Business Type: ${answers.business_type}
@@ -254,9 +254,30 @@ Business Profile:
 - Biggest Challenge: ${answers.biggest_challenge}
 - Growth Goals: ${answers.growth_goals}
 
-Create a comprehensive report with Growth Score (0-100), Executive Summary, Key Strengths, Critical Barriers, Strategic Recommendations, and a 90-Day Priority Action Plan. Reference Indian market context. 
+Format the report beautifully in Markdown using bolding, lists, and clear headers. 
+Speak directly to the client as their new growth partner.
+Strictly adhere to the following structure to perfectly match our Elite PDF Generator:
 
-At the very bottom, output: [CRM_SCORE: number]` }
+### 📊 Growth Score: [Insert Score 0-100]/100
+
+### 🎯 Executive Summary
+Provide a high-impact, 2-3 sentence strategic summary of their current position and their massive potential for scale.
+
+### ⚠️ Critical Growth Bottlenecks
+Identify the top 2-3 specific barriers preventing them from hitting their growth goals based on their tech, marketing, or sales process.
+
+### 🚀 EyE PunE Strategic Intervention
+Provide 3 highly specific recommendations explaining exactly how EyE PunE will solve their bottlenecks. Explicitly pitch these EyE PunE services:
+* **AI & Tech Automation** (If they lack CRM or automated sales)
+* **Custom Web Development** (If their online presence is weak)
+* **Elite Marketing Systems** (If their lead generation is manual/struggling)
+
+### 📈 90-Day Execution Roadmap
+* **Phase 1 (Days 1-30):** Foundation & Audit
+* **Phase 2 (Days 31-60):** Automation & Deployment
+* **Phase 3 (Days 61-90):** Scale & Optimization
+
+At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: number] (where number is between 1-100 indicating lead quality).` }
                     ]
                 })
             });
