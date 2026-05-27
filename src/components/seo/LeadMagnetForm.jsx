@@ -18,10 +18,11 @@ export default function LeadMagnetForm({ keyword }) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: 'SEO Blueprint Lead',
+                    name: formData.name,
                     email: formData.email,
                     phone: formData.phone,
-                    company: formData.name, // Storing their actual name here since we use the primary 'name' to flag the lead type
+                    company: '',
+                    source: 'SEO Blueprint Lead Magnet',
                     service_interest: keyword,
                     message: `Requested the 2026 ${keyword} Growth Blueprint. Name: ${formData.name}, Phone: ${formData.phone}`,
                     hp_verification: ''
