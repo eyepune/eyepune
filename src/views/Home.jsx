@@ -16,8 +16,7 @@ const LexProSection = dynamic(() => import("@/components/home/LexProSection"), {
 const CTASection = dynamic(() => import("@/components/home/CTASection"), { ssr: true });
 const AIO_FAQ = dynamic(() => import("@/components/home/AIO_FAQ"), { ssr: true });
 const Scroll3DReveal = dynamic(() => import("@/components/shared/Scroll3DReveal"), { ssr: true });
-const LeadMagnetForm = dynamic(() => import("@/components/seo/LeadMagnetForm"), { ssr: true });
-import { TrendingUp, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 const HOME_FAQS = [
     {
@@ -103,41 +102,6 @@ export default function Home() {
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/15 to-transparent" />
                 </section>
-                {/* Dynamic SEO Lead Magnet */}
-                <div className="max-w-4xl mx-auto mb-24 px-4 mt-20">
-                    <Scroll3DReveal direction="up" rotation={true}>
-                    <div className="rounded-3xl bg-gradient-to-r from-red-950/50 to-black border border-red-500/30 p-8 md:p-12 relative overflow-hidden shadow-[0_0_50px_rgba(239,68,68,0.1)]">
-                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-red-500/20 blur-[100px] rounded-full pointer-events-none" />
-                        
-                        <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-                        <div className="md:w-3/5 text-center md:text-left">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold mb-4 uppercase tracking-wider">
-                            <TrendingUp className="w-3 h-3" /> Free PDF Download
-                            </div>
-                            <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight">
-                            The 2026 <span className="text-red-500">Business Growth</span> Blueprint
-                            </h3>
-                            <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
-                            Steal the exact framework we use to generate highly-qualified leads and scale revenues for 100+ global clients. Enter your email to get instant access.
-                            </p>
-                            <LeadMagnetForm keyword="Business Growth Strategy" />
-                        </div>
-                        
-                        <div className="md:w-2/5 flex justify-center">
-                            <div className="relative w-48 h-64 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                            <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-red-500 to-orange-400" />
-                            <div className="p-6 pt-10 flex flex-col items-center text-center h-full">
-                                <Zap className="w-12 h-12 text-red-500 mb-4 opacity-50" />
-                                <div className="text-xs text-gray-500 uppercase tracking-widest font-bold mb-2">EyE PunE Labs</div>
-                                <div className="font-black text-white text-lg leading-tight">Growth Strategy Framework</div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </Scroll3DReveal>
-                </div>
-
                 {/* 6. AIO FAQ — optimized for AI bots and users */}
                 <Scroll3DReveal direction="up" rotation={true}>
                     <AIO_FAQ />
