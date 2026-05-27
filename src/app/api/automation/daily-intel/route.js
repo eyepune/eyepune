@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getAdminNotificationTemplate } from '@/lib/email-templates';
 import { generateAndPostToLinkedin } from '@/lib/linkedin-automation'; // Reusing LLM logic
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
     const authHeader = request.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && process.env.NODE_ENV === 'production') {
