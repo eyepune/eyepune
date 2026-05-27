@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, TrendingUp, Zap, Target, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
-import ClientLogos from '@/components/home/ClientLogos';
 
 export async function generateMetadata({ params }) {
   const rawKeyword = params.keyword;
@@ -112,11 +111,6 @@ export default function SEOKeywordPage({ params }) {
               </Button>
             </Link>
           </div>
-        </div>
-
-        {/* Social Proof injected for Cold Traffic */}
-        <div className="mb-24">
-            <ClientLogos />
         </div>
 
         {/* Value Proposition Grid (Dynamic) */}
