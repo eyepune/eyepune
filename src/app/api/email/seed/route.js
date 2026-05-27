@@ -22,7 +22,10 @@ export async function POST() {
         content: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; background: #ffffff;">
             <div style="border-bottom: 3px solid #ef4444; padding-bottom: 20px; margin-bottom: 28px;">
-              <h1 style="margin: 0; font-size: 28px; color: #111827;">EyE PunE <span style="color: #ef4444;">●</span></h1>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+                <img src="https://eyepune.com/logo.svg" alt="Logo" style="height: 32px;" />
+                <h2 style="margin: 0; color: #111827; font-size: 26px; font-weight: 900;">EyE <span style="color: #ef4444;">PunE</span></h2>
+              </div>
             </div>
             <h2 style="font-size: 22px; color: #111827; margin-bottom: 8px;">Hi {{name}},</h2>
             <p style="color: #6b7280; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
@@ -41,6 +44,10 @@ export async function POST() {
             <div style="text-align: center; margin: 32px 0;">
               <a href="https://eyepune.com/Booking" style="background: #ef4444; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px; display: inline-block;">Book a Free Discovery Call →</a>
             </div>
+            <p style="margin-top: 30px; font-size: 16px; color: #111827;">
+              Best regards,<br/>
+              <strong>EyE PunE Team</strong>
+            </p>
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0;" />
             <p style="color: #9ca3af; font-size: 13px; text-align: center; margin: 0;">
               EyE PunE | Pune, Maharashtra, India | <a href="https://eyepune.com" style="color: #ef4444;">eyepune.com</a>
@@ -56,7 +63,10 @@ export async function POST() {
         content: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; background: #ffffff;">
             <div style="border-bottom: 3px solid #ef4444; padding-bottom: 20px; margin-bottom: 28px;">
-              <h1 style="margin: 0; font-size: 28px; color: #111827;">EyE PunE <span style="color: #ef4444;">●</span></h1>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+                <img src="https://eyepune.com/logo.svg" alt="Logo" style="height: 32px;" />
+                <h2 style="margin: 0; color: #111827; font-size: 26px; font-weight: 900;">EyE <span style="color: #ef4444;">PunE</span></h2>
+              </div>
             </div>
             <div style="background: linear-gradient(135deg, #ef4444, #f97316); border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 28px; color: white;">
               <p style="margin: 0 0 8px; font-size: 14px; opacity: 0.85; text-transform: uppercase; letter-spacing: 1px;">Your Business Growth Score</p>
@@ -77,6 +87,10 @@ export async function POST() {
               <a href="https://eyepune.com/Booking" style="background: #ef4444; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px; display: inline-block;">Claim Your Free Strategy Session →</a>
               <p style="color: #9ca3af; font-size: 12px; margin: 12px 0 0;">Limited slots available. No obligation.</p>
             </div>
+            <p style="margin-top: 30px; font-size: 16px; color: #111827;">
+              Best regards,<br/>
+              <strong>EyE PunE Team</strong>
+            </p>
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0;" />
             <p style="color: #9ca3af; font-size: 13px; text-align: center; margin: 0;">
               EyE PunE | <a href="https://eyepune.com" style="color: #ef4444;">eyepune.com</a>
@@ -92,7 +106,10 @@ export async function POST() {
         content: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; background: #ffffff;">
             <div style="border-bottom: 3px solid #22c55e; padding-bottom: 20px; margin-bottom: 28px;">
-              <h1 style="margin: 0; font-size: 28px; color: #111827;">EyE PunE <span style="color: #22c55e;">●</span></h1>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+                <img src="https://eyepune.com/logo.svg" alt="Logo" style="height: 32px;" />
+                <h2 style="margin: 0; color: #111827; font-size: 26px; font-weight: 900;">EyE <span style="color: #ef4444;">PunE</span></h2>
+              </div>
             </div>
             <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 28px;">
               <div style="font-size: 48px; margin-bottom: 8px;">✅</div>
@@ -121,6 +138,10 @@ export async function POST() {
             </div>
             <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 0;">
               Please prepare a brief overview of your business goals. See you then!
+            </p>
+            <p style="margin-top: 30px; font-size: 16px; color: #111827;">
+              Best regards,<br/>
+              <strong>EyE PunE Team</strong>
             </p>
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0;" />
             <p style="color: #9ca3af; font-size: 13px; text-align: center; margin: 0;">

@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { triggerAutomation } from '@/lib/automation-service';
+import { notifyNewInquiry } from '@/lib/admin-notifier';
 
 export async function POST(request) {
   try {
@@ -57,23 +59,25 @@ export async function POST(request) {
       console.warn('[Leads API] Error inserting inquiry (non-fatal):', inquiryError);
     }
 
-    // Try to trigger internal webhooks asynchronously so we don't block the response
-    const protocol = request.headers.get('x-forwarded-proto') || 'http';
-    const host = request.headers.get('host');
-    const baseUrl = `${protocol}://${host}`;
-
-    fetch(`${baseUrl}/api/automation/trigger`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        trigger: 'new_inquiry',
-        payload: { name, email, phone, company: company || 'their business', service: service_interest || 'General Inquiry' }
-      })
-    }).catch(err => console.warn('[Leads API] Automation trigger failed:', err.message));
+    // Trigger Client Email (Automations) directly
+    try {
+      await triggerAutomation('new_inquiry', { 
+        name, 
+        email, 
+        phone, 
+        company: company || 'their business', 
+        service: service_interest || 'General Inquiry' 
+      });
+    } catch (err) {
+      console.warn('[Leads API] Automation trigger failed:', err.message);
+    }
 
     // Automatically generate and email the PDF Blueprint if this is a Lead Magnet request
     if (source === 'SEO Blueprint Lead Magnet') {
       try {
+        const protocol = request.headers.get('x-forwarded-proto') || 'http';
+        const host = request.headers.get('host');
+        const baseUrl = `${protocol}://${host}`;
         await fetch(`${baseUrl}/api/automation/blueprint`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -85,14 +89,17 @@ export async function POST(request) {
       }
     }
 
-    fetch(`${baseUrl}/api/admin/notify`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'inquiry',
-        payload: { name, email, service: service_interest || 'General Inquiry', message }
-      })
-    }).catch(err => console.warn('[Leads API] Admin notification trigger failed:', err.message));
+    // Admin Notification directly
+    try {
+      await notifyNewInquiry({ 
+        name, 
+        email, 
+        service: service_interest || 'General Inquiry', 
+        message 
+      });
+    } catch (err) {
+      console.warn('[Leads API] Admin notification trigger failed:', err.message);
+    }
 
     return NextResponse.json({ success: true });
 

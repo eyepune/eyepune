@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Palette, Layers, FileText, Star, Image, Sparkles, Search, PenTool, Briefcase, Zap } from 'lucide-react';
+import { ArrowRight, Palette, Layers, FileText, Star, Image, Sparkles, Search, PenTool, Briefcase, Zap, TrendingUp } from 'lucide-react';
 import SEOHead from '@/components/seo/SEOHead';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import LeadMagnetForm from '@/components/seo/LeadMagnetForm';
 
 const faqs = [
     { question: "How much does branding cost in Pune?", answer: "EyE PunE's branding packages start at ₹20,000 for a logo and brand kit. Full brand identity packages including guidelines, collaterals, and templates range from ₹50,000 to ₹1,50,000." },
@@ -157,6 +158,38 @@ export default function Service_Branding() {
                     </div>
                 </div>
             </section>
+            {/* Dynamic SEO Lead Magnet */}
+            <div className="max-w-4xl mx-auto mb-24 px-4 mt-16">
+              <div className="rounded-3xl bg-gradient-to-r from-red-950/50 to-black border border-red-500/30 p-8 md:p-12 relative overflow-hidden shadow-[0_0_50px_rgba(239,68,68,0.1)]">
+                <div className="absolute -right-20 -top-20 w-64 h-64 bg-red-500/20 blur-[100px] rounded-full pointer-events-none" />
+                
+                <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                  <div className="md:w-3/5 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold mb-4 uppercase tracking-wider">
+                      <TrendingUp className="w-3 h-3" /> Free PDF Download
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight">
+                      The 2026 <span className="text-red-500">Brand Identity</span> Growth Blueprint
+                    </h3>
+                    <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
+                      Steal the exact framework we use to generate highly-qualified leads and scale revenues for 100+ global clients. Enter your email to get instant access.
+                    </p>
+                    <LeadMagnetForm keyword="Brand Identity Design" />
+                  </div>
+                  
+                  <div className="md:w-2/5 flex justify-center">
+                    <div className="relative w-48 h-64 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                      <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-red-500 to-orange-400" />
+                      <div className="p-6 pt-10 flex flex-col items-center text-center h-full">
+                        <Zap className="w-12 h-12 text-red-500 mb-4 opacity-50" />
+                        <div className="text-xs text-gray-500 uppercase tracking-widest font-bold mb-2">EyE PunE Labs</div>
+                        <div className="font-black text-white text-lg leading-tight">Brand Identity Framework</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* FAQ */}
             <section className="py-24 border-t border-white/[0.06]">
@@ -199,25 +232,22 @@ export default function Service_Branding() {
             </section>
 
             {/* CTA */}
-            <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-950/30 to-transparent" />
-                <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-                    <h2 className="text-4xl md:text-5xl font-black mb-4">Let's Build a Brand <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Worth Remembering</span></h2>
-                    <p className="text-gray-400 mb-8">Book a free consultation — we'll share brand strategy insights specific to your industry.</p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href={createPageUrl("Booking")}>
-                            <Button className="bg-gradient-to-r from-red-600 to-red-500 text-white px-10 py-6 rounded-full font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.4)]">
-                                Start Branding Project
-                            </Button>
-                        </Link>
-                        <a href="https://wa.me/919284712033?text=Hi,%20I%20need%20branding%20and%20logo%20design%20for%20my%20business" target="_blank" rel="noopener noreferrer">
-                            <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 px-10 py-6 rounded-full text-lg">
-                                WhatsApp Us
-                            </Button>
-                        </a>
-                    </div>
-                </div>
-            </section>
+            <div className="max-w-4xl mx-auto text-center p-12 rounded-3xl bg-gradient-to-b from-red-950/40 to-black border border-red-900/30 relative overflow-hidden mb-24 mt-12">
+              <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 md:mb-6 relative z-10 px-2 leading-tight">
+                Let's Build a Brand <span className="text-red-500 block sm:inline mt-1 sm:mt-0 pb-1">Worth Remembering</span>
+              </h2>
+              <p className="text-base md:text-xl text-gray-400 mb-8 relative z-10 px-4 leading-relaxed">
+                Book a free consultation — we'll share brand strategy insights specific to your industry.
+              </p>
+              <div className="flex justify-center w-full relative z-10 mt-8">
+                <Link href={createPageUrl("Booking")} className="w-full sm:w-auto">
+                  <Button size="lg" className="bg-white text-black hover:bg-gray-200 font-bold h-auto min-h-[56px] py-3 px-4 sm:px-8 text-base sm:text-lg rounded-[28px] w-full sm:w-auto shadow-2xl hover:scale-105 transition-all whitespace-normal text-center leading-tight">
+                    Start Branding Project
+                  </Button>
+                </Link>
+              </div>
+            </div>
         </div>
         </>
     );

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { generateStrategyPDF } from '@/lib/pdf-generator';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const reportMarkdown = `

@@ -29,7 +29,7 @@ export async function notifyAdmin(message) {
                  <h2 style="color: #ef4444;">EyE PunE Admin Alert</h2>
                  <pre style="background: #f4f4f4; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-family: inherit;">${message}</pre>
                </div>`
-    }).catch(e => console.warn('Failed to send admin Email:', e)));
+    }));
 
     await Promise.all(promises);
     return { success: true };
