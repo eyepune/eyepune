@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input';
 import { MessageCircle, X, Send, Loader, Bot, Sparkles } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-// How many messages before we ask for the user's name/email
-const LEAD_CAPTURE_THRESHOLD = 3;
+// How many messages before we ask for the user's name/email/phone
+const LEAD_CAPTURE_THRESHOLD = 2;
 
 export default function ChatbotWidget() {
     const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +25,7 @@ export default function ChatbotWidget() {
     const [isLoading, setIsLoading] = useState(false);
     const [leadCaptured, setLeadCaptured] = useState(false);
     const [showLeadForm, setShowLeadForm] = useState(false);
-    const [leadData, setLeadData] = useState({ name: '', email: '', hp_verification: '' });
+    const [leadData, setLeadData] = useState({ name: '', email: '', phone: '', hp_verification: '' });
     const [messageCount, setMessageCount] = useState(0);
     const scrollRef = useRef(null);
     const messageId = useRef(2);
@@ -55,67 +55,22 @@ export default function ChatbotWidget() {
         }
     }, [messageCount, leadCaptured]);
 
-    const saveLead = async (name, email) => {
+    const saveLead = async (name, email, phone) => {
         try {
-            // Save to leads table
-            await supabase.from('leads').insert([{
-                full_name: name,
-                email: email,
-                source: 'chatbot',
-                status: 'new',
-                notes: `Chatbot lead. Conversation: ${messages
-                    .slice(1)
-                    .map(m => `${m.role === 'user' ? 'User' : 'Bot'}: ${m.content}`)
-                    .join('\n')}`
-            }]);
-
-            // Save to inquiries table for visibility in Admin Forms tab
-            try {
-                await supabase.from('inquiries').insert([{
-                    full_name: name,
+            await fetch('/api/leads/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name,
                     email: email,
+                    phone: phone || '',
+                    company: '',
                     service_interest: 'AI Chatbot Inquiry',
-                    message: `Lead captured via chatbot after ${messageCount} messages.`,
+                    message: `Chatbot lead after ${messageCount} messages.\n\nConversation:\n${messages.slice(1).map(m => `${m.role === 'user' ? 'User' : 'Bot'}: ${m.content}`).join('\n')}`,
                     source: 'chatbot',
-                    status: 'new'
-                }]);
-            } catch (err) {
-                console.warn('[Chatbot] Inquiry save failed:', err);
-            }
-
-            // Fire WhatsApp notify (non-blocking)
-            fetch('/api/whatsapp/notify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'contact',
-                    name,
-                    email,
-                    message: `Chatbot lead after ${messageCount} messages`
+                    hp_verification: ''
                 })
-            }).catch(() => {});
-
-            // Fire admin email (non-blocking)
-            fetch('/api/email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    to: 'connect@eyepune.com',
-                    subject: `💬 New Chatbot Lead: ${name}`,
-                    html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">
-                        <h2 style="color:#ef4444;margin-top:0">💬 New Chatbot Lead</h2>
-                        <p><strong>Name:</strong> ${name}</p>
-                        <p><strong>Email:</strong> ${email}</p>
-                        <p><strong>Messages exchanged:</strong> ${messageCount}</p>
-                        <h3>Conversation:</h3>
-                        <div style="background:#f9fafb;padding:16px;border-radius:8px;font-size:13px;white-space:pre-wrap">${
-                            messages.slice(1).map(m => `${m.role === 'user' ? '👤 User' : '🤖 Bot'}: ${m.content}`).join('\n\n')
-                        }</div>
-                        <a href="https://eyepune.com/Admin_CRM" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#ef4444;color:white;text-decoration:none;border-radius:8px;font-weight:bold">Open CRM →</a>
-                    </div>`
-                })
-            }).catch(() => {});
-
+            });
         } catch (err) {
             console.warn('[Chatbot] Lead save failed:', err.message);
         }
@@ -134,7 +89,7 @@ export default function ChatbotWidget() {
 
         if (!leadData.name || !leadData.email) return;
 
-        await saveLead(leadData.name, leadData.email);
+        await saveLead(leadData.name, leadData.email, leadData.phone);
         setLeadCaptured(true);
         setShowLeadForm(false);
 
@@ -169,22 +124,21 @@ export default function ChatbotWidget() {
                 content: m.content
             }));
 
-            const systemPrompt = `You are the EyE PunE AI Assistant — friendly, professional, and concise.
-EyE PunE is an AI-powered digital marketing & automation agency based in Pune, India.
+            const systemPrompt = `You are the EyE PunE AI Assistant — acting as a high-ticket Sales Development Rep (SDR).
+Your goal is to aggressively qualify leads, create FOMO, and push them to book a Strategy Session or drop their phone number.
 
 Services:
 - Social Media Management (₹15,000–₹35,000/month)
 - Website & Sales Funnel Development (₹45,000–₹75,000)
 - AI Automation & Chatbots (₹25,000–₹65,000/month)
-- Branding (₹30,000 one-time)
 - Full Growth Bundle (₹1,25,000/month)
 
 Response rules:
-- Keep answers under 3 sentences
-- If asked about pricing, give the range and suggest a free consultation
-- Encourage booking at: https://eyepune.com/Booking
-- For AI Assessment, direct to: https://eyepune.com/AI_Assessment
-- Never make up specific claims — stick to what's listed above`;
+- NEVER give long explanations. Keep answers under 2 sentences.
+- Always end your message with a compelling question that drives them to take action.
+- If asked about pricing, give the range and immediately push them to book a free consultation at: https://eyepune.com/Booking
+- Emphasize that we only take 3 new clients per month (scarcity).
+- Never make up specific claims — stick to the facts above.`;
 
             const response = await fetch('/api/llm', {
                 method: 'POST',
@@ -321,6 +275,13 @@ Response rules:
                                                 value={leadData.name}
                                                 onChange={e => setLeadData(p => ({ ...p, name: e.target.value }))}
                                                 required
+                                                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-red-500/50"
+                                            />
+                                            <input
+                                                type="tel"
+                                                placeholder="Phone (Optional)"
+                                                value={leadData.phone}
+                                                onChange={e => setLeadData(p => ({ ...p, phone: e.target.value }))}
                                                 className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-red-500/50"
                                             />
                                             <input

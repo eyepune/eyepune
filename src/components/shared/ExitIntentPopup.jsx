@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { createPageUrl } from "@/utils";
-import { base44 } from "@/api/base44Client";
 
 export default function ExitIntentPopup() {
     const [show, setShow] = useState(false);
@@ -64,14 +63,27 @@ export default function ExitIntentPopup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email) return;
-        await base44.entities.Inquiry.create({
-            email,
-            name: 'Exit Intent Lead',
-            message: 'Requested free audit via exit popup',
-            service_interest: 'custom',
-            status: 'new'
-        });
-        setSubmitted(true);
+        
+        try {
+            const response = await fetch('/api/leads/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: 'Exit Intent Lead',
+                    email: email,
+                    phone: '',
+                    company: '',
+                    service_interest: 'custom',
+                    message: 'Requested free audit via exit popup',
+                    hp_verification: ''
+                })
+            });
+            if (response.ok) {
+                setSubmitted(true);
+            }
+        } catch (error) {
+            console.error('Failed to submit exit intent', error);
+        }
     };
 
     return (

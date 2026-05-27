@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, TrendingUp, Zap, Target, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import LeadMagnetForm from '@/components/seo/LeadMagnetForm';
 
 export async function generateMetadata({ params }) {
   const rawKeyword = params.keyword;
@@ -142,17 +143,7 @@ export default function SEOKeywordPage({ params }) {
                 <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
                   Steal the exact framework we use to generate highly-qualified leads and scale revenues for 100+ global clients. Enter your email to get instant access.
                 </p>
-                <form className="flex flex-col sm:flex-row gap-3">
-                  <input 
-                    type="email" 
-                    placeholder="Enter your best email..." 
-                    className="flex-1 bg-white/[0.05] border border-white/[0.1] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50 transition-colors"
-                    required
-                  />
-                  <Button type="button" className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-6 py-6 font-bold shadow-lg shadow-red-500/20 whitespace-nowrap">
-                    Send My Blueprint
-                  </Button>
-                </form>
+                <LeadMagnetForm keyword={keyword} />
               </div>
               
               <div className="md:w-2/5 flex justify-center">
@@ -200,10 +191,10 @@ export default function SEOKeywordPage({ params }) {
         {/* CTA Section */}
         <div className="max-w-4xl mx-auto text-center p-12 rounded-3xl bg-gradient-to-b from-red-950/40 to-black border border-red-900/30 relative overflow-hidden mb-24">
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 relative z-10 px-2">
-            Ready to implement <span className="text-red-500">{keyword}</span> in your business?
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 md:mb-6 relative z-10 px-2 leading-tight">
+            Ready to scale with <span className="text-red-500 block sm:inline mt-1 sm:mt-0">{keyword}</span>?
           </h2>
-          <p className="text-lg md:text-xl text-gray-400 mb-8 relative z-10 px-4">
+          <p className="text-base md:text-xl text-gray-400 mb-8 relative z-10 px-4 leading-relaxed">
             Book a 15-minute discovery call and we'll map out a custom blueprint for you.
           </p>
           <div className="flex justify-center w-full relative z-10 mt-8">
