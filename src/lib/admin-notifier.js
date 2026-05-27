@@ -1,4 +1,5 @@
 import { sendWhatsAppText } from './whatsapp-service';
+import { sendEmail } from './email-service';
 
 /**
  * Admin Notifier Service
@@ -6,14 +7,32 @@ import { sendWhatsAppText } from './whatsapp-service';
  */
 
 const ADMIN_NUMBER = process.env.ADMIN_WHATSAPP_NUMBER || '919511210191';
+const ADMIN_EMAIL = 'team@eyepune.com';
 
 export async function notifyAdmin(message) {
-    if (!ADMIN_NUMBER) return { success: false, error: 'Admin number not configured' };
+    const promises = [];
     
-    return await sendWhatsAppText({
-        to: ADMIN_NUMBER,
-        text: message
-    });
+    if (ADMIN_NUMBER) {
+        promises.push(sendWhatsAppText({
+            to: ADMIN_NUMBER,
+            text: message
+        }).catch(e => console.warn('Failed to send admin WhatsApp:', e)));
+    }
+    
+    // Extract a subject line from the first line of the message
+    const subject = message.split('\n')[0].replace(/[*🚀📊📩📅]/g, '').trim() || 'New EyE PunE Notification';
+    
+    promises.push(sendEmail({
+        to: ADMIN_EMAIL,
+        subject: subject,
+        html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+                 <h2 style="color: #ef4444;">EyE PunE Admin Alert</h2>
+                 <pre style="background: #f4f4f4; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-family: inherit;">${message}</pre>
+               </div>`
+    }).catch(e => console.warn('Failed to send admin Email:', e)));
+
+    await Promise.all(promises);
+    return { success: true };
 }
 
 export async function notifyNewLead({ name, email, phone, company, source }) {
