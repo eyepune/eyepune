@@ -15,7 +15,28 @@ export async function generateStrategyPDF(data) {
         format: "a4",
     });
 
-    const { name, business, score, report } = data;
+    function sanitizeForPDF(str) {
+        if (!str) return '';
+        return str
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'")
+            .replace(/&#039;/g, "'")
+            .replace(/[\u2018\u2019]/g, "'") // Smart single quotes
+            .replace(/[\u201C\u201D]/g, '"') // Smart double quotes
+            .replace(/[\u2013\u2014]/g, '-') // En and Em dashes
+            .replace(/[\u2026]/g, '...')     // Ellipsis
+            .replace(/[^\x00-\xFF]/g, '')    // Strip all emojis and non-Latin1 characters
+            .trim();
+    }
+
+    const name = sanitizeForPDF(data.name);
+    const business = sanitizeForPDF(data.business);
+    const score = data.score;
+    const report = sanitizeForPDF(data.report);
+
     const brandColor = [239, 68, 68];   // #ef4444 Crimson Red
     const darkGray = [40, 40, 40];      // Corporate Dark Gray
     const lightBg = [255, 255, 255];    // Crisp White
