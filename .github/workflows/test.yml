@@ -37,6 +37,7 @@ jobs:
         # Include necessary mocked build ENVs here if needed
         NEXT_PUBLIC_SUPABASE_URL: "http://localhost:54321"
         NEXT_PUBLIC_SUPABASE_ANON_KEY: "mock-key"
+        SUPABASE_SERVICE_ROLE_KEY: "mock-key"
 
     - name: Run Playwright E2E Tests
       run: npm run test:e2e
