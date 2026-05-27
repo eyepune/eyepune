@@ -170,6 +170,11 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                 company_name: siteInfo.title || targetUrl
             }));
             
+            // Trigger Meta Pixel Lead Event
+            if (typeof window !== 'undefined' && window.fbq) {
+                window.fbq('track', 'Lead');
+            }
+
             setStep(questions.length + 1); // Go to report view
             
         } catch (error) {

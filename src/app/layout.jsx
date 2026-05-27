@@ -1,6 +1,7 @@
 import '@/globals.css';
 import { Providers } from './providers';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
+import { MetaPixel } from '@/components/analytics/MetaPixel';
 import AIChatbot from '@/components/home/AIChatbot';
 import SEO_JSONLD from '@/components/seo/SEO_JSONLD';
 import SmoothScroll from '@/components/3d/SmoothScroll';
@@ -98,6 +99,7 @@ export default function RootLayout({ children }) {
         <body className="min-h-screen bg-transparent text-white antialiased font-sans">
           <SEO_JSONLD />
           <GoogleAnalytics />
+          <MetaPixel />
           <Providers>
             <SmoothScroll>
               <GlobalCanvas />

@@ -91,6 +91,27 @@ export async function triggerAutomation(triggerType, payload) {
       }
     }
 
+    // 3. Process WhatsApp Nurture (if applicable)
+    if (triggerType === 'new_assessment' && payload.phone) {
+      try {
+        const { sendWhatsAppText } = await import('./whatsapp-service.js');
+        const messageText = `Hi ${payload.name || 'there'}! 👋\n\nI saw you just completed the AI Growth Assessment for ${payload.business || 'your business'} on EyE PunE. Your Growth Score is ${payload.score}/100.\n\nI have 2 slots open this week to review your custom blueprint on a quick strategy call. Are you free to hop on?\n\n- The EyE PunE Growth Team`;
+        
+        const waResult = await sendWhatsAppText({ 
+          to: payload.phone, 
+          text: messageText 
+        });
+        
+        results.push({ type: 'whatsapp', success: waResult.success });
+        if (waResult.success) {
+          console.log(`[AutomationService] WhatsApp nurture sent to ${payload.phone}`);
+        }
+      } catch (waErr) {
+        console.warn('[AutomationService] Failed to trigger WhatsApp nurture:', waErr.message);
+        results.push({ type: 'whatsapp', success: false, error: waErr.message });
+      }
+    }
+
     return { success: true, results };
   } catch (error) {
     console.error('[AutomationService] Fatal Error:', error.message);

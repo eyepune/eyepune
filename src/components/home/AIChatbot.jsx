@@ -197,7 +197,7 @@ Sales Sniper Strategy:
 - **Urgency**: Mention that we only take 5 new "Intelligence Audits" per week.
 - **CTAs**: 
   - Researching? -> [AI Assessment](https://eyepune.com/AI-Assessment)
-  - Ready to scale? -> [Book Vision Sync](https://eyepune.com/Booking)
+  - **Ready to scale? -> Output exactly the token [BOOK_MEETING] in your response. This will render a glowing "Book Strategy Call" button for them to click.**
 
 Tone & Persona:
 - Elite, confident, and ROI-obsessed. 
@@ -291,14 +291,33 @@ Assistant:`;
                                                 ? 'bg-red-600 text-white rounded-tr-none' 
                                                 : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-none'
                                             }`}>
-                                                <ReactMarkdown 
-                                                    className="prose prose-invert prose-sm max-w-none"
-                                                    components={{
-                                                        a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" className="text-orange-300 underline underline-offset-2 hover:text-orange-200" {...props} />
-                                                    }}
-                                                >
-                                                    {m.content}
-                                                </ReactMarkdown>
+                                                {m.content.includes('[BOOK_MEETING]') ? (
+                                                    <div className="space-y-4">
+                                                        <ReactMarkdown 
+                                                            className="prose prose-invert prose-sm max-w-none"
+                                                            components={{
+                                                                a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" className="text-orange-300 underline underline-offset-2 hover:text-orange-200" {...props} />
+                                                            }}
+                                                        >
+                                                            {m.content.replace(/\[BOOK_MEETING\]/g, '')}
+                                                        </ReactMarkdown>
+                                                        <a 
+                                                            href="/Booking" 
+                                                            className="block w-full text-center bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black py-3 px-4 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all animate-pulse"
+                                                        >
+                                                            🔥 Book Your Strategy Call
+                                                        </a>
+                                                    </div>
+                                                ) : (
+                                                    <ReactMarkdown 
+                                                        className="prose prose-invert prose-sm max-w-none"
+                                                        components={{
+                                                            a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" className="text-orange-300 underline underline-offset-2 hover:text-orange-200" {...props} />
+                                                        }}
+                                                    >
+                                                        {m.content}
+                                                    </ReactMarkdown>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
