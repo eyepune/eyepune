@@ -74,13 +74,57 @@ export async function GET(request) {
       bodyText = bodyText.substring(0, MAX_LENGTH) + '...';
     }
 
+    // --- NEW: ADVANCED SEO & TECH STACK EXTRACTION ---
+    const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/gi);
+    const h2Match = html.match(/<h2[^>]*>([^<]+)<\/h2>/gi);
+    
+    const h1Count = h1Match ? h1Match.length : 0;
+    const h2Count = h2Match ? h2Match.length : 0;
+    const wordCount = bodyText.split(/\s+/).length;
+
+    // Image Alt Analysis
+    const imgMatch = html.match(/<img[^>]+>/gi) || [];
+    let imagesWithAlt = 0;
+    imgMatch.forEach(img => {
+      if (img.match(/alt=["']([^"']+)["']/i)) imagesWithAlt++;
+    });
+    const altRatio = imgMatch.length > 0 ? Math.round((imagesWithAlt / imgMatch.length) * 100) : 100;
+
+    // Tech Stack Detection
+    let techStack = [];
+    if (html.match(/wp-content|wp-includes/i)) techStack.push('WordPress');
+    if (html.match(/cdn\.shopify\.com/i)) techStack.push('Shopify');
+    if (html.match(/_next\/static/i) || html.match(/next\/router/i)) techStack.push('Next.js');
+    if (html.match(/data-reactroot|react-dom/i) && !techStack.includes('Next.js')) techStack.push('React');
+    if (html.match(/wix\.com/i)) techStack.push('Wix');
+    if (techStack.length === 0) techStack.push('Custom Built');
+
+    // Calculate a raw On-Page SEO Score (0-100)
+    let rawSeoScore = 50;
+    if (title && title.length > 10 && title.length < 70) rawSeoScore += 15;
+    if (description && description.length > 50 && description.length < 160) rawSeoScore += 15;
+    if (h1Count === 1) rawSeoScore += 10;
+    if (altRatio > 80) rawSeoScore += 10;
+    if (rawSeoScore > 100) rawSeoScore = 100;
+
+    const seoMetrics = {
+      h1Count,
+      h2Count,
+      wordCount,
+      totalImages: imgMatch.length,
+      altRatio,
+      techStack: techStack.join(', '),
+      rawSeoScore
+    };
+
     return NextResponse.json({
       success: true,
       url: validUrl,
       data: {
         title,
         description,
-        content: bodyText
+        content: bodyText,
+        seo: seoMetrics
       }
     });
 

@@ -85,51 +85,64 @@ export default function AI_Assessment() {
         }, 2200);
         
         try {
-            // 1. Scrape the URL
-            const scrapeRes = await fetch(`/api/scrape?url=${encodeURIComponent(targetUrl)}`);
+            // 1. Fetch Scrape (SEO) and PageSpeed in parallel
+            const [scrapeRes, speedRes] = await Promise.all([
+                fetch(`/api/scrape?url=${encodeURIComponent(targetUrl)}`),
+                fetch(`/api/assessment/pagespeed?url=${encodeURIComponent(targetUrl)}`)
+            ]);
+
             if (!scrapeRes.ok) throw new Error('Failed to analyze website URL');
             const scrapeData = await scrapeRes.json();
+            const speedData = speedRes.ok ? await speedRes.json() : { data: { score: 50, lcp: 'N/A' } };
             
             if (!scrapeData.success) throw new Error(scrapeData.error || 'Failed to extract website data');
             
             const siteInfo = scrapeData.data;
+            const seo = siteInfo.seo || {};
+            const speed = speedData.data || {};
             
-            // 2. Generate LLM Report
+            // 2. Generate LLM Report with Hard Data
             const response = await fetch('/api/llm', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: [
-                        { role: 'system', content: "You are an elite AI Growth Consultant and Tech Strategist working FOR EyE PunE (a premium AI automation and Next.js web development agency). Your job is to analyze a POTENTIAL CLIENT'S website data and output a highly persuasive, visually structured markdown report. You must highlight the CLIENT'S critical gaps and directly pitch how EyE PunE's solutions will fix their problems. DO NOT critique EyE PunE." },
-                        { role: 'user', content: `Analyze the potential client's website data below and generate a premium Strategy Report pitching to them.
+                        { role: 'system', content: "You are an elite AI Growth Consultant and Tech Strategist working FOR EyE PunE (a premium AI automation and Next.js web development agency). Your job is to analyze a POTENTIAL CLIENT'S real performance metrics and output a highly persuasive, visually structured markdown report. You must highlight the CLIENT'S critical gaps and directly pitch how EyE PunE's solutions will fix their problems. DO NOT critique EyE PunE." },
+                        { role: 'user', content: `Analyze the potential client's website metrics below and generate a premium Strategy Report pitching to them.
 
 Website URL: ${targetUrl}
 Title: ${siteInfo.title}
-Description: ${siteInfo.description}
-Content Snippet: ${siteInfo.content}
+Tech Stack Detected: ${seo.techStack}
+
+**Technical Metrics (Hard Data):**
+- Mobile Performance Score: ${speed.score}/100
+- Largest Contentful Paint (LCP): ${speed.lcp}
+- Cumulative Layout Shift (CLS): ${speed.cls}
+- On-Page SEO Score: ${seo.rawSeoScore}/100
+- H1 Tags Found: ${seo.h1Count}
+- Image Alt Tag Completion: ${seo.altRatio}%
 
 Format the report beautifully in Markdown with bolding, lists, and clear headers. 
-Speak directly to the client (e.g., "Your website...").
+Speak directly to the client (e.g., "Your website built on ${seo.techStack}...").
 Use the exact following structure:
 
-### 📊 Performance & SEO Score: [Insert Score 0-100]/100
+### Performance & SEO Score: [Insert Average of Performance & SEO Scores]/100
 
-### 🎯 Executive Summary
-Provide a 2-3 sentence summary of what this client's business does and their current digital footprint.
+### Executive Summary
+Provide a 2-3 sentence summary of what this client's business does and their current digital performance metrics.
 
-### 💪 Key Strengths
+### Key Strengths
 * Bullet point 1
 * Bullet point 2
 
-### ⚠️ Critical Gaps Found
-Identify 2-3 specific technical, SEO, or marketing bottlenecks based on the client's site.
+### Critical Gaps Found
+Identify 2-3 specific technical, SEO, or speed bottlenecks based on the hard data provided above (e.g. slow LCP, missing H1s, old tech stack).
 
-### 🚀 EyE PunE Strategic Recommendations
+### EyE PunE Strategic Recommendations
 Provide 3 highly specific recommendations explaining how WE (EyE PunE) can scale them and fix their gaps. Explicitly pitch these EyE PunE services where relevant:
-* **AI & Tech Automation** (AI Chatbots, CRM sync, Automated Workflows)
-* **Custom & CMS Web Development** (Custom coding in any language, WordPress, Shopify, Wix)
-* **Platform & Hosting Migrations** (Seamlessly moving their site to better hosting or a new CMS)
-* **Elite Marketing Systems** (High-converting Sales Funnels, Paid Ads, Brand Scaling)
+* **Custom & CMS Web Development** (Mention rebuilding them in Next.js for blazing fast speeds)
+* **Elite Marketing Systems** (High-converting Sales Funnels, Paid Ads)
+* **AI & Tech Automation** (AI Chatbots, CRM sync)
 
 At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: <number>] (where number is between 1-100 indicating lead quality).` }
                     ]
@@ -171,6 +184,10 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
         }
     };
 
+    const { useSearchParams } = require('next/navigation');
+    const searchParams = useSearchParams();
+    const urlEmail = searchParams ? searchParams.get('email') : null;
+
     React.useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -179,17 +196,23 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                 setFormData(prev => ({
                     ...prev,
                     lead_name: currentUser.user_metadata?.full_name || currentUser.user_metadata?.name || '',
-                    lead_email: currentUser.email || '',
+                    lead_email: urlEmail || currentUser.email || '',
                     lead_phone: currentUser.user_metadata?.phone || '',
                 }));
             } catch {
                 setUser(null);
+                if (urlEmail) {
+                    setFormData(prev => ({
+                        ...prev,
+                        lead_email: urlEmail
+                    }));
+                }
             } finally {
                 setCheckingAuth(false);
             }
         };
         checkAuth();
-    }, []);
+    }, [urlEmail]);
 
     const isContactStep = step === 0;
     const isQuestionStep = step > 0 && step <= questions.length;
@@ -354,6 +377,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     name: clientName,
+                    email: formData.lead_email,
                     business: formData.company_name,
                     score: report.score,
                     report: report.content,
@@ -538,7 +562,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                                 <Card className="bg-gradient-to-br from-red-600 via-red-500 to-orange-500 p-10 text-center text-white border-none shadow-2xl relative overflow-hidden">
                                     <div className="relative z-10">
                                         <Award className="w-12 h-12 mx-auto mb-4 opacity-80" />
-                                        <h2 className="text-2xl font-bold mb-2">Growth Score</h2>
+                                        <h2 className="text-2xl font-bold mb-2">Performance & SEO Score</h2>
                                         <div className="text-8xl font-black mb-4 tracking-tighter">{report.score}</div>
                                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                                             <Badge className="bg-white/20 text-white border-white/30 px-6 py-2">

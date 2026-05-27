@@ -60,12 +60,15 @@ export default function ExitIntentPopup() {
         setDismissed(true);
     };
 
+    const router = require('next/navigation').useRouter();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email) return;
         
         try {
-            const response = await fetch('/api/leads/create', {
+            // Still log the lead quietly in the background
+            fetch('/api/leads/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -77,12 +80,14 @@ export default function ExitIntentPopup() {
                     message: 'Requested free audit via exit popup',
                     hp_verification: ''
                 })
-            });
-            if (response.ok) {
-                setSubmitted(true);
-            }
+            }).catch(err => console.warn('Lead capture background fail:', err));
+
+            // Instantly redirect to AI Assessment funnel with their email prefilled
+            setSubmitted(true);
+            router.push(createPageUrl(`AI_Assessment?email=${encodeURIComponent(email)}`));
+            handleDismiss();
         } catch (error) {
-            console.error('Failed to submit exit intent', error);
+            console.error('Failed to route exit intent', error);
         }
     };
 

@@ -151,23 +151,11 @@ export default function Client_Dashboard() {
         enabled: !!user?.email,
     });
 
-    const [wizardCompleted, setWizardCompleted] = useState(false);
-    
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setWizardCompleted(localStorage.getItem('eyepune_wizard_completed') === 'true');
+        if (!selectedProject && projects.length > 0) {
+            setSelectedProject(projects[0]);
         }
-    }, []);
-
-    const displayProjects = (projects.length === 0 && wizardCompleted) 
-        ? [{ id: 'mock-engine', projectName: 'AI Growth Engine - Phase 1', status: 'live_deployment' }]
-        : projects;
-
-    useEffect(() => {
-        if (!selectedProject && displayProjects.length > 0) {
-            setSelectedProject(displayProjects[0]);
-        }
-    }, [selectedProject, displayProjects]);
+    }, [selectedProject, projects]);
 
     if (!user) {
         return (
@@ -177,7 +165,7 @@ export default function Client_Dashboard() {
         );
     }
 
-    if (displayProjects.length === 0) {
+    if (projects.length === 0) {
         return (
             <ClientLayout>
                 <div className="min-h-[85vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 relative">
@@ -195,16 +183,6 @@ export default function Client_Dashboard() {
                         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                         className="text-center relative z-10 w-full max-w-5xl mx-auto"
                     >
-                        <motion.div 
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.2, duration: 0.8 }}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-red-500/10 border border-red-500/20 mb-6 shadow-[0_0_30px_rgba(239,68,68,0.15)] backdrop-blur-md"
-                        >
-                            <Sparkles className="w-4 h-4 text-red-500 animate-pulse" />
-                            <span className="text-xs uppercase font-black tracking-[0.3em] text-red-500">System Initializing</span>
-                        </motion.div>
-                        
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-6 leading-[1.1]">
                             Welcome to your <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-red-500 bg-[length:200%_auto] animate-gradient pb-2">Command Center</span>
