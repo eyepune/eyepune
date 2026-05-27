@@ -87,7 +87,7 @@ export default function ChatbotWidget() {
             return;
         }
 
-        if (!leadData.name || !leadData.email) return;
+        if (!leadData.name || !leadData.email || !leadData.phone) return;
 
         await saveLead(leadData.name, leadData.email, leadData.phone);
         setLeadCaptured(true);
@@ -279,9 +279,10 @@ Response rules:
                                             />
                                             <input
                                                 type="tel"
-                                                placeholder="Phone (Optional)"
+                                                placeholder="Your Phone Number"
                                                 value={leadData.phone}
                                                 onChange={e => setLeadData(p => ({ ...p, phone: e.target.value }))}
+                                                required
                                                 className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-red-500/50"
                                             />
                                             <input

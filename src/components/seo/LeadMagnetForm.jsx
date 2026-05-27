@@ -10,7 +10,7 @@ export default function LeadMagnetForm({ keyword }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.email || !formData.name) return;
+        if (!formData.email || !formData.name || !formData.phone) return;
         
         setLoading(true);
         try {
@@ -62,8 +62,9 @@ export default function LeadMagnetForm({ keyword }) {
                     type="tel" 
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    placeholder="Phone Number (Optional)" 
+                    placeholder="Phone Number" 
                     className="w-full bg-white/[0.05] border border-white/[0.1] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50 transition-colors"
+                    required
                 />
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
