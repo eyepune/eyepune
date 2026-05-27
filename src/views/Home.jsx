@@ -4,16 +4,18 @@ import { Star, ChevronRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { createPageUrl } from "@/utils";
-import TestimonialDisplay from "@/components/testimonials/TestimonialDisplay";
+import dynamic from 'next/dynamic';
 import SEOHead, { generateOrganizationSchema, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo/SEOHead";
 import HeroSection from "@/components/home/HeroSection";
-import SuccessTicker from "@/components/home/SuccessTicker";
-import ServicesSection from "@/components/home/ServicesSection";
-import WhyChooseUs from "@/components/home/WhyChooseUs";
-import LexProSection from "@/components/home/LexProSection";
-import CTASection from "@/components/home/CTASection";
-import AIO_FAQ from "@/components/home/AIO_FAQ";
-import Scroll3DReveal from "@/components/shared/Scroll3DReveal";
+
+const TestimonialDisplay = dynamic(() => import("@/components/testimonials/TestimonialDisplay"), { ssr: true });
+const SuccessTicker = dynamic(() => import("@/components/home/SuccessTicker"), { ssr: true });
+const ServicesSection = dynamic(() => import("@/components/home/ServicesSection"), { ssr: true });
+const WhyChooseUs = dynamic(() => import("@/components/home/WhyChooseUs"), { ssr: true });
+const LexProSection = dynamic(() => import("@/components/home/LexProSection"), { ssr: true });
+const CTASection = dynamic(() => import("@/components/home/CTASection"), { ssr: true });
+const AIO_FAQ = dynamic(() => import("@/components/home/AIO_FAQ"), { ssr: true });
+const Scroll3DReveal = dynamic(() => import("@/components/shared/Scroll3DReveal"), { ssr: true });
 
 const HOME_FAQS = [
     {

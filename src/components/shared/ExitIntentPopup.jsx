@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bot, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 
@@ -11,6 +12,23 @@ export default function ExitIntentPopup() {
     const [dismissed, setDismissed] = useState(false);
     const [email, setEmail] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const pathname = usePathname() || '';
+
+    // Context-aware dynamic copy
+    let popupTitle = "Wait — Get a Free Audit!";
+    let popupSubtext = "Before you go, let us analyse your business's digital presence for FREE. No commitment, just actionable insights.";
+    let ctaText = "Get My Free Audit";
+    
+    if (pathname.includes('/Solutions/')) {
+        const keyword = pathname.split('/').pop().replace(/-/g, ' ');
+        popupTitle = "Wait — Get Your Free Blueprint!";
+        popupSubtext = `Before you leave, enter your email to get our exclusive 2026 ${keyword} Growth Blueprint sent directly to your inbox.`;
+        ctaText = "Send My Blueprint";
+    } else if (pathname.includes('/Service-AI')) {
+        popupTitle = "Wait — Get the AI Playbook!";
+        popupSubtext = "Learn how we use AI to save our clients 100+ hours a month. Get the free playbook now.";
+        ctaText = "Get The AI Playbook";
+    }
 
     useEffect(() => {
         // Only show once per session
@@ -90,19 +108,21 @@ export default function ExitIntentPopup() {
                                     <Bot className="w-6 h-6 text-white" />
                                 </div>
 
-                                <h2 className="text-2xl font-black text-white mb-2">Wait — Get a Free Audit!</h2>
+                                <h2 className="text-2xl font-black text-white mb-2">{popupTitle}</h2>
                                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                                    Before you go, let us analyse your business's digital presence for <span className="text-white font-semibold">FREE</span>. No commitment, just actionable insights.
+                                    {popupSubtext}
                                 </p>
 
-                                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4 mb-6 space-y-2">
-                                    {['Social media audit', 'Website SEO score', 'Lead generation gaps', 'Competitor analysis'].map((item, i) => (
-                                        <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
-                                            {item}
-                                        </div>
-                                    ))}
-                                </div>
+                                {!pathname.includes('/Solutions/') && (
+                                    <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4 mb-6 space-y-2">
+                                        {['Social media audit', 'Website SEO score', 'Lead generation gaps', 'Competitor analysis'].map((item, i) => (
+                                            <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                                                {item}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                                 <form onSubmit={handleSubmit} className="space-y-3">
                                     <input
@@ -114,7 +134,7 @@ export default function ExitIntentPopup() {
                                         className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-red-500/40 transition-colors"
                                     />
                                     <Button type="submit" className="w-full bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl py-5 font-bold shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]">
-                                        Get My Free Audit <ArrowRight className="w-4 h-4 ml-1" />
+                                        {ctaText} <ArrowRight className="w-4 h-4 ml-1" />
                                     </Button>
                                 </form>
 

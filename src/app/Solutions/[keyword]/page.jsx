@@ -126,6 +126,49 @@ export default function SEOKeywordPage({ params }) {
           ))}
         </div>
 
+        {/* Dynamic SEO Lead Magnet */}
+        <div className="max-w-4xl mx-auto mb-24 px-4">
+          <div className="rounded-3xl bg-gradient-to-r from-red-950/50 to-black border border-red-500/30 p-8 md:p-12 relative overflow-hidden shadow-[0_0_50px_rgba(239,68,68,0.1)]">
+            <div className="absolute -right-20 -top-20 w-64 h-64 bg-red-500/20 blur-[100px] rounded-full pointer-events-none" />
+            
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+              <div className="md:w-3/5 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold mb-4 uppercase tracking-wider">
+                  <TrendingUp className="w-3 h-3" /> Free PDF Download
+                </div>
+                <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight">
+                  The 2026 <span className="text-red-500">{keyword}</span> Growth Blueprint
+                </h3>
+                <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
+                  Steal the exact framework we use to generate highly-qualified leads and scale revenues for 100+ global clients. Enter your email to get instant access.
+                </p>
+                <form className="flex flex-col sm:flex-row gap-3">
+                  <input 
+                    type="email" 
+                    placeholder="Enter your best email..." 
+                    className="flex-1 bg-white/[0.05] border border-white/[0.1] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50 transition-colors"
+                    required
+                  />
+                  <Button type="button" className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-6 py-6 font-bold shadow-lg shadow-red-500/20 whitespace-nowrap">
+                    Send My Blueprint
+                  </Button>
+                </form>
+              </div>
+              
+              <div className="md:w-2/5 flex justify-center">
+                <div className="relative w-48 h-64 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                  <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-red-500 to-orange-400" />
+                  <div className="p-6 pt-10 flex flex-col items-center text-center h-full">
+                    <Zap className="w-12 h-12 text-red-500 mb-4 opacity-50" />
+                    <div className="text-xs text-gray-500 uppercase tracking-widest font-bold mb-2">EyE PunE Labs</div>
+                    <div className="font-black text-white text-lg leading-tight">{keyword} Framework</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Dynamic SEO FAQ Section */}
         <div className="max-w-4xl mx-auto mb-24 px-4">
           <div className="text-center mb-12">
