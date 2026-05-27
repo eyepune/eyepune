@@ -90,12 +90,10 @@ export default function Service_SocialMedia() {
             <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
-                <div className="absolute inset-0 opacity-[0.03]"
-                    style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
-                />
-                <div className="absolute top-0 right-0 w-full max-w-[500px] h-[500px] pointer-events-none"
-                    style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
-                />
+                {/* Background Gradients & Effects from Solutions theme */}
+                <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none">
+                    <div className="absolute top-0 left-0 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full -translate-y-1/2" />
+                </div>
                 
                 
                 <div className="max-w-7xl mx-auto px-6 relative z-10">

@@ -91,12 +91,10 @@ export default function Service_AI() {
             <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
-                <div className="absolute inset-0 opacity-[0.03]"
-                    style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }}
-                />
-                <div className="absolute top-0 right-0 w-full max-w-[500px] h-[500px] pointer-events-none"
-                    style={{ background: 'radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%)' }}
-                />
+                {/* Background Gradients & Effects from Solutions theme */}
+                <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none">
+                    <div className="absolute top-0 left-0 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full -translate-y-1/2" />
+                </div>
                 
                 
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -153,7 +151,7 @@ export default function Service_AI() {
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {features.map((f, i) => (
                             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                                className="group p-8 rounded-3xl bg-white/[0.02] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all relative overflow-hidden"
+                                className="group p-8 rounded-2xl bg-card border border-border/50 hover:border-red-500/30 transition-colors relative overflow-hidden"
                             >
                                 <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-red-500/5 rounded-full blur-2xl group-hover:bg-red-500/10 transition-all" />
                                 <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">

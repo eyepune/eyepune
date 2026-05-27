@@ -121,8 +121,12 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section ref={heroRef} className="relative min-h-[100svh] pt-20 pb-32 flex items-center justify-center overflow-hidden bg-transparent">
-            {/* Floating Tech & Social Symbols moved to global Layout */}
+        <section ref={heroRef} className="relative min-h-[100svh] pt-32 pb-32 flex items-center justify-center overflow-hidden bg-transparent">
+            {/* Background Gradients & Effects from Solutions theme */}
+            <div className="absolute top-0 left-0 w-full h-[100vh] overflow-hidden pointer-events-none">
+                <div className="absolute top-0 left-0 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full -translate-y-1/2" />
+                <HeroFloatingIcons />
+            </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
                 <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
