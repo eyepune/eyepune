@@ -53,7 +53,6 @@ import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 import ClientLayout from "@/components/client/ClientLayout";
-import { Sparkles as SparklesIcon } from 'lucide-react';
 
 const HolographicScanner = () => (
     <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -152,11 +151,23 @@ export default function Client_Dashboard() {
         enabled: !!user?.email,
     });
 
+    const [wizardCompleted, setWizardCompleted] = useState(false);
+    
     useEffect(() => {
-        if (!selectedProject && projects.length > 0) {
-            setSelectedProject(projects[0]);
+        if (typeof window !== 'undefined') {
+            setWizardCompleted(localStorage.getItem('eyepune_wizard_completed') === 'true');
         }
-    }, [selectedProject, projects]);
+    }, []);
+
+    const displayProjects = (projects.length === 0 && wizardCompleted) 
+        ? [{ id: 'mock-engine', projectName: 'AI Growth Engine - Phase 1', status: 'live_deployment' }]
+        : projects;
+
+    useEffect(() => {
+        if (!selectedProject && displayProjects.length > 0) {
+            setSelectedProject(displayProjects[0]);
+        }
+    }, [selectedProject, displayProjects]);
 
     if (!user) {
         return (
@@ -166,71 +177,118 @@ export default function Client_Dashboard() {
         );
     }
 
-    if (projects.length === 0) {
+    if (displayProjects.length === 0) {
         return (
             <ClientLayout>
-                <div className="min-h-[85vh] flex flex-col items-center justify-center py-20 px-6 overflow-hidden relative">
-                    {/* Background Decorative Elements */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] h-[800px] bg-red-600/[0.03] blur-[120px] rounded-full pointer-events-none" />
+                <div className="min-h-[85vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 relative">
+                    {/* Cinematic Background Elements */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1000px] h-[1000px] bg-red-600/[0.05] blur-[150px] rounded-full pointer-events-none -z-10" />
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/[0.03] blur-[120px] rounded-full pointer-events-none -z-10" />
+                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-red-900/[0.05] blur-[120px] rounded-full pointer-events-none -z-10" />
                     
+                    {/* Grid Pattern Overlay */}
+                    <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.02] mix-blend-overlay pointer-events-none -z-10" />
+
                     <motion.div 
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-center relative z-10 max-w-4xl"
+                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-center relative z-10 w-full max-w-5xl mx-auto"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 mb-8">
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.2, duration: 0.8 }}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-red-500/10 border border-red-500/20 mb-6 shadow-[0_0_30px_rgba(239,68,68,0.15)] backdrop-blur-md"
+                        >
                             <Sparkles className="w-4 h-4 text-red-500 animate-pulse" />
-                            <span className="text-[10px] uppercase font-black tracking-[0.3em] text-red-500">System Initializing</span>
-                        </div>
+                            <span className="text-xs uppercase font-black tracking-[0.3em] text-red-500">System Initializing</span>
+                        </motion.div>
                         
-                        <h1 className="text-6xl md:text-7xl font-black text-white tracking-tighter mb-6 leading-none">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-6 leading-[1.1]">
                             Welcome to your <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-[length:200%_auto] animate-gradient">Elite Command Center</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-red-500 bg-[length:200%_auto] animate-gradient pb-2">Command Center</span>
                         </h1>
                         
-                        <p className="text-gray-400 text-xl font-medium max-w-2xl mx-auto mb-16 leading-relaxed">
+                        <p className="text-gray-400 text-base md:text-lg font-medium max-w-2xl mx-auto mb-12 leading-relaxed">
                             Your dedicated growth engine is being calibrated by our engineers. 
                             Complete the onboarding to unlock real-time metrics, project files, and direct strategist access.
                         </p>
 
-                        {/* Onboarding Roadmap */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 text-left">
+                        {/* Onboarding Roadmap - Glassmorphic Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-left relative">
+                            {/* Connector line for desktop */}
+                            <div className="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 -translate-y-1/2 pointer-events-none" />
+                            
                             {[
-                                { step: '01', title: 'Strategy Sync', desc: 'Book your kickoff call with your dedicated strategist.', status: 'pending' },
-                                { step: '02', title: 'Asset Handoff', desc: 'Provide necessary access and branding assets via Setup Wizard.', status: 'upcoming' },
-                                { step: '03', title: 'Launch Engine', desc: 'Monitor your first campaign live in this dashboard.', status: 'upcoming' }
+                                { step: '01', title: 'Strategy Sync', desc: 'Book your kickoff call with your dedicated strategist.', status: 'pending', glow: 'rgba(239,68,68,0.2)' },
+                                { step: '02', title: 'Asset Handoff', desc: 'Provide necessary access and branding assets via Setup Wizard.', status: 'upcoming', glow: 'rgba(249,115,22,0.15)' },
+                                { step: '03', title: 'Launch Engine', desc: 'Monitor your first campaign live in this dashboard.', status: 'upcoming', glow: 'rgba(255,255,255,0.1)' }
                             ].map((s, i) => (
-                                <div key={i} className="p-8 rounded-[2.5rem] bg-[#0c0c0c]/60 border border-white/[0.05] relative overflow-hidden group hover:border-red-500/20 transition-all">
-                                    <div className="text-4xl font-black text-white/5 absolute top-4 right-6 group-hover:text-red-500/10 transition-colors">{s.step}</div>
-                                    <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
-                                    <p className="text-sm text-gray-500 leading-relaxed mb-6">{s.desc}</p>
-                                    <Badge className={cn(
-                                        "px-3 py-1 text-[9px] uppercase font-black",
-                                        s.status === 'pending' ? "bg-red-500/20 text-red-500 border-0" : "bg-white/5 text-gray-600 border-0"
-                                    )}>
-                                        {s.status}
-                                    </Badge>
-                                </div>
+                                <motion.div 
+                                    key={i}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 + (i * 0.1), duration: 0.8 }}
+                                    className="p-8 rounded-[2.5rem] bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.05] hover:border-red-500/30 relative overflow-hidden group transition-all duration-700 backdrop-blur-xl shadow-2xl"
+                                >
+                                    {/* Hover Glow */}
+                                    <div 
+                                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                                        style={{ background: `radial-gradient(circle at 50% 0%, ${s.glow} 0%, transparent 70%)` }}
+                                    />
+                                    
+                                    <div className="text-5xl font-black text-white/[0.03] absolute -top-2 right-4 group-hover:text-red-500/10 transition-colors duration-700">{s.step}</div>
+                                    <div className="relative z-10">
+                                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">{s.title}</h3>
+                                        <p className="text-sm text-gray-500 leading-relaxed mb-8 h-10">{s.desc}</p>
+                                        <Badge className={cn(
+                                            "px-4 py-1.5 text-[10px] uppercase font-black tracking-widest transition-colors",
+                                            s.status === 'pending' ? "bg-red-500/10 text-red-500 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.2)]" : "bg-white/5 text-gray-500 border border-white/10"
+                                        )}>
+                                            {s.status}
+                                        </Badge>
+                                    </div>
+                                </motion.div>
                             ))}
                         </div>
 
-                        <div className="flex flex-wrap gap-4 justify-center">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8, duration: 0.8 }}
+                            className="flex flex-wrap gap-6 justify-center"
+                        >
                             <Button 
                                 onClick={() => setConsultationDialogOpen(true)}
-                                className="bg-red-600 hover:bg-red-700 text-white rounded-[1.5rem] px-10 h-16 font-black text-lg shadow-[0_0_40px_rgba(220,38,38,0.3)] hover:shadow-[0_0_60px_rgba(220,38,38,0.5)] transition-all"
+                                className="bg-red-600 hover:bg-red-700 text-white rounded-[2rem] px-12 h-16 font-black text-lg shadow-[0_0_40px_rgba(220,38,38,0.3)] hover:shadow-[0_0_60px_rgba(220,38,38,0.5)] transition-all group"
                             >
-                                <Phone className="w-5 h-5 mr-3" /> Book Kickoff Call
+                                <Phone className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" /> Book Kickoff Call
                             </Button>
                             <Button 
                                 variant="outline"
                                 onClick={() => setShowSetupWizard(true)}
-                                className="border-white/10 text-white hover:bg-white/5 rounded-[1.5rem] px-10 h-16 font-black text-lg backdrop-blur-xl"
+                                className="border-white/10 bg-white/[0.02] text-white hover:bg-white/[0.08] hover:border-white/20 rounded-[2rem] px-12 h-16 font-black text-lg backdrop-blur-xl transition-all group"
                             >
-                                <Zap className="w-5 h-5 mr-3 text-orange-500" /> Start Setup Wizard
+                                <Zap className="w-5 h-5 mr-3 text-orange-500 group-hover:scale-110 transition-transform" /> Start Setup Wizard
                             </Button>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 </div>
+                
+                {/* Modals are kept below */}
+                <QuickConsultationScheduler 
+                    open={consultationDialogOpen} 
+                    onOpenChange={setConsultationDialogOpen} 
+                    user={user}
+                    project={selectedProject}
+                />
+                <SetupWizard 
+                    open={showSetupWizard} 
+                    onOpenChange={setShowSetupWizard} 
+                    user={user}
+                    project={selectedProject}
+                />
             </ClientLayout>
         );
     }

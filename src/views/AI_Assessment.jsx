@@ -347,11 +347,13 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
         if (!report || isPdfGenerating) return;
         setIsPdfGenerating(true);
         try {
+            const clientName = formData.lead_name || "Valued Client";
+            
             const response = await fetch('/api/assessment/generate-pdf', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: formData.lead_name,
+                    name: clientName,
                     business: formData.company_name,
                     score: report.score,
                     report: report.content,
@@ -363,7 +365,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `EyE_PunE_Strategy_${formData.lead_name.replace(/\s+/g, '_')}.pdf`;
+            a.download = `EyE_PunE_Strategy_${clientName.replace(/\s+/g, '_')}.pdf`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
