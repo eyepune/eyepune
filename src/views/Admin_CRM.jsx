@@ -42,7 +42,7 @@ function Admin_CRM() {
 
     const [formData, setFormData] = useState({
         full_name: '', email: '', phone: '', company: '',
-        source: 'website', status: 'new', notes: '',
+        source: 'website', status: 'new', notes: '', score: 50,
     });
 
     const { data: leads = [], isLoading } = useQuery({
@@ -119,7 +119,7 @@ function Admin_CRM() {
     });
 
     const resetForm = () => {
-        setFormData({ full_name: '', email: '', phone: '', company: '', source: 'website', status: 'new', notes: '' });
+        setFormData({ full_name: '', email: '', phone: '', company: '', source: 'website', status: 'new', notes: '', score: 50 });
         setEditingLead(null);
         setIsDialogOpen(false);
     };
@@ -129,7 +129,7 @@ function Admin_CRM() {
         setFormData({
             full_name: lead.full_name || '', email: lead.email || '', phone: lead.phone || '',
             company: lead.company || '', source: lead.source || 'website', status: lead.status || 'new',
-            notes: lead.notes || '',
+            notes: lead.notes || '', score: lead.score || 50,
         });
         setIsDialogOpen(true);
     };
@@ -402,6 +402,7 @@ function Admin_CRM() {
                                         <th className="px-6 py-4 font-medium border-b border-white/5">Contact Info</th>
                                         <th className="px-6 py-4 font-medium border-b border-white/5">Source</th>
                                         <th className="px-6 py-4 font-medium border-b border-white/5">Status</th>
+                                        <th className="px-6 py-4 font-medium border-b border-white/5">Score</th>
                                         <th className="px-6 py-4 font-medium border-b border-white/5 text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -445,6 +446,19 @@ function Admin_CRM() {
                                                 )}>
                                                     {lead.status?.replace('_', ' ')}
                                                 </Badge>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className={cn(
+                                                    "inline-flex items-center justify-center min-w-[36px] h-[36px] rounded-lg font-black text-sm",
+                                                    (lead.score >= 80) 
+                                                        ? "bg-red-500/20 text-red-500 border border-red-500/40 shadow-[0_0_15px_rgba(239,68,68,0.4)]" 
+                                                        : (lead.score >= 50) 
+                                                            ? "bg-orange-500/10 text-orange-400 border border-orange-500/20" 
+                                                            : "bg-gray-500/10 text-gray-400 border border-gray-500/20"
+                                                )}>
+                                                    {lead.score || 0}
+                                                    {(lead.score >= 80) && <span className="ml-1 text-[10px]">🔥</span>}
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -575,6 +589,18 @@ function Admin_CRM() {
                                 rows={4} 
                                 placeholder="Add any relevant context, next steps, or conversation notes here..."
                                 className="bg-[#111] border-white/10 focus:border-blue-500/50 transition-colors resize-none custom-scrollbar" 
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-gray-300 text-xs uppercase tracking-wider font-semibold">Lead Score (0-100)</Label>
+                            <Input 
+                                type="number" 
+                                min="0" 
+                                max="100"
+                                value={formData.score} 
+                                onChange={(e) => setFormData({...formData, score: parseInt(e.target.value) || 0})} 
+                                className="bg-[#111] border-white/10 focus:border-red-500/50 transition-colors h-11 w-32 font-bold text-center" 
                             />
                         </div>
 
