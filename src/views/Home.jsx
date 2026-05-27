@@ -8,14 +8,16 @@ import dynamic from 'next/dynamic';
 import SEOHead, { generateOrganizationSchema, generateBreadcrumbSchema, generateFAQSchema } from "@/components/seo/SEOHead";
 import HeroSection from "@/components/home/HeroSection";
 
-const TestimonialDisplay = dynamic(() => import("@/components/testimonials/TestimonialDisplay"), { ssr: true });
+const TestimonialDisplay = dynamic(() => import("@/components/testimonials/TestimonialDisplay"), { ssr: false });
 const SuccessTicker = dynamic(() => import("@/components/home/SuccessTicker"), { ssr: true });
 const ServicesSection = dynamic(() => import("@/components/home/ServicesSection"), { ssr: true });
 const WhyChooseUs = dynamic(() => import("@/components/home/WhyChooseUs"), { ssr: true });
-const LexProSection = dynamic(() => import("@/components/home/LexProSection"), { ssr: true });
-const CTASection = dynamic(() => import("@/components/home/CTASection"), { ssr: true });
-const AIO_FAQ = dynamic(() => import("@/components/home/AIO_FAQ"), { ssr: true });
+const LexProSection = dynamic(() => import("@/components/home/LexProSection"), { ssr: false });
+const CTASection = dynamic(() => import("@/components/home/CTASection"), { ssr: false });
+const AIO_FAQ = dynamic(() => import("@/components/home/AIO_FAQ"), { ssr: false });
 const Scroll3DReveal = dynamic(() => import("@/components/shared/Scroll3DReveal"), { ssr: true });
+const RecentInsights = dynamic(() => import("@/components/home/RecentInsights"), { ssr: false });
+const GlobalLeadMagnet = dynamic(() => import("@/components/home/GlobalLeadMagnet"), { ssr: false });
 import { Zap } from 'lucide-react';
 
 const HOME_FAQS = [
@@ -102,12 +104,23 @@ export default function Home() {
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/15 to-transparent" />
                 </section>
-                {/* 6. AIO FAQ — optimized for AI bots and users */}
+                
+                {/* 7. Recent Insights (Programmatic SEO Booster) */}
+                <Scroll3DReveal direction="up" rotation={false}>
+                    <RecentInsights />
+                </Scroll3DReveal>
+
+                {/* 8. Global Lead Magnet (AI Audit) */}
+                <Scroll3DReveal direction="scale" rotation={true}>
+                    <GlobalLeadMagnet />
+                </Scroll3DReveal>
+
+                {/* 9. AIO FAQ — optimized for AI bots and users */}
                 <Scroll3DReveal direction="up" rotation={true}>
                     <AIO_FAQ />
                 </Scroll3DReveal>
 
-                {/* 7. Final CTA */}
+                {/* 10. Final CTA */}
                 <Scroll3DReveal direction="scale" rotation={false}>
                     <CTASection />
                 </Scroll3DReveal>
