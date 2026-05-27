@@ -73,11 +73,16 @@ export async function POST(request) {
 
     // Automatically generate and email the PDF Blueprint if this is a Lead Magnet request
     if (name === 'SEO Blueprint Lead') {
-      fetch(`${baseUrl}/api/automation/blueprint`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, keyword: service_interest, name: company })
-      }).catch(err => console.warn('[Leads API] Blueprint automation trigger failed:', err.message));
+      try {
+        await fetch(`${baseUrl}/api/automation/blueprint`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, keyword: service_interest, name: company })
+        });
+        console.log('[Leads API] Blueprint generated and sent successfully.');
+      } catch (err) {
+        console.warn('[Leads API] Blueprint automation trigger failed:', err.message);
+      }
     }
 
     fetch(`${baseUrl}/api/admin/notify`, {
