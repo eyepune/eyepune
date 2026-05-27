@@ -67,7 +67,7 @@ This blueprint provides a high-level roadmap. To execute this with military prec
           <p>Once you review the PDF, I highly recommend booking a free strategy session with our team to discuss how we can implement this autonomous system directly into your business.</p>
           <p><a href="https://eyepune.com/Booking" style="display: inline-block; padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Book Your Strategy Call</a></p>
           <br/>
-          <p>Best regards,<br/><strong>The EyE PunE AI Team</strong></p>
+          <p>Best regards,<br/><strong>EyE PunE Team</strong></p>
         </div>
       `,
       attachments: [{

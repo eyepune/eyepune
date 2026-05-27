@@ -134,8 +134,7 @@ export const getLinkedinOutreachTemplate = (name, company) => `
         </div>
         
         <p style="margin-bottom: 5px;">Best regards,</p>
-        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
-        <p style="color: #6b7280; font-size: 14px; margin-top: 0;">Founder, EyE PunE</p>
+        <p style="margin-top: 0; font-weight: bold;">EyE PunE Team</p>
     </div>
 </div>
 `;
@@ -152,8 +151,8 @@ export const getFollowUpTemplate = (name) => `
             <a href="https://eyepune.com/Booking" style="background: ${TEXT_COLOR}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Find a time on my calendar</a>
         </div>
         
-        <p style="margin-bottom: 5px;">Best,</p>
-        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
+        <p style="margin-bottom: 5px;">Best regards,</p>
+        <p style="margin-top: 0; font-weight: bold;">EyE PunE Team</p>
     </div>
 </div>
 `;
@@ -205,7 +204,7 @@ export const getPostMeetingFollowUpTemplate = (name) => `
         <p>In the meantime, if any other questions pop into your head, feel free to reply directly to this email!</p>
         <br>
         <p style="margin-bottom: 5px;">Best regards,</p>
-        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
+        <p style="margin-top: 0; font-weight: bold;">EyE PunE Team</p>
     </div>
 </div>
 `;
@@ -235,8 +234,8 @@ export const getReactivationTemplate = (name) => `
         <p>We recently rolled out several massive upgrades to our proprietary AI infrastructure, allowing our partners to automate their sales cycles and client onboarding entirely.</p>
         <p>I know timing is everything in business. Have you made any progress on upgrading your digital infrastructure since we last spoke? If it’s back on the roadmap for this quarter, I’d love to show you the new systems we’ve built.</p>
         <br>
-        <p style="margin-bottom: 5px;">Best,</p>
-        <p style="margin-top: 0; font-weight: bold;">Sagar Deshmukh</p>
+        <p style="margin-bottom: 5px;">Best regards,</p>
+        <p style="margin-top: 0; font-weight: bold;">EyE PunE Team</p>
     </div>
 </div>
 `;
