@@ -31,7 +31,7 @@ export const viewport = {
 export const metadata = {
   metadataBase: new URL('https://www.eyepune.com'),
   title: {
-    default: 'EyE PunE | Global AI Growth Engine | Elite Marketing & Tech Automation',
+    default: 'EyE PunE | Elite AI Growth & Marketing Agency',
     template: '%s | EyE PunE'
   },
   description: 'Pune-based elite digital agency. We combine AI-driven marketing, full-stack web development, and hyper-scalable sales systems to explode business growth worldwide.',

@@ -67,6 +67,7 @@ import Solution_Founders from '@/views/Solution_Founders';
 import Solution_YouTubers from '@/views/Solution_YouTubers';
 import Solution_Startups from '@/views/Solution_Startups';
 import Solution_B2BGrowth from '@/views/Solution_B2BGrowth';
+import Solution_Programmatic from '@/views/Solution_Programmatic';
 import AI_Intelligence_Hub from '@/views/AI_Intelligence_Hub';
 import PageNotFound from '@/lib/PageNotFound';
 import PrivacyPolicy from '@/views/PrivacyPolicy';
@@ -175,13 +176,19 @@ export default function CatchAllPageClient({ initialData }) {
   
   // Case-insensitive lookup: try exact match first, then find by case-insensitive key
   let resolvedPageName = rawPageName;
-  if (!PAGE_MAP[resolvedPageName]) {
+  let isProgrammatic = false;
+  
+  if (rawPageName.toLowerCase().startsWith('solutions/') || rawPageName.toLowerCase().startsWith('solution/')) {
+    isProgrammatic = true;
+    resolvedPageName = 'Solution-Programmatic';
+  } else if (!PAGE_MAP[resolvedPageName]) {
     const lowerName = rawPageName.toLowerCase().replace(/[-\/]/g, '_');
     const matchKey = Object.keys(PAGE_MAP).find(k => k.toLowerCase().replace(/[-\/]/g, '_') === lowerName);
     if (matchKey) resolvedPageName = matchKey;
   }
   
-  const PageComponent = PAGE_MAP[resolvedPageName];
+  // Temporarily add it to PAGE_MAP just for this render if it's programmatic
+  const PageComponent = isProgrammatic ? Solution_Programmatic : PAGE_MAP[resolvedPageName];
   
   if (!PageComponent) {
     return <PageNotFound />;

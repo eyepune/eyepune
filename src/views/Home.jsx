@@ -90,7 +90,7 @@ export default function Home() {
                                 {[...Array(5)].map((_, i) => (
                                     <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                                 ))}
-                                <span className="text-gray-500 ml-2 text-sm">Rated 5/5 by 100+ businesses</span>
+                                <span className="text-gray-500 ml-2 text-sm">Rated 5/5</span>
                             </div>
                         </motion.div>
                         <TestimonialDisplay featured={true} limit={3} />

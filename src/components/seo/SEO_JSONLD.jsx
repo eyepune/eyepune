@@ -106,6 +106,8 @@ export default function SEO_JSONLD() {
             "itemListElement": [
                 {
                     "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
                     "itemOffered": {
                         "@type": "Service",
                         "name": "AI Automation & Custom Chatbots",
@@ -114,6 +116,8 @@ export default function SEO_JSONLD() {
                 },
                 {
                     "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
                     "itemOffered": {
                         "@type": "Service",
                         "name": "High-Performance Website Development",
@@ -122,6 +126,8 @@ export default function SEO_JSONLD() {
                 },
                 {
                     "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
                     "itemOffered": {
                         "@type": "Service",
                         "name": "B2B Lead Generation & Outreach Engine",
@@ -130,6 +136,8 @@ export default function SEO_JSONLD() {
                 },
                 {
                     "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
                     "itemOffered": {
                         "@type": "Service",
                         "name": "Performance Marketing (Google & Meta Ads)",
@@ -138,6 +146,8 @@ export default function SEO_JSONLD() {
                 },
                 {
                     "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
                     "itemOffered": {
                         "@type": "Service",
                         "name": "Social Media Management & Content Distribution",
@@ -146,6 +156,8 @@ export default function SEO_JSONLD() {
                 },
                 {
                     "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
                     "itemOffered": {
                         "@type": "Service",
                         "name": "Sales Funnels & Landing Page Optimization",
