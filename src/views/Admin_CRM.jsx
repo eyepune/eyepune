@@ -13,7 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail, Users, Target, Activity, Filter, CheckCircle2, Upload, Download } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Search, Phone, Mail, Users, Target, Activity, Filter, CheckCircle2, Upload, Download, FileText } from 'lucide-react';
+import ProposalGenerator from '@/components/admin/ProposalGenerator';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -34,6 +35,7 @@ function Admin_CRM() {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingLead, setEditingLead] = useState(null);
+    const [generatingProposalFor, setGeneratingProposalFor] = useState(null);
     const [searchTerm, setSearchTerm] = useState(initialSearch);
     const [statusFilter, setStatusFilter] = useState(initialStatus);
     const [isUploading, setIsUploading] = useState(false);
@@ -465,6 +467,15 @@ function Admin_CRM() {
                                                     <Button 
                                                         variant="ghost" 
                                                         size="icon" 
+                                                        onClick={() => setGeneratingProposalFor(lead)}
+                                                        className="h-8 w-8 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-md"
+                                                        title="Generate Proposal"
+                                                    >
+                                                        <FileText className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button 
+                                                        variant="ghost" 
+                                                        size="icon" 
                                                         onClick={() => handleEdit(lead)}
                                                         className="h-8 w-8 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-md"
                                                     >
@@ -625,6 +636,13 @@ function Admin_CRM() {
                     </form>
                 </DialogContent>
             </Dialog>
+
+            {/* Proposal Generator */}
+            <ProposalGenerator 
+                open={!!generatingProposalFor} 
+                onClose={() => setGeneratingProposalFor(null)} 
+                lead={generatingProposalFor} 
+            />
         </div>
     );
 }

@@ -12,21 +12,34 @@ import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-export default function ProposalGenerator({ open, onClose, project }) {
+export default function ProposalGenerator({ open, onClose, project, lead }) {
     const [formData, setFormData] = useState({
         proposal_number: `PROP-${Date.now()}`,
-        client_name: project?.client_name || '',
-        client_email: project?.client_email || '',
+        client_name: project?.client_name || lead?.full_name || '',
+        client_email: project?.client_email || lead?.email || '',
         date: new Date().toISOString().split('T')[0],
         valid_until: '',
-        project_title: project?.project_name || '',
-        executive_summary: '',
+        project_title: project?.project_name || (lead?.company ? `Growth System for ${lead.company}` : ''),
+        executive_summary: lead?.score ? `Based on your AI Growth Assessment (Score: ${lead.score}/100), this proposal outlines our strategy to scale your operations...` : '',
         scope_of_work: '',
         deliverables: '',
         timeline: '',
         investment: '',
         terms_conditions: 'Payment Terms: 50% advance, 50% on completion\nValidity: 30 days from proposal date\nRevisions: 2 rounds of revisions included'
     });
+
+    React.useEffect(() => {
+        if (lead || project) {
+            setFormData(prev => ({
+                ...prev,
+                proposal_number: `PROP-${Date.now()}`,
+                client_name: project?.client_name || lead?.full_name || '',
+                client_email: project?.client_email || lead?.email || '',
+                project_title: project?.project_name || (lead?.company ? `Growth System for ${lead.company}` : ''),
+                executive_summary: lead?.score ? `Based on your AI Growth Assessment (Score: ${lead.score}/100), this proposal outlines our strategy to scale your operations...` : ''
+            }));
+        }
+    }, [lead, project]);
     const [isGenerating, setIsGenerating] = useState(false);
 
     const generatePDF = async () => {
