@@ -80,9 +80,7 @@ async function generateAndPostBlog(audience) {
              "excerpt": "Hooking 2-sentence summary",
              "content": "Full HTML content with <h2> and <p> tags. Must be 1000+ words.",
              "category": "ai_automation",
-             "tags": ["AI", "Enterprise", "Global Scale", "Growth"],
-             "meta_title": "SEO Optimized Title",
-             "meta_description": "SEO Description"
+             "tags": ["AI", "Enterprise", "Global Scale", "Growth"]
            }
         3. Do not include markdown or backticks in the response, just the raw JSON.
     `;
@@ -173,7 +171,11 @@ async function generateAndPostBlog(audience) {
     if (success && llmData) {
         try {
             const rawContent = llmData.choices[0].message.content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-            const cleanContent = rawContent.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+            let cleanContent = rawContent.trim();
+            const jsonMatch = cleanContent.match(/```(?:json)?\s*([\s\S]*?)```/i);
+            if (jsonMatch) {
+                cleanContent = jsonMatch[1].trim();
+            }
             postData = JSON.parse(cleanContent);
         } catch (parseError) {
             console.warn('[AI-Blog] Failed to parse LLM JSON output. Falling back to local premium generator:', parseError.message);
@@ -194,11 +196,16 @@ async function generateAndPostBlog(audience) {
     const { data: newPost, error: dbError } = await supabase
         .from('blog_posts')
         .insert({
-            ...postData,
+            title: postData.title,
+            excerpt: postData.excerpt,
+            content: postData.content,
+            category: postData.category,
+            tags: postData.tags,
             slug,
             featured_image: imageUrl,
             status: 'published',
-            published_date: new Date().toISOString()
+            published_date: new Date().toISOString(),
+            author: 'EyE PunE AI'
         })
         .select()
         .single();
@@ -328,10 +335,8 @@ function getFallbackBlogContent(audience) {
         {
             title: "The Sub-Second Digital Architecture: Why Speed is Your Ultimate Enterprise Growth Engine",
             excerpt: "In a world of sub-2-second attention spans, standard web performance is costing enterprise brands millions. Here is the blueprint for sub-second page loads at scale.",
-            category: "web_architecture",
+            category: "web_development",
             tags: ["Web Speed", "Enterprise", "React", "NextJS", "SEO"],
-            meta_title: "Sub-Second Web Architectures: The ROI of Speed",
-            meta_description: "Why loading times under 2 seconds are critical for C-suite conversion and operational sales success. Fully researched architectural breakdown.",
             content: `
                 <p>In the digital economy, latency is not simply a technical metric—it is a direct leakage of revenue. Enterprise brands spend millions on complex customer acquisition, only to lose up to 50% of their qualified leads at the first hurdle: load time. Multiple research analyses, including studies by Google and Amazon, confirm a stark truth. Every 100 milliseconds of page latency decreases checkout conversion rates by up to 1%. For a global enterprise generating ten million dollars online, a 1-second delay is a million-dollar technical debt.</p>
                 
@@ -357,8 +362,6 @@ function getFallbackBlogContent(audience) {
             excerpt: "The era of manual lead scoring and slow follow-ups is officially over. Discover how elite growth partners deploy autonomous agent networks to scale pipeline velocity.",
             category: "ai_automation",
             tags: ["AI Growth", "Sales Automation", "CRM Sync", "Lead Nurture"],
-            meta_title: "Autonomous Sales Engines: Automating B2B Lead Conversion",
-            meta_description: "Deep dive into multi-model AI agents replacing manual lead follow-ups. Build a 24/7 autonomous pipeline for your brand.",
             content: `
                 <p>For decades, the B2B sales cycle relied on manual processes. Leads filled out a web form, sat in a queue for hours, were manually assigned to a sales representative, and finally received a generic follow-up email days later. In this latency-filled model, conversion rates decayed rapidly. Research shows that responding to an inquiry within 5 minutes increases qualified conversion opportunities by over 390%. Yet, very few sales teams possess the resources to maintain 24/7 instant response times. Enter the era of the Autonomous Sales Engine.</p>
                 
@@ -382,8 +385,6 @@ function getFallbackBlogContent(audience) {
             excerpt: "Harnessing high-performance LLM inference to automate real-time marketing intelligence and personalized B2B workflows.",
             category: "ai_automation",
             tags: ["NVIDIA NIM", "LLM Scale", "B2B Marketing", "SaaS Growth"],
-            meta_title: "Accelerating SaaS Scale: NVIDIA NIM Infrastructure",
-            meta_description: "How elite digital agencies utilize NVIDIA-accelerated AI models to drive real-time marketing automation and B2B growth.",
             content: `
                 <p>The acceleration of AI technology has created a massive challenge for enterprise SaaS products: latency. Running complex, multi-million parameter LLMs to generate real-time recommendations, custom content, or dynamic user audits has traditionally been too slow to use inside live web sessions. However, the introduction of NVIDIA NIM (NVIDIA Inference Microservices) has completely shifted the landscape. By optimizing model execution directly on GPUs, enterprise brands can deploy elite models at scale, securing sub-second reasoning speeds.</p>
                 

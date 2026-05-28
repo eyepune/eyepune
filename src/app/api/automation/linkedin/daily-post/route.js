@@ -6,10 +6,10 @@ import { generateAndPostToLinkedin } from '@/lib/linkedin-automation';
  * Hits this endpoint 2x a day to rotate educational and promotional content.
  */
 export async function POST(request) {
-    // 1. Verify Authorization (Optional: check for a secret header if using Vercel Cron)
     const authHeader = request.headers.get('authorization');
-    if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        // return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const cronSecret = process.env.CRON_SECRET;
+    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     try {
@@ -66,6 +66,12 @@ export async function POST(request) {
 
 // Support GET for easy manual testing
 export async function GET(request) {
+    const authHeader = request.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET;
+    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type') || 'educational';
     

@@ -93,6 +93,7 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
                     postContent = llmData.choices?.[0]?.message?.content || '';
                     if (postContent) {
                         postContent = postContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+                        postContent = postContent.replace(/^["']|["']$/g, '').trim();
                         success = true;
                         console.log('[LinkedIn-Automation] Content generated successfully via Llama 3.1.');
                     }
@@ -147,8 +148,14 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
             })
         });
 
-        const publishData = await publishRes.json();
-        if (!publishRes.ok) throw new Error(publishData.message || 'LinkedIn UGC API rejected share request.');
+        const publishText = await publishRes.text();
+        let publishData = {};
+        try { publishData = JSON.parse(publishText); } catch(e) {}
+        
+        if (!publishRes.ok) {
+            const errStr = publishData.message || publishText || 'LinkedIn UGC API rejected share request.';
+            throw new Error(`LinkedIn API Error (${publishRes.status}): ${errStr.substring(0, 200)}`);
+        }
 
         // 5. Log Success in activity_logs
         await supabase.from('activity_logs').insert([{
