@@ -30,7 +30,7 @@ export const MetaPixel = () => {
     <>
       <Script
         id="meta-pixel"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         onLoad={() => setIsLoaded(true)}
         dangerouslySetInnerHTML={{
           __html: `

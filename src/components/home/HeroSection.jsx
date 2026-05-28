@@ -133,7 +133,7 @@ export default function HeroSection() {
                     
                     {/* Centered Content */}
                     <motion.div 
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 1, y: 0 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                         className="flex flex-col items-center"
@@ -149,7 +149,7 @@ export default function HeroSection() {
 
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-6 tracking-tight drop-shadow-2xl">
                             <div className="relative inline-flex flex-col h-[1.5em] overflow-hidden align-bottom">
-                                <AnimatePresence mode="wait">
+                                <AnimatePresence mode="wait" initial={false}>
                                     <motion.span
                                         key={words[index]}
                                         initial={{ opacity: 0, y: 40 }}

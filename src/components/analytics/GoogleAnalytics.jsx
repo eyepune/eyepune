@@ -30,9 +30,9 @@ export function GoogleAnalytics() {
             {/* Google Analytics 4 */}
             <Script
                 src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-                strategy="afterInteractive"
+                strategy="lazyOnload"
             />
-            <Script id="google-analytics" strategy="afterInteractive">
+            <Script id="google-analytics" strategy="lazyOnload">
                 {`
                     window.dataLayer = window.dataLayer || [];
                     function gtag(){dataLayer.push(arguments);}
@@ -46,7 +46,7 @@ export function GoogleAnalytics() {
 
             {/* Meta Pixel */}
             {META_PIXEL_ID && (
-                <Script id="meta-pixel" strategy="afterInteractive">
+                <Script id="meta-pixel" strategy="lazyOnload">
                     {`
                         !function(f,b,e,v,n,t,s)
                         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

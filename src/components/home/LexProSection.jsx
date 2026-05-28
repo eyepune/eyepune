@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, ArrowRight, Scale, ShieldCheck, FileText, Zap } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import Image from 'next/image';
 
 const features = [
     { icon: FileText, text: 'AI drafting for 15+ Indian contract types' },
@@ -54,12 +55,12 @@ export default function LexProSection() {
                                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                                 className="absolute inset-0 rounded-3xl overflow-hidden border border-orange-500/20 bg-orange-950/25 backdrop-blur-sm"
                             >
-                                <img
+                                <Image
                                     src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69697d1626923688ef1d9afa/b532a4c62_generated_image.png"
                                     alt="Lex Pro Dashboard"
                                     loading="lazy"
-                                    width="800"
-                                    height="600"
+                                    width={800}
+                                    height={600}
                                     className="w-full h-full object-cover opacity-80"
                                 />
                                 {/* Overlay gradient */}

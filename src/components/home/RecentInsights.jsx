@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { createPageUrl } from "@/utils";
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import GlowCard from '@/components/shared/GlowCard';
@@ -86,10 +87,12 @@ export default function RecentInsights() {
                             <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
                                 <GlowCard className="group h-full flex flex-col p-6 cursor-pointer !rounded-3xl border border-white/5 hover:border-red-500/20">
                                     <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-6 border border-white/10">
-                                        <img 
+                                        <Image 
                                             src={post.featured_image || fallbackImages[idx % fallbackImages.length]} 
                                             alt={post.title}
-                                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            className="object-cover group-hover:scale-105 transition-transform duration-700"
                                             onError={(e) => { e.target.src = fallbackImages[idx % fallbackImages.length] }}
                                         />
                                         <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md border border-white/10 w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
