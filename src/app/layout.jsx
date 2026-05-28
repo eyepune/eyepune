@@ -92,6 +92,8 @@ export const metadata = {
 
 import { CSPostHogProvider } from './PostHogProvider';
 
+import { Suspense } from 'react';
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
@@ -99,7 +101,9 @@ export default function RootLayout({ children }) {
         <body className="min-h-screen bg-transparent text-white antialiased font-sans">
           <SEO_JSONLD />
           <GoogleAnalytics />
-          <MetaPixel />
+          <Suspense fallback={null}>
+            <MetaPixel />
+          </Suspense>
           <Providers>
             <SmoothScroll>
               <GlobalCanvas />
