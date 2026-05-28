@@ -1,5 +1,7 @@
 import '@/globals.css';
+import { Suspense } from 'react';
 import { Providers } from './providers';
+import { CSPostHogProvider } from './PostHogProvider';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import { MetaPixel } from '@/components/analytics/MetaPixel';
 import { Analytics } from '@vercel/analytics/react';
@@ -92,10 +94,6 @@ export const metadata = {
     },
   },
 };
-
-import { CSPostHogProvider } from './PostHogProvider';
-
-import { Suspense } from 'react';
 
 export default function RootLayout({ children }) {
   return (
