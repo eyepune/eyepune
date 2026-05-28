@@ -5,13 +5,13 @@ import { MetaPixel } from '@/components/analytics/MetaPixel';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import dynamic from 'next/dynamic';
-const AIChatbot = dynamic(() => import('@/components/home/AIChatbot'), { ssr: false });
-const GlobalCanvas = dynamic(() => import('@/components/3d/GlobalCanvas'), { ssr: false });
 import SEO_JSONLD from '@/components/seo/SEO_JSONLD';
 import SmoothScroll from '@/components/3d/SmoothScroll';
 import PremiumEffects from '@/components/shared/PremiumEffects';
 import { Outfit, Inter } from 'next/font/google';
 
+const AIChatbot = dynamic(() => import('@/components/home/AIChatbot'), { ssr: false });
+const GlobalCanvas = dynamic(() => import('@/components/3d/GlobalCanvas'), { ssr: false });
 const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
