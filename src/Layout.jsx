@@ -48,6 +48,7 @@ const footerLinks = {
         { name: 'For Startups', page: 'Solution-Startups' },
         { name: 'B2B Growth Engine', page: 'Solution-B2BGrowth' },
         { name: 'AI Intelligence Hub', page: 'AI-Intelligence-Hub' },
+        { name: 'All Solutions', page: 'Solutions-Directory' },
     ],
 };
 

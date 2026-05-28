@@ -68,6 +68,7 @@ import Solution_YouTubers from '@/views/Solution_YouTubers';
 import Solution_Startups from '@/views/Solution_Startups';
 import Solution_B2BGrowth from '@/views/Solution_B2BGrowth';
 import Solution_Programmatic from '@/views/Solution_Programmatic';
+import Solutions_Directory from '@/views/Solutions_Directory';
 import AI_Intelligence_Hub from '@/views/AI_Intelligence_Hub';
 import PageNotFound from '@/lib/PageNotFound';
 import PrivacyPolicy from '@/views/PrivacyPolicy';
@@ -138,6 +139,7 @@ const PAGE_MAP = {
   'Solution-YouTubers': Solution_YouTubers,
   'Solution-Startups': Solution_Startups,
   'Solution-B2BGrowth': Solution_B2BGrowth,
+  'Solutions-Directory': Solutions_Directory,
   'AI-Intelligence-Hub': AI_Intelligence_Hub,
   'Privacy-Policy': PrivacyPolicy,
   'Terms-and-Conditions': Terms,
