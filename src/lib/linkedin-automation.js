@@ -112,14 +112,18 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
             postContent = getLocalPremiumLinkedinPost(type);
         }
 
-        // 3. Resolve Author URN if missing
-        let authorUrn = urn;
-        if (!authorUrn) {
-            const meRes = await fetch('https://api.linkedin.com/v2/me', {
+        // 3. Resolve Author URN (Company Page takes priority)
+        let authorUrn = null;
+        if (process.env.LINKEDIN_ORGANIZATION_ID) {
+            authorUrn = `urn:li:organization:${process.env.LINKEDIN_ORGANIZATION_ID}`;
+        } else if (urn) {
+            authorUrn = urn;
+        } else {
+            const meRes = await fetch('https://api.linkedin.com/v2/userinfo', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const meData = await meRes.json();
-            if (meData.id) authorUrn = `urn:li:person:${meData.id}`;
+            if (meData.sub) authorUrn = `urn:li:person:${meData.sub}`;
         }
 
         if (!authorUrn) throw new Error('Could not resolve LinkedIn Author URN. Make sure your profile token is active.');

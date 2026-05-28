@@ -175,7 +175,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                 window.fbq('track', 'Lead');
             }
 
-            setStep(questions.length + 1); // Go to report view
+            setStep(0); // Ask for contact info before showing report
             
         } catch (error) {
             console.error('Audit Error:', error);
@@ -237,7 +237,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
         }
     };
 
-    const handleContactSubmit = (e) => {
+    const handleContactSubmit = async (e) => {
         e.preventDefault();
         // Honeypot check
         if (formData.hp_verification) {
@@ -245,7 +245,44 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
             handleNext();
             return;
         }
-        handleNext();
+
+        if (auditUrl && report) {
+            setIsSubmitting(true);
+            try {
+                const assessmentPayload = {
+                    name: formData.lead_name,
+                    email: formData.lead_email,
+                    phone: formData.lead_phone,
+                    company: formData.company_name || auditUrl,
+                    business_type: 'URL Audit',
+                    revenue_range: '',
+                    lead_generation_method: '',
+                    sales_process: '',
+                    marketing_channels: '',
+                    team_size: '',
+                    online_presence: auditUrl,
+                    crm_usage: '',
+                    biggest_challenge: 'Website Performance & SEO',
+                    growth_goals: '',
+                    score: report.score,
+                    ai_report: report.content,
+                    hp_verification: formData.hp_verification
+                };
+                await fetch('/api/assessment/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(assessmentPayload)
+                });
+                setStep(questions.length + 1);
+            } catch (err) {
+                console.error(err);
+                setStep(questions.length + 1);
+            } finally {
+                setIsSubmitting(false);
+            }
+        } else {
+            handleNext();
+        }
     };
 
     const handleAnswerChange = (value) => {

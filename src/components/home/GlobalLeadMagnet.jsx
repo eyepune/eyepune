@@ -37,7 +37,7 @@ export default function GlobalLeadMagnet() {
                             </p>
                             
                             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
-                                <Link href="/Contact">
+                                <Link href="/AI-Assessment">
                                     <Button size="lg" className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-bold h-14 px-10 rounded-full shadow-[0_0_30px_rgba(220,38,38,0.2)] hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] transition-all">
                                         Claim Your Free Audit
                                         <ArrowRight className="w-5 h-5 ml-2" />

@@ -19,10 +19,10 @@ export async function POST(request) {
         // If no type provided, we pick based on current hour
         let type = body.type;
         if (!type) {
-            const hour = new Date().getHours();
-            // Morning post (before 12 PM): Educational
-            // Evening post (after 12 PM): Promotional
-            type = hour < 12 ? 'educational' : 'promotional';
+            const hour = new Date().getUTCHours();
+            // Morning post (4 AM UTC / 9:30 AM IST): Educational
+            // Afternoon post (10 AM UTC / 3:30 PM IST): Promotional
+            type = hour < 9 ? 'educational' : 'promotional';
         }
 
         const result = await generateAndPostToLinkedin(type);

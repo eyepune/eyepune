@@ -231,6 +231,21 @@ export default function Booking() {
                             <p className="text-sm text-muted-foreground">
                                 A calendar invite has been sent to your email with all the details.
                             </p>
+
+                            <div className="mt-10 pt-10 border-t border-border">
+                                <div className="inline-flex items-center justify-center p-3 bg-red-600/10 rounded-full mb-4">
+                                    <span className="text-2xl">🚀</span>
+                                </div>
+                                <h3 className="text-2xl font-bold mb-2">Want to skip the wait?</h3>
+                                <p className="text-muted-foreground mb-8">
+                                    Don't want to wait for the call? Select your package, sign the proposal, and our AI agents will begin onboarding you immediately.
+                                </p>
+                                <a href="/Pricing" className="inline-block w-full sm:w-auto">
+                                    <Button className="bg-red-600 hover:bg-red-700 text-white font-black h-14 px-10 text-lg shadow-xl shadow-red-600/20 w-full">
+                                        VIEW PACKAGES & START NOW
+                                    </Button>
+                                </a>
+                            </div>
                         </motion.div>
                     ) : (
                         <div className="grid lg:grid-cols-2 gap-8">

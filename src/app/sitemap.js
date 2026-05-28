@@ -118,5 +118,25 @@ export default async function sitemap() {
         priority: 0.9,
     }));
 
-    return [...staticRoutes, ...blogRoutes, ...programmaticRoutes];
+    // Target Cities for Local Programmatic SEO
+    const targetCities = [
+        "Mumbai", "Bangalore", "Delhi", "Hyderabad", "Chennai", "Kolkata", 
+        "Ahmedabad", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", 
+        "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", 
+        "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", 
+        "Ranchi", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", 
+        "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi-Mumbai", 
+        "Allahabad", "Howrah", "Gwalior", "Jabalpur", "Coimbatore", "Vijayawada", 
+        "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", 
+        "Dubai", "Singapore", "London", "New-York", "Toronto", "Sydney"
+    ];
+
+    const locationRoutes = targetCities.map(city => ({
+        url: `${baseUrl}/Locations/${city}`,
+        lastModified: now,
+        changeFrequency: 'weekly',
+        priority: 0.9,
+    }));
+
+    return [...staticRoutes, ...blogRoutes, ...programmaticRoutes, ...locationRoutes];
 }

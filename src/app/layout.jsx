@@ -2,6 +2,8 @@ import '@/globals.css';
 import { Providers } from './providers';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import { MetaPixel } from '@/components/analytics/MetaPixel';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import AIChatbot from '@/components/home/AIChatbot';
 import SEO_JSONLD from '@/components/seo/SEO_JSONLD';
 import SmoothScroll from '@/components/3d/SmoothScroll';
@@ -111,6 +113,8 @@ export default function RootLayout({ children }) {
               {children}
               <AIChatbot />
             </SmoothScroll>
+            <Analytics />
+            <SpeedInsights />
           </Providers>
         </body>
       </CSPostHogProvider>

@@ -264,17 +264,21 @@ async function directPostToLinkedIn(post) {
         throw new Error('LinkedIn integration not connected. Link your profile in the Marketing Dashboard.');
     }
 
-    // 2. Resolve Profile URN if missing
-    let authorUrn = urn;
-    if (!authorUrn) {
-        const meRes = await fetch('https://api.linkedin.com/v2/me', {
+    // 2. Resolve Profile URN (Company Page takes priority)
+    let authorUrn = null;
+    if (process.env.LINKEDIN_ORGANIZATION_ID) {
+        authorUrn = `urn:li:organization:${process.env.LINKEDIN_ORGANIZATION_ID}`;
+    } else if (urn) {
+        authorUrn = urn;
+    } else {
+        const meRes = await fetch('https://api.linkedin.com/v2/userinfo', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const meData = await meRes.json();
-        if (!meData.id) {
+        if (!meData.sub) {
             throw new Error(`Profile access rejected by LinkedIn: ${meData.message || 'Invalid Token'}`);
         }
-        authorUrn = `urn:li:person:${meData.id}`;
+        authorUrn = `urn:li:person:${meData.sub}`;
     }
 
     // 3. Publish UGC Post via LinkedIn API
