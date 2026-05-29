@@ -1,16 +1,2 @@
 {
-  "crons": [
-    {
-      "path": "/api/automation/linkedin/daily-post",
-      "schedule": "0 10 * * 1-5"
-    },
-    {
-      "path": "/api/automation/ai-blog",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron/daily-drip",
-      "schedule": "0 12 * * *"
-    }
-  ]
 }

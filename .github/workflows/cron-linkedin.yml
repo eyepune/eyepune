@@ -1,0 +1,16 @@
+name: LinkedIn Automation Cron
+
+on:
+  schedule:
+    # Runs at 9:00 AM and 6:00 PM IST (3:30 AM and 12:30 PM UTC) every day
+    - cron: '30 3,12 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  post-to-linkedin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger LinkedIn Endpoint
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/linkedin/daily-post" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

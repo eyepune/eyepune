@@ -1,0 +1,16 @@
+name: AI Blog Automation Cron
+
+on:
+  schedule:
+    # Runs at 08:00 UTC every day
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  generate-blog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger AI Blog Endpoint
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/ai-blog" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

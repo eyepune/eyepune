@@ -1,0 +1,16 @@
+name: Daily Drip Campaign Cron
+
+on:
+  schedule:
+    # Runs at 12:00 UTC every day
+    - cron: '0 12 * * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  run-drip-campaign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Daily Drip Endpoint
+        run: |
+          curl -X GET "https://www.eyepune.com/api/cron/daily-drip" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

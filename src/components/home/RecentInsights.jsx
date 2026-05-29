@@ -10,7 +10,7 @@ import GlowCard from '@/components/shared/GlowCard';
 
 const fallbackImages = [
     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800',
+    'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=800',
     'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800'
 ];
 
@@ -93,7 +93,10 @@ export default function RecentInsights() {
                                             fill
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                            onError={(e) => { e.target.src = fallbackImages[idx % fallbackImages.length] }}
+                                            onError={(e) => { 
+                                                e.currentTarget.srcset = "";
+                                                e.currentTarget.src = fallbackImages[idx % fallbackImages.length];
+                                            }}
                                         />
                                         <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md border border-white/10 w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <ArrowUpRight className="w-5 h-5 text-white" />
