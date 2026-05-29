@@ -34,13 +34,17 @@ export async function GET(request) {
         const postResult = await generateAndPostBlog('global');
         results.push(postResult);
 
-        // Log Success to automation_logs
-        await supabase.from('automation_logs').insert([{
-            type: 'blog',
-            status: 'success',
-            message: `Generated and published 1 global blog post: "${postResult.title}".`,
-            payload: { results }
-        }]);
+        // Log Success to automation_logs (ignore if table missing)
+        try {
+            await supabase.from('automation_logs').insert([{
+                type: 'blog',
+                status: 'success',
+                message: `Generated and published 1 global blog post: "${postResult.title}".`,
+                payload: { results }
+            }]);
+        } catch (e) {
+            console.warn('[AI-Blog] Could not log to automation_logs:', e.message);
+        }
 
         return NextResponse.json({
             success: true,
@@ -322,11 +326,15 @@ async function directPostToLinkedIn(post) {
     console.log(`[AI-Blog] Directly published to LinkedIn. ID: ${shareData.id}`);
 
     // Log the successful share
-    await supabase.from('activity_logs').insert([{
-        action: 'linkedin_auto_post',
-        details: `Successfully published blog post distribution to LinkedIn: ${shareData.id}`,
-        status: 'success'
-    }]);
+    try {
+        await supabase.from('activity_logs').insert([{
+            action: 'linkedin_auto_post',
+            details: `Successfully published blog post distribution to LinkedIn: ${shareData.id}`,
+            status: 'success'
+        }]);
+    } catch (e) {
+        console.warn('[AI-Blog] Could not log to activity_logs:', e.message);
+    }
 }
 
 /**
