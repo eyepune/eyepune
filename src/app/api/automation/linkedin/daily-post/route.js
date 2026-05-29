@@ -29,21 +29,25 @@ export async function POST(request) {
 
         const { supabase } = await import('@/integrations/supabase/client');
         if (!result.success) {
-            await supabase.from('automation_logs').insert([{
-                type: 'linkedin',
-                status: 'failure',
-                message: result.error,
-                payload: { type }
-            }]);
+            try {
+                await supabase.from('automation_logs').insert([{
+                    type: 'linkedin',
+                    status: 'failure',
+                    message: result.error,
+                    payload: { type }
+                }]);
+            } catch (e) { console.warn('Could not log failure:', e.message); }
             return NextResponse.json({ error: result.error }, { status: 500 });
         }
 
-        await supabase.from('automation_logs').insert([{
-            type: 'linkedin',
-            status: 'success',
-            message: `Published ${type} post to LinkedIn.`,
-            payload: { type, postId: result.postId }
-        }]);
+        try {
+            await supabase.from('automation_logs').insert([{
+                type: 'linkedin',
+                status: 'success',
+                message: `Published ${type} post to LinkedIn.`,
+                payload: { type, postId: result.postId }
+            }]);
+        } catch (e) { console.warn('Could not log success:', e.message); }
 
         return NextResponse.json({
             success: true,
