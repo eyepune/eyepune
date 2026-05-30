@@ -21,9 +21,9 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 export async function GET(request) {
     // 1. Auth Check (for Vercel Cron or Manual Trigger)
     const authHeader = request.headers.get('authorization');
-    if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // TEMPORARILY DISABLED: if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
+    //    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // }
 
     try {
         console.log('[AI-Blog] Starting automated blog generation...');
