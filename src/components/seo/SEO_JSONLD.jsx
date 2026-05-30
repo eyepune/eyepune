@@ -8,7 +8,7 @@ import React from 'react';
 export default function SEO_JSONLD() {
     const businessSchema = {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
+        "@type": "Organization",
         "name": "EyE PunE",
         "alternateName": ["EyePune", "EyEPunE", "Eye Pune"],
         "url": "https://www.eyepune.com",
@@ -16,7 +16,6 @@ export default function SEO_JSONLD() {
         "image": "https://www.eyepune.com/opengraph-image.png",
         "description": "EyE PunE is an elite digital marketing and AI automation agency in Pune, providing cutting-edge growth solutions, multi-model AI systems, and global brand acceleration.",
         "telephone": "+91 92847 12033",
-        "priceRange": "$$$",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "Baner",
@@ -24,24 +23,6 @@ export default function SEO_JSONLD() {
             "addressRegion": "Maharashtra",
             "postalCode": "411045",
             "addressCountry": "IN"
-        },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 18.5590,
-            "longitude": 73.7799
-        },
-        "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday"
-            ],
-            "opens": "09:00",
-            "closes": "20:00"
         },
         "sameAs": [
             "https://www.facebook.com/eyepune",
@@ -58,32 +39,37 @@ export default function SEO_JSONLD() {
             "Generative Search Optimization (GSO)",
             "Web Development (Next.js, React, Tailwind CSS)",
             "B2B Lead Generation Engines",
-            "YouTube Growth Systems & Viral Distribution",
-            "Performance Marketing (Google Ads & Meta Ads)",
-            "Social Media Management & Strategy",
-            "Sales Funnels & Conversion Rate Optimization (CRO)",
-            "Elite Brand Strategy & Design"
+            "Performance Marketing",
+            "Social Media Management & Strategy"
         ],
         "founder": {
             "@type": "Person",
             "name": "EyE PunE Leadership",
             "jobTitle": "Founder & Principal Growth Officer"
-        },
-        "areaServed": [
+        }
+    };
+
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
             {
-                "@type": "Country",
-                "name": "Global"
+                "@type": "Question",
+                "name": "What services does EyE PunE provide?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We provide AI automation, full-stack website development, B2B lead generation, and performance marketing globally."
+                }
             },
             {
-                "@type": "AdministrativeArea",
-                "name": "Pune, Maharashtra, India"
+                "@type": "Question",
+                "name": "Where is EyE PunE located?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We are headquartered in Pune, India, but serve elite clients worldwide."
+                }
             }
-        ],
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.eyepune.com/Blog?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
+        ]
     };
 
     const serviceSchema = {
@@ -92,7 +78,7 @@ export default function SEO_JSONLD() {
         "name": "Growth Acceleration Services",
         "serviceType": "AI Automation, Web Development, & Digital Marketing",
         "provider": {
-            "@type": "ProfessionalService",
+            "@type": "Organization",
             "name": "EyE PunE",
             "url": "https://www.eyepune.com"
         },
@@ -111,7 +97,7 @@ export default function SEO_JSONLD() {
                     "itemOffered": {
                         "@type": "Service",
                         "name": "AI Automation & Custom Chatbots",
-                        "description": "Custom Multi-Model AI Orchestration, WhatsApp marketing automation, and smart website bots that qualify leads, answer FAQs, and schedule consults 24/7."
+                        "description": "Custom Multi-Model AI Orchestration, WhatsApp marketing automation, and smart website bots."
                     }
                 },
                 {
@@ -121,47 +107,7 @@ export default function SEO_JSONLD() {
                     "itemOffered": {
                         "@type": "Service",
                         "name": "High-Performance Website Development",
-                        "description": "Bespoke full-stack web applications, ultra-fast Next.js and Tailwind CSS websites, and robust technical architectures optimized for modern UX and business growth."
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "price": "0",
-                    "priceCurrency": "USD",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "B2B Lead Generation & Outreach Engine",
-                        "description": "24/7 automated cold outreach setups on LinkedIn and Email, list building, and intelligent lead qualifying and nurturing pipelines designed for Founders and Agencies."
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "price": "0",
-                    "priceCurrency": "USD",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Performance Marketing (Google & Meta Ads)",
-                        "description": "Data-driven advertising campaigns on Google, Meta, and LinkedIn focused on maximizing ROI, advanced custom audiences, and high-converting retargeting funnels."
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "price": "0",
-                    "priceCurrency": "USD",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Social Media Management & Content Distribution",
-                        "description": "Premium brand presence strategy, custom high-impact visual assets, engaging copy creation, and automated content distribution engines."
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "price": "0",
-                    "priceCurrency": "USD",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Sales Funnels & Landing Page Optimization",
-                        "description": "High-converting landing pages and sequential sales funnels designed to turn raw traffic into revenue with seamless user journeys."
+                        "description": "Bespoke full-stack web applications, ultra-fast Next.js and Tailwind CSS websites."
                     }
                 }
             ]
@@ -173,6 +119,10 @@ export default function SEO_JSONLD() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
             />
             <script
                 type="application/ld+json"

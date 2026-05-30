@@ -21,6 +21,7 @@ import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
 import CustomCursor from "@/components/shared/CustomCursor";
 import HeroFloatingIcons from "@/components/shared/HeroFloatingIcons";
+import CookieBanner from "@/components/shared/CookieBanner";
 
 const footerLinks = {
     Services: [
@@ -504,6 +505,7 @@ export default function Layout(props) {
             <LayoutContent {...props} />
             {isPublicPage && <WhatsAppFloat />}
             {isPublicPage && <ExitIntentPopup />}
+            {isPublicPage && <CookieBanner />}
         </ThemeProvider>
     );
 }
