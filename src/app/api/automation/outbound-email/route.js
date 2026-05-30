@@ -1,18 +1,14 @@
 import { NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 
 /**
  * 🚀 Outbound AI Lead Engine (Webhook Endpoint)
  * 
- * This endpoint acts as the brain for your outbound cold email/LinkedIn outreach.
- * It is designed to be triggered by an external webhook (e.g., Apollo.io, Instantly, Make.com)
- * when a new lead is scraped or enters a specific campaign.
- * 
  * Flow:
- * 1. Receive Lead Data (Name, Company, LinkedIn, Website)
- * 2. Scrape/Analyze the Lead's company (Placeholder logic)
- * 3. Ping LLM (OpenAI/Anthropic) to generate a hyper-personalized email pitch
- * 4. Dispatch the email via Resend/SMTP (Placeholder)
- * 5. Log the interaction to Supabase CRM
+ * 1. Receive Lead Data
+ * 2. Ping LLM for Personalization
+ * 3. Dispatch the email via ZOHO MAIL SMTP
+ * 4. Log interaction
  */
 
 export async function POST(request) {
@@ -31,7 +27,6 @@ export async function POST(request) {
             lead_name, 
             company_name, 
             industry,
-            campaign_id 
         } = body;
 
         if (!lead_email || !company_name) {
@@ -41,28 +36,80 @@ export async function POST(request) {
             );
         }
 
-        console.log(`🤖 [Outbound Engine] Processing new lead: ${lead_name} at ${company_name} (${industry})`);
+        console.log(`🤖 [Outbound Engine] Processing new lead: ${lead_name} at ${company_name}`);
 
-        // 3. AI Personalization Layer (Mock Implementation)
-        // In production, this would call OpenAI:
-        // const prompt = `Write a personalized cold email for ${lead_name} at ${company_name} in the ${industry} space...`;
-        
-        const generatedSubject = `Scaling ${company_name}'s AI Architecture`;
-        const generatedBody = `Hi ${lead_name},\n\nI noticed ${company_name} is operating in the ${industry} space. We build autonomous AI growth engines and Next.js architectures that could help you scale...`;
+        // 3. AI Personalization Layer (Live LLM Integration)
+        let generatedSubject = `Scaling ${company_name}'s AI Architecture`;
+        let generatedBody = `Hi ${lead_name},\n\nI noticed ${company_name} is operating in the ${industry} space. We build autonomous AI growth engines and Next.js architectures that could help you scale...\n\nBest,\nEyE PunE Team`;
 
-        // 4. Dispatch Email (Placeholder for Resend/SendGrid API)
-        // await resend.emails.send({ to: lead_email, subject: generatedSubject, text: generatedBody })
-        console.log(`📨 [Outbound Engine] Dispatching personalized email to ${lead_email}`);
+        const LLM_API_KEY = process.env.LLM_API_KEY;
+        const LLM_API_URL = process.env.LLM_API_URL || 'https://integrate.api.nvidia.com/v1/chat/completions';
+
+        if (LLM_API_KEY) {
+            console.log(`🧠 [Outbound Engine] Querying LLM for hyper-personalization...`);
+            const prompt = `Write a short, highly converting cold email to ${lead_name}, who works at ${company_name} (Industry: ${industry}). You are EyE PunE, an elite AI automation and Next.js web development agency. Keep it under 4 sentences. Make it sound human. Do not use placeholders. Provide the output in JSON format: {"subject": "the subject", "body": "the email body"}`;
+            
+            try {
+                const aiResponse = await fetch(LLM_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${LLM_API_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'meta/llama3-70b-instruct',
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.7,
+                        max_tokens: 500,
+                        response_format: { type: "json_object" }
+                    })
+                });
+
+                if (aiResponse.ok) {
+                    const aiData = await aiResponse.json();
+                    const aiResult = JSON.parse(aiData.choices[0].message.content);
+                    generatedSubject = aiResult.subject || generatedSubject;
+                    generatedBody = aiResult.body || generatedBody;
+                    console.log(`🧠 [Outbound Engine] LLM generated personalized pitch successfully.`);
+                } else {
+                    console.error('⚠️ LLM API error, falling back to template:', await aiResponse.text());
+                }
+            } catch (err) {
+                console.error('⚠️ LLM fetch failed, falling back to template:', err);
+            }
+        } else {
+            console.warn('⚠️ No LLM_API_KEY found, using fallback email template.');
+        }
+
+        // 4. Dispatch Email via ZOHO MAIL SMTP
+        console.log(`📨 [Outbound Engine] Dispatching email to ${lead_email} via Zoho Mail...`);
         
-        // 5. Log to CRM / Client Portal (Placeholder)
-        // await supabase.from('crm_leads').insert({ email: lead_email, status: 'contacted' });
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.zoho.com',
+            port: 465,
+            secure: true, // true for 465, false for 587
+            auth: {
+                user: process.env.ZOHO_EMAIL_ADDRESS,
+                pass: process.env.ZOHO_APP_PASSWORD,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.ZOHO_EMAIL_ADDRESS,
+            to: lead_email,
+            subject: generatedSubject,
+            text: generatedBody,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`✅ [Zoho SMTP] Email sent successfully: ${info.messageId}`);
 
         return NextResponse.json({
             success: true,
-            message: 'Outbound AI personalization and dispatch completed.',
+            message: 'Outbound AI email dispatched via Zoho Mail.',
             data: {
                 target: lead_email,
-                generated_subject: generatedSubject
+                message_id: info.messageId
             }
         });
 
