@@ -60,9 +60,6 @@ export const metadata = {
     google: 'Y6xKuYwi-UqakzomtNF7IlQXA-d_uJ3q_dYpPfAXhRA',
     bing: '4D3E7D51ACDBA311179798C9A1675D74',
   },
-  alternates: {
-    canonical: '/',
-  },
   formatDetection: {
     email: false,
     address: false,
