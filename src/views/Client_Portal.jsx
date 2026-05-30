@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { FileText, Receipt, CreditCard, History, LogIn, User } from 'lucide-react';
+import { FileText, Receipt, CreditCard, History, LogIn, User, TrendingUp } from 'lucide-react';
 import ProposalViewer from '@/components/client/portal/ProposalViewer';
 import InvoiceDashboard from '@/components/client/portal/InvoiceDashboard';
 import PaymentHistory from '@/components/client/portal/PaymentHistory';
 
 const TABS = [
+  { id: 'analytics', label: 'Growth Analytics', icon: TrendingUp },
   { id: 'proposals', label: 'My Proposals', icon: FileText },
   { id: 'invoices', label: 'Invoices & Pay', icon: Receipt },
   { id: 'payments', label: 'Payment History', icon: History },
@@ -94,6 +95,15 @@ export default function Client_Portal() {
 
       {/* Content */}
       <div className="max-w-5xl mx-auto px-6 py-8">
+        {activeTab === 'analytics' && (
+          <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-8 text-center">
+            <TrendingUp className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-2">AI Growth Analytics</h2>
+            <p className="text-gray-400 max-w-md mx-auto">
+              Your real-time SEO performance, AI automation metrics, and lead generation analytics will appear here once your campaign is fully provisioned.
+            </p>
+          </div>
+        )}
         {activeTab === 'proposals' && <ProposalViewer user={user} />}
         {activeTab === 'invoices' && <InvoiceDashboard user={user} />}
         {activeTab === 'payments' && <PaymentHistory user={user} />}
