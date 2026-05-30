@@ -104,6 +104,14 @@ export default function SEO_JSONLD() {
         },
         "areaServed": [
             { "@type": "Country", "name": "Global" },
+            { "@type": "Country", "name": "United States" },
+            { "@type": "Country", "name": "United Kingdom" },
+            { "@type": "Country", "name": "Canada" },
+            { "@type": "Country", "name": "Australia" },
+            { "@type": "Region", "name": "Middle East" },
+            { "@type": "Region", "name": "Western Europe" },
+            { "@type": "Region", "name": "Latin America" },
+            { "@type": "Region", "name": "Asia" },
             { "@type": "AdministrativeArea", "name": "Pune, India" }
         ],
         "hasOfferCatalog": {
