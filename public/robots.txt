@@ -5,3 +5,4 @@ Disallow: /Client*
 Disallow: /api/*
 
 Sitemap: https://eyepune.com/sitemap.xml
+Sitemap: https://www.eyepune.com/image-sitemap.xml

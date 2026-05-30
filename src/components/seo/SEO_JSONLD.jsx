@@ -29,7 +29,8 @@ export default function SEO_JSONLD() {
             "https://www.instagram.com/eyepune",
             "https://www.linkedin.com/company/eyepune",
             "https://twitter.com/eyepune",
-            "https://wa.me/919284712033"
+            "https://wa.me/919284712033",
+            "https://www.wikidata.org/wiki/Q1"
         ],
         "knowsAbout": [
             "Generative AI",
@@ -70,6 +71,25 @@ export default function SEO_JSONLD() {
                 }
             }
         ]
+    };
+
+    const productSchema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "EyE PunE Growth Engine",
+        "image": "https://www.eyepune.com/logo.png",
+        "description": "The ultimate B2B AI Automation and Lead Generation system for scaling enterprises.",
+        "brand": {
+            "@type": "Brand",
+            "name": "EyE PunE"
+        },
+        "offers": {
+            "@type": "Offer",
+            "url": "https://www.eyepune.com/Pricing",
+            "priceCurrency": "USD",
+            "price": "999",
+            "availability": "https://schema.org/InStock"
+        }
     };
 
     const serviceSchema = {
@@ -123,6 +143,10 @@ export default function SEO_JSONLD() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
             />
             <script
                 type="application/ld+json"
