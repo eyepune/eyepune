@@ -375,7 +375,7 @@ function LayoutContent({ children, currentPageName }) {
                             <div className="grid md:grid-cols-2 gap-8 items-center">
                                 <div className="text-center md:text-left flex flex-col items-center md:items-start">
                                     <h3 className="text-2xl md:text-3xl font-black mb-3 text-white">Join the Growth Insider</h3>
-                                    <p className="text-gray-400 text-sm md:text-base max-w-md">
+                                    <p className="text-gray-300 text-sm md:text-base max-w-md">
                                         Get exclusive AI automation strategies, SEO tips, and marketing funnels delivered straight to your inbox weekly.
                                     </p>
                                 </div>
