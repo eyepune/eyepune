@@ -371,7 +371,7 @@ function LayoutContent({ children, currentPageName }) {
                     />
 
                     {/* Newsletter Capture Section for Content Marketing Strategy */}
-                    <div className="border-b border-white/[0.06] bg-white/[0.01] backdrop-blur-md">
+                    <div className="border-b border-white/[0.06] bg-black/40 backdrop-blur-md">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
                             <div className="grid md:grid-cols-2 gap-8 items-center">
                                 <div className="text-center md:text-left flex flex-col items-center md:items-start">
