@@ -41,6 +41,10 @@ export const metadata = {
   },
   description: 'Pune-based elite digital agency. We combine AI-driven marketing, full-stack web development, and hyper-scalable sales systems to explode business growth worldwide.',
   keywords: [
+    'Best Digital Marketing Agencies',
+    'Top 100 Digital Marketing Companies in India',
+    'Top Digital Marketing Agencies in India',
+    'Top 30 Digital Marketing Agencies',
     'AI marketing agency Pune', 
     'digital marketing agency Pune', 
     'B2B lead generation services', 

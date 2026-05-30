@@ -67,6 +67,10 @@ export default async function sitemap() {
 
     // Programmatic SEO Pages
     const programmaticSeoQueries = [
+        "Best Digital Marketing Agencies",
+        "Top 100 Digital Marketing Companies in India",
+        "Top Digital Marketing Agencies in India",
+        "Top 30 Digital Marketing Agencies",
         "B2B paid ads agency India",
         "Best Google Ads agency for startups",
         "Meta Ads management services global",

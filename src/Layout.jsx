@@ -405,7 +405,7 @@ function LayoutContent({ children, currentPageName }) {
                                     <span className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase text-red-500 font-bold mt-1 text-center ml-2">Connect · Engage · Grow</span>
                                 </Link>
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
-                                    Pune-based all-in-one growth partner serving clients across the globe.
+                                    Recognized among the <strong>Top Digital Marketing Agencies in India</strong>. Pune-based all-in-one growth partner serving elite clients across the globe.
                                 </p>
                                 <div className="space-y-3 text-sm flex flex-col items-center sm:items-start mt-4">
                                     <a href="mailto:connect@eyepune.com" className="flex items-center gap-3 text-gray-600 hover:text-red-400 transition-colors py-1 group">
