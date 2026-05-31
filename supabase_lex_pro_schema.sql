@@ -88,3 +88,26 @@ USING (contract_id IN (
     SELECT id FROM lex_contracts 
     WHERE organization_id IN (SELECT organization_id FROM profiles WHERE id = auth.uid())
 ));
+
+-- 5. Digital Audit Trails (Clickwrap Signatures)
+CREATE TABLE lex_audit_trails (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    contract_id UUID REFERENCES lex_contracts(id) ON DELETE CASCADE,
+    party_name VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    user_agent TEXT NOT NULL,
+    document_hash VARCHAR(64) NOT NULL,
+    signed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE lex_audit_trails ENABLE ROW LEVEL SECURITY;
+
+-- Audit Trails: Users can view trails for contracts in their org
+CREATE POLICY "Users can view org audit trails" 
+ON lex_audit_trails FOR SELECT 
+USING (contract_id IN (
+    SELECT id FROM lex_contracts 
+    WHERE organization_id IN (SELECT organization_id FROM profiles WHERE id = auth.uid())
+));
+

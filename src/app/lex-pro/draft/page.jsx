@@ -87,6 +87,9 @@ export default function LexProDrafting() {
     const [showCanvas, setShowCanvas] = useState(false);
     const [generatedDraft, setGeneratedDraft] = useState('');
     const [dynamicAnswers, setDynamicAnswers] = useState({});
+    const [savedContractId, setSavedContractId] = useState(null);
+    const [auditTrails, setAuditTrails] = useState([]);
+    const [isSigning, setIsSigning] = useState(false);
 
     const [formData, setFormData] = useState({
         contractType: 'nda',
@@ -198,8 +201,10 @@ Signature Method: ${formData.signatureType}
                     content: generatedDraft
                 })
             });
+            
             const data = await response.json();
             if (data.success) {
+                setSavedContractId(data.contract.id);
                 alert('Draft saved successfully to your organization workspace!');
             } else {
                 alert(`Error saving draft: ${data.error}`);
@@ -208,6 +213,45 @@ Signature Method: ${formData.signatureType}
             alert(`Network error saving draft: ${error.message}`);
         } finally {
             setIsSaving(false);
+        }
+    };
+
+    const handleSignDocument = async (partyName) => {
+        if (!savedContractId) {
+            alert("Please save the draft first before signing.");
+            return;
+        }
+        setIsSigning(true);
+        try {
+            const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+            );
+            const { data: { session } } = await supabase.auth.getSession();
+
+            const response = await fetch('/api/lex-pro/sign', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+                },
+                body: JSON.stringify({
+                    contractId: savedContractId,
+                    partyName: partyName,
+                    documentText: generatedDraft
+                })
+            });
+            const data = await response.json();
+            if (data.success) {
+                setAuditTrails(prev => [...prev, data.auditTrail]);
+                alert(`Successfully signed as ${partyName}!`);
+            } else {
+                alert(`Error signing: ${data.error}`);
+            }
+        } catch (err) {
+            alert(`Network error: ${err.message}`);
+        } finally {
+            setIsSigning(false);
         }
     };
 
@@ -246,6 +290,26 @@ Signature Method: ${formData.signatureType}
             }
             doc.text(lines[i], 20, y);
             y += 7; // line spacing
+        }
+        
+        if (auditTrails.length > 0) {
+            doc.addPage();
+            doc.setFontSize(16);
+            doc.setFont("times", "bold");
+            doc.text(`DIGITAL AUDIT TRAIL CERTIFICATE`, 105, 30, null, null, "center");
+            
+            doc.setFontSize(11);
+            doc.setFont("times", "normal");
+            let ay = 50;
+            
+            auditTrails.forEach((trail, index) => {
+                doc.text(`Signature ${index + 1}: ${trail.party_name}`, 20, ay);
+                doc.text(`IP Address: ${trail.ip_address}`, 20, ay + 7);
+                doc.text(`Timestamp: ${new Date(trail.signed_at).toLocaleString()}`, 20, ay + 14);
+                doc.text(`Document Hash (SHA-256): ${trail.document_hash.substring(0, 40)}...`, 20, ay + 21);
+                doc.text(`User Agent: ${trail.user_agent.substring(0, 70)}...`, 20, ay + 28);
+                ay += 45;
+            });
         }
         
         doc.save(`LexPro_${formData.contractType}_Draft.pdf`);
@@ -381,6 +445,7 @@ Signature Method: ${formData.signatureType}
                             >
                                 <option value="E-Signature">E-Signature (Aadhaar/DSC)</option>
                                 <option value="Wet Signature">Manual Wet Signature</option>
+                                <option value="Digital Audit Trail">Digital Audit Trail (Clickwrap)</option>
                             </select>
                         </div>
                     </div>
@@ -493,24 +558,38 @@ Signature Method: ${formData.signatureType}
                     
                     {generatedDraft && (
                         <div className="flex items-center gap-2">
-                            <Button 
-                                variant="outline" 
-                                size="sm" 
-                                onClick={handleSaveDraft}
-                                disabled={isSaving}
-                                className="border-white/10 text-gray-300 hover:text-white bg-white/5"
-                            >
-                                {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                                {isSaving ? 'Saving...' : 'Save Draft'}
-                            </Button>
-                            <Button 
-                                onClick={handleExportPDF}
-                                variant="outline" 
-                                size="sm" 
-                                className="border-orange-500/30 text-orange-400 hover:bg-orange-500/10"
-                            >
-                                <Download className="w-4 h-4 mr-2" /> Export PDF
-                            </Button>
+                                <Button 
+                                    onClick={handleSaveDraft} 
+                                    disabled={isSaving}
+                                    variant="outline" 
+                                    className="border-orange-500/30 text-orange-400 hover:bg-orange-500/10"
+                                >
+                                    {isSaving ? 'Saving...' : 'Save Draft'}
+                                </Button>
+                                {formData.signatureType === 'Digital Audit Trail' && savedContractId && (
+                                    <div className="flex gap-2">
+                                        <Button 
+                                            onClick={() => handleSignDocument(formData.partyA || 'Party A')} 
+                                            disabled={isSigning || auditTrails.some(t => t.party_name === (formData.partyA || 'Party A'))} 
+                                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                                        >
+                                            {auditTrails.some(t => t.party_name === (formData.partyA || 'Party A')) ? 'Party A Signed ✓' : 'Sign Party A'}
+                                        </Button>
+                                        <Button 
+                                            onClick={() => handleSignDocument(formData.partyB || 'Party B')} 
+                                            disabled={isSigning || auditTrails.some(t => t.party_name === (formData.partyB || 'Party B'))} 
+                                            className="bg-green-600 hover:bg-green-700 text-white"
+                                        >
+                                            {auditTrails.some(t => t.party_name === (formData.partyB || 'Party B')) ? 'Party B Signed ✓' : 'Sign Party B'}
+                                        </Button>
+                                    </div>
+                                )}
+                                <Button 
+                                    onClick={handleExportPDF} 
+                                    className="bg-gradient-to-r from-orange-600 to-red-600 text-white border-0"
+                                >
+                                    Export PDF
+                                </Button>
                         </div>
                     )}
                 </div>
