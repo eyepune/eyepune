@@ -21,25 +21,11 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const authHeader = request.headers.get('Authorization');
-        if (!authHeader) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
-
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
         
         // We use the service key to insert because we haven't set up INSERT RLS for this table yet
         const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-        const supabase = createClient(supabaseUrl, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-        
-        // Verify user token
-        const token = authHeader.replace('Bearer ', '');
-        const { data: userData, error: userError } = await supabase.auth.getUser(token);
-        
-        if (userError || !userData?.user) {
-            return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-        }
 
         // 1. Generate Cryptographic Hash of the document text
         const documentHash = await generateHash(documentText);
