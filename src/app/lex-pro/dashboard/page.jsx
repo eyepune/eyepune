@@ -6,8 +6,10 @@ import { FileText, ShieldAlert, CheckCircle2, Clock, Plus, ArrowUpRight, Loader2
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
+import { useRouter } from 'next/navigation';
 
 export default function LexProDashboard() {
+    const router = useRouter();
     const [recentContracts, setRecentContracts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [dbError, setDbError] = useState('');
@@ -125,7 +127,11 @@ export default function LexProDashboard() {
                                     // For MVP, if risk_score isn't set, default to Pending
                                     const risk = contract.risk_score ? (contract.risk_score < 40 ? 'High' : contract.risk_score < 70 ? 'Medium' : 'Low') : 'Pending';
                                     return (
-                                    <tr key={contract.id || i} className="hover:bg-white/[0.02] transition-colors group cursor-pointer">
+                                    <tr 
+                                        key={contract.id || i} 
+                                        className="hover:bg-white/[0.02] transition-colors group cursor-pointer"
+                                        onClick={() => router.push(`/lex-pro/draft?id=${contract.id}`)}
+                                    >
                                         <td className="px-6 py-4 font-medium text-gray-200 group-hover:text-orange-300 transition-colors">
                                             {contract.title}
                                         </td>

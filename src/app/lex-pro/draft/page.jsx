@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Wand2, ArrowRight, Loader2, Save, Download } from 'lucide-react';
+import { FileText, Wand2, ArrowRight, Loader2, Save, Download, Link as LinkIcon, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { jsPDF } from 'jspdf';
 import { createBrowserClient } from '@supabase/ssr';
+import { useSearchParams } from 'next/navigation';
 
 const contractSchema = {
     nda: [
@@ -90,6 +91,35 @@ export default function LexProDrafting() {
     const [savedContractId, setSavedContractId] = useState(null);
     const [auditTrails, setAuditTrails] = useState([]);
     const [isSigning, setIsSigning] = useState(false);
+    const [isCopied, setIsCopied] = useState(false);
+
+    const searchParams = useSearchParams();
+    const contractIdParam = searchParams.get('id');
+
+    useEffect(() => {
+        if (contractIdParam) {
+            const fetchContract = async () => {
+                try {
+                    const response = await fetch(`/api/lex-pro/contracts/${contractIdParam}`);
+                    const data = await response.json();
+                    if (data.success) {
+                        setGeneratedDraft(data.contract.content);
+                        setSavedContractId(data.contract.id);
+                        setAuditTrails(data.auditTrails || []);
+                        setFormData(prev => ({ 
+                            ...prev, 
+                            contractType: data.contract.contract_type,
+                            signatureType: 'Digital Audit Trail' // Default to this if loading to view signatures
+                        }));
+                        setShowCanvas(true);
+                    }
+                } catch (err) {
+                    console.error("Failed to load contract", err);
+                }
+            };
+            fetchContract();
+        }
+    }, [contractIdParam]);
 
     const [formData, setFormData] = useState({
         contractType: 'nda',
@@ -313,6 +343,14 @@ Signature Method: ${formData.signatureType}
         }
         
         doc.save(`LexPro_${formData.contractType}_Draft.pdf`);
+    };
+
+    const handleCopyShareLink = () => {
+        if (!savedContractId) return;
+        const url = `${window.location.origin}/lex-pro/sign/${savedContractId}`;
+        navigator.clipboard.writeText(url);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000);
     };
 
     return (
@@ -568,6 +606,14 @@ Signature Method: ${formData.signatureType}
                                 </Button>
                                 {formData.signatureType === 'Digital Audit Trail' && savedContractId && (
                                     <div className="flex gap-2">
+                                        <Button 
+                                            onClick={handleCopyShareLink}
+                                            variant="outline"
+                                            className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                                        >
+                                            {isCopied ? <Check className="w-4 h-4 mr-2 text-green-400" /> : <LinkIcon className="w-4 h-4 mr-2" />}
+                                            {isCopied ? 'Copied!' : 'Copy Share Link'}
+                                        </Button>
                                         <Button 
                                             onClick={() => handleSignDocument(formData.partyA || 'Party A')} 
                                             disabled={isSigning || auditTrails.some(t => t.party_name === (formData.partyA || 'Party A'))} 
