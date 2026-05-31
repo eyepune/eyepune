@@ -23,7 +23,7 @@ export async function GET(request) {
             .eq('status', 'draft')
             .order('scheduled_for', { ascending: true })
             .limit(1)
-            .single();
+            .maybeSingle();
 
         let postContent = "";
 
@@ -44,16 +44,16 @@ export async function GET(request) {
         // 3. Post to LinkedIn Official API
         // You will need to add these to your Vercel Environment Variables
         const LINKEDIN_ACCESS_TOKEN = process.env.LINKEDIN_ACCESS_TOKEN;
-        const LINKEDIN_COMPANY_URN = process.env.LINKEDIN_COMPANY_URN; // e.g., urn:li:organization:123456
+        const LINKEDIN_AUTHOR_URN = process.env.LINKEDIN_PERSON_URN || process.env.LINKEDIN_COMPANY_URN;
 
-        if (!LINKEDIN_ACCESS_TOKEN || !LINKEDIN_COMPANY_URN) {
+        if (!LINKEDIN_ACCESS_TOKEN || !LINKEDIN_AUTHOR_URN) {
             console.log("⚠️ Missing LinkedIn API Keys. Skipping actual post.");
             return NextResponse.json({ error: 'Missing LinkedIn API keys in .env' }, { status: 500 });
         }
 
         const linkedinUrl = 'https://api.linkedin.com/v2/ugcPosts';
         const postData = {
-            author: LINKEDIN_COMPANY_URN,
+            author: LINKEDIN_AUTHOR_URN,
             lifecycleState: 'PUBLISHED',
             specificContent: {
                 'com.linkedin.ugc.ShareContent': {

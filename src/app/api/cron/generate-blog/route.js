@@ -35,18 +35,24 @@ export async function POST(request) {
         
         const selectedTopic = topics[Math.floor(Math.random() * topics.length)];
 
-        // Generate the Blog Content via internal fetch to our LLM route
-        const host = request.headers.get('host');
-        const protocol = host?.includes('localhost') ? 'http' : 'https';
+        // Generate the Blog Content via direct NVIDIA API to avoid self-fetch timeouts
+        const LLM_API_URL = process.env.LLM_API_URL || 'https://integrate.api.nvidia.com/v1/chat/completions';
+        const LLM_API_KEY = process.env.LLM_API_KEY || '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';
         
-        const llmResponse = await fetch(`${protocol}://${host}/api/llm`, {
+        const llmResponse = await fetch(LLM_API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${LLM_API_KEY}`
+            },
             body: JSON.stringify({
                 model: 'meta/llama-3.1-8b-instruct',
-                prompt: `You are an elite digital marketing and AI growth consultant writing for the EyE PunE agency blog. 
+                messages: [{
+                    role: 'user',
+                    content: `You are an elite digital marketing and AI growth consultant writing for the EyE PunE agency blog. 
 Write a highly engaging, SEO-optimized, comprehensive 800-word blog post about "${selectedTopic}". 
-Format it strictly in Markdown. Do not include any generic intros or outros like "Here is the post". Just output the raw Markdown content starting with the Title as an H1. Include subheadings (H2, H3) and bullet points. End with a strong call to action to book a free AI assessment at eyepune.com.`,
+Format it strictly in Markdown. Do not include any generic intros or outros like "Here is the post". Just output the raw Markdown content starting with the Title as an H1. Include subheadings (H2, H3) and bullet points. End with a strong call to action to book a free AI assessment at eyepune.com.`
+                }],
                 temperature: 0.7,
                 max_tokens: 3000
             })
@@ -56,7 +62,8 @@ Format it strictly in Markdown. Do not include any generic intros or outros like
             throw new Error(`LLM API failed: ${llmResponse.statusText}`);
         }
 
-        const { content: rawMarkdown } = await llmResponse.json();
+        const llmData = await llmResponse.json();
+        const rawMarkdown = llmData.choices?.[0]?.message?.content || '';
 
         // Extract title from first H1
         const titleMatch = rawMarkdown.match(/^#\s+(.+)$/m);
