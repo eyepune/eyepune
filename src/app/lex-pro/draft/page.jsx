@@ -102,6 +102,7 @@ export default function LexProDrafting() {
         partyBIdentifier: '',
         effectiveDate: '',
         signatureType: 'E-Signature',
+        printFormat: 'Standard A4',
         jurisdiction: 'Maharashtra',
         governingLaw: 'Indian Contract Act, 1872',
         additionalTerms: ''
@@ -216,22 +217,32 @@ Signature Method: ${formData.signatureType}
         
         doc.setFont("times", "normal");
         
-        // Add a title header
-        doc.setFontSize(16);
-        doc.setFont("times", "bold");
-        doc.text(`EyE PunE Legal - ${formData.contractType.toUpperCase()} Draft`, 105, 20, null, null, "center");
+        let y = 20;
+        
+        if (formData.printFormat === 'Standard A4') {
+            doc.setFontSize(16);
+            doc.setFont("times", "bold");
+            doc.text(`EyE PunE Legal - ${formData.contractType.toUpperCase()} Draft`, 105, 20, null, null, "center");
+            y = 35;
+        } else if (formData.printFormat === 'Company Letterhead') {
+            y = 50; // 50mm top margin for branding
+        } else if (formData.printFormat === 'Indian Stamp Paper') {
+            y = 120; // 120mm top margin for physical stamp
+        }
         
         doc.setFontSize(12);
         doc.setFont("times", "normal");
         
         // Split text to fit page width (approx 170mm out of 210mm A4)
         const lines = doc.splitTextToSize(generatedDraft, 170);
-        let y = 35;
+        
+        let bottomMarginLimit = formData.printFormat === 'Company Letterhead' ? 245 : 280;
+        let defaultTopMargin = formData.printFormat === 'Company Letterhead' ? 50 : 20;
         
         for (let i = 0; i < lines.length; i++) {
-            if (y > 280) { // If near bottom of A4 page
+            if (y > bottomMarginLimit) { 
                 doc.addPage();
-                y = 20; // reset y for new page
+                y = defaultTopMargin; 
             }
             doc.text(lines[i], 20, y);
             y += 7; // line spacing
@@ -373,7 +384,20 @@ Signature Method: ${formData.signatureType}
                             </select>
                         </div>
                     </div>
-
+                    
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">Print Layout Format</label>
+                        <select 
+                            name="printFormat" 
+                            value={formData.printFormat} 
+                            onChange={handleInputChange}
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                        >
+                            <option value="Standard A4">Standard A4 (Default Margins)</option>
+                            <option value="Company Letterhead">Company Letterhead (Large Header/Footer Margins)</option>
+                            <option value="Indian Stamp Paper">Indian Stamp Paper (Massive First Page Margin)</option>
+                        </select>
+                    </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
