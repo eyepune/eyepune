@@ -10,9 +10,9 @@ export default function LexProLandingPage() {
     return (
         <div className="min-h-screen bg-black text-gray-100 font-sans overflow-x-hidden selection:bg-orange-500/30 selection:text-orange-200">
             {/* Background ambient effects */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-orange-600/10 rounded-full blur-[120px] mix-blend-screen" />
-                <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[100px] mix-blend-screen" />
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
+                <div className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-600/10 via-black/0 to-black/0 rounded-full" />
+                <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-600/10 via-black/0 to-black/0 rounded-full" />
             </div>
 
             {/* Navigation */}
