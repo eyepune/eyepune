@@ -104,7 +104,7 @@ export default function RecentInsights() {
                                     </div>
                                     
                                     <div className="flex items-center gap-3 text-[10px] font-bold tracking-widest text-gray-500 uppercase mb-4">
-                                        <span className="text-red-500">{post.category?.replace('_', ' ') || 'Insight'}</span>
+                                        <span className="text-red-400">{post.category?.replace('_', ' ') || 'Insight'}</span>
                                         <span>•</span>
                                         <span>{formatDate(post.published_date)}</span>
                                     </div>
@@ -113,16 +113,16 @@ export default function RecentInsights() {
                                         {post.title}
                                     </h3>
                                     
-                                    <p className="text-gray-400 text-sm line-clamp-3 mb-6 flex-1 leading-relaxed">
+                                    <p className="text-gray-300 text-sm line-clamp-3 mb-6 flex-1 leading-relaxed">
                                         {post.excerpt}
                                     </p>
                                     
                                     <div className="flex items-center justify-between pt-4 border-t border-white/[0.05] mt-auto">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 rounded-full bg-red-950 flex items-center justify-center text-[10px] font-black text-red-500 border border-red-500/30">E</div>
-                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{post.author || 'EyE PunE'}</span>
+                                            <div className="w-6 h-6 rounded-full bg-red-950 flex items-center justify-center text-[10px] font-black text-red-400 border border-red-500/30">E</div>
+                                            <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">{post.author || 'EyE PunE'}</span>
                                         </div>
-                                        <div className="text-[10px] uppercase tracking-wider text-red-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="text-[10px] uppercase tracking-wider text-red-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
                                             Read More
                                         </div>
                                     </div>

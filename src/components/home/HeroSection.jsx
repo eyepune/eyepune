@@ -141,7 +141,7 @@ export default function HeroSection() {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-900/30 border border-rose-900/50 text-rose-300 text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md"
+                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-900/80 border border-rose-900/50 text-rose-200 text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md"
                         >
                             <Sparkles className="w-3 h-3" />
                             Global Growth Engine
@@ -173,7 +173,7 @@ export default function HeroSection() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 1, delay: 0.8 }}
-                            className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed"
+                            className="text-xl text-gray-300 mb-10 max-w-xl leading-relaxed drop-shadow-md"
                         >
                             We empower Founders, Creators, and Global Startups with Multi-Model AI automation and elite marketing systems. Leveraging the power of OpenAI, Anthropic, and Google Gemini.
                         </motion.p>
@@ -211,7 +211,7 @@ export default function HeroSection() {
                                     </Link>
                                 </div>
                             </div>
-                            <p className="text-[11px] text-gray-600 mt-4 ml-6 uppercase tracking-widest flex items-center gap-2">
+                            <p className="text-[11px] text-gray-400 mt-4 ml-6 uppercase tracking-widest flex items-center gap-2">
                                 <Zap className="w-3 h-3 text-rose-500" />
                                 Instant Global Analysis · No Credit Card Required
                             </p>
@@ -221,22 +221,22 @@ export default function HeroSection() {
                         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 border-t border-white/10 pt-8 mt-4 w-full">
                             <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">50+</span>
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Global Brands</span>
+                                <span className="text-[10px] text-gray-300 uppercase tracking-widest mt-1">Global Brands</span>
                             </div>
                             <div className="hidden sm:block w-px h-8 bg-white/10" />
                             <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">10+</span>
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Countries</span>
+                                <span className="text-[10px] text-gray-300 uppercase tracking-widest mt-1">Countries</span>
                             </div>
                             <div className="hidden md:block w-px h-8 bg-white/10" />
                             <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">5X</span>
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Avg ROI</span>
+                                <span className="text-[10px] text-gray-300 uppercase tracking-widest mt-1">Avg ROI</span>
                             </div>
                             <div className="hidden sm:block w-px h-8 bg-white/10" />
                             <div className="flex flex-col items-center min-w-[100px]">
                                 <span className="text-3xl font-black text-white drop-shadow-md">NVIDIA</span>
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Accelerated</span>
+                                <span className="text-[10px] text-gray-300 uppercase tracking-widest mt-1">Accelerated</span>
                             </div>
                         </div>
                     </motion.div>

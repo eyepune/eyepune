@@ -64,7 +64,7 @@ export default function ServicesSection() {
                                     <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 to-transparent opacity-0 group-hover:opacity-[0.04] transition-opacity rounded-xl" />
 
                                     {/* Tag - hidden on mobile */}
-                                    <span className="hidden sm:block text-red-500/30 group-hover:text-red-500/60 font-black text-xl w-12 flex-shrink-0 transition-colors">{s.tag}</span>
+                                    <span className="hidden sm:block text-red-400/60 group-hover:text-red-400 font-black text-xl w-12 flex-shrink-0 transition-colors">{s.tag}</span>
 
                                     {/* Icon */}
                                     <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-white/[0.03] border border-white/[0.06] group-hover:border-red-500/30 group-hover:bg-red-500/10 transition-all">
