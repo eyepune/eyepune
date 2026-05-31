@@ -369,12 +369,12 @@ function LayoutContent({ children, currentPageName }) {
                     />
 
                     {/* Newsletter Capture Section for Content Marketing Strategy */}
-                    <div className="border-b border-white/[0.06] bg-black/40 backdrop-blur-md">
+                    <div className="border-b border-white/[0.06] bg-black/90 backdrop-blur-xl">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
                             <div className="grid md:grid-cols-2 gap-8 items-center">
                                 <div className="text-center md:text-left flex flex-col items-center md:items-start">
-                                    <h3 className="text-2xl md:text-3xl font-black mb-3 text-white">Join the Growth Insider</h3>
-                                    <p className="text-gray-300 text-sm md:text-base max-w-md">
+                                    <h2 className="text-2xl md:text-3xl font-black mb-3 text-white">Join the Growth Insider</h2>
+                                    <p className="text-gray-200 text-sm md:text-base max-w-md">
                                         Get exclusive AI automation strategies, SEO tips, and marketing funnels delivered straight to your inbox weekly.
                                     </p>
                                 </div>
@@ -382,7 +382,8 @@ function LayoutContent({ children, currentPageName }) {
                                     <input 
                                         type="email" 
                                         placeholder="Enter your email address" 
-                                        className="flex-1 bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500/50 transition-colors text-center sm:text-left"
+                                        aria-label="Email address for newsletter"
+                                        className="flex-1 bg-white/[0.05] border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-red-500/80 transition-colors text-center sm:text-left"
                                         required
                                     />
                                     <Button type="submit" className="bg-red-600 hover:bg-red-500 text-white px-6 py-3 h-auto rounded-xl font-bold transition-all w-full sm:w-auto">
@@ -398,9 +399,9 @@ function LayoutContent({ children, currentPageName }) {
 
                             {/* Brand col */}
                             <div className="sm:col-span-2 lg:col-span-2 flex flex-col items-center sm:items-start">
-                                <Link href={createPageUrl("Home")} className="flex-shrink-0 flex flex-col items-center justify-center mb-5">
+                                <Link href={createPageUrl("Home")} className="flex-shrink-0 flex flex-col items-center justify-center mb-5" aria-label="EyE PunE Home">
                                     <Logo variant="dark" size="sm" />
-                                    <span className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase text-red-500 font-bold mt-1 text-center ml-2">Connect · Engage · Grow</span>
+                                    <span className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase text-red-400 font-bold mt-1 text-center ml-2">Connect · Engage · Grow</span>
                                 </Link>
                                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
                                     Recognized among the <strong>Top Digital Marketing Agencies in India</strong>. Pune-based all-in-one growth partner serving elite clients across the globe.

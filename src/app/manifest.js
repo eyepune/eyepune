@@ -10,15 +10,15 @@ export default function Manifest() {
     orientation: 'portrait',
     icons: [
       {
-        src: '/icon.png',
-        sizes: '192x192',
-        type: 'image/png',
+        src: '/logo.svg',
+        sizes: 'any',
+        type: 'image/svg+xml',
         purpose: 'any',
       },
       {
-        src: '/icon.png',
-        sizes: '512x512',
-        type: 'image/png',
+        src: '/logo.svg',
+        sizes: 'any',
+        type: 'image/svg+xml',
         purpose: 'maskable',
       },
     ],

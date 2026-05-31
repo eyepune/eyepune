@@ -59,8 +59,8 @@ export default function AIO_FAQ() {
                                 transition={{ delay: i * 0.08 }}
                                 className={`rounded-[24px] border transition-all duration-300 overflow-hidden ${
                                     isOpen 
-                                        ? 'bg-white/[0.03] border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]' 
-                                        : 'bg-white/[0.015] border-white/5 hover:border-white/10 hover:bg-white/[0.025]'
+                                        ? 'bg-white/[0.03] border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.1)] scale-[1.02]' 
+                                        : 'bg-white/[0.015] border-white/5 hover:border-white/10 hover:bg-white/[0.025] hover:scale-[1.01]'
                                 }`}
                             >
                                 <button

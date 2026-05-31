@@ -128,34 +128,48 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
 
         if (!authorUrn) throw new Error('Could not resolve LinkedIn Author URN. Make sure your profile token is active.');
 
-        // 4. Publish to LinkedIn
+        // 4. Publish to LinkedIn with Retry Logic
         console.log(`[LinkedIn-Automation] Publishing post content to LinkedIn for author ${authorUrn}...`);
-        const publishRes = await fetch('https://api.linkedin.com/v2/ugcPosts', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'X-Restli-Protocol-Version': '2.0.0'
-            },
-            body: JSON.stringify({
-                author: authorUrn,
-                lifecycleState: "PUBLISHED",
-                specificContent: {
-                    "com.linkedin.ugc.ShareContent": {
-                        shareCommentary: { text: postContent },
-                        shareMediaCategory: "NONE"
-                    }
-                },
-                visibility: {
-                    "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
-                }
-            })
-        });
-
-        const publishText = await publishRes.text();
-        let publishData = {};
-        try { publishData = JSON.parse(publishText); } catch(e) {}
         
+        let publishRes;
+        let publishText;
+        let publishData = {};
+        const maxRetries = 3;
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            publishRes = await fetch('https://api.linkedin.com/v2/ugcPosts', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'X-Restli-Protocol-Version': '2.0.0'
+                },
+                body: JSON.stringify({
+                    author: authorUrn,
+                    lifecycleState: "PUBLISHED",
+                    specificContent: {
+                        "com.linkedin.ugc.ShareContent": {
+                            shareCommentary: { text: postContent },
+                            shareMediaCategory: "NONE"
+                        }
+                    },
+                    visibility: {
+                        "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+                    }
+                })
+            });
+
+            publishText = await publishRes.text();
+            try { publishData = JSON.parse(publishText); } catch(e) { publishData = {}; }
+            
+            if (publishRes.ok) break; // Success, exit retry loop
+            
+            if (attempt < maxRetries) {
+                console.warn(`[LinkedIn-Automation] Publish attempt ${attempt} failed: ${publishRes.status}. Retrying in 2 seconds...`);
+                await new Promise(resolve => setTimeout(resolve, 2000)); // wait 2 seconds before retry
+            }
+        }
+
         if (!publishRes.ok) {
             const errStr = publishData.message || publishText || 'LinkedIn UGC API rejected share request.';
             throw new Error(`LinkedIn API Error (${publishRes.status}): ${errStr.substring(0, 200)}`);
@@ -207,7 +221,7 @@ Run a Free AI Assessment at eyepune.com/AI-Assessment
 
 Most growth teams take hours to qualify and follow up with hot leads. By then, the prospect's interest has already decayed.
 
-Elite growth networks use multi-model AI architectures. A prospect fills out an assessment, specialized agents score it instantly,中央 CRM is synchronized, and custom roadmaps are delivered to their WhatsApp in under 3 minutes.
+Elite growth networks use multi-model AI architectures. A prospect fills out an assessment, specialized agents score it instantly, Central CRM is synchronized, and custom roadmaps are delivered to their WhatsApp in under 3 minutes.
 
 Scale your acquisitions, minimize friction, and let software handle the high-effort, low-value pipelines.
 

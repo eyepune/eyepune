@@ -56,27 +56,40 @@ export default function GlobalCanvas() {
                     transition={{ duration: 1 }}
                     className="fixed inset-0 pointer-events-none z-[-100] overflow-hidden"
                 >
-                    {ICONS.map((item, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0 }}
-                            animate={{ 
-                                opacity: 0.5, // Updated to 50% opacity
-                                y: [0, -30, 0],
-                                rotate: [0, 15, -15, 0]
-                            }}
-                            transition={{ 
-                                duration: 12 + Math.random() * 8, 
-                                repeat: Infinity, 
-                                ease: "easeInOut",
-                                delay: item.delay
-                            }}
-                            className="absolute text-red-600"
-                            style={{ left: item.x, top: item.y }}
-                        >
-                            <item.Icon className="w-12 h-12 md:w-24 md:h-24 opacity-100" strokeWidth={0.2} />
-                        </motion.div>
-                    ))}
+                    {ICONS.map((item, i) => {
+                        // Generate a deterministic pseudo-random depth factor based on index
+                        const depth = 1 + (i % 3) * 0.5; // 1.0, 1.5, 2.0
+                        const scale = 1 / depth; 
+                        const blur = depth > 1.5 ? 'blur(4px)' : depth > 1.0 ? 'blur(2px)' : 'none';
+                        const opacityBase = depth > 1.5 ? 0.2 : depth > 1.0 ? 0.35 : 0.6;
+                        
+                        return (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0 }}
+                                animate={{ 
+                                    opacity: opacityBase,
+                                    y: [0, -40 / depth, 0],
+                                    rotate: [0, 15 / depth, -15 / depth, 0]
+                                }}
+                                transition={{ 
+                                    duration: (12 + (i % 5) * 2) * depth, 
+                                    repeat: Infinity, 
+                                    ease: "easeInOut",
+                                    delay: item.delay
+                                }}
+                                className="absolute text-red-600"
+                                style={{ 
+                                    left: item.x, 
+                                    top: item.y,
+                                    filter: blur,
+                                    transform: `scale(${scale})`
+                                }}
+                            >
+                                <item.Icon className="w-12 h-12 md:w-24 md:h-24 opacity-100" strokeWidth={0.2} />
+                            </motion.div>
+                        );
+                    })}
                 </motion.div>
             )}
         </AnimatePresence>

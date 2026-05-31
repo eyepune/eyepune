@@ -240,16 +240,16 @@ export default function Contact() {
                                     <h3 className="text-lg font-bold text-white mb-5">Follow Us</h3>
                                     <div className="flex gap-3">
                                         {[
-                                            { label: 'Instagram', tag: 'IG', href: 'https://instagram.com/eyepune' },
-                                            { label: 'LinkedIn', tag: 'LI', href: 'https://linkedin.com/company/eyepune' },
-                                            { label: 'WhatsApp', tag: 'WA', href: 'https://wa.me/919284712033' },
+                                            { label: 'Instagram', icon: Instagram, href: 'https://instagram.com/eyepune' },
+                                            { label: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/eyepune' },
+                                            { label: 'WhatsApp', icon: MessageCircle, href: 'https://wa.me/919284712033' },
                                         ].map((s, i) => (
                                             <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                                                 whileHover={{ y: -3 }}
-                                                className="flex flex-col items-center gap-1.5 flex-1 py-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.05] transition-all"
+                                                className="flex flex-col items-center gap-1.5 flex-1 py-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-red-500/30 hover:bg-red-500/[0.05] transition-all group/social"
                                             >
-                                                <span className="font-black text-gray-400 hover:text-red-400 text-xs">{s.tag}</span>
-                                                <span className="text-gray-600 text-xs">{s.label}</span>
+                                                <s.icon className="w-5 h-5 text-gray-400 group-hover/social:text-red-400 mb-1 transition-colors" />
+                                                <span className="text-gray-600 text-[11px] uppercase tracking-wider group-hover/social:text-gray-300 transition-colors">{s.label}</span>
                                             </motion.a>
                                         ))}
                                     </div>

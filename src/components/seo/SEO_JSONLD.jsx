@@ -8,7 +8,7 @@ import React from 'react';
 export default function SEO_JSONLD() {
     const businessSchema = {
         "@context": "https://schema.org",
-        "@type": "Organization",
+        "@type": "ProfessionalService",
         "name": "EyE PunE",
         "alternateName": ["EyePune", "EyEPunE", "Eye Pune"],
         "url": "https://www.eyepune.com",
@@ -23,6 +23,11 @@ export default function SEO_JSONLD() {
             "addressRegion": "Maharashtra",
             "postalCode": "411045",
             "addressCountry": "IN"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 18.5590,
+            "longitude": 73.7868
         },
         "sameAs": [
             "https://www.facebook.com/eyepune",

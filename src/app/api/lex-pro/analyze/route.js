@@ -92,7 +92,7 @@ Provide 3 to 5 key clauses in the "clauses" array. Do NOT wrap the JSON in Markd
 
 Contract Text to Analyze:
 """
-${contractText.substring(0, 8000)} // Truncating to avoid token limits
+${contractText.substring(0, 80000)} // Increased limit (Llama 3.1 supports up to 128k tokens)
 """`;
 
         const llmResponse = await fetch(LLM_API_URL, {

@@ -108,6 +108,9 @@ export default function ExitIntentPopup() {
                         exit={{ scale: 0.85, y: 30, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 250, damping: 25 }}
                         onClick={(e) => e.stopPropagation()}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="exit-popup-title"
                         className="relative bg-[#0a0a0a] border border-white/[0.08] rounded-3xl p-8 max-w-md w-full shadow-2xl overflow-hidden"
                     >
                         {/* Background glow */}
@@ -125,7 +128,7 @@ export default function ExitIntentPopup() {
                                     <Bot className="w-6 h-6 text-white" />
                                 </div>
 
-                                <h2 className="text-2xl font-black text-white mb-2">{popupTitle}</h2>
+                                <h2 id="exit-popup-title" className="text-2xl font-black text-white mb-2">{popupTitle}</h2>
                                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                                     {popupSubtext}
                                 </p>
@@ -147,6 +150,7 @@ export default function ExitIntentPopup() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="Enter your email address"
+                                        aria-label="Email Address"
                                         required
                                         className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-red-500/40 transition-colors"
                                     />
