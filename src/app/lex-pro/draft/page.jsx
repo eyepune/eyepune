@@ -84,6 +84,7 @@ const contractSchema = {
 export default function LexProDrafting() {
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [showCanvas, setShowCanvas] = useState(false);
     const [generatedDraft, setGeneratedDraft] = useState('');
     const [dynamicAnswers, setDynamicAnswers] = useState({});
 
@@ -120,6 +121,7 @@ export default function LexProDrafting() {
 
     const generateDraft = async () => {
         setIsGenerating(true);
+        setShowCanvas(true);
         try {
             // Combine dynamic answers with form data
             const dynamicFields = contractSchema[formData.contractType] || [];
@@ -239,10 +241,11 @@ Signature Method: ${formData.signatureType}
     };
 
     return (
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 h-[calc(100vh-8rem)]">
+        <div className="max-w-7xl mx-auto h-[calc(100vh-8rem)]">
             
-            {/* Left: Input Form */}
-            <div className="w-full lg:w-1/3 flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+            {!showCanvas ? (
+            {/* Input Form */}
+            <div className="w-full max-w-3xl mx-auto flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl animate-in fade-in duration-300">
                 <div className="p-6 border-b border-white/10 bg-black/20">
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
                         <Wand2 className="w-5 h-5 text-orange-400" />
@@ -445,13 +448,22 @@ Signature Method: ${formData.signatureType}
                     </Button>
                 </div>
             </div>
+            ) : (
 
-            {/* Right: Output/Editor Area */}
-            <div className="w-full lg:w-2/3 flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl relative">
+            {/* Output/Editor Area */}
+            <div className="w-full flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl relative animate-in fade-in zoom-in-95 duration-300">
                 
                 {/* Editor Toolbar */}
                 <div className="h-16 border-b border-white/10 bg-black/20 flex items-center justify-between px-6">
                     <div className="flex items-center gap-3">
+                        <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => setShowCanvas(false)}
+                            className="text-gray-400 hover:text-white mr-4 hover:bg-white/5"
+                        >
+                            ← Back
+                        </Button>
                         <FileText className="w-5 h-5 text-gray-400" />
                         <span className="font-medium text-gray-200">
                             {generatedDraft ? 'Generated Draft - ' + (formData.contractType === 'nda' ? 'NDA' : formData.contractType) : 'Editor Canvas'}
@@ -521,6 +533,7 @@ Signature Method: ${formData.signatureType}
                     )}
                 </div>
             </div>
+            )}
             
         </div>
     );
