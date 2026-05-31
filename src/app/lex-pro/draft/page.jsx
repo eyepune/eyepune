@@ -1,0 +1,432 @@
+"use client";
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FileText, Wand2, ArrowRight, Loader2, Save, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { jsPDF } from 'jspdf';
+import { createBrowserClient } from '@supabase/ssr';
+
+const contractSchema = {
+    nda: [
+        { id: 'purpose', label: 'Purpose of NDA', placeholder: 'e.g., Software Evaluation' },
+        { id: 'duration', label: 'Duration of Confidentiality', placeholder: 'e.g., 3 Years' }
+    ],
+    employment: [
+        { id: 'role', label: 'Job Title / Role', placeholder: 'e.g., Senior Developer' },
+        { id: 'salary', label: 'Annual Compensation', placeholder: 'e.g., INR 12,00,000' },
+        { id: 'probation', label: 'Probation Period', placeholder: 'e.g., 6 Months' },
+        { id: 'notice', label: 'Notice Period', placeholder: 'e.g., 60 Days' }
+    ],
+    service: [
+        { id: 'scope', label: 'Scope of Services', placeholder: 'e.g., Marketing and SEO' },
+        { id: 'paymentTerms', label: 'Payment Terms', placeholder: 'e.g., Net 30' }
+    ],
+    freelance: [
+        { id: 'deliverables', label: 'Specific Deliverables', placeholder: 'e.g., 5 articles per month' },
+        { id: 'fee', label: 'Consulting Fee', placeholder: 'e.g., INR 50,000 / month' }
+    ],
+    consulting: [
+        { id: 'services', label: 'Consulting Services', placeholder: 'e.g., Financial Auditing' },
+        { id: 'retainer', label: 'Retainer Amount', placeholder: 'e.g., INR 1,00,000 / month' }
+    ],
+    founders: [
+        { id: 'equity', label: 'Equity Split (%)', placeholder: 'e.g., 50/50' },
+        { id: 'vesting', label: 'Vesting Schedule', placeholder: 'e.g., 4 years with 1 year cliff' },
+        { id: 'roles', label: 'Founder Roles', placeholder: 'e.g., CEO and CTO' }
+    ],
+    shareholders: [
+        { id: 'boardSeats', label: 'Board Seats Allocation', placeholder: 'e.g., 2 for Investors, 3 for Founders' },
+        { id: 'lockIn', label: 'Founder Lock-in Period', placeholder: 'e.g., 3 Years' }
+    ],
+    partnership: [
+        { id: 'capital', label: 'Capital Contribution', placeholder: 'e.g., INR 5 Lakhs each' },
+        { id: 'profitShare', label: 'Profit/Loss Sharing Ratio', placeholder: 'e.g., 60:40' }
+    ],
+    joint_venture: [
+        { id: 'jvPurpose', label: 'Purpose of Joint Venture', placeholder: 'e.g., Real Estate Development' },
+        { id: 'ownership', label: 'Ownership Structure', placeholder: 'e.g., 51% Party A, 49% Party B' }
+    ],
+    mou: [
+        { id: 'intention', label: 'Primary Intention', placeholder: 'e.g., Explore Merger Opportunities' },
+        { id: 'validity', label: 'MoU Validity Period', placeholder: 'e.g., 6 Months' }
+    ],
+    saas: [
+        { id: 'subscription', label: 'Subscription Plan / Tier', placeholder: 'e.g., Enterprise Tier' },
+        { id: 'users', label: 'Number of Permitted Users', placeholder: 'e.g., Up to 50' },
+        { id: 'uptime', label: 'SLA Uptime Guarantee', placeholder: 'e.g., 99.9%' }
+    ],
+    terms: [
+        { id: 'websiteURL', label: 'Website/App URL', placeholder: 'e.g., https://eyepune.com' },
+        { id: 'userType', label: 'Target Audience', placeholder: 'e.g., B2B Businesses' }
+    ],
+    lease: [
+        { id: 'property', label: 'Property Address', placeholder: 'e.g., 101 Tech Park, Pune' },
+        { id: 'rent', label: 'Monthly Rent', placeholder: 'e.g., INR 1,50,000' },
+        { id: 'deposit', label: 'Security Deposit', placeholder: 'e.g., 6 Months Rent' },
+        { id: 'lockInLease', label: 'Lock-in Period', placeholder: 'e.g., 3 Years' }
+    ],
+    rent: [
+        { id: 'propertyRent', label: 'Property Address', placeholder: 'e.g., Flat 202, ABC Tower' },
+        { id: 'rentAmount', label: 'Monthly Rent', placeholder: 'e.g., INR 25,000' },
+        { id: 'depositAmount', label: 'Security Deposit', placeholder: 'e.g., INR 1,00,000' }
+    ],
+    vendor: [
+        { id: 'goods', label: 'Goods/Services Provided', placeholder: 'e.g., Office Supplies' },
+        { id: 'delivery', label: 'Delivery Terms', placeholder: 'e.g., Within 7 days of PO' }
+    ],
+    franchise: [
+        { id: 'territory', label: 'Exclusive Territory', placeholder: 'e.g., Pune District' },
+        { id: 'royalty', label: 'Royalty Fee (%)', placeholder: 'e.g., 5% of Gross Sales' }
+    ]
+};
+
+export default function LexProDrafting() {
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [generatedDraft, setGeneratedDraft] = useState('');
+    const [dynamicAnswers, setDynamicAnswers] = useState({});
+
+    const [formData, setFormData] = useState({
+        contractType: 'nda',
+        partyA: '',
+        partyB: '',
+        jurisdiction: 'Maharashtra',
+        governingLaw: 'Indian Contract Act, 1872',
+        additionalTerms: ''
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'contractType') {
+            setDynamicAnswers({}); // Reset dynamic answers when type changes
+        }
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleDynamicChange = (id, value) => {
+        setDynamicAnswers(prev => ({ ...prev, [id]: value }));
+    };
+
+    const generateDraft = async () => {
+        setIsGenerating(true);
+        try {
+            // Combine dynamic answers with form data
+            const dynamicFields = contractSchema[formData.contractType] || [];
+            const formattedDynamicAnswers = dynamicFields.map(field => `${field.label}: ${dynamicAnswers[field.id] || 'Not specified'}`).join('\n');
+            
+            const payload = {
+                ...formData,
+                additionalTerms: `${formData.additionalTerms}\n\nSpecific Details:\n${formattedDynamicAnswers}`
+            };
+
+            const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+            );
+            const { data: { session } } = await supabase.auth.getSession();
+
+            const response = await fetch('/api/lex-pro/draft', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+                },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                setGeneratedDraft(data.draft);
+            } else {
+                setGeneratedDraft(`Error generating draft: ${data.error}`);
+            }
+        } catch (error) {
+            setGeneratedDraft(`Failed to reach AI service: ${error.message}`);
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
+    const handleSaveDraft = async () => {
+        if (!generatedDraft) return;
+        setIsSaving(true);
+        try {
+            const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+            );
+            const { data: { session } } = await supabase.auth.getSession();
+
+            const response = await fetch('/api/lex-pro/save-draft', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+                },
+                body: JSON.stringify({
+                    title: `${formData.contractType.toUpperCase()} - ${formData.partyA || 'Party A'} & ${formData.partyB || 'Party B'}`,
+                    contractType: formData.contractType,
+                    content: generatedDraft
+                })
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert('Draft saved successfully to your organization workspace!');
+            } else {
+                alert(`Error saving draft: ${data.error}`);
+            }
+        } catch (error) {
+            alert(`Network error saving draft: ${error.message}`);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleExportPDF = () => {
+        if (!generatedDraft) return;
+        const doc = new jsPDF();
+        
+        doc.setFont("times", "normal");
+        
+        // Add a title header
+        doc.setFontSize(16);
+        doc.setFont("times", "bold");
+        doc.text(`EyE PunE Legal - ${formData.contractType.toUpperCase()} Draft`, 105, 20, null, null, "center");
+        
+        doc.setFontSize(12);
+        doc.setFont("times", "normal");
+        
+        // Split text to fit page width (approx 170mm out of 210mm A4)
+        const lines = doc.splitTextToSize(generatedDraft, 170);
+        let y = 35;
+        
+        for (let i = 0; i < lines.length; i++) {
+            if (y > 280) { // If near bottom of A4 page
+                doc.addPage();
+                y = 20; // reset y for new page
+            }
+            doc.text(lines[i], 20, y);
+            y += 7; // line spacing
+        }
+        
+        doc.save(`LexPro_${formData.contractType}_Draft.pdf`);
+    };
+
+    return (
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 h-[calc(100vh-8rem)]">
+            
+            {/* Left: Input Form */}
+            <div className="w-full lg:w-1/3 flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+                <div className="p-6 border-b border-white/10 bg-black/20">
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                        <Wand2 className="w-5 h-5 text-orange-400" />
+                        AI Contract Drafter
+                    </h2>
+                    <p className="text-sm text-gray-400 mt-1">Configure parameters to generate an India-compliant draft.</p>
+                </div>
+                
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-orange-500/20 scrollbar-track-transparent">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">Contract Type</label>
+                        <select 
+                            name="contractType" 
+                            value={formData.contractType} 
+                            onChange={handleInputChange}
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                        >
+                            <option value="nda">Non-Disclosure Agreement (NDA)</option>
+                            <option value="employment">Employment Agreement</option>
+                            <option value="service">Master Service Agreement (MSA)</option>
+                            <option value="freelance">Independent Contractor / Freelance Agreement</option>
+                            <option value="consulting">Consulting Agreement</option>
+                            <option value="founders">Founders / Co-Founders Agreement</option>
+                            <option value="shareholders">Shareholder Agreement (SHA)</option>
+                            <option value="partnership">Partnership Deed</option>
+                            <option value="joint_venture">Joint Venture Agreement</option>
+                            <option value="mou">Memorandum of Understanding (MoU)</option>
+                            <option value="saas">Software as a Service (SaaS) Agreement</option>
+                            <option value="terms">Terms of Service & Privacy Policy</option>
+                            <option value="lease">Commercial Lease Agreement</option>
+                            <option value="rent">Residential Rent Agreement</option>
+                            <option value="vendor">Vendor Agreement</option>
+                            <option value="franchise">Franchise Agreement</option>
+                        </select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">Party A (Disclosing/Employer/etc.)</label>
+                        <input 
+                            type="text" 
+                            name="partyA" 
+                            value={formData.partyA} 
+                            onChange={handleInputChange}
+                            placeholder="e.g. EyE PunE Vision"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">Party B (Receiving/Employee/etc.)</label>
+                        <input 
+                            type="text" 
+                            name="partyB" 
+                            value={formData.partyB} 
+                            onChange={handleInputChange}
+                            placeholder="e.g. John Doe"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-300">Jurisdiction</label>
+                            <input 
+                                type="text" 
+                                name="jurisdiction" 
+                                value={formData.jurisdiction} 
+                                onChange={handleInputChange}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-300">Governing Law</label>
+                            <input 
+                                type="text" 
+                                name="governingLaw" 
+                                value={formData.governingLaw} 
+                                onChange={handleInputChange}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 text-sm"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Dynamic Contract-Specific Fields */}
+                    {contractSchema[formData.contractType] && (
+                        <div className="p-4 bg-orange-500/5 border border-orange-500/20 rounded-xl space-y-4">
+                            <h3 className="text-sm font-bold text-orange-400 flex items-center gap-2">
+                                <FileText className="w-4 h-4" /> Specific Contract Details
+                            </h3>
+                            <div className="grid grid-cols-1 gap-4">
+                                {contractSchema[formData.contractType].map((field) => (
+                                    <div key={field.id} className="space-y-1.5">
+                                        <label className="text-xs font-medium text-gray-300">{field.label}</label>
+                                        <input 
+                                            type="text" 
+                                            value={dynamicAnswers[field.id] || ''} 
+                                            onChange={(e) => handleDynamicChange(field.id, e.target.value)}
+                                            placeholder={field.placeholder}
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-orange-500/50 text-sm"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-300">Specific Clauses or Context (Optional)</label>
+                        <textarea 
+                            name="additionalTerms" 
+                            value={formData.additionalTerms} 
+                            onChange={handleInputChange}
+                            placeholder="Any specific terms to include..."
+                            className="w-full h-24 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 resize-none"
+                        />
+                    </div>
+                </div>
+
+                <div className="p-6 border-t border-white/10 bg-black/20">
+                    <Button 
+                        onClick={generateDraft}
+                        disabled={isGenerating}
+                        className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] h-12"
+                    >
+                        {isGenerating ? (
+                            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Generating Draft...</>
+                        ) : (
+                            <><Wand2 className="w-5 h-5 mr-2" /> Generate Contract</>
+                        )}
+                    </Button>
+                </div>
+            </div>
+
+            {/* Right: Output/Editor Area */}
+            <div className="w-full lg:w-2/3 flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl relative">
+                
+                {/* Editor Toolbar */}
+                <div className="h-16 border-b border-white/10 bg-black/20 flex items-center justify-between px-6">
+                    <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-gray-400" />
+                        <span className="font-medium text-gray-200">
+                            {generatedDraft ? 'Generated Draft - ' + (formData.contractType === 'nda' ? 'NDA' : formData.contractType) : 'Editor Canvas'}
+                        </span>
+                    </div>
+                    
+                    {generatedDraft && (
+                        <div className="flex items-center gap-2">
+                            <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={handleSaveDraft}
+                                disabled={isSaving}
+                                className="border-white/10 text-gray-300 hover:text-white bg-white/5"
+                            >
+                                {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                                {isSaving ? 'Saving...' : 'Save Draft'}
+                            </Button>
+                            <Button 
+                                onClick={handleExportPDF}
+                                variant="outline" 
+                                size="sm" 
+                                className="border-orange-500/30 text-orange-400 hover:bg-orange-500/10"
+                            >
+                                <Download className="w-4 h-4 mr-2" /> Export PDF
+                            </Button>
+                        </div>
+                    )}
+                </div>
+
+                {/* Editor Content Area */}
+                <div className="flex-1 p-6 overflow-y-auto bg-[#0a0a0a] scrollbar-thin scrollbar-thumb-orange-500/20 scrollbar-track-transparent">
+                    {!generatedDraft && !isGenerating && (
+                        <div className="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto opacity-50">
+                            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
+                                <FileText className="w-10 h-10 text-gray-400" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">Ready to Draft</h3>
+                            <p className="text-gray-400">Fill out the parameters on the left and click "Generate Contract" to see the AI drafted document here.</p>
+                        </div>
+                    )}
+
+                    {isGenerating && (
+                        <div className="h-full flex flex-col items-center justify-center text-center opacity-80">
+                            <motion.div 
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                className="w-16 h-16 border-4 border-orange-500/20 border-t-orange-500 rounded-full mb-6"
+                            />
+                            <h3 className="text-xl font-bold text-white mb-2">AI is Drafting...</h3>
+                            <p className="text-orange-400 animate-pulse">Aligning with Indian Contract Act guidelines</p>
+                        </div>
+                    )}
+
+                    {generatedDraft && !isGenerating && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-white/5 border border-white/10 rounded-xl p-8 max-w-3xl mx-auto shadow-2xl"
+                        >
+                            <textarea 
+                                value={generatedDraft.trim()} 
+                                onChange={(e) => setGeneratedDraft(e.target.value)}
+                                className="w-full h-[600px] bg-transparent text-gray-300 font-serif leading-relaxed focus:outline-none resize-none"
+                            />
+                        </motion.div>
+                    )}
+                </div>
+            </div>
+            
+        </div>
+    );
+}

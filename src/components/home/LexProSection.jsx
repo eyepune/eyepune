@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { CheckCircle2, ArrowRight, Scale, ShieldCheck, FileText, Zap } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
+import Link from 'next/link';
 
 const features = [
     { icon: FileText, text: 'AI drafting for 15+ Indian contract types' },
@@ -134,16 +135,16 @@ export default function LexProSection() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <a href="https://lex-pro.base44.app" target="_blank" rel="noopener noreferrer">
+                            <Link href="/lex-pro/dashboard">
                                 <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                                     <Button size="lg" className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white px-8 py-5 rounded-full font-bold shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_50px_rgba(249,115,22,0.6)] transition-all">
-                                        Start Free 7-Day Trial
+                                        Open Lex Pro Dashboard
                                         <ArrowRight className="w-4 h-4 ml-2" />
                                     </Button>
                                 </motion.div>
-                            </a>
+                            </Link>
                         </div>
-                        <p className="text-gray-600 text-xs mt-3">No credit card · 7-day free trial · Trusted by 500+ firms</p>
+                        <p className="text-gray-600 text-xs mt-3">Integrated natively within EyE PunE Vision</p>
                     </motion.div>
                 </div>
             </div>
