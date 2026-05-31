@@ -135,7 +135,7 @@ export default function LexProSection() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <Link href="/lex-pro/dashboard">
+                            <Link href="/lex-pro">
                                 <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                                     <Button size="lg" className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white px-8 py-5 rounded-full font-bold shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_50px_rgba(249,115,22,0.6)] transition-all">
                                         Open Lex Pro Dashboard
