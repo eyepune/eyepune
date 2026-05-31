@@ -90,7 +90,17 @@ export default function LexProDrafting() {
     const [formData, setFormData] = useState({
         contractType: 'nda',
         partyA: '',
+        partyAType: 'Private Limited Company',
+        partyAAddress: '',
+        partyASignatory: '',
+        partyAIdentifier: '',
         partyB: '',
+        partyBType: 'Individual',
+        partyBAddress: '',
+        partyBSignatory: '',
+        partyBIdentifier: '',
+        effectiveDate: '',
+        signatureType: 'E-Signature',
         jurisdiction: 'Maharashtra',
         governingLaw: 'Indian Contract Act, 1872',
         additionalTerms: ''
@@ -115,9 +125,24 @@ export default function LexProDrafting() {
             const dynamicFields = contractSchema[formData.contractType] || [];
             const formattedDynamicAnswers = dynamicFields.map(field => `${field.label}: ${dynamicAnswers[field.id] || 'Not specified'}`).join('\n');
             
+            const partyInfo = `
+Party A (${formData.partyAType}): ${formData.partyA}
+Address: ${formData.partyAAddress || 'Not specified'}
+Authorized Signatory: ${formData.partyASignatory || 'N/A'}
+ID/CIN/GSTIN: ${formData.partyAIdentifier || 'N/A'}
+
+Party B (${formData.partyBType}): ${formData.partyB}
+Address: ${formData.partyBAddress || 'Not specified'}
+Authorized Signatory: ${formData.partyBSignatory || 'N/A'}
+ID/CIN/GSTIN: ${formData.partyBIdentifier || 'N/A'}
+
+Effective Date: ${formData.effectiveDate || 'Upon Execution'}
+Signature Method: ${formData.signatureType}
+`;
+            
             const payload = {
                 ...formData,
-                additionalTerms: `${formData.additionalTerms}\n\nSpecific Details:\n${formattedDynamicAnswers}`
+                additionalTerms: `${formData.additionalTerms}\n\nSpecific Details:\n${formattedDynamicAnswers}\n\nContract Parties & Execution Info:\n${partyInfo}`
             };
 
             const supabase = createBrowserClient(
@@ -254,29 +279,99 @@ export default function LexProDrafting() {
                         </select>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Party A (Disclosing/Employer/etc.)</label>
-                        <input 
-                            type="text" 
-                            name="partyA" 
-                            value={formData.partyA} 
-                            onChange={handleInputChange}
-                            placeholder="e.g. EyE PunE Vision"
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
-                        />
+                    <div className="space-y-4 p-5 bg-white/[0.02] border border-white/10 rounded-xl">
+                        <h3 className="text-sm font-bold text-orange-400">Party A Details</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Entity Name</label>
+                                <input type="text" name="partyA" value={formData.partyA} onChange={handleInputChange} placeholder="e.g. EyE PunE Vision" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Entity Type</label>
+                                <select name="partyAType" value={formData.partyAType} onChange={handleInputChange} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 appearance-none text-sm">
+                                    <option value="Private Limited Company">Private Limited Company</option>
+                                    <option value="Public Limited Company">Public Limited Company</option>
+                                    <option value="Limited Liability Partnership (LLP)">LLP</option>
+                                    <option value="Partnership Firm">Partnership Firm</option>
+                                    <option value="Proprietorship">Proprietorship</option>
+                                    <option value="Individual">Individual</option>
+                                    <option value="Trust/Society">Trust/Society</option>
+                                </select>
+                            </div>
+                            <div className="space-y-2 sm:col-span-2">
+                                <label className="text-xs font-medium text-gray-400">Registered Address</label>
+                                <textarea name="partyAAddress" value={formData.partyAAddress} onChange={handleInputChange} placeholder="Full registered address..." rows={2} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 resize-none text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Authorized Signatory (if applicable)</label>
+                                <input type="text" name="partyASignatory" value={formData.partyASignatory} onChange={handleInputChange} placeholder="e.g. Jane Doe, Director" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">CIN / PAN / GSTIN</label>
+                                <input type="text" name="partyAIdentifier" value={formData.partyAIdentifier} onChange={handleInputChange} placeholder="Registration number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Party B (Receiving/Employee/etc.)</label>
-                        <input 
-                            type="text" 
-                            name="partyB" 
-                            value={formData.partyB} 
-                            onChange={handleInputChange}
-                            placeholder="e.g. John Doe"
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
-                        />
+                    <div className="space-y-4 p-5 bg-white/[0.02] border border-white/10 rounded-xl">
+                        <h3 className="text-sm font-bold text-orange-400">Party B Details</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Entity Name</label>
+                                <input type="text" name="partyB" value={formData.partyB} onChange={handleInputChange} placeholder="e.g. John Doe" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Entity Type</label>
+                                <select name="partyBType" value={formData.partyBType} onChange={handleInputChange} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 appearance-none text-sm">
+                                    <option value="Individual">Individual</option>
+                                    <option value="Private Limited Company">Private Limited Company</option>
+                                    <option value="Public Limited Company">Public Limited Company</option>
+                                    <option value="Limited Liability Partnership (LLP)">LLP</option>
+                                    <option value="Partnership Firm">Partnership Firm</option>
+                                    <option value="Proprietorship">Proprietorship</option>
+                                    <option value="Trust/Society">Trust/Society</option>
+                                </select>
+                            </div>
+                            <div className="space-y-2 sm:col-span-2">
+                                <label className="text-xs font-medium text-gray-400">Registered Address</label>
+                                <textarea name="partyBAddress" value={formData.partyBAddress} onChange={handleInputChange} placeholder="Full registered address..." rows={2} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 resize-none text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Authorized Signatory (if applicable)</label>
+                                <input type="text" name="partyBSignatory" value={formData.partyBSignatory} onChange={handleInputChange} placeholder="e.g. John Smith, CEO" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">CIN / PAN / GSTIN</label>
+                                <input type="text" name="partyBIdentifier" value={formData.partyBIdentifier} onChange={handleInputChange} placeholder="Registration number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
+                        </div>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-300">Effective Date</label>
+                            <input 
+                                type="date" 
+                                name="effectiveDate" 
+                                value={formData.effectiveDate} 
+                                onChange={handleInputChange}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 [color-scheme:dark]"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-300">Execution Method</label>
+                            <select 
+                                name="signatureType" 
+                                value={formData.signatureType} 
+                                onChange={handleInputChange}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                            >
+                                <option value="E-Signature">E-Signature (Aadhaar/DSC)</option>
+                                <option value="Wet Signature">Manual Wet Signature</option>
+                            </select>
+                        </div>
+                    </div>
+
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
