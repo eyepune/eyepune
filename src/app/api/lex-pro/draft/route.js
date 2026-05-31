@@ -70,6 +70,10 @@ export async function POST(request) {
 The jurisdiction is ${jurisdiction} and the governing law is ${governingLaw}. 
 ${additionalTerms ? `Ensure you include the following specific terms: ${additionalTerms}` : ''}${contextText}
 
+CRITICAL EXECUTION RULE: At the very end of the contract, you MUST include a dedicated Signature Block for both Party A and Party B. 
+- If the "Signature Method" in the specific details is "Wet Signature" or "Manual Wet Signature", you MUST create explicit physical signature lines (e.g., "Signature: _______________________").
+- If the "Signature Method" is "E-Signature", you MUST include digital placeholders (e.g., "[Digitally Signed via Aadhaar/DSC]").
+
 Output ONLY the raw text of the contract. Make it professional, comprehensive, and strictly compliant with Indian law. 
 CRITICAL RULE: DO NOT use any Markdown formatting whatsoever (no **, no *, no #). Return purely plain text with standard spacing and capitalized headers.`;
 
