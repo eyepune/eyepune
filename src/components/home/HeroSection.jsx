@@ -148,7 +148,7 @@ export default function HeroSection() {
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-6 tracking-tight drop-shadow-2xl">
-                            <div className="relative inline-flex flex-col h-[1.5em] overflow-hidden align-bottom">
+                            <div className="relative inline-flex flex-col h-[1.3em] overflow-hidden align-middle">
                                 <AnimatePresence mode="wait" initial={false}>
                                     <motion.span
                                         key={words[index]}
@@ -159,7 +159,7 @@ export default function HeroSection() {
                                             duration: 0.6, 
                                             ease: [0.23, 1, 0.32, 1] 
                                         }}
-                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400 pb-2"
+                                        className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400 pb-4"
                                     >
                                         {words[index]}
                                     </motion.span>
