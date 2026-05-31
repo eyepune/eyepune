@@ -41,7 +41,6 @@ const footerLinks = {
     'Get Started': [
         { name: 'Free AI Assessment', page: 'AI-Assessment' },
         { name: 'Book Consultation', page: 'Booking' },
-        { name: 'Pricing', page: 'Pricing' },
     ],
     Solutions: [
         { name: 'For Founders', page: 'Solution-Founders' },
@@ -57,7 +56,6 @@ const publicNavLinks = [
     { name: 'Home', page: 'Home', icon: HomeIcon },
     { name: 'Services', page: 'Services-Detail', icon: Briefcase, subLinks: footerLinks.Services },
     { name: 'Solutions', page: 'Solution-B2BGrowth', icon: Target, subLinks: footerLinks.Solutions },
-    { name: 'Pricing', page: 'Pricing', icon: Tag },
     { name: 'Blog', page: 'Blog', icon: BookOpen },
     { name: 'About', page: 'About', icon: Users },
 ];
