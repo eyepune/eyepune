@@ -244,7 +244,6 @@ Signature Method: ${formData.signatureType}
         <div className="max-w-7xl mx-auto h-[calc(100vh-8rem)]">
             
             {!showCanvas ? (
-            {/* Input Form */}
             <div className="w-full max-w-3xl mx-auto flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl animate-in fade-in duration-300">
                 <div className="p-6 border-b border-white/10 bg-black/20">
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -449,8 +448,6 @@ Signature Method: ${formData.signatureType}
                 </div>
             </div>
             ) : (
-
-            {/* Output/Editor Area */}
             <div className="w-full flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl relative animate-in fade-in zoom-in-95 duration-300">
                 
                 {/* Editor Toolbar */}
