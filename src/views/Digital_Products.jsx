@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import GlowCard from '@/components/shared/GlowCard';
 import Link from 'next/link';
+import SEOHead from '@/components/seo/SEOHead';
 
 export default function Digital_Products() {
   const [currency, setCurrency] = useState('USD');
@@ -83,6 +84,11 @@ export default function Digital_Products() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a0a] pt-24 pb-16">
+      <SEOHead 
+        title="Premium B2B Digital Assets & Templates"
+        description="Download EyE PunE's proprietary digital assets. Get instant access to our Agency OS, B2B Cold Email Playbooks, and Programmatic SEO Blueprints."
+        keywords="B2B digital products, cold email templates, programmatic SEO blueprint, Notion agency OS, business growth assets"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import GlowCard from '@/components/shared/GlowCard';
+import SEOHead from '@/components/seo/SEOHead';
 
 export default function Resources() {
   const tools = [
@@ -64,6 +65,11 @@ export default function Resources() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0a0a0a] pt-24 pb-16">
+      <SEOHead 
+        title="B2B Tech Stack & Partner Resources"
+        description="Discover the exact infrastructure, CRMs, and payment gateways EyE PunE uses to scale global B2B operations."
+        keywords="B2B tech stack, top CRMs for agencies, Razorpay for B2B, Vercel hosting, SEMrush SEO tools"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">

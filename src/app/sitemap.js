@@ -22,6 +22,8 @@ export default async function sitemap() {
         { url: `${baseUrl}/About`,                     lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/Pricing`,                   lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/Testimonials`,              lastModified: now, changeFrequency: 'weekly',  priority: 0.75 },
+        { url: `${baseUrl}/Digital-Products`,          lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+        { url: `${baseUrl}/Resources`,                 lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
         // Service landing pages
         { url: `${baseUrl}/Service-SocialMedia`,       lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/Service-WebDev`,            lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
