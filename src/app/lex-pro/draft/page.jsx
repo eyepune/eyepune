@@ -553,7 +553,7 @@ Signature Method: ${formData.signatureType}
                                 onChange={handleInputChange}
                                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 appearance-none"
                             >
-                                <option value="E-Signature">E-Signature (Aadhaar/DSC)</option>
+                                <option value="E-Signature">E-Signature (IP & Geo-Tag)</option>
                                 <option value="Wet Signature">Manual Wet Signature</option>
                                 <option value="Digital Audit Trail">Digital Audit Trail (Clickwrap)</option>
                             </select>
