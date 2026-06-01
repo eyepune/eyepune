@@ -72,14 +72,8 @@ export default function LexProClientLayout({ children }) {
             {/* Sidebar */}
             <aside className="w-64 border-r border-blue-900/30 bg-[#0D1425] flex flex-col h-full hidden md:flex">
                 <div className="p-6">
-                    <Link href="/lex-pro/dashboard" className="flex items-center gap-2">
-                        <img src="/lexpro-icon.svg" alt="LexPro Logo" className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-slate-700 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)] hidden">
-                            <span className="text-white font-bold text-lg">L</span>
-                        </div>
-                        <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-slate-300">
-                            Lex Pro
-                        </span>
+                    <Link href="/lex-pro/dashboard" className="flex items-center">
+                        <img src="/lexpro-logo-full.png" alt="LexPro Logo" className="h-12 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] bg-white/5 p-2 rounded-lg" />
                     </Link>
                 </div>
 

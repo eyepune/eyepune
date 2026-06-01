@@ -17,15 +17,9 @@ export default function LexProLandingPage() {
 
             {/* Navigation */}
             <nav className="relative z-50 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-                <div className="flex items-center gap-3">
-                    <img src="/lexpro-icon.svg" alt="LexPro Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-slate-700 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)] hidden">
-                        <span className="text-white font-bold text-xl">L</span>
-                    </div>
-                    <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-slate-300 tracking-tight">
-                        Lex Pro
-                    </span>
-                </div>
+                <Link href="/lex-pro" className="flex items-center">
+                    <img src="/lexpro-logo-full.png" alt="LexPro Logo" className="h-14 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] bg-white/5 p-2 rounded-xl" />
+                </Link>
                 <div className="flex items-center gap-6 font-medium text-sm">
                     <Link href="#features" className="text-gray-300 hover:text-blue-400 transition-colors hidden md:block">Features</Link>
                     <Link href="#pricing" className="text-gray-300 hover:text-blue-400 transition-colors hidden md:block">Pricing</Link>
