@@ -1,11 +1,14 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Rocket, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Rocket, ChevronRight, PhoneCall } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import LexProLeadModal from '@/components/lex-pro/LexProLeadModal';
 
 export default function StartupsPage() {
+    const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+
     return (
         <div className="min-h-screen bg-[#0A0F1C] text-gray-100 font-sans selection:bg-blue-500/30 overflow-x-hidden">
             {/* Navigation */}
@@ -31,13 +34,28 @@ export default function StartupsPage() {
                 <p className="text-base md:text-xl text-gray-400 max-w-2xl mb-10 md:mb-12 leading-relaxed px-2">
                     Generate co-founder agreements, NDAs, and ESOP policies instantly without exorbitant legal retainers. Ensure total compliance from Day 1.
                 </p>
-                <Link href="/lex-pro/login">
-                    <Button className="h-12 md:h-14 px-6 md:px-8 text-base md:text-lg font-bold bg-white text-[#0A0F1C] hover:bg-gray-100 rounded-full transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                        Protect Your Startup
-                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5 ml-2" />
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                    <Link href="/lex-pro/login">
+                        <Button className="h-12 md:h-14 px-6 md:px-8 text-base md:text-lg font-bold bg-white text-[#0A0F1C] hover:bg-gray-100 rounded-full transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                            Protect Your Startup
+                            <ChevronRight className="w-4 h-4 md:w-5 md:h-5 ml-2" />
+                        </Button>
+                    </Link>
+                    <Button 
+                        onClick={() => setIsDemoModalOpen(true)}
+                        className="h-12 md:h-14 px-6 md:px-8 text-base md:text-lg font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all"
+                    >
+                        <PhoneCall className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                        Contact Sales
                     </Button>
-                </Link>
+                </div>
             </section>
+
+            <LexProLeadModal 
+                isOpen={isDemoModalOpen} 
+                onClose={() => setIsDemoModalOpen(false)} 
+                sourcePage="/lex-pro/startups" 
+            />
         </div>
     )
 }
