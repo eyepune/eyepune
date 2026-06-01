@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import GlowCard from '@/components/shared/GlowCard';
 
 export default function Resources() {
@@ -120,9 +121,9 @@ export default function Resources() {
           <p className="text-blue-100 mb-8 max-w-2xl mx-auto relative z-10">
             Our agency specializes in connecting these exact platforms into automated workflows for B2B enterprises. Let&apos;s build your infrastructure.
           </p>
-          <a href="/Contact" className="inline-block bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-blue-50 transition-colors relative z-10">
+          <Link href="/Contact" className="inline-block bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-blue-50 transition-colors relative z-10">
             Book a Consultation
-          </a>
+          </Link>
         </div>
 
       </div>
