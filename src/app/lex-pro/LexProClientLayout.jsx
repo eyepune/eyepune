@@ -7,6 +7,7 @@ import { LayoutDashboard, FileText, ShieldAlert, Settings, LogOut, Search, Bell,
 import { Button } from '@/components/ui/button';
 import { createClient } from '@supabase/supabase-js';
 import OnboardingTour from '@/components/lex-pro/OnboardingTour';
+import LexProChatWidget from '@/components/lex-pro/LexProChatWidget';
 
 export default function LexProClientLayout({ children }) {
     const pathname = usePathname();
@@ -61,6 +62,7 @@ export default function LexProClientLayout({ children }) {
         return (
             <div className="bg-[#0A0F1C] min-h-screen font-sans text-gray-100">
                 {children}
+                <LexProChatWidget />
             </div>
         );
     }
@@ -146,6 +148,7 @@ export default function LexProClientLayout({ children }) {
                     {children}
                 </div>
                 <OnboardingTour />
+                <LexProChatWidget />
             </main>
         </div>
     );
