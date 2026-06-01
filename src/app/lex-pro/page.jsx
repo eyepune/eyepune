@@ -8,29 +8,30 @@ import { Button } from '@/components/ui/button';
 
 export default function LexProLandingPage() {
     return (
-        <div className="min-h-screen bg-black text-gray-100 font-sans overflow-x-hidden selection:bg-orange-500/30 selection:text-orange-200">
+        <div className="min-h-screen bg-[#0A0F1C] text-gray-100 font-sans overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-200">
             {/* Background ambient effects */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
-                <div className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-600/10 via-black/0 to-black/0 rounded-full" />
-                <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-600/10 via-black/0 to-black/0 rounded-full" />
+                <div className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600/10 via-[#0A0F1C]/0 to-[#0A0F1C]/0 rounded-full" />
+                <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-600/10 via-[#0A0F1C]/0 to-[#0A0F1C]/0 rounded-full" />
             </div>
 
             {/* Navigation */}
             <nav className="relative z-50 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.4)]">
+                    <img src="/lexpro-logo.png" alt="LexPro Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-slate-700 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)] hidden">
                         <span className="text-white font-bold text-xl">L</span>
                     </div>
-                    <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400 tracking-tight">
+                    <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-slate-300 tracking-tight">
                         Lex Pro
                     </span>
                 </div>
                 <div className="flex items-center gap-6 font-medium text-sm">
-                    <Link href="#features" className="text-gray-300 hover:text-orange-400 transition-colors hidden md:block">Features</Link>
-                    <Link href="#pricing" className="text-gray-300 hover:text-orange-400 transition-colors hidden md:block">Pricing</Link>
+                    <Link href="#features" className="text-gray-300 hover:text-blue-400 transition-colors hidden md:block">Features</Link>
+                    <Link href="#pricing" className="text-gray-300 hover:text-blue-400 transition-colors hidden md:block">Pricing</Link>
                     <Link href="/lex-pro/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
                     <Link href="/lex-pro/login">
-                        <Button className="bg-white text-black hover:bg-gray-200 rounded-full px-6 font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                        <Button className="bg-white text-[#0A0F1C] hover:bg-gray-200 rounded-full px-6 font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                             Get Started
                         </Button>
                     </Link>
@@ -47,7 +48,7 @@ export default function LexProLandingPage() {
                     transition={{ delay: 0.1 }}
                     className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[1.1] max-w-4xl"
                 >
-                    The Autonomous Legal OS for <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">India.</span>
+                    The Autonomous Legal OS for <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-slate-300">India.</span>
                 </motion.h1>
                 
                 <motion.p 
@@ -66,7 +67,7 @@ export default function LexProLandingPage() {
                     className="flex flex-col sm:flex-row gap-4"
                 >
                     <Link href="/lex-pro/login">
-                        <Button className="h-14 px-8 rounded-full text-lg font-bold bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 text-white shadow-[0_0_30px_rgba(249,115,22,0.4)]">
+                        <Button className="h-14 px-8 rounded-full text-lg font-bold bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-500 hover:to-slate-500 text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]">
                             Enter Workspace <ArrowRight className="ml-2 w-5 h-5" />
                         </Button>
                     </Link>
@@ -86,14 +87,14 @@ export default function LexProLandingPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Big Feature */}
                     <div className="md:col-span-2 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl p-8 backdrop-blur-md relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] group-hover:bg-orange-500/20 transition-colors" />
-                        <FileText className="w-12 h-12 text-orange-400 mb-6" />
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] group-hover:bg-blue-500/20 transition-colors" />
+                        <FileText className="w-12 h-12 text-blue-400 mb-6" />
                         <h3 className="text-2xl font-bold mb-3">AI Contract Drafting</h3>
                         <p className="text-gray-400 leading-relaxed max-w-md">Instantly draft 16+ highly specific Indian corporate agreements. The engine automatically weaves your variables (salary, vesting, royalties) into watertight legal clauses.</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl p-8 backdrop-blur-md">
-                        <Database className="w-12 h-12 text-red-400 mb-6" />
+                        <Database className="w-12 h-12 text-slate-400 mb-6" />
                         <h3 className="text-xl font-bold mb-3">Bulk Generation</h3>
                         <p className="text-gray-400 leading-relaxed text-sm">Upload a CSV dataset to autonomously generate and save hundreds of employee agreements or NDAs simultaneously.</p>
                     </div>
@@ -105,7 +106,7 @@ export default function LexProLandingPage() {
                     </div>
 
                     <div className="md:col-span-2 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl p-8 backdrop-blur-md flex flex-col justify-end relative overflow-hidden">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[1px] bg-gradient-to-r from-transparent via-orange-500/50 to-transparent -rotate-12" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent -rotate-12" />
                         <Lock className="w-12 h-12 text-white mb-6 relative z-10" />
                         <h3 className="text-2xl font-bold mb-3 relative z-10">Multi-Tenant Isolation</h3>
                         <p className="text-gray-400 leading-relaxed max-w-md relative z-10">Bank-grade security. Every law firm or corporate workspace is cryptographically isolated using Supabase Row Level Security.</p>

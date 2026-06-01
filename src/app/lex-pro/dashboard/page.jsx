@@ -38,7 +38,7 @@ export default function LexProDashboard() {
         { label: 'Total Contracts', value: recentContracts.length.toString(), icon: FileText, color: 'text-blue-400', bg: 'bg-blue-400/10' },
         { label: 'High Risk Clauses Found', value: '0', icon: ShieldAlert, color: 'text-red-400', bg: 'bg-red-400/10' },
         { label: 'Ready for Signature', value: recentContracts.filter(c => c.status === 'Ready').length.toString(), icon: CheckCircle2, color: 'text-green-400', bg: 'bg-green-400/10' },
-        { label: 'Pending Review', value: recentContracts.filter(c => c.status === 'Reviewing' || c.status === 'Draft').length.toString(), icon: Clock, color: 'text-orange-400', bg: 'bg-orange-400/10' },
+        { label: 'Pending Review', value: recentContracts.filter(c => c.status === 'Reviewing' || c.status === 'Draft').length.toString(), icon: Clock, color: 'text-slate-400', bg: 'bg-slate-400/10' },
     ];
 
     return (
@@ -46,17 +46,17 @@ export default function LexProDashboard() {
             {/* Header section */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black text-white mb-2">Welcome back to <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400">Lex Pro</span></h1>
+                    <h1 className="text-3xl font-black text-white mb-2">Welcome back to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-slate-300">Lex Pro</span></h1>
                     <p className="text-gray-400">Here's an overview of your contract lifecycle and AI insights.</p>
                 </div>
                 <div className="flex gap-3">
                     <Link href="/lex-pro/analyze">
-                        <Button variant="outline" className="border-orange-500/30 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300">
+                        <Button variant="outline" className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300">
                             Analyze Document
                         </Button>
                     </Link>
                     <Link href="/lex-pro/draft">
-                        <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)]">
+                        <Button className="bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-500 hover:to-slate-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                             <Plus className="w-4 h-4 mr-2" />
                             New Draft
                         </Button>
@@ -72,7 +72,7 @@ export default function LexProDashboard() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-orange-500/30 transition-colors"
+                        className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/30 transition-colors"
                     >
                         <div className="flex items-start justify-between mb-4">
                             <div className={`p-3 rounded-xl ${stat.bg}`}>
@@ -91,14 +91,14 @@ export default function LexProDashboard() {
             <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
                 <div className="p-6 border-b border-white/10 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-white">Recent Contracts</h2>
-                    <Button variant="ghost" className="text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 text-sm h-8">
+                    <Button variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 text-sm h-8">
                         View All <ArrowUpRight className="w-4 h-4 ml-1" />
                     </Button>
                 </div>
                 <div className="overflow-x-auto">
                     {isLoading ? (
                         <div className="p-8 flex justify-center items-center">
-                            <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+                            <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                         </div>
                     ) : dbError ? (
                         <div className="p-8 text-center border border-red-500/20 bg-red-500/10 m-4 rounded-xl">
@@ -132,7 +132,7 @@ export default function LexProDashboard() {
                                         className="hover:bg-white/[0.02] transition-colors group cursor-pointer"
                                         onClick={() => router.push(`/lex-pro/draft?id=${contract.id}`)}
                                     >
-                                        <td className="px-6 py-4 font-medium text-gray-200 group-hover:text-orange-300 transition-colors">
+                                        <td className="px-6 py-4 font-medium text-gray-200 group-hover:text-blue-300 transition-colors">
                                             {contract.title}
                                         </td>
                                         <td className="px-6 py-4 text-gray-400">
@@ -148,13 +148,13 @@ export default function LexProDashboard() {
                                                 contract.status === 'Draft' ? 'text-blue-400' :
                                                 contract.status === 'Ready' ? 'text-green-400' :
                                                 contract.status === 'High Risk' ? 'text-red-400' :
-                                                'text-orange-400'
+                                                'text-slate-400'
                                             }`}>
                                                 <span className={`w-1.5 h-1.5 rounded-full ${
                                                     contract.status === 'Draft' ? 'bg-blue-400' :
                                                     contract.status === 'Ready' ? 'bg-green-400' :
                                                     contract.status === 'High Risk' ? 'bg-red-400' :
-                                                    'bg-orange-400'
+                                                    'bg-slate-400'
                                                 }`} />
                                                 {contract.status}
                                             </span>
@@ -162,7 +162,7 @@ export default function LexProDashboard() {
                                         <td className="px-6 py-4">
                                             <span className={`px-2.5 py-1 rounded-md text-xs font-bold ${
                                                 risk === 'Low' ? 'bg-green-400/10 text-green-400 border border-green-400/20' :
-                                                risk === 'Medium' ? 'bg-orange-400/10 text-orange-400 border border-orange-400/20' :
+                                                risk === 'Medium' ? 'bg-slate-400/10 text-slate-400 border border-slate-400/20' :
                                                 risk === 'Pending' ? 'bg-gray-400/10 text-gray-400 border border-gray-400/20' :
                                                 'bg-red-400/10 text-red-400 border border-red-400/20'
                                             }`}>
