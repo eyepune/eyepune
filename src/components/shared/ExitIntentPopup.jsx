@@ -111,7 +111,7 @@ export default function ExitIntentPopup() {
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="exit-popup-title"
-                        className="relative bg-[#0a0a0a] border border-white/[0.08] rounded-3xl p-8 max-w-md w-full shadow-2xl overflow-hidden"
+                        className="relative bg-[#0a0a0a] border border-white/[0.08] rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl overflow-y-auto max-h-[90vh]"
                     >
                         {/* Background glow */}
                         <div className="absolute top-0 right-0 w-64 h-64 pointer-events-none"

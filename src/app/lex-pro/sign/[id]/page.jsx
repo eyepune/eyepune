@@ -99,7 +99,7 @@ export default function SecureSignPortal() {
     return (
         <div className="min-h-screen bg-black text-gray-100 font-sans selection:bg-orange-500/30">
             {/* Header */}
-            <header className="h-20 border-b border-orange-500/20 bg-black/50 backdrop-blur-md flex items-center justify-center px-8 sticky top-0 z-50">
+            <header className="h-20 border-b border-orange-500/20 bg-black/50 backdrop-blur-md flex items-center justify-center px-8 sticky top-0 z-50 print:hidden">
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.5)]">
                         <span className="text-white font-bold text-lg">L</span>
@@ -112,19 +112,32 @@ export default function SecureSignPortal() {
 
             <main className="max-w-4xl mx-auto p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                 {/* Document View */}
-                <div className="md:col-span-2 space-y-4">
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-10 shadow-2xl">
-                        <h1 className="text-2xl font-bold text-white mb-8 border-b border-white/10 pb-4 text-center">
+                <div className="md:col-span-2 space-y-4 print:col-span-3 print:space-y-0" id="contract-content-container">
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-10 shadow-2xl print:bg-white print:border-none print:shadow-none print:text-black">
+                        <h1 className="text-2xl font-bold text-white print:text-black mb-8 border-b border-white/10 print:border-gray-300 pb-4 text-center">
                             {contract.title}
                         </h1>
-                        <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-wrap font-serif leading-relaxed text-sm">
+                        <div className="prose prose-invert print:prose-p:text-black max-w-none text-gray-300 print:text-black whitespace-pre-wrap font-serif leading-relaxed text-sm">
                             {contract.content}
+                        </div>
+                        
+                        {/* Print-only audit trail appended to the end of the document */}
+                        <div className="hidden print:block mt-12 pt-8 border-t border-gray-300">
+                            <h3 className="text-lg font-bold text-black mb-4">Digital Execution Audit Trail</h3>
+                            {auditTrails.map((trail, idx) => (
+                                <div key={idx} className="mb-4 text-sm text-gray-800">
+                                    <p><strong>Signed By:</strong> {trail.party_name}</p>
+                                    <p><strong>Date:</strong> {new Date(trail.signed_at).toLocaleString()}</p>
+                                    <p><strong>IP Address:</strong> {trail.ip_address}</p>
+                                    <p><strong>Document Hash (SHA-256):</strong> {trail.document_hash}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
 
                 {/* Signing Panel */}
-                <div className="md:col-span-1 sticky top-28 space-y-6">
+                <div className="md:col-span-1 sticky top-28 space-y-6 print:hidden">
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl" />
                         
@@ -137,10 +150,19 @@ export default function SecureSignPortal() {
                         </p>
 
                         {hasSigned ? (
-                            <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-center">
-                                <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-2" />
-                                <h3 className="text-green-400 font-bold mb-1">Successfully Signed</h3>
-                                <p className="text-green-400/80 text-xs">Your cryptographic signature has been securely recorded.</p>
+                            <div className="space-y-4">
+                                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-center">
+                                    <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-2" />
+                                    <h3 className="text-green-400 font-bold mb-1">Successfully Signed</h3>
+                                    <p className="text-green-400/80 text-xs">Your cryptographic signature has been securely recorded.</p>
+                                </div>
+                                <Button 
+                                    onClick={() => window.print()}
+                                    className="w-full bg-white/10 hover:bg-white/20 text-white font-medium h-10 border border-white/10"
+                                >
+                                    <FileText className="w-4 h-4 mr-2" />
+                                    Download as PDF
+                                </Button>
                             </div>
                         ) : (
                             <div className="space-y-4">

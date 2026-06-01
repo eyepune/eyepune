@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, FileText, ShieldAlert, Settings, LogOut, Search, Bell, Database, BookOpen } from 'lucide-react';
+import { LayoutDashboard, FileText, ShieldAlert, Settings, LogOut, Search, Bell, Database, BookOpen, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@supabase/supabase-js';
+import LexProChatWidget from '@/components/lex-pro/LexProChatWidget';
+import OnboardingTour from '@/components/lex-pro/OnboardingTour';
 
 export default function LexProClientLayout({ children }) {
     const pathname = usePathname();
@@ -52,11 +54,17 @@ export default function LexProClientLayout({ children }) {
         { name: 'Knowledge Base', href: '/lex-pro/knowledge', icon: BookOpen },
         { name: 'Bulk Engine', href: '/lex-pro/bulk', icon: Database },
         { name: 'Risk Analysis', href: '/lex-pro/analyze', icon: ShieldAlert },
+        { name: 'Affiliates', href: '/lex-pro/affiliates', icon: Users },
         { name: 'Settings', href: '/lex-pro/settings', icon: Settings },
     ];
 
     if (isPublicPage) {
-        return <div className="bg-[#0A0F1C] min-h-screen font-sans text-gray-100">{children}</div>;
+        return (
+            <div className="bg-[#0A0F1C] min-h-screen font-sans text-gray-100">
+                {children}
+                <LexProChatWidget />
+            </div>
+        );
     }
 
     if (isLoading) {
@@ -139,6 +147,8 @@ export default function LexProClientLayout({ children }) {
                 <div className="flex-1 overflow-y-auto p-8 relative z-10 scrollbar-thin scrollbar-thumb-blue-500/20 scrollbar-track-transparent">
                     {children}
                 </div>
+                <LexProChatWidget />
+                <OnboardingTour />
             </main>
         </div>
     );

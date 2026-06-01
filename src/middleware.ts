@@ -100,6 +100,19 @@ export async function middleware(request: NextRequest) {
     // Ignore session errors for public routes/crawlers
   }
 
+  // --- Lex Pro Affiliate Tracking Middleware ---
+  const partnerRef = request.nextUrl.searchParams.get('ref');
+  if (partnerRef) {
+    // Store the affiliate referral ID in a cookie for 30 days
+    supabaseResponse.cookies.set('partner_ref', partnerRef, {
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: '/',
+      httpOnly: false, // Accessible to frontend if needed for display
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+  }
+
   return supabaseResponse;
 }
 

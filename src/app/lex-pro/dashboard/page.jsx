@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, ShieldAlert, CheckCircle2, Clock, Plus, ArrowUpRight, Loader2 } from 'lucide-react';
+import { FileText, ShieldAlert, CheckCircle2, Clock, Plus, ArrowUpRight, Loader2, Sparkles, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
@@ -113,8 +113,22 @@ export default function LexProDashboard() {
                             <p className="text-red-400/70 text-xs mt-2">Did you run the supabase_lex_pro_schema.sql script in your Supabase SQL editor?</p>
                         </div>
                     ) : recentContracts.length === 0 ? (
-                        <div className="p-8 text-center text-gray-500">
-                            No contracts found. Start by drafting a new one!
+                        <div className="p-16 text-center text-gray-500 flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
+                            <div className="w-20 h-20 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+                                <FileText className="w-10 h-10 text-blue-400" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-200 mb-3 tracking-tight">No contracts generated yet</h3>
+                            <p className="text-gray-400 mb-8 max-w-md leading-relaxed text-sm">
+                                Start drafting legally sound contracts tailored for your startup or enterprise. Powered by AI and localized for Indian jurisdiction.
+                            </p>
+                            <div className="flex gap-4">
+                                <Button onClick={() => router.push('/lex-pro/draft')} className="bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-500 hover:to-slate-500 text-white font-semibold h-11 px-6 shadow-[0_0_20px_rgba(59,130,246,0.4)]">
+                                    <Sparkles className="w-4 h-4 mr-2" /> Start AI Draft
+                                </Button>
+                                <Button onClick={() => router.push('/lex-pro/bulk')} variant="outline" className="border-white/10 text-gray-300 hover:text-white hover:bg-white/10 bg-black/40 h-11 px-6 backdrop-blur-md">
+                                    <Database className="w-4 h-4 mr-2 text-blue-400" /> Bulk Engine
+                                </Button>
+                            </div>
                         </div>
                     ) : (
                         <table className="w-full text-left">

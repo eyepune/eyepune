@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, User, Building, Users, CreditCard, Shield, Save, Loader2, Plus, Mail } from 'lucide-react';
+import { Settings, User, Building, Users, CreditCard, Shield, Save, Loader2, Plus, Mail, Code, Webhook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createBrowserClient } from '@supabase/ssr';
 
@@ -91,10 +91,54 @@ export default function LexProSettings() {
         }
     };
 
+    const handleInvite = async () => {
+        const email = window.prompt("Enter the email address of the team member you wish to invite:");
+        if (!email) return;
+        
+        if (!organization?.id) {
+            alert("You must be part of an organization to invite members.");
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/lex-pro/invite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, role: 'Member', organizationId: organization.id })
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert(`Invitation successfully sent to ${email}`);
+            } else {
+                alert(`Failed to send invite: ${data.error}`);
+            }
+        } catch (error) {
+            alert('An error occurred while sending the invite.');
+        }
+    };
+
+    const handleUpgrade = async () => {
+        try {
+            const response = await fetch('/api/lex-pro/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: profile?.email || 'user@example.com', planId: 'lex_pro_enterprise' })
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert(`Order Created! ID: ${data.orderId}. (Razorpay SDK pop-up will mount here in production).`);
+            } else {
+                alert(`Checkout failed: ${data.error}`);
+            }
+        } catch (error) {
+            alert('An error occurred during checkout.');
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="h-[calc(100vh-8rem)] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+                <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
             </div>
         );
     }
@@ -129,9 +173,15 @@ export default function LexProSettings() {
                 </button>
                 <button 
                     onClick={() => setActiveTab('billing')}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'billing' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'billing' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                 >
                     <CreditCard className="w-5 h-5" /> Billing & Plan
+                </button>
+                <button 
+                    onClick={() => setActiveTab('developer')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'developer' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                >
+                    <Code className="w-5 h-5" /> Developer API
                 </button>
             </div>
 
@@ -139,7 +189,7 @@ export default function LexProSettings() {
             <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl shadow-xl overflow-hidden">
                 
                 {activeTab === 'profile' && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-8 space-y-6">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 md:p-8 space-y-6">
                         <div className="border-b border-white/10 pb-6">
                             <h3 className="text-2xl font-bold text-white">My Profile</h3>
                             <p className="text-gray-400 mt-1">Manage your personal account settings and preferences.</p>
@@ -183,7 +233,7 @@ export default function LexProSettings() {
                 )}
 
                 {activeTab === 'organization' && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-8 space-y-6">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 md:p-8 space-y-6">
                         <div className="border-b border-white/10 pb-6">
                             <h3 className="text-2xl font-bold text-white">Organization Details</h3>
                             <p className="text-gray-400 mt-1">Manage your firm or company workspace details.</p>
@@ -231,13 +281,13 @@ export default function LexProSettings() {
                 )}
 
                 {activeTab === 'team' && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-8 space-y-6">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 md:p-8 space-y-6">
                         <div className="border-b border-white/10 pb-6 flex justify-between items-center">
                             <div>
                                 <h3 className="text-2xl font-bold text-white">Team Management</h3>
                                 <p className="text-gray-400 mt-1">Manage access for your partners and associates.</p>
                             </div>
-                            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                            <Button onClick={handleInvite} className="bg-blue-600 hover:bg-blue-700 text-white">
                                 <Plus className="w-4 h-4 mr-2" /> Invite Member
                             </Button>
                         </div>
@@ -268,7 +318,7 @@ export default function LexProSettings() {
                 )}
 
                 {activeTab === 'billing' && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-8 space-y-6">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 md:p-8 space-y-6">
                         <div className="border-b border-white/10 pb-6">
                             <h3 className="text-2xl font-bold text-white">Billing & Subscription</h3>
                             <p className="text-gray-400 mt-1">Manage your active Lex Pro Enterprise plan.</p>
@@ -286,11 +336,56 @@ export default function LexProSettings() {
                                 <p className="text-gray-400 mb-6 max-w-md">Unlimited bulk document generation, 50 team seats, and premium AI Risk Analysis.</p>
                                 
                                 <div className="flex gap-4">
-                                    <Button className="bg-white text-black hover:bg-gray-200">
+                                    <Button onClick={handleUpgrade} className="bg-white text-black hover:bg-gray-200">
                                         Manage Subscription
                                     </Button>
                                     <Button variant="outline" className="border-white/10 text-white hover:bg-white/5">
                                         View Invoices
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+
+                {activeTab === 'developer' && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 md:p-8 space-y-6">
+                        <div className="border-b border-white/10 pb-6">
+                            <h3 className="text-2xl font-bold text-white">Developer API & Webhooks</h3>
+                            <p className="text-gray-400 mt-1">Integrate Lex Pro Enterprise with your internal CRMs or workflows.</p>
+                        </div>
+                        
+                        <div className="space-y-6">
+                            <div className="p-6 bg-black/40 border border-white/10 rounded-2xl">
+                                <h4 className="font-bold text-white mb-4 flex items-center gap-2">
+                                    <Code className="w-5 h-5 text-blue-400" />
+                                    Secret API Key
+                                </h4>
+                                <p className="text-sm text-gray-400 mb-4">Use this key to authenticate REST API requests (e.g., generating contracts programmatically).</p>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                    <div className="flex-1 bg-black border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 font-mono flex items-center blur-sm hover:blur-none transition-all cursor-crosshair">
+                                        sk_lex_pro_************************9f2
+                                    </div>
+                                    <Button className="bg-blue-600 hover:bg-blue-700 text-white min-w-[140px]">
+                                        Regenerate Key
+                                    </Button>
+                                </div>
+                            </div>
+
+                            <div className="p-6 bg-black/40 border border-white/10 rounded-2xl">
+                                <h4 className="font-bold text-white mb-4 flex items-center gap-2">
+                                    <Webhook className="w-5 h-5 text-blue-400" />
+                                    Execution Webhooks
+                                </h4>
+                                <p className="text-sm text-gray-400 mb-4">Ping a URL whenever a counterparty successfully signs a document.</p>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                    <input 
+                                        type="url" 
+                                        placeholder="https://your-server.com/lex-webhook"
+                                        className="flex-1 bg-black border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
+                                    />
+                                    <Button className="bg-white text-black hover:bg-gray-200 min-w-[140px]">
+                                        Save Endpoint
                                     </Button>
                                 </div>
                             </div>

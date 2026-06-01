@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldAlert, ShieldCheck, Upload, AlertTriangle, Info, CheckCircle2, Loader2, ArrowRight } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, Upload, AlertTriangle, Info, CheckCircle2, Loader2, ArrowRight, PenTool } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createBrowserClient } from '@supabase/ssr';
 
@@ -10,6 +10,8 @@ export default function LexProAnalyze() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [analysisResult, setAnalysisResult] = useState(null);
+    const [isRedlining, setIsRedlining] = useState(false);
+    const [redlineResult, setRedlineResult] = useState(null);
     const [contractText, setContractText] = useState('');
     const fileInputRef = useRef(null);
 
@@ -65,7 +67,9 @@ export default function LexProAnalyze() {
         if (!contractText.trim()) return;
         
         setIsAnalyzing(true);
+        setIsAnalyzing(true);
         setAnalysisResult(null);
+        setRedlineResult(null);
 
         try {
             const supabase = createBrowserClient(
@@ -111,6 +115,44 @@ export default function LexProAnalyze() {
             alert(`API Error: ${error.message}`);
         } finally {
             setIsAnalyzing(false);
+        }
+    };
+
+    const handleGenerateRedline = async () => {
+        if (!analysisResult) return;
+        
+        setIsRedlining(true);
+        try {
+            const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+            );
+            const { data: { session } } = await supabase.auth.getSession();
+
+            // We can hit a specific redline endpoint or a generic AI endpoint
+            const response = await fetch('/api/lex-pro/redline', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+                },
+                body: JSON.stringify({ 
+                    contractText,
+                    analysis: analysisResult
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                setRedlineResult(data.redline);
+            } else {
+                alert(`Error generating redline: ${data.error}`);
+            }
+        } catch (error) {
+            console.error("Redline Error:", error);
+            alert("Failed to generate redline due to network error.");
+        } finally {
+            setIsRedlining(false);
         }
     };
 
@@ -280,6 +322,63 @@ export default function LexProAnalyze() {
                                     </motion.div>
                                 ))}
                             </div>
+                            
+                            {/* Redline Generation Area */}
+                            <div className="pt-6 border-t border-white/10 mt-8">
+                                {!redlineResult && (
+                                    <Button 
+                                        onClick={handleGenerateRedline}
+                                        disabled={isRedlining}
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] h-12"
+                                    >
+                                        {isRedlining ? (
+                                            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Generating Redlined Response...</>
+                                        ) : (
+                                            <><PenTool className="w-5 h-5 mr-2" /> Generate Redline Response</>
+                                        )}
+                                    </Button>
+                                )}
+                                
+                                {redlineResult && (
+                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                                        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                            <PenTool className="w-5 h-5 text-blue-400" />
+                                            Proposed Redline Response
+                                        </h3>
+                                        
+                                        <div className="p-4 bg-black/60 rounded-xl border border-white/10 text-sm text-gray-300 font-sans whitespace-pre-wrap">
+                                            {redlineResult.email}
+                                        </div>
+                                        
+                                        <div className="space-y-3 mt-4">
+                                            <h4 className="font-bold text-sm text-gray-400 uppercase tracking-wider">Suggested Edits</h4>
+                                            {redlineResult.changes.map((change, idx) => (
+                                                <div key={idx} className="p-4 bg-black/40 border border-white/5 rounded-xl text-sm">
+                                                    <div className="line-through text-red-400/70 mb-2 p-2 bg-red-500/10 rounded">
+                                                        - {change.original}
+                                                    </div>
+                                                    <div className="text-green-400 mb-3 p-2 bg-green-500/10 rounded">
+                                                        + {change.new}
+                                                    </div>
+                                                    <div className="text-gray-400 italic text-xs border-l-2 border-blue-500 pl-2">
+                                                        Rationale: {change.reason}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        
+                                        <div className="flex gap-4 pt-4">
+                                            <Button className="flex-1 bg-white text-black hover:bg-gray-200">
+                                                Copy Email & Redlines
+                                            </Button>
+                                            <Button variant="outline" className="border-white/10 text-white">
+                                                Export to DOCX
+                                            </Button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </div>
+
                         </motion.div>
                     )}
                 </div>

@@ -70,7 +70,7 @@ export default function LexProKnowledgeBase() {
         <div className="max-w-4xl mx-auto py-8">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-                    <Database className="w-8 h-8 text-orange-400" />
+                    <Database className="w-8 h-8 text-blue-400" />
                     Knowledge Base Manager
                 </h1>
                 <p className="text-gray-400 mt-2">
@@ -89,7 +89,7 @@ export default function LexProKnowledgeBase() {
                         value={formData.title} 
                         onChange={handleInputChange}
                         placeholder="e.g., Standard NDA Clause - Non Compete 2026"
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                     />
                 </div>
 
@@ -99,7 +99,7 @@ export default function LexProKnowledgeBase() {
                         name="sourceType" 
                         value={formData.sourceType} 
                         onChange={handleInputChange}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 appearance-none"
                     >
                         <option value="Precedent">Internal Precedent (Law Firm Data)</option>
                         <option value="Act">Statutory Law / Indian Act</option>
@@ -110,14 +110,14 @@ export default function LexProKnowledgeBase() {
                 <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-300 flex items-center justify-between">
                         <span>Document Content</span>
-                        <span className="text-xs text-orange-500/80 bg-orange-500/10 px-2 py-1 rounded">Text limits apply</span>
+                        <span className="text-xs text-blue-400/80 bg-blue-500/10 px-2 py-1 rounded">Text limits apply</span>
                     </label>
                     <textarea 
                         name="content" 
                         value={formData.content} 
                         onChange={handleInputChange}
                         placeholder="Paste the raw text of the precedent or clause here..."
-                        className="w-full h-64 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white font-serif focus:outline-none focus:border-orange-500/50 resize-y"
+                        className="w-full h-64 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white font-serif focus:outline-none focus:border-blue-500/50 resize-y"
                     />
                 </div>
 
@@ -136,7 +136,7 @@ export default function LexProKnowledgeBase() {
                     <Button 
                         onClick={handleUpload}
                         disabled={isUploading}
-                        className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] h-12 text-lg"
+                        className="w-full bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-500 hover:to-slate-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] h-12 text-lg"
                     >
                         {isUploading ? (
                             <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Embedding Vector & Saving...</>

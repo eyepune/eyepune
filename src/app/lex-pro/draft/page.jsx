@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Wand2, ArrowRight, Loader2, Save, Download, Link as LinkIcon, Check } from 'lucide-react';
+import { FileText, Wand2, ArrowRight, Loader2, Save, Download, Link as LinkIcon, Check, History, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { jsPDF } from 'jspdf';
 import { createBrowserClient } from '@supabase/ssr';
@@ -92,6 +92,8 @@ export default function LexProDrafting() {
     const [auditTrails, setAuditTrails] = useState([]);
     const [isSigning, setIsSigning] = useState(false);
     const [isCopied, setIsCopied] = useState(false);
+    const [versions, setVersions] = useState([]);
+    const [showVersions, setShowVersions] = useState(false);
 
     const searchParams = useSearchParams();
     const contractIdParam = searchParams.get('id');
@@ -133,6 +135,8 @@ export default function LexProDrafting() {
         partyBAddress: '',
         partyBSignatory: '',
         partyBIdentifier: '',
+        partyAEmail: '',
+        partyBEmail: '',
         effectiveDate: '',
         signatureType: 'E-Signature',
         printFormat: 'Standard A4',
@@ -246,6 +250,23 @@ Signature Method: ${formData.signatureType}
         }
     };
 
+    const handleSaveSnapshot = () => {
+        const newVersion = {
+            id: `v${versions.length + 1}`,
+            timestamp: new Date().toLocaleString(),
+            content: generatedDraft
+        };
+        setVersions(prev => [newVersion, ...prev]);
+        alert(`Snapshot ${newVersion.id} saved to history!`);
+    };
+
+    const handleRestoreVersion = (content) => {
+        if(confirm("Are you sure you want to restore this version? Unsaved changes will be lost.")) {
+            setGeneratedDraft(content);
+            setShowVersions(false);
+        }
+    };
+
     const handleSignDocument = async (partyName) => {
         if (!savedContractId) {
             alert("Please save the draft first before signing.");
@@ -277,6 +298,49 @@ Signature Method: ${formData.signatureType}
                 alert(`Successfully signed as ${partyName}!`);
             } else {
                 alert(`Error signing: ${data.error}`);
+            }
+        } catch (err) {
+            alert(`Network error: ${err.message}`);
+        } finally {
+            setIsSigning(false);
+        }
+    };
+
+    const handleRouteForSignature = async (partyName, email) => {
+        if (!savedContractId) {
+            alert("Please save the draft first before routing for signature.");
+            return;
+        }
+        if (!email) {
+            alert(`Please provide an email address for ${partyName} in the form details.`);
+            return;
+        }
+        
+        setIsSigning(true);
+        try {
+            const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+            );
+            const { data: { session } } = await supabase.auth.getSession();
+
+            const response = await fetch('/api/lex-pro/route-signature', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+                },
+                body: JSON.stringify({
+                    contractId: savedContractId,
+                    partyName: partyName,
+                    email: email
+                })
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert(`Sequential Routing Initiated!\nAn execution link has been securely emailed to ${partyName} at ${email}.`);
+            } else {
+                alert(`Error routing for signature: ${data.error}`);
             }
         } catch (err) {
             alert(`Network error: ${err.message}`);
@@ -425,6 +489,10 @@ Signature Method: ${formData.signatureType}
                                 <label className="text-xs font-medium text-gray-400">CIN / PAN / GSTIN</label>
                                 <input type="text" name="partyAIdentifier" value={formData.partyAIdentifier} onChange={handleInputChange} placeholder="Registration number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
                             </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Email Address (For Routing)</label>
+                                <input type="email" name="partyAEmail" value={formData.partyAEmail} onChange={handleInputChange} placeholder="partyA@example.com" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
                         </div>
                     </div>
 
@@ -456,8 +524,12 @@ Signature Method: ${formData.signatureType}
                                 <input type="text" name="partyBSignatory" value={formData.partyBSignatory} onChange={handleInputChange} placeholder="e.g. John Smith, CEO" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-medium text-gray-400">CIN / PAN / GSTIN</label>
-                                <input type="text" name="partyBIdentifier" value={formData.partyBIdentifier} onChange={handleInputChange} placeholder="Registration number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <label className="text-xs font-medium text-gray-400">CIN / PAN / Aadhaar</label>
+                                <input type="text" name="partyBIdentifier" value={formData.partyBIdentifier} onChange={handleInputChange} placeholder="Identification number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-gray-400">Email Address (For Routing)</label>
+                                <input type="email" name="partyBEmail" value={formData.partyBEmail} onChange={handleInputChange} placeholder="partyB@example.com" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
                             </div>
                         </div>
                     </div>
@@ -615,20 +687,32 @@ Signature Method: ${formData.signatureType}
                                             {isCopied ? 'Copied!' : 'Copy Share Link'}
                                         </Button>
                                         <Button 
-                                            onClick={() => handleSignDocument(formData.partyA || 'Party A')} 
+                                            onClick={() => handleRouteForSignature(formData.partyA || 'Party A', formData.partyAEmail)} 
                                             disabled={isSigning || auditTrails.some(t => t.party_name === (formData.partyA || 'Party A'))} 
                                             className="bg-blue-600 hover:bg-blue-700 text-white"
                                         >
-                                            {auditTrails.some(t => t.party_name === (formData.partyA || 'Party A')) ? 'Party A Signed ✓' : 'Sign Party A'}
+                                            <Send className="w-4 h-4 mr-2" />
+                                            {auditTrails.some(t => t.party_name === (formData.partyA || 'Party A')) ? 'Party A Signed ✓' : 'Route to Party A'}
                                         </Button>
                                         <Button 
-                                            onClick={() => handleSignDocument(formData.partyB || 'Party B')} 
+                                            onClick={() => handleRouteForSignature(formData.partyB || 'Party B', formData.partyBEmail)} 
                                             disabled={isSigning || auditTrails.some(t => t.party_name === (formData.partyB || 'Party B'))} 
                                             className="bg-green-600 hover:bg-green-700 text-white"
                                         >
-                                            {auditTrails.some(t => t.party_name === (formData.partyB || 'Party B')) ? 'Party B Signed ✓' : 'Sign Party B'}
+                                            <Send className="w-4 h-4 mr-2" />
+                                            {auditTrails.some(t => t.party_name === (formData.partyB || 'Party B')) ? 'Party B Signed ✓' : 'Route to Party B'}
                                         </Button>
                                     </div>
+                                )}
+                                
+                                {generatedDraft && (
+                                    <Button 
+                                        onClick={() => setShowVersions(!showVersions)}
+                                        variant="outline"
+                                        className="border-white/10 bg-white/5 text-gray-300 hover:text-white"
+                                    >
+                                        <History className="w-4 h-4 mr-2" /> History
+                                    </Button>
                                 )}
                                 <Button 
                                     onClick={handleExportPDF} 
@@ -640,9 +724,11 @@ Signature Method: ${formData.signatureType}
                     )}
                 </div>
 
-                {/* Editor Content Area */}
-                <div className="flex-1 p-6 overflow-y-auto bg-[#0a0a0a] scrollbar-thin scrollbar-thumb-orange-500/20 scrollbar-track-transparent">
-                    {!generatedDraft && !isGenerating && (
+                {/* Main Editor + Version History Wrapper */}
+                <div className="flex-1 flex overflow-hidden">
+                    {/* Editor Content Area */}
+                    <div className="flex-1 p-6 overflow-y-auto bg-[#0a0a0a] scrollbar-thin scrollbar-thumb-orange-500/20 scrollbar-track-transparent">
+                        {!generatedDraft && !isGenerating && (
                         <div className="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto opacity-50">
                             <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
                                 <FileText className="w-10 h-10 text-gray-400" />
@@ -671,10 +757,51 @@ Signature Method: ${formData.signatureType}
                             className="bg-white/5 border border-white/10 rounded-xl p-8 max-w-3xl mx-auto shadow-2xl"
                         >
                             <textarea 
-                                value={generatedDraft.trim()} 
+                                className="w-full h-full min-h-[500px] bg-transparent text-gray-300 font-serif leading-relaxed focus:outline-none resize-none"
+                                value={generatedDraft}
                                 onChange={(e) => setGeneratedDraft(e.target.value)}
-                                className="w-full h-[600px] bg-transparent text-gray-300 font-serif leading-relaxed focus:outline-none resize-none"
                             />
+                        </motion.div>
+                    )}
+                </div>
+                    
+                    {/* Version History Sidebar */}
+                    {showVersions && (
+                        <motion.div 
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={{ width: 320, opacity: 1 }}
+                            className="border-l border-white/10 bg-black/40 overflow-y-auto shrink-0 flex flex-col"
+                        >
+                            <div className="p-4 border-b border-white/10 bg-white/5 flex justify-between items-center sticky top-0">
+                                <h3 className="font-bold text-white flex items-center gap-2">
+                                    <History className="w-4 h-4 text-orange-400" /> Version History
+                                </h3>
+                                <Button size="sm" onClick={handleSaveSnapshot} className="bg-orange-600 hover:bg-orange-700 text-white text-xs h-7 px-2">
+                                    + Snapshot
+                                </Button>
+                            </div>
+                            <div className="p-4 space-y-3">
+                                {versions.length === 0 ? (
+                                    <p className="text-xs text-gray-500 text-center py-4">No snapshots saved yet.</p>
+                                ) : (
+                                    versions.map(v => (
+                                        <div key={v.id} className="p-3 bg-white/5 border border-white/10 rounded-lg hover:border-orange-500/30 transition-colors group">
+                                            <div className="flex justify-between items-center mb-2">
+                                                <span className="font-bold text-sm text-white">{v.id}</span>
+                                                <span className="text-[10px] text-gray-500">{v.timestamp}</span>
+                                            </div>
+                                            <Button 
+                                                variant="outline" 
+                                                size="sm" 
+                                                onClick={() => handleRestoreVersion(v.content)}
+                                                className="w-full h-7 text-xs border-white/10 bg-black hover:bg-orange-500/20 hover:text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                Restore Version
+                                            </Button>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
                         </motion.div>
                     )}
                 </div>

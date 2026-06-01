@@ -83,13 +83,13 @@ export default function LexProLogin() {
         <div className="min-h-screen bg-black flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
             {/* Background Effects */}
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-orange-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
-                <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-red-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/3" />
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
+                <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-slate-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/3" />
             </div>
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
                 <div className="flex justify-center mb-6">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-[0_0_30px_rgba(249,115,22,0.4)]">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-slate-600 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.4)]">
                         <ShieldAlert className="w-8 h-8 text-white" />
                     </div>
                 </div>
@@ -115,7 +115,7 @@ export default function LexProLogin() {
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 sm:text-sm"
+                                    className="block w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 sm:text-sm"
                                     placeholder="attorney@lawfirm.com"
                                 />
                             </div>
@@ -132,7 +132,7 @@ export default function LexProLogin() {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 sm:text-sm"
+                                    className="block w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 sm:text-sm"
                                     placeholder="••••••••"
                                 />
                             </div>
@@ -148,7 +148,7 @@ export default function LexProLogin() {
                             <Button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full flex justify-center py-6 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                                className="w-full flex justify-center py-6 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-500 hover:to-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
                             >
                                 {isLoading ? (
                                     <Loader2 className="w-5 h-5 animate-spin" />
