@@ -172,9 +172,20 @@ export default function SecureSignPortal() {
                             <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Audit Trail</h3>
                             <div className="space-y-4">
                                 {auditTrails.map((trail, idx) => (
-                                    <div key={idx} className="border-l-2 border-orange-500 pl-4 py-1">
-                                        <div className="text-sm font-bold text-white">{trail.party_name}</div>
-                                        <div className="text-xs text-gray-500 mt-1">
+                                    <div key={idx} className="border-l-2 border-orange-500 pl-4 py-2 space-y-1">
+                                        <div className="text-sm font-bold text-white flex items-center justify-between">
+                                            {trail.party_name}
+                                            <ShieldCheck className="w-4 h-4 text-green-400" />
+                                        </div>
+                                        <div className="text-xs text-gray-400 flex justify-between">
+                                            <span>IP Address:</span> 
+                                            <span className="font-mono text-gray-300">{trail.ip_address}</span>
+                                        </div>
+                                        <div className="text-xs text-gray-400 flex justify-between">
+                                            <span>SHA-256 Hash:</span> 
+                                            <span className="font-mono text-gray-300">{trail.document_hash?.substring(0, 12)}...</span>
+                                        </div>
+                                        <div className="text-xs text-gray-500 mt-1 border-t border-white/10 pt-1">
                                             {new Date(trail.signed_at).toLocaleString()}
                                         </div>
                                     </div>

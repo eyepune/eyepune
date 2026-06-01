@@ -163,9 +163,9 @@ export default function LexProLandingPage() {
                         <div>
                             <h4 className="text-white font-bold mb-6">Solutions</h4>
                             <ul className="space-y-4 text-sm text-gray-400">
-                                <li><a href="#" className="hover:text-white transition-colors">For Law Firms</a></li>
-                                <li><a href="#" className="hover:text-white transition-colors">For Startups</a></li>
-                                <li><a href="#" className="hover:text-white transition-colors">Enterprise API</a></li>
+                                <li><Link href="/lex-pro/law-firms" className="hover:text-white transition-colors">For Law Firms</Link></li>
+                                <li><Link href="/lex-pro/startups" className="hover:text-white transition-colors">For Startups</Link></li>
+                                <li><Link href="/lex-pro/enterprise-api" className="hover:text-white transition-colors">Enterprise API</Link></li>
                             </ul>
                         </div>
 

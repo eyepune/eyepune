@@ -22,6 +22,11 @@ const loadRazorpayScript = () => {
 export default function CheckoutModal({ pkg, isOpen, onClose }) {
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [geoPricing, setGeoPricing] = useState({
+        currency: 'INR',
+        amount: pkg.price,
+        isLoaded: false
+    });
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -50,16 +55,46 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                 email: user.email || prev.email
             }));
         }
-    }, [user]);
+
+        // Fetch Geo-Location for Pricing
+        const fetchGeoPricing = async () => {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                if (data.country_code !== 'IN') {
+                    // International User - Convert to USD
+                    const exchangeRate = 83; // Approx INR to USD
+                    setGeoPricing({
+                        currency: 'USD',
+                        amount: Math.ceil(pkg.price / exchangeRate),
+                        isLoaded: true
+                    });
+                } else {
+                    setGeoPricing({
+                        currency: 'INR',
+                        amount: pkg.price,
+                        isLoaded: true
+                    });
+                }
+            } catch (err) {
+                // Fallback to INR on error
+                setGeoPricing({ currency: 'INR', amount: pkg.price, isLoaded: true });
+            }
+        };
+
+        if (!geoPricing.isLoaded) {
+            fetchGeoPricing();
+        }
+    }, [user, pkg.price, geoPricing.isLoaded]);
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-IN', {
+    const formatPrice = (price, currency = 'INR') => {
+        return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'INR',
+            currency: currency,
             maximumFractionDigits: 0
         }).format(price);
     };
@@ -82,8 +117,8 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    amount: pkg.price,
-                    currency: 'INR',
+                    amount: geoPricing.amount,
+                    currency: geoPricing.currency,
                     receipt: `pkg_${Date.now()}`
                 })
             });
@@ -122,7 +157,8 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                                     customer_email: formData.email,
                                     customer_phone: formData.phone,
                                     plan_name: pkg.name,
-                                    amount: pkg.price,
+                                    amount: geoPricing.amount,
+                                    currency: geoPricing.currency,
                                     notes: formData.notes
                                 }
                             }),
@@ -196,7 +232,13 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                             <div className="p-6 border-b bg-muted/30">
                                 <div className="flex justify-between items-center">
                                     <span className="text-muted-foreground">Total Amount</span>
-                                    <span className="text-2xl font-bold">{formatPrice(pkg.price)}</span>
+                                    <span className="text-2xl font-bold">
+                                        {!geoPricing.isLoaded ? (
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                        ) : (
+                                            formatPrice(geoPricing.amount, geoPricing.currency)
+                                        )}
+                                    </span>
                                 </div>
                             </div>
 
@@ -322,7 +364,7 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                                             Processing...
                                         </>
                                     ) : (
-                                        `Proceed to Pay ${formatPrice(pkg.price)}`
+                                        `Proceed to Pay ${formatPrice(geoPricing.amount, geoPricing.currency)}`
                                     )}
                                 </Button>
 

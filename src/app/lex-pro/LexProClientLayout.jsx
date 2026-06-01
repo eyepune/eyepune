@@ -10,7 +10,8 @@ import { createClient } from '@supabase/supabase-js';
 export default function LexProClientLayout({ children }) {
     const pathname = usePathname();
     const router = useRouter();
-    const isPublicPage = pathname === '/lex-pro' || pathname === '/lex-pro/login';
+    const publicPages = ['/lex-pro', '/lex-pro/login', '/lex-pro/law-firms', '/lex-pro/startups', '/lex-pro/enterprise-api'];
+    const isPublicPage = publicPages.includes(pathname);
     const [isLoading, setIsLoading] = useState(!isPublicPage);
 
     // Initialize Supabase Client
