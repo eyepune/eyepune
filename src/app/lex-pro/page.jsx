@@ -69,7 +69,7 @@ export default function LexProLandingPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="flex flex-col sm:flex-row gap-4"
+                    className="flex flex-col sm:flex-row gap-4 mb-12"
                 >
                     <Link href="/lex-pro/login">
                         <Button className="h-14 px-8 rounded-full text-lg font-bold bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-500 hover:to-slate-500 text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]">
@@ -79,6 +79,21 @@ export default function LexProLandingPage() {
                     <Button variant="outline" className="h-14 px-8 rounded-full text-lg font-semibold border-white/10 bg-white/5 hover:bg-white/10 text-white backdrop-blur-md">
                         Book a Demo
                     </Button>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5, duration: 1 }}
+                    className="flex flex-col items-center justify-center opacity-80 hover:opacity-100 transition-opacity cursor-pointer pt-8 border-t border-white/5 w-full max-w-lg mx-auto"
+                >
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">Official Legal Intelligence Partner</p>
+                    <a href="https://www.clearclauselegall.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all shadow-lg hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-slate-400 flex items-center justify-center">
+                            <ShieldAlert className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Clear Clause Legal</span>
+                    </a>
                 </motion.div>
             </section>
 
@@ -144,9 +159,15 @@ export default function LexProLandingPage() {
                             <p className="text-sm text-gray-400 leading-relaxed mb-6">
                                 The autonomous legal drafting and intelligence engine built specifically for the Indian legal framework.
                             </p>
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-900/10 border border-blue-500/10">
-                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                                <span className="text-[10px] font-bold tracking-widest uppercase text-blue-400">A Product by EyE PunE</span>
+                            <div className="space-y-4">
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-900/10 border border-blue-500/10 w-fit">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                    <span className="text-[10px] font-bold tracking-widest uppercase text-blue-400">A Product by EyE PunE</span>
+                                </div>
+                                <a href="https://www.clearclauselegall.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-blue-500/30 transition-colors w-fit group">
+                                    <ShieldAlert className="w-3 h-3 text-gray-400 group-hover:text-blue-400" />
+                                    <span className="text-[10px] font-bold tracking-widest uppercase text-gray-400 group-hover:text-white transition-colors">Legal Partner: Clear Clause Legal</span>
+                                </a>
                             </div>
                         </div>
 
