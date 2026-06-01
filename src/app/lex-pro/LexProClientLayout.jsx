@@ -71,9 +71,9 @@ export default function LexProClientLayout({ children }) {
         <div className="flex h-screen bg-[#0A0F1C] text-gray-100 overflow-hidden font-sans">
             {/* Sidebar */}
             <aside className="w-64 border-r border-blue-900/30 bg-[#0D1425] flex flex-col h-full hidden md:flex">
-                <div className="p-6">
-                    <Link href="/lex-pro/dashboard" className="flex items-center">
-                        <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-24 md:h-32 w-auto object-contain scale-125 origin-left" style={{ filter: 'brightness(0) invert(1) drop-shadow(0px 0px 15px rgba(255,255,255,0.8))' }} />
+                <div className="p-6 pb-2">
+                    <Link href="/lex-pro/dashboard" className="flex items-center -ml-2">
+                        <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-12 md:h-16 w-auto object-contain scale-[1.5] md:scale-[2] origin-left" style={{ filter: 'brightness(0) invert(1) drop-shadow(0px 0px 10px rgba(255,255,255,0.8))' }} />
                     </Link>
                 </div>
 
