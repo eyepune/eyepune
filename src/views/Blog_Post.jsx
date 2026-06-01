@@ -285,6 +285,7 @@ export default function BlogPost({ initialData }) {
                             ) : (
                                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                                     {post.content}
+                                </ReactMarkdown>
                             )}
                         </div>
 
