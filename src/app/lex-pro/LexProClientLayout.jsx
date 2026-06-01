@@ -73,7 +73,7 @@ export default function LexProClientLayout({ children }) {
             <aside className="w-64 border-r border-blue-900/30 bg-[#0D1425] flex flex-col h-full hidden md:flex">
                 <div className="p-6">
                     <Link href="/lex-pro/dashboard" className="flex items-center">
-                        <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-20 md:h-24 w-auto object-contain" style={{ filter: 'drop-shadow(0px 0px 10px rgba(255,255,255,1)) drop-shadow(0px 0px 25px rgba(255,255,255,0.6))' }} />
+                        <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-24 md:h-32 w-auto object-contain scale-125 origin-left" style={{ filter: 'url(#extract-white) drop-shadow(0px 0px 15px rgba(255,255,255,0.8))' }} />
                     </Link>
                 </div>
 
