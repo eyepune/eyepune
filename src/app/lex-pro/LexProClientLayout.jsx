@@ -61,7 +61,6 @@ export default function LexProClientLayout({ children }) {
         return (
             <div className="bg-[#0A0F1C] min-h-screen font-sans text-gray-100">
                 {children}
-                <LexProChatWidget />
             </div>
         );
     }
