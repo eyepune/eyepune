@@ -17,8 +17,8 @@ export default function LexProLandingPage() {
 
             {/* Navigation */}
             <nav className="relative z-50 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-                <Link href="/lex-pro" className="flex items-center bg-[#0A0F1C]">
-                    <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-28 md:h-40 w-auto object-contain scale-150 origin-left mix-blend-screen" style={{ filter: 'grayscale(1) invert(1) brightness(2) drop-shadow(0px 0px 15px rgba(255,255,255,0.8))' }} />
+                <Link href="/lex-pro" className="flex items-center">
+                    <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-28 md:h-40 w-auto object-contain scale-150 origin-left" style={{ filter: 'brightness(0) invert(1) drop-shadow(0px 0px 15px rgba(255,255,255,0.8))' }} />
                 </Link>
                 <div className="flex items-center gap-6 font-medium text-sm">
                     <Link href="#features" className="text-gray-300 hover:text-blue-400 transition-colors hidden md:block">Features</Link>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0A0F1C; /* Dark navy background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .nav-simulator {
+            width: 100%;
+            max-width: 1200px;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            height: 160px; /* equivalent to h-40 */
+            width: auto;
+            object-fit: contain;
+            transform: scale(1.5);
+            transform-origin: left center;
+            filter: brightness(0) invert(1) drop-shadow(0px 0px 15px rgba(255,255,255,0.8));
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-simulator">
+        <img src="public/lexpro_logo.png" alt="LexPro Logo" class="logo" />
+    </div>
+</body>
+</html>
