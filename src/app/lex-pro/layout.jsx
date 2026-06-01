@@ -50,16 +50,6 @@ export default function LexProLayout({ children }) {
 
     return (
         <>
-            <svg width="0" height="0" className="absolute pointer-events-none">
-                <filter id="extract-white">
-                    <feColorMatrix type="matrix" values="
-                        0  0  0  0  1
-                        0  0  0  0  1
-                        0  0  0  0  1
-                       -1 -1 -1  0  2.8
-                    " />
-                </filter>
-            </svg>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
