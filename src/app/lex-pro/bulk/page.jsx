@@ -8,22 +8,77 @@ import { createBrowserClient } from '@supabase/ssr';
 
 // Same schema as draft page
 const contractSchema = {
-    nda: [ { id: 'purpose', label: 'Purpose of NDA' }, { id: 'duration', label: 'Duration of Confidentiality' } ],
-    employment: [ { id: 'role', label: 'Job Title / Role' }, { id: 'salary', label: 'Annual Compensation' }, { id: 'probation', label: 'Probation Period' }, { id: 'notice', label: 'Notice Period' } ],
-    service: [ { id: 'scope', label: 'Scope of Services' }, { id: 'paymentTerms', label: 'Payment Terms' } ],
-    freelance: [ { id: 'deliverables', label: 'Specific Deliverables' }, { id: 'fee', label: 'Consulting Fee' } ],
-    consulting: [ { id: 'services', label: 'Consulting Services' }, { id: 'retainer', label: 'Retainer Amount' } ],
-    founders: [ { id: 'equity', label: 'Equity Split (%)' }, { id: 'vesting', label: 'Vesting Schedule' }, { id: 'roles', label: 'Founder Roles' } ],
-    shareholders: [ { id: 'boardSeats', label: 'Board Seats Allocation' }, { id: 'lockIn', label: 'Founder Lock-in Period' } ],
-    partnership: [ { id: 'capital', label: 'Capital Contribution' }, { id: 'profitShare', label: 'Profit/Loss Sharing Ratio' } ],
-    joint_venture: [ { id: 'jvPurpose', label: 'Purpose of Joint Venture' }, { id: 'ownership', label: 'Ownership Structure' } ],
-    mou: [ { id: 'intention', label: 'Primary Intention' }, { id: 'validity', label: 'MoU Validity Period' } ],
-    saas: [ { id: 'subscription', label: 'Subscription Plan / Tier' }, { id: 'users', label: 'Number of Permitted Users' }, { id: 'uptime', label: 'SLA Uptime Guarantee' } ],
-    terms: [ { id: 'websiteURL', label: 'Website/App URL' }, { id: 'userType', label: 'Target Audience' } ],
-    lease: [ { id: 'property', label: 'Property Address' }, { id: 'rent', label: 'Monthly Rent' }, { id: 'deposit', label: 'Security Deposit' }, { id: 'lockInLease', label: 'Lock-in Period' } ],
-    rent: [ { id: 'propertyRent', label: 'Property Address' }, { id: 'rentAmount', label: 'Monthly Rent' }, { id: 'depositAmount', label: 'Security Deposit' } ],
-    vendor: [ { id: 'goods', label: 'Goods/Services Provided' }, { id: 'delivery', label: 'Delivery Terms' } ],
-    franchise: [ { id: 'territory', label: 'Exclusive Territory' }, { id: 'royalty', label: 'Royalty Fee (%)' } ]
+    nda: [
+        { id: 'purpose', label: 'Purpose of NDA', placeholder: 'e.g., Software Evaluation' },
+        { id: 'duration', label: 'Duration of Confidentiality', placeholder: 'e.g., 3 Years' }
+    ],
+    employment: [
+        { id: 'role', label: 'Job Title / Role', placeholder: 'e.g., Senior Developer' },
+        { id: 'salary', label: 'Annual Compensation', placeholder: 'e.g., INR 12,00,000' },
+        { id: 'probation', label: 'Probation Period', placeholder: 'e.g., 6 Months' },
+        { id: 'notice', label: 'Notice Period', placeholder: 'e.g., 60 Days' }
+    ],
+    service: [
+        { id: 'scope', label: 'Scope of Services', placeholder: 'e.g., Marketing and SEO' },
+        { id: 'paymentTerms', label: 'Payment Terms', placeholder: 'e.g., Net 30' }
+    ],
+    freelance: [
+        { id: 'deliverables', label: 'Specific Deliverables', placeholder: 'e.g., 5 articles per month' },
+        { id: 'fee', label: 'Consulting Fee', placeholder: 'e.g., INR 50,000 / month' }
+    ],
+    consulting: [
+        { id: 'services', label: 'Consulting Services', placeholder: 'e.g., Financial Auditing' },
+        { id: 'retainer', label: 'Retainer Amount', placeholder: 'e.g., INR 1,00,000 / month' }
+    ],
+    founders: [
+        { id: 'equity', label: 'Equity Split (%)', placeholder: 'e.g., 50/50' },
+        { id: 'vesting', label: 'Vesting Schedule', placeholder: 'e.g., 4 years with 1 year cliff' },
+        { id: 'roles', label: 'Founder Roles', placeholder: 'e.g., CEO and CTO' }
+    ],
+    shareholders: [
+        { id: 'boardSeats', label: 'Board Seats Allocation', placeholder: 'e.g., 2 for Investors, 3 for Founders' },
+        { id: 'lockIn', label: 'Founder Lock-in Period', placeholder: 'e.g., 3 Years' }
+    ],
+    partnership: [
+        { id: 'capital', label: 'Capital Contribution', placeholder: 'e.g., INR 5 Lakhs each' },
+        { id: 'profitShare', label: 'Profit/Loss Sharing Ratio', placeholder: 'e.g., 60:40' }
+    ],
+    joint_venture: [
+        { id: 'jvPurpose', label: 'Purpose of Joint Venture', placeholder: 'e.g., Real Estate Development' },
+        { id: 'ownership', label: 'Ownership Structure', placeholder: 'e.g., 51% Party A, 49% Party B' }
+    ],
+    mou: [
+        { id: 'intention', label: 'Primary Intention', placeholder: 'e.g., Explore Merger Opportunities' },
+        { id: 'validity', label: 'MoU Validity Period', placeholder: 'e.g., 6 Months' }
+    ],
+    saas: [
+        { id: 'subscription', label: 'Subscription Plan / Tier', placeholder: 'e.g., Enterprise Tier' },
+        { id: 'users', label: 'Number of Permitted Users', placeholder: 'e.g., Up to 50' },
+        { id: 'uptime', label: 'SLA Uptime Guarantee', placeholder: 'e.g., 99.9%' }
+    ],
+    terms: [
+        { id: 'websiteURL', label: 'Website/App URL', placeholder: 'e.g., https://eyepune.com' },
+        { id: 'userType', label: 'Target Audience', placeholder: 'e.g., B2B Businesses' }
+    ],
+    lease: [
+        { id: 'property', label: 'Property Address', placeholder: 'e.g., 101 Tech Park, Pune' },
+        { id: 'rent', label: 'Monthly Rent', placeholder: 'e.g., INR 1,50,000' },
+        { id: 'deposit', label: 'Security Deposit', placeholder: 'e.g., 6 Months Rent' },
+        { id: 'lockInLease', label: 'Lock-in Period', placeholder: 'e.g., 3 Years' }
+    ],
+    rent: [
+        { id: 'propertyRent', label: 'Property Address', placeholder: 'e.g., Flat 202, ABC Tower' },
+        { id: 'rentAmount', label: 'Monthly Rent', placeholder: 'e.g., INR 25,000' },
+        { id: 'depositAmount', label: 'Security Deposit', placeholder: 'e.g., INR 1,00,000' }
+    ],
+    vendor: [
+        { id: 'goods', label: 'Goods/Services Provided', placeholder: 'e.g., Office Supplies' },
+        { id: 'delivery', label: 'Delivery Terms', placeholder: 'e.g., Within 7 days of PO' }
+    ],
+    franchise: [
+        { id: 'territory', label: 'Exclusive Territory', placeholder: 'e.g., Pune District' },
+        { id: 'royalty', label: 'Royalty Fee (%)', placeholder: 'e.g., 5% of Gross Sales' }
+    ]
 };
 
 export default function LexProBulk() {

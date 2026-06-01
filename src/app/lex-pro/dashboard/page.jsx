@@ -49,7 +49,12 @@ export default function LexProDashboard() {
                     <h1 className="text-3xl font-black text-white mb-2">Welcome back to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-slate-300">Lex Pro</span></h1>
                     <p className="text-gray-400">Here's an overview of your contract lifecycle and AI insights.</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
+                    <Link href="/lex-pro/bulk">
+                        <Button variant="outline" className="border-orange-500/30 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300">
+                            Bulk Engine
+                        </Button>
+                    </Link>
                     <Link href="/lex-pro/analyze">
                         <Button variant="outline" className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300">
                             Analyze Document
