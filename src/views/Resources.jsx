@@ -41,9 +41,11 @@ export default function Resources() {
       link: 'https://rzp.io/rzp/1rSpeFFL',
       buttonText: 'Start with Razorpay',
       icon: (
-        <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white text-3xl shadow-lg border border-blue-400/30">
-          R
-        </div>
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" 
+          alt="Razorpay" 
+          className="h-8 w-auto dark:brightness-0 dark:invert" 
+        />
       ),
       color: 'from-blue-600 to-sky-800',
       instruction: 'Join Razorpay Partners. You will get a unique link and earn 0.1% commission on all merchant transactions.'

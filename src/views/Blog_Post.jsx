@@ -294,12 +294,11 @@ export default function BlogPost({ initialData }) {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                             <div className="relative z-10 flex-1">
                                 <span className="text-blue-400 font-bold text-xs uppercase tracking-widest mb-4 block">Featured Partner</span>
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center font-black text-white text-2xl shadow-lg border border-blue-400/30">
-                                        R
-                                    </div>
-                                    <span className="text-3xl font-black text-white tracking-tight">Razorpay</span>
-                                </div>
+                                <img 
+                                    src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" 
+                                    alt="Razorpay" 
+                                    className="h-8 w-auto mb-6 brightness-0 invert" 
+                                />
                                 <p className="text-blue-200/80 text-sm md:text-base">Join the leading payment infrastructure powering EyE PunE. Accept global transactions seamlessly.</p>
                             </div>
                             <div className="relative z-10">
