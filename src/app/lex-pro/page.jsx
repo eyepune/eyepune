@@ -35,6 +35,17 @@ export default function LexProLandingPage() {
             {/* Hero Section */}
             <section className="relative z-10 pt-20 pb-32 px-4 max-w-7xl mx-auto text-center flex flex-col items-center">
 
+                <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#121B33]/50 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)] mb-8 backdrop-blur-sm"
+                >
+                    <span className="flex h-2 w-2 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-300">A Product by EyE PunE</span>
+                </motion.div>
                 
                 <motion.h1 
                     initial={{ opacity: 0, y: 20 }}

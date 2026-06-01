@@ -89,9 +89,13 @@ export default function LexProClientLayout({ children }) {
                 </nav>
 
                 <div className="p-4 border-t border-blue-900/30">
-                    <div onClick={handleSignOut} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer group">
+                    <div onClick={handleSignOut} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer group mb-4">
                         <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                         <span className="font-medium">Sign Out</span>
+                    </div>
+                    <div className="px-4 text-center mt-auto pb-2">
+                        <p className="text-[10px] text-gray-600 tracking-widest uppercase font-bold">A Product By</p>
+                        <p className="text-[12px] text-blue-400/80 tracking-widest uppercase font-black mt-0.5">EyE PunE</p>
                     </div>
                 </div>
             </aside>
