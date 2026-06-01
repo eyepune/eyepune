@@ -118,6 +118,77 @@ export default function LexProLandingPage() {
                     </div>
                 </div>
             </section>
+
+            {/* CTA Pre-footer */}
+            <section className="relative z-10 py-24 px-4 max-w-5xl mx-auto text-center border-t border-white/5">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
+                <h2 className="text-4xl md:text-6xl font-black mb-6">Ready to upgrade your firm?</h2>
+                <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">Join the elite Indian law firms and startups automating their legal drafting and risk analysis.</p>
+                <div className="flex items-center justify-center gap-4">
+                    <Link href="/lex-pro/login">
+                        <Button className="h-14 px-8 text-lg font-bold bg-white text-[#0A0F1C] hover:bg-gray-100 rounded-full transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]">
+                            Start Building Now
+                        </Button>
+                    </Link>
+                </div>
+            </section>
+
+            {/* Footer */}
+            <footer className="relative z-10 border-t border-blue-900/30 bg-[#070B14] pt-20 pb-10">
+                <div className="max-w-7xl mx-auto px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                        <div className="md:col-span-1">
+                            <Link href="/lex-pro" className="inline-block mb-4 -ml-4">
+                                <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-10 w-auto object-contain scale-[1.5] origin-left" style={{ filter: 'brightness(0) invert(1)' }} />
+                            </Link>
+                            <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                                The autonomous legal drafting and intelligence engine built specifically for the Indian legal framework.
+                            </p>
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-900/10 border border-blue-500/10">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                <span className="text-[10px] font-bold tracking-widest uppercase text-blue-400">A Product by EyE PunE</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 className="text-white font-bold mb-6">Platform</h4>
+                            <ul className="space-y-4 text-sm text-gray-400">
+                                <li><Link href="#features" className="hover:text-white transition-colors">Features</Link></li>
+                                <li><Link href="#pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                                <li><Link href="/lex-pro/login" className="hover:text-white transition-colors">Sign In</Link></li>
+                                <li><Link href="/lex-pro/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="text-white font-bold mb-6">Solutions</h4>
+                            <ul className="space-y-4 text-sm text-gray-400">
+                                <li><a href="#" className="hover:text-white transition-colors">For Law Firms</a></li>
+                                <li><a href="#" className="hover:text-white transition-colors">For Startups</a></li>
+                                <li><a href="#" className="hover:text-white transition-colors">Enterprise API</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="text-white font-bold mb-6">Legal</h4>
+                            <ul className="space-y-4 text-sm text-gray-400">
+                                <li><Link href="/PrivacyPolicy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                                <li><Link href="/Terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                                <li><Link href="/Disclaimer" className="hover:text-white transition-colors">Legal Disclaimer</Link></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <p className="text-sm text-gray-500">
+                            &copy; {new Date().getFullYear()} EyE PunE. All rights reserved.
+                        </p>
+                        <div className="flex items-center gap-6 text-sm text-gray-500">
+                            <span>Built in Pune, India</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }
