@@ -22,7 +22,7 @@ export default function AIChatbot() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const path = window.location.pathname;
-            if (path.startsWith('/Admin') || path.startsWith('/Admin-') || path.startsWith('/SignProposal')) {
+            if (path.startsWith('/Admin') || path.startsWith('/Admin-') || path.startsWith('/SignProposal') || path.startsWith('/lex-pro')) {
                 setIsPathAllowed(false);
             }
         }

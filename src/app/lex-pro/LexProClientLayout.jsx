@@ -6,7 +6,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, FileText, ShieldAlert, Settings, LogOut, Search, Bell, Database, BookOpen, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@supabase/supabase-js';
-import LexProChatWidget from '@/components/lex-pro/LexProChatWidget';
 import OnboardingTour from '@/components/lex-pro/OnboardingTour';
 
 export default function LexProClientLayout({ children }) {
@@ -147,7 +146,6 @@ export default function LexProClientLayout({ children }) {
                 <div className="flex-1 overflow-y-auto p-8 relative z-10 scrollbar-thin scrollbar-thumb-blue-500/20 scrollbar-track-transparent">
                     {children}
                 </div>
-                <LexProChatWidget />
                 <OnboardingTour />
             </main>
         </div>

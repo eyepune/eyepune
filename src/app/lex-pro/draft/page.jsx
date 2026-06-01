@@ -459,15 +459,15 @@ Signature Method: ${formData.signatureType}
                     </div>
 
                     <div className="space-y-4 p-5 bg-white/[0.02] border border-white/10 rounded-xl">
-                        <h3 className="text-sm font-bold text-orange-400">Party A Details</h3>
+                        <h3 className="text-sm font-bold text-blue-400">Party A Details</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Entity Name</label>
-                                <input type="text" name="partyA" value={formData.partyA} onChange={handleInputChange} placeholder="e.g. EyE PunE Vision" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="text" name="partyA" value={formData.partyA} onChange={handleInputChange} placeholder="e.g. EyE PunE Vision" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Entity Type</label>
-                                <select name="partyAType" value={formData.partyAType} onChange={handleInputChange} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 appearance-none text-sm">
+                                <select name="partyAType" value={formData.partyAType} onChange={handleInputChange} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 appearance-none text-sm">
                                     <option value="Private Limited Company">Private Limited Company</option>
                                     <option value="Public Limited Company">Public Limited Company</option>
                                     <option value="Limited Liability Partnership (LLP)">LLP</option>
@@ -479,33 +479,33 @@ Signature Method: ${formData.signatureType}
                             </div>
                             <div className="space-y-2 sm:col-span-2">
                                 <label className="text-xs font-medium text-gray-400">Registered Address</label>
-                                <textarea name="partyAAddress" value={formData.partyAAddress} onChange={handleInputChange} placeholder="Full registered address..." rows={2} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 resize-none text-sm" />
+                                <textarea name="partyAAddress" value={formData.partyAAddress} onChange={handleInputChange} placeholder="Full registered address..." rows={2} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 resize-none text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Authorized Signatory (if applicable)</label>
-                                <input type="text" name="partyASignatory" value={formData.partyASignatory} onChange={handleInputChange} placeholder="e.g. Jane Doe, Director" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="text" name="partyASignatory" value={formData.partyASignatory} onChange={handleInputChange} placeholder="e.g. Jane Doe, Director" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">CIN / PAN / GSTIN</label>
-                                <input type="text" name="partyAIdentifier" value={formData.partyAIdentifier} onChange={handleInputChange} placeholder="Registration number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="text" name="partyAIdentifier" value={formData.partyAIdentifier} onChange={handleInputChange} placeholder="Registration number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Email Address (For Routing)</label>
-                                <input type="email" name="partyAEmail" value={formData.partyAEmail} onChange={handleInputChange} placeholder="partyA@example.com" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="email" name="partyAEmail" value={formData.partyAEmail} onChange={handleInputChange} placeholder="partyA@example.com" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-4 p-5 bg-white/[0.02] border border-white/10 rounded-xl">
-                        <h3 className="text-sm font-bold text-orange-400">Party B Details</h3>
+                        <h3 className="text-sm font-bold text-blue-400">Party B Details</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Entity Name</label>
-                                <input type="text" name="partyB" value={formData.partyB} onChange={handleInputChange} placeholder="e.g. John Doe" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="text" name="partyB" value={formData.partyB} onChange={handleInputChange} placeholder="e.g. John Doe" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Entity Type</label>
-                                <select name="partyBType" value={formData.partyBType} onChange={handleInputChange} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 appearance-none text-sm">
+                                <select name="partyBType" value={formData.partyBType} onChange={handleInputChange} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 appearance-none text-sm">
                                     <option value="Individual">Individual</option>
                                     <option value="Private Limited Company">Private Limited Company</option>
                                     <option value="Public Limited Company">Public Limited Company</option>
@@ -517,19 +517,19 @@ Signature Method: ${formData.signatureType}
                             </div>
                             <div className="space-y-2 sm:col-span-2">
                                 <label className="text-xs font-medium text-gray-400">Registered Address</label>
-                                <textarea name="partyBAddress" value={formData.partyBAddress} onChange={handleInputChange} placeholder="Full registered address..." rows={2} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 resize-none text-sm" />
+                                <textarea name="partyBAddress" value={formData.partyBAddress} onChange={handleInputChange} placeholder="Full registered address..." rows={2} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 resize-none text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Authorized Signatory (if applicable)</label>
-                                <input type="text" name="partyBSignatory" value={formData.partyBSignatory} onChange={handleInputChange} placeholder="e.g. John Smith, CEO" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="text" name="partyBSignatory" value={formData.partyBSignatory} onChange={handleInputChange} placeholder="e.g. John Smith, CEO" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">CIN / PAN / Aadhaar</label>
-                                <input type="text" name="partyBIdentifier" value={formData.partyBIdentifier} onChange={handleInputChange} placeholder="Identification number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="text" name="partyBIdentifier" value={formData.partyBIdentifier} onChange={handleInputChange} placeholder="Identification number..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-gray-400">Email Address (For Routing)</label>
-                                <input type="email" name="partyBEmail" value={formData.partyBEmail} onChange={handleInputChange} placeholder="partyB@example.com" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500/50 text-sm" />
+                                <input type="email" name="partyBEmail" value={formData.partyBEmail} onChange={handleInputChange} placeholder="partyB@example.com" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500/50 text-sm" />
                             </div>
                         </div>
                     </div>
@@ -542,7 +542,7 @@ Signature Method: ${formData.signatureType}
                                 name="effectiveDate" 
                                 value={formData.effectiveDate} 
                                 onChange={handleInputChange}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 [color-scheme:dark]"
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 [color-scheme:dark]"
                             />
                         </div>
                         <div className="space-y-2">
@@ -551,7 +551,7 @@ Signature Method: ${formData.signatureType}
                                 name="signatureType" 
                                 value={formData.signatureType} 
                                 onChange={handleInputChange}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 appearance-none"
                             >
                                 <option value="E-Signature">E-Signature (Aadhaar/DSC)</option>
                                 <option value="Wet Signature">Manual Wet Signature</option>
@@ -566,7 +566,7 @@ Signature Method: ${formData.signatureType}
                             name="printFormat" 
                             value={formData.printFormat} 
                             onChange={handleInputChange}
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 appearance-none"
                         >
                             <option value="Standard A4">Standard A4 (Default Margins)</option>
                             <option value="Company Letterhead">Company Letterhead (Large Header/Footer Margins)</option>
@@ -582,7 +582,7 @@ Signature Method: ${formData.signatureType}
                                 name="jurisdiction" 
                                 value={formData.jurisdiction} 
                                 onChange={handleInputChange}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                             />
                         </div>
                         <div className="space-y-2">
@@ -592,15 +592,15 @@ Signature Method: ${formData.signatureType}
                                 name="governingLaw" 
                                 value={formData.governingLaw} 
                                 onChange={handleInputChange}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 text-sm"
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 text-sm"
                             />
                         </div>
                     </div>
 
                     {/* Dynamic Contract-Specific Fields */}
                     {contractSchema[formData.contractType] && (
-                        <div className="p-4 bg-orange-500/5 border border-orange-500/20 rounded-xl space-y-4">
-                            <h3 className="text-sm font-bold text-orange-400 flex items-center gap-2">
+                        <div className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-xl space-y-4">
+                            <h3 className="text-sm font-bold text-blue-400 flex items-center gap-2">
                                 <FileText className="w-4 h-4" /> Specific Contract Details
                             </h3>
                             <div className="grid grid-cols-1 gap-4">
@@ -612,7 +612,7 @@ Signature Method: ${formData.signatureType}
                                             value={dynamicAnswers[field.id] || ''} 
                                             onChange={(e) => handleDynamicChange(field.id, e.target.value)}
                                             placeholder={field.placeholder}
-                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-orange-500/50 text-sm"
+                                            className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-blue-500/50 text-sm"
                                         />
                                     </div>
                                 ))}
@@ -627,7 +627,7 @@ Signature Method: ${formData.signatureType}
                             value={formData.additionalTerms} 
                             onChange={handleInputChange}
                             placeholder="Any specific terms to include..."
-                            className="w-full h-24 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 resize-none"
+                            className="w-full h-24 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 resize-none"
                         />
                     </div>
                 </div>
@@ -636,7 +636,7 @@ Signature Method: ${formData.signatureType}
                     <Button 
                         onClick={generateDraft}
                         disabled={isGenerating}
-                        className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] h-12"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] h-12"
                     >
                         {isGenerating ? (
                             <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Generating Draft...</>
