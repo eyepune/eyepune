@@ -76,10 +76,13 @@ import Terms from '@/views/Terms';
 import Cookies from '@/views/Cookies';
 import RefundPolicy from '@/views/RefundPolicy';
 import Disclaimer from '@/views/Disclaimer';
+import Resources from '@/views/Resources';
+
 // ── Route → Component mapping ──────────────────────────────────────────
 const PAGE_MAP = {
   'Home': Home,
   'About': About,
+  'Resources': Resources,
   'AI-Assessment': AI_Assessment,
   'Admin-Analytics': Admin_Analytics,
   'Admin-Blog': Admin_Blog,

@@ -285,8 +285,27 @@ export default function BlogPost({ initialData }) {
                             ) : (
                                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
                                     {post.content}
-                                </ReactMarkdown>
                             )}
+                        </div>
+
+                        {/* Partner Affiliate Banner (Razorpay) */}
+                        <div className="mt-16 p-8 bg-gradient-to-br from-blue-900/40 to-sky-900/20 border border-blue-500/20 rounded-3xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8 justify-between">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                            <div className="relative z-10 flex-1">
+                                <span className="text-blue-400 font-bold text-xs uppercase tracking-widest mb-2 block">Featured Partner</span>
+                                <h3 className="text-2xl font-black text-white mb-2">Power your payments with Razorpay</h3>
+                                <p className="text-blue-200/80 text-sm md:text-base">Join the leading payment infrastructure powering EyE PunE. Accept global transactions seamlessly.</p>
+                            </div>
+                            <div className="relative z-10">
+                                <a 
+                                    href="https://rzp.io/rzp/1rSpeFFL" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="whitespace-nowrap inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
+                                >
+                                    Get Started Free
+                                </a>
+                            </div>
                         </div>
 
                         {/* Related Articles */}
