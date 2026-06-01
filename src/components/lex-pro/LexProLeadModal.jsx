@@ -58,16 +58,16 @@ export default function LexProLeadModal({ isOpen, onClose, sourcePage }) {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full max-w-lg bg-[#0A0F1C] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-10"
+                        className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-[#0A0F1C] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-10"
                     >
-                        <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+                        <div className="p-4 md:p-6 border-b border-white/10 flex justify-between items-center bg-white/5 shrink-0">
                             <h3 className="text-xl font-bold text-white">Book an Enterprise Demo</h3>
                             <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="p-6">
+                        <div className="p-4 md:p-6 overflow-y-auto">
                             {isSuccess ? (
                                 <div className="py-12 flex flex-col items-center justify-center text-center">
                                     <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mb-4">
