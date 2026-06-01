@@ -18,7 +18,7 @@ export default function LexProLandingPage() {
             {/* Navigation */}
             <nav className="relative z-50 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
                 <div className="flex items-center gap-3">
-                    <img src="/lexpro-logo.png" alt="LexPro Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+                    <img src="/lexpro-icon.svg" alt="LexPro Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-slate-700 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)] hidden">
                         <span className="text-white font-bold text-xl">L</span>
                     </div>
