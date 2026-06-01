@@ -139,7 +139,7 @@ export default function LexProLandingPage() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                         <div className="md:col-span-1">
                             <Link href="/lex-pro" className="inline-block mb-4 -ml-4">
-                                <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-10 w-auto object-contain scale-[1.5] origin-left" style={{ filter: 'brightness(0) invert(1)' }} />
+                                <img src="/lexpro_logo.png" alt="LexPro Logo" className="h-12 md:h-16 w-auto object-contain scale-[1.5] md:scale-[2.5] origin-left" style={{ filter: 'brightness(0) invert(1)' }} />
                             </Link>
                             <p className="text-sm text-gray-400 leading-relaxed mb-6">
                                 The autonomous legal drafting and intelligence engine built specifically for the Indian legal framework.
