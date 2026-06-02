@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Download, Upload, Loader2, CheckCircle2, AlertTriangle, Play, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -88,8 +88,26 @@ export default function LexProBulk() {
     const [isGenerating, setIsGenerating] = useState(false);
     const [progress, setProgress] = useState({ current: 0, total: 0, successes: 0, failures: 0 });
     const [logs, setLogs] = useState([]);
+    const [accessToken, setAccessToken] = useState(null);
     
     const fileInputRef = useRef(null);
+
+    // Load session once on mount — avoids GoTrueClient multi-instance race condition
+    useEffect(() => {
+        const loadSession = async () => {
+            try {
+                const supabase = createBrowserClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+                );
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.access_token) setAccessToken(session.access_token);
+            } catch (e) {
+                console.warn('[LexPro Bulk] Failed to load session:', e.message);
+            }
+        };
+        loadSession();
+    }, []);
 
     // Small delay between requests to avoid rate-limiting the LLM API
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -190,14 +208,9 @@ export default function LexProBulk() {
         let successCount = 0;
         let failCount = 0;
 
-        const supabase = createBrowserClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-        );
-        const { data: { session } } = await supabase.auth.getSession();
         const authHeaders = {
             'Content-Type': 'application/json',
-            ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+            ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
         };
 
         for (let i = 0; i < csvData.length; i++) {

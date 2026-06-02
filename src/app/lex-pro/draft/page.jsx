@@ -94,6 +94,26 @@ export default function LexProDrafting() {
     const [isCopied, setIsCopied] = useState(false);
     const [versions, setVersions] = useState([]);
     const [showVersions, setShowVersions] = useState(false);
+    const [accessToken, setAccessToken] = useState(null);
+
+    // Load session ONCE on mount to avoid GoTrueClient multi-instance race condition
+    useEffect(() => {
+        const loadSession = async () => {
+            try {
+                const supabase = createBrowserClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+                );
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.access_token) {
+                    setAccessToken(session.access_token);
+                }
+            } catch (e) {
+                console.warn('[LexPro Draft] Failed to load session:', e.message);
+            }
+        };
+        loadSession();
+    }, []);
 
     const searchParams = useSearchParams();
     const contractIdParam = searchParams.get('id');
@@ -185,17 +205,11 @@ Signature Method: ${formData.signatureType}
                 additionalTerms: `${formData.additionalTerms}\n\nSpecific Details:\n${formattedDynamicAnswers}\n\nContract Parties & Execution Info:\n${partyInfo}`
             };
 
-            const supabase = createBrowserClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-            );
-            const { data: { session } } = await supabase.auth.getSession();
-
             const response = await fetch('/api/lex-pro/draft', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+                    ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
                 },
                 body: JSON.stringify(payload)
             });
@@ -222,17 +236,11 @@ Signature Method: ${formData.signatureType}
         if (!generatedDraft) return;
         setIsSaving(true);
         try {
-            const supabase = createBrowserClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-            );
-            const { data: { session } } = await supabase.auth.getSession();
-
             const response = await fetch('/api/lex-pro/save-draft', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+                    ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
                 },
                 body: JSON.stringify({
                     title: `${formData.contractType.toUpperCase()} - ${formData.partyA || 'Party A'} & ${formData.partyB || 'Party B'}`,
