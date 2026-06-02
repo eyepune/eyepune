@@ -199,6 +199,11 @@ Signature Method: ${formData.signatureType}
                 },
                 body: JSON.stringify(payload)
             });
+            if (response.status === 401) {
+                setGeneratedDraft('Error: Session expired or unauthorized. Please log in again.');
+                return;
+            }
+            
             const data = await response.json();
             
             if (data.success) {
@@ -424,20 +429,20 @@ Signature Method: ${formData.signatureType}
             <div className="w-full max-w-3xl mx-auto flex flex-col h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-xl animate-in fade-in duration-300">
                 <div className="p-6 border-b border-white/10 bg-black/20">
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Wand2 className="w-5 h-5 text-orange-400" />
+                        <Wand2 className="w-5 h-5 text-blue-400" />
                         AI Contract Drafter
                     </h2>
                     <p className="text-sm text-gray-400 mt-1">Configure parameters to generate an India-compliant draft.</p>
                 </div>
                 
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-orange-500/20 scrollbar-track-transparent">
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-blue-500/20 scrollbar-track-transparent">
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-300">Contract Type</label>
                         <select 
                             name="contractType" 
                             value={formData.contractType} 
                             onChange={handleInputChange}
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 appearance-none"
                         >
                             <option value="nda">Non-Disclosure Agreement (NDA)</option>
                             <option value="employment">Employment Agreement</option>
@@ -672,7 +677,7 @@ Signature Method: ${formData.signatureType}
                                     onClick={handleSaveDraft} 
                                     disabled={isSaving}
                                     variant="outline" 
-                                    className="border-orange-500/30 text-orange-400 hover:bg-orange-500/10"
+                                    className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
                                 >
                                     {isSaving ? 'Saving...' : 'Save Draft'}
                                 </Button>
@@ -716,7 +721,7 @@ Signature Method: ${formData.signatureType}
                                 )}
                                 <Button 
                                     onClick={handleExportPDF} 
-                                    className="bg-gradient-to-r from-orange-600 to-red-600 text-white border-0"
+                                    className="bg-gradient-to-r from-blue-600 to-slate-600 text-white border-0 hover:from-blue-700 hover:to-slate-700"
                                 >
                                     Export PDF
                                 </Button>
@@ -727,7 +732,7 @@ Signature Method: ${formData.signatureType}
                 {/* Main Editor + Version History Wrapper */}
                 <div className="flex-1 flex overflow-hidden">
                     {/* Editor Content Area */}
-                    <div className="flex-1 p-6 overflow-y-auto bg-[#0a0a0a] scrollbar-thin scrollbar-thumb-orange-500/20 scrollbar-track-transparent">
+                    <div className="flex-1 p-6 overflow-y-auto bg-[#0a0a0a] scrollbar-thin scrollbar-thumb-blue-500/20 scrollbar-track-transparent">
                         {!generatedDraft && !isGenerating && (
                         <div className="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto opacity-50">
                             <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
@@ -743,10 +748,10 @@ Signature Method: ${formData.signatureType}
                             <motion.div 
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                className="w-16 h-16 border-4 border-orange-500/20 border-t-orange-500 rounded-full mb-6"
+                                className="w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full mb-6"
                             />
                             <h3 className="text-xl font-bold text-white mb-2">AI is Drafting...</h3>
-                            <p className="text-orange-400 animate-pulse">Aligning with Indian Contract Act guidelines</p>
+                            <p className="text-blue-400 animate-pulse">Aligning with Indian Contract Act guidelines</p>
                         </div>
                     )}
 
@@ -774,9 +779,9 @@ Signature Method: ${formData.signatureType}
                         >
                             <div className="p-4 border-b border-white/10 bg-white/5 flex justify-between items-center sticky top-0">
                                 <h3 className="font-bold text-white flex items-center gap-2">
-                                    <History className="w-4 h-4 text-orange-400" /> Version History
+                                    <History className="w-4 h-4 text-blue-400" /> Version History
                                 </h3>
-                                <Button size="sm" onClick={handleSaveSnapshot} className="bg-orange-600 hover:bg-orange-700 text-white text-xs h-7 px-2">
+                                <Button size="sm" onClick={handleSaveSnapshot} className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-7 px-2">
                                     + Snapshot
                                 </Button>
                             </div>
@@ -785,7 +790,7 @@ Signature Method: ${formData.signatureType}
                                     <p className="text-xs text-gray-500 text-center py-4">No snapshots saved yet.</p>
                                 ) : (
                                     versions.map(v => (
-                                        <div key={v.id} className="p-3 bg-white/5 border border-white/10 rounded-lg hover:border-orange-500/30 transition-colors group">
+                                        <div key={v.id} className="p-3 bg-white/5 border border-white/10 rounded-lg hover:border-blue-500/30 transition-colors group">
                                             <div className="flex justify-between items-center mb-2">
                                                 <span className="font-bold text-sm text-white">{v.id}</span>
                                                 <span className="text-[10px] text-gray-500">{v.timestamp}</span>
@@ -794,7 +799,7 @@ Signature Method: ${formData.signatureType}
                                                 variant="outline" 
                                                 size="sm" 
                                                 onClick={() => handleRestoreVersion(v.content)}
-                                                className="w-full h-7 text-xs border-white/10 bg-black hover:bg-orange-500/20 hover:text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                className="w-full h-7 text-xs border-white/10 bg-black hover:bg-blue-500/20 hover:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"
                                             >
                                                 Restore Version
                                             </Button>

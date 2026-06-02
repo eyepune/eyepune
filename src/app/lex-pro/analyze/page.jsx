@@ -95,7 +95,7 @@ export default function LexProAnalyze() {
                     if (riskStr.includes('high')) {
                         return { ...clause, risk: 'High', icon: ShieldAlert, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' };
                     } else if (riskStr.includes('medium')) {
-                        return { ...clause, risk: 'Medium', icon: AlertTriangle, color: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/20' };
+                        return { ...clause, risk: 'Medium', icon: AlertTriangle, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' };
                     } else {
                         return { ...clause, risk: 'Low', icon: ShieldCheck, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' };
                     }
@@ -202,7 +202,7 @@ export default function LexProAnalyze() {
                     <Button 
                         onClick={handleAnalyze}
                         disabled={isAnalyzing || !contractText.trim()}
-                        className="w-full bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)] h-12"
+                        className="w-full bg-gradient-to-r from-blue-600 to-slate-500 hover:from-blue-500 hover:to-slate-400 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] h-12"
                     >
                         {isAnalyzing ? (
                             <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Analyzing Clauses...</>
@@ -266,7 +266,7 @@ export default function LexProAnalyze() {
                                             initial={{ strokeDasharray: "0, 100" }}
                                             animate={{ strokeDasharray: `${analysisResult.score}, 100` }}
                                             transition={{ duration: 1.5, ease: "easeOut" }}
-                                            className="text-orange-500"
+                                            className="text-blue-500"
                                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                             fill="none"
                                             stroke="currentColor"

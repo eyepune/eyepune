@@ -30,7 +30,7 @@ export default function LexProAffiliates() {
                 {[
                     { title: "Total Referrals", value: "14", icon: Users, color: "text-blue-400", bg: "bg-blue-500/10" },
                     { title: "Active Subscriptions", value: "8", icon: TrendingUp, color: "text-green-400", bg: "bg-green-500/10" },
-                    { title: "Pending Commission", value: "₹24,500", icon: DollarSign, color: "text-orange-400", bg: "bg-orange-500/10" },
+                    { title: "Pending Commission", value: "₹24,500", icon: DollarSign, color: "text-blue-400", bg: "bg-blue-500/10" },
                     { title: "Paid Commission", value: "₹12,000", icon: CheckCircle2, color: "text-slate-400", bg: "bg-slate-500/10" }
                 ].map((stat, i) => (
                     <motion.div 
@@ -93,7 +93,7 @@ export default function LexProAffiliates() {
                                         <td className="py-4 text-gray-400">{ref.date}</td>
                                         <td className="py-4">
                                             <span className={`px-2 py-1 rounded text-xs font-bold ${
-                                                ref.status === 'Active' ? 'bg-green-500/10 text-green-400' : 'bg-orange-500/10 text-orange-400'
+                                                ref.status === 'Active' ? 'bg-green-500/10 text-green-400' : 'bg-blue-500/10 text-blue-400'
                                             }`}>
                                                 {ref.status}
                                             </span>

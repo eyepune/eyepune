@@ -51,7 +51,7 @@ export default function LexProDashboard() {
                 </div>
                 <div className="flex gap-3 flex-wrap">
                     <Link href="/lex-pro/bulk">
-                        <Button variant="outline" className="border-orange-500/30 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300">
+                        <Button variant="outline" className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300">
                             Bulk Engine
                         </Button>
                     </Link>

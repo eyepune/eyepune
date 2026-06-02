@@ -78,7 +78,7 @@ export default function SecureSignPortal() {
     if (isLoading) {
         return (
             <div className="min-h-screen bg-black flex flex-col items-center justify-center">
-                <Loader2 className="w-12 h-12 text-orange-500 animate-spin mb-4" />
+                <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
                 <p className="text-gray-400 font-medium">Loading Secure Legal Document...</p>
             </div>
         );
@@ -97,14 +97,14 @@ export default function SecureSignPortal() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-gray-100 font-sans selection:bg-orange-500/30">
+        <div className="min-h-screen bg-black text-gray-100 font-sans selection:bg-blue-500/30">
             {/* Header */}
-            <header className="h-20 border-b border-orange-500/20 bg-black/50 backdrop-blur-md flex items-center justify-center px-8 sticky top-0 z-50 print:hidden">
+            <header className="h-20 border-b border-blue-500/20 bg-black/50 backdrop-blur-md flex items-center justify-center px-8 sticky top-0 z-50 print:hidden">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.5)]">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-slate-600 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                         <span className="text-white font-bold text-lg">L</span>
                     </div>
-                    <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400">
+                    <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-slate-400">
                         Lex Pro Secure Sign
                     </span>
                 </div>
@@ -139,7 +139,7 @@ export default function SecureSignPortal() {
                 {/* Signing Panel */}
                 <div className="md:col-span-1 sticky top-28 space-y-6 print:hidden">
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl" />
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
                         
                         <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
                             <ShieldCheck className="w-5 h-5 text-green-400" />
@@ -173,13 +173,13 @@ export default function SecureSignPortal() {
                                         value={partyName}
                                         onChange={(e) => setPartyName(e.target.value)}
                                         placeholder="e.g. John Doe"
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                     />
                                 </div>
                                 <Button 
                                     onClick={handleSign}
                                     disabled={isSigning || !partyName.trim()}
-                                    className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold h-12"
+                                    className="w-full bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-500 hover:to-slate-500 text-white font-bold h-12"
                                 >
                                     {isSigning ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
                                     I Agree & Sign Document
@@ -194,7 +194,7 @@ export default function SecureSignPortal() {
                             <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Audit Trail</h3>
                             <div className="space-y-4">
                                 {auditTrails.map((trail, idx) => (
-                                    <div key={idx} className="border-l-2 border-orange-500 pl-4 py-2 space-y-1">
+                                    <div key={idx} className="border-l-2 border-blue-500 pl-4 py-2 space-y-1">
                                         <div className="text-sm font-bold text-white flex items-center justify-between">
                                             {trail.party_name}
                                             <ShieldCheck className="w-4 h-4 text-green-400" />

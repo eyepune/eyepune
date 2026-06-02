@@ -241,7 +241,7 @@ export default function LexProBulk() {
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-xl flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-                        <Database className="w-7 h-7 text-orange-400" />
+                        <Database className="w-7 h-7 text-blue-400" />
                         Bulk Contract Generator
                     </h1>
                     <p className="text-gray-400 mt-1">Upload a CSV dataset to autonomously generate and save hundreds of contracts instantly.</p>
@@ -258,7 +258,7 @@ export default function LexProBulk() {
                                 value={contractType} 
                                 onChange={(e) => { setContractType(e.target.value); setCsvData([]); setHeaders([]); }}
                                 disabled={isGenerating}
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                             >
                                 <option value="nda">Non-Disclosure Agreement (NDA)</option>
                                 <option value="employment">Employment Agreement</option>
@@ -274,7 +274,7 @@ export default function LexProBulk() {
                                 onClick={downloadTemplate}
                                 variant="outline" 
                                 disabled={isGenerating}
-                                className="w-full border-orange-500/30 text-orange-400 hover:bg-orange-500/10"
+                                className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
                             >
                                 <Download className="w-4 h-4 mr-2" /> Download CSV Template
                             </Button>
@@ -303,7 +303,7 @@ export default function LexProBulk() {
                             <Button 
                                 onClick={startBulkGeneration}
                                 disabled={isGenerating}
-                                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] h-12 mt-4"
+                                className="w-full bg-gradient-to-r from-blue-600 to-slate-600 hover:from-blue-700 hover:to-slate-700 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] h-12 mt-4"
                             >
                                 {isGenerating ? (
                                     <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Processing...</>
@@ -327,7 +327,7 @@ export default function LexProBulk() {
                             </div>
                             <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden">
                                 <motion.div 
-                                    className="h-full bg-gradient-to-r from-orange-500 to-red-500"
+                                    className="h-full bg-gradient-to-r from-blue-500 to-slate-500"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${(progress.current / progress.total) * 100}%` }}
                                 />

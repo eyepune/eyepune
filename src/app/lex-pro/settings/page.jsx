@@ -149,25 +149,25 @@ export default function LexProSettings() {
             {/* Sidebar Navigation */}
             <div className="w-full md:w-64 shrink-0 space-y-2">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                    <Settings className="w-6 h-6 text-orange-400" />
+                    <Settings className="w-6 h-6 text-blue-400" />
                     Platform Settings
                 </h2>
                 
                 <button 
                     onClick={() => setActiveTab('profile')}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'profile' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'profile' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                 >
                     <User className="w-5 h-5" /> My Profile
                 </button>
                 <button 
                     onClick={() => setActiveTab('organization')}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'organization' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'organization' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                 >
                     <Building className="w-5 h-5" /> Organization
                 </button>
                 <button 
                     onClick={() => setActiveTab('team')}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'team' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'team' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                 >
                     <Users className="w-5 h-5" /> Team Management
                 </button>
@@ -202,7 +202,7 @@ export default function LexProSettings() {
                                     type="text" 
                                     value={profile?.full_name || ''} 
                                     onChange={(e) => setProfile({...profile, full_name: e.target.value})}
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -224,7 +224,7 @@ export default function LexProSettings() {
                         </div>
 
                         <div className="pt-6 border-t border-white/10">
-                            <Button onClick={handleSaveProfile} disabled={isSaving} className="bg-orange-600 hover:bg-orange-700 text-white">
+                            <Button onClick={handleSaveProfile} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700 text-white">
                                 {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                                 Save Profile Changes
                             </Button>
@@ -247,7 +247,7 @@ export default function LexProSettings() {
                                         type="text" 
                                         value={organization.name || ''} 
                                         onChange={(e) => setOrganization({...organization, name: e.target.value})}
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50"
+                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -255,7 +255,7 @@ export default function LexProSettings() {
                                     <select 
                                         value={organization.type || ''}
                                         onChange={(e) => setOrganization({...organization, type: e.target.value})}
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 appearance-none"
+                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 appearance-none"
                                     >
                                         <option value="Law Firm">Law Firm</option>
                                         <option value="CA Practice">CA Practice</option>
@@ -264,14 +264,14 @@ export default function LexProSettings() {
                                     </select>
                                 </div>
                                 <div className="pt-6 border-t border-white/10">
-                                    <Button onClick={handleSaveProfile} disabled={isSaving} className="bg-orange-600 hover:bg-orange-700 text-white">
+                                    <Button onClick={handleSaveProfile} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700 text-white">
                                         {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                                         Update Organization
                                     </Button>
                                 </div>
                             </div>
                         ) : (
-                            <div className="p-6 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-400 flex flex-col items-center justify-center text-center">
+                            <div className="p-6 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400 flex flex-col items-center justify-center text-center">
                                 <Building className="w-12 h-12 mb-4 opacity-50" />
                                 <h4 className="font-bold mb-2">No Organization Found</h4>
                                 <p className="text-sm opacity-80 mb-4">You are currently using a personal account. Upgrade to a business plan to create an organization.</p>
@@ -297,7 +297,7 @@ export default function LexProSettings() {
                                 {teamMembers.map((member, i) => (
                                     <div key={i} className="flex items-center justify-between p-4 bg-black/40 border border-white/5 rounded-xl">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 font-bold">
+                                            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold">
                                                 {(member.full_name || 'U')[0]}
                                             </div>
                                             <div>
@@ -324,9 +324,9 @@ export default function LexProSettings() {
                             <p className="text-gray-400 mt-1">Manage your active Lex Pro Enterprise plan.</p>
                         </div>
                         
-                        <div className="p-6 bg-gradient-to-br from-black/60 to-orange-950/20 border border-orange-500/20 rounded-2xl relative overflow-hidden">
+                        <div className="p-6 bg-gradient-to-br from-black/60 to-blue-950/20 border border-blue-500/20 rounded-2xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <CreditCard className="w-32 h-32 text-orange-500" />
+                                <CreditCard className="w-32 h-32 text-blue-500" />
                             </div>
                             <div className="relative z-10">
                                 <div className="inline-block px-3 py-1 bg-green-500/20 border border-green-500/30 text-green-400 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
