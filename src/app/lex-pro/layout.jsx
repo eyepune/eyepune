@@ -11,10 +11,10 @@ export const metadata = {
         siteName: 'Lex Pro by EyE PunE',
         images: [
             {
-                url: 'https://www.eyepune.com/og-image.jpg', // Using global default
+                url: 'https://www.eyepune.com/lexpro-og.png',
                 width: 1200,
                 height: 630,
-                alt: 'Lex Pro by EyE PunE',
+                alt: 'Lex Pro — The Autonomous Legal OS for India by EyE PunE',
             }
         ],
         locale: 'en_IN',
