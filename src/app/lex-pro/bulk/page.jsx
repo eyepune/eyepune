@@ -91,6 +91,31 @@ export default function LexProBulk() {
     
     const fileInputRef = useRef(null);
 
+    // Small delay between requests to avoid rate-limiting the LLM API
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Retry a fetch call up to `maxRetries` times on failure
+    const fetchWithRetry = async (url, options, maxRetries = 2) => {
+        let lastError;
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                const res = await fetch(url, options);
+                const data = await res.json();
+                if (res.ok && data.success) return data;
+                // If we got a 401, no point retrying
+                if (res.status === 401) throw new Error('Unauthorized — please log in again.');
+                throw new Error(data.error || `HTTP ${res.status}`);
+            } catch (err) {
+                lastError = err;
+                if (attempt < maxRetries) {
+                    addLog(`  ↳ Attempt ${attempt} failed (${err.message}). Retrying in 2s...`, 'info');
+                    await sleep(2000);
+                }
+            }
+        }
+        throw lastError;
+    };
+
     const addLog = (msg, type = 'info') => {
         setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), msg, type }]);
     };
@@ -194,42 +219,41 @@ export default function LexProBulk() {
                     additionalTerms: `${row.additionalTerms || ''}\n\nSpecific Details:\n${formattedDynamicAnswers}`
                 };
 
-                // 2. Call Draft API
-                const draftRes = await fetch('/api/lex-pro/draft', {
+                // 2. Call Draft API with retry
+                const draftData = await fetchWithRetry('/api/lex-pro/draft', {
                     method: 'POST',
                     headers: authHeaders,
                     body: JSON.stringify(payload)
-                });
-                const draftData = await draftRes.json();
+                }, 2);
 
-                if (!draftData.success) throw new Error(draftData.error);
+                if (!draftData.success) throw new Error(draftData.error || 'Draft generation failed');
 
-                addLog(`[${i + 1}/${csvData.length}] Draft generated successfully. Saving to database...`);
+                addLog(`[${i + 1}/${csvData.length}] ✓ Draft generated. Saving to database...`);
 
-                // 3. Save to Supabase
+                // 3. Save to Supabase with retry
                 const title = `Bulk ${contractType.toUpperCase()} - ${row.partyA} & ${row.partyB} - ${new Date().getTime().toString().slice(-4)}`;
-                const saveRes = await fetch('/api/lex-pro/save-draft', {
+                await fetchWithRetry('/api/lex-pro/save-draft', {
                     method: 'POST',
                     headers: authHeaders,
                     body: JSON.stringify({
-                        title: title,
-                        contractType: contractType,
+                        title,
+                        contractType,
                         content: draftData.draft
                     })
-                });
-                const saveData = await saveRes.json();
-
-                if (!saveData.success) throw new Error(saveData.error);
+                }, 2);
 
                 successCount++;
-                addLog(`[${i + 1}/${csvData.length}] Successfully saved: ${title}`, 'success');
+                addLog(`[${i + 1}/${csvData.length}] ✓ Saved: ${title}`, 'success');
 
             } catch (error) {
                 failCount++;
-                addLog(`[${i + 1}/${csvData.length}] Failed: ${error.message}`, 'error');
+                addLog(`[${i + 1}/${csvData.length}] ✗ Failed after retries: ${error.message}`, 'error');
             }
 
             setProgress(prev => ({ ...prev, successes: successCount, failures: failCount }));
+            
+            // Throttle: wait 300ms between each contract to avoid LLM rate limits
+            if (i < csvData.length - 1) await sleep(300);
         }
 
         setIsGenerating(false);
