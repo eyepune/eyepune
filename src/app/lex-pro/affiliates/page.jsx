@@ -9,7 +9,7 @@ export default function LexProAffiliates() {
     const [copied, setCopied] = useState(false);
     
     // In production, this would be fetched from Supabase auth profile
-    const partnerId = "cc_legal_8f92j";
+    const partnerId = "partner_8f92j";
     const affiliateLink = `https://eyepune.com/lex-pro?ref=${partnerId}`;
 
     const handleCopy = () => {
@@ -84,7 +84,7 @@ export default function LexProAffiliates() {
                             </thead>
                             <tbody className="divide-y divide-white/5">
                                 {[
-                                    { name: "ClearClause Legal", date: "May 28, 2026", status: "Active" },
+
                                     { name: "Nexus Startups Inc", date: "May 25, 2026", status: "Active" },
                                     { name: "Global Tech Solutions", date: "May 12, 2026", status: "Pending Trial" }
                                 ].map((ref, idx) => (
@@ -113,7 +113,7 @@ export default function LexProAffiliates() {
                         </div>
                         <h3 className="font-bold text-white mb-2">Partner Integration</h3>
                         <p className="text-sm text-gray-400 mb-6">
-                            Are you a specialized law firm like <strong className="text-blue-300">ClearClause Legal</strong>? 
+                            Are you a specialized law firm? 
                             Embed Lex Pro directly into your website to offer instant AI drafting to your clients.
                         </p>
                         <Button className="w-full bg-white text-black hover:bg-gray-200">
