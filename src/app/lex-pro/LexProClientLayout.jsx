@@ -54,7 +54,6 @@ export default function LexProClientLayout({ children }) {
         { name: 'Knowledge Base', href: '/lex-pro/knowledge', icon: BookOpen },
         { name: 'Bulk Engine', href: '/lex-pro/bulk', icon: Database },
         { name: 'Risk Analysis', href: '/lex-pro/analyze', icon: ShieldAlert },
-        { name: 'Affiliates', href: '/lex-pro/affiliates', icon: Users },
         { name: 'Settings', href: '/lex-pro/settings', icon: Settings },
     ];
 
