@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, FileText, ShieldAlert, Settings, LogOut, Search, Bell, Database, BookOpen, Users } from 'lucide-react';
+import { LayoutDashboard, FileText, ShieldAlert, Settings, LogOut, Search, Bell, Database, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@supabase/supabase-js';
 import OnboardingTour from '@/components/lex-pro/OnboardingTour';

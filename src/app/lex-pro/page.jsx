@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, FileText, Database, ShieldAlert, CheckCircle2, Bot, Layers, Lock } from 'lucide-react';
+import { ArrowRight, FileText, Database, ShieldAlert, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function LexProLandingPage() {
