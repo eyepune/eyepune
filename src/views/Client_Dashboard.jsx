@@ -548,8 +548,25 @@ export default function Client_Dashboard() {
             />
             <FeedbackDialog 
                 open={feedbackDialogOpen} 
-                onOpenChange={setFeedbackDialogOpen}
+                onClose={() => setFeedbackDialogOpen(false)}
                 deliverable={selectedDeliverable}
+                projectId={selectedProject?.id}
+                onSubmit={async (data) => {
+                    try {
+                        const { error } = await supabase.from('client_feedback').insert([{
+                            project_id: data.project_id,
+                            deliverable_id: data.deliverable_id,
+                            rating: data.rating,
+                            feedback_text: data.feedback_text,
+                            category: data.category,
+                            created_by: user.email
+                        }]);
+                        if (error) throw error;
+                        toast.success('Feedback submitted successfully!');
+                    } catch (err) {
+                        toast.error(err.message || 'Failed to submit feedback');
+                    }
+                }}
             />
             <SetupWizard 
                 open={showSetupWizard} 

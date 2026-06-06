@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, Upload, CheckCircle, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 export default function TestimonialSubmission() {
     const [isSuccess, setIsSuccess] = useState(false);
@@ -69,6 +70,7 @@ export default function TestimonialSubmission() {
         },
         onSuccess: () => {
             setIsSuccess(true);
+            toast.success("Testimonial submitted successfully!");
             setFormData({
                 customer_name: '',
                 customer_title: '',
@@ -78,6 +80,10 @@ export default function TestimonialSubmission() {
                 customer_image: '',
                 service: 'full_service'
             });
+        },
+        onError: (err) => {
+            console.error('Submission failed:', err);
+            toast.error(err.message || "Failed to submit testimonial");
         }
     });
 
