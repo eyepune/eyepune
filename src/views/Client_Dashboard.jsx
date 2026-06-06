@@ -48,6 +48,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
@@ -82,6 +83,17 @@ export default function Client_Dashboard() {
     const queryClient = useQueryClient();
 
     const { user, isLoadingAuth } = useAuth();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        if (!pathname) return;
+        if (pathname === '/Client-Reports') setActiveTab('analytics');
+        else if (pathname === '/Client-Files') setActiveTab('deliverables');
+        else if (pathname === '/Client-Documents') setActiveTab('deliverables');
+        else if (pathname === '/Client-Messages') setActiveTab('overview');
+        else if (pathname === '/Client-Feedback') setFeedbackDialogOpen(true);
+        else if (pathname === '/Client-Dashboard') setActiveTab('overview');
+    }, [pathname]);
 
     // -- DATA FETCHING --
     const { data: projects = [] } = useQuery({
