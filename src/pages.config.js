@@ -158,6 +158,7 @@ export const PAGES = {
     "Services-Detail": servicesDetail,
     "Sign-Contract": SignContract,
     "Testimonials": Testimonials,
+    "Client-Testimonials": Testimonials,
     "Unsubscribe": Unsubscribe,
     "Login": Login,
     "System-Status": SystemStatus,

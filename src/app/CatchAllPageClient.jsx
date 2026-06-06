@@ -137,6 +137,7 @@ const PAGE_MAP = {
   'Sign-Contract': SignContract,
   'Sign-Proposal': SignProposal,
   'Testimonials': Testimonials,
+  'Client-Testimonials': Testimonials,
   'Unsubscribe': Unsubscribe,
   'Admin-Outreach': Admin_Outreach,
   'System-Status': SystemStatus,
