@@ -10,6 +10,7 @@ import dynamic from 'next/dynamic';
 import SEO_JSONLD from '@/components/seo/SEO_JSONLD';
 import SmoothScroll from '@/components/3d/SmoothScroll';
 import PremiumEffects from '@/components/shared/PremiumEffects';
+import SecurityProvider from '@/components/security/SecurityProvider';
 import { Outfit, Inter } from 'next/font/google';
 
 const AIChatbot = dynamic(() => import('@/components/home/AIChatbot'), { ssr: false });
@@ -121,6 +122,7 @@ export default function RootLayout({ children }) {
             <MetaPixel />
           </Suspense>
           <Providers>
+            <SecurityProvider />
             <SmoothScroll>
               <GlobalCanvas />
               <PremiumEffects />

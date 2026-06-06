@@ -1,4 +1,3 @@
-import React from 'react';
 import LexProClientLayout from './LexProClientLayout';
 
 export const metadata = {
