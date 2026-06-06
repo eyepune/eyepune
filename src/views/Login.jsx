@@ -12,9 +12,11 @@ import { useAuth } from '@/lib/AuthContext';
 import { Loader2, Mail, Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
     const { user, isAuthenticated, isLoadingAuth } = useAuth();
+    const router = useRouter();
     const [mode, setMode] = useState('signin');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -24,12 +26,12 @@ export default function Login() {
     React.useEffect(() => {
         if (!isLoadingAuth && isAuthenticated && user) {
             if (user.role === 'admin') {
-                window.location.href = '/Admin-Dashboard';
+                router.push('/Admin-Dashboard');
             } else {
-                window.location.href = '/Client-Dashboard';
+                router.push('/Client-Dashboard');
             }
         }
-    }, [isLoadingAuth, isAuthenticated, user]);
+    }, [isLoadingAuth, isAuthenticated, user, router]);
 
     if (isLoadingAuth) {
         return (

@@ -81,7 +81,7 @@ export default function Client_Dashboard() {
     const [showSetupWizard, setShowSetupWizard] = useState(false);
     const queryClient = useQueryClient();
 
-    const { user } = useAuth();
+    const { user, isLoadingAuth } = useAuth();
 
     // -- DATA FETCHING --
     const { data: projects = [] } = useQuery({
@@ -157,12 +157,19 @@ export default function Client_Dashboard() {
         }
     }, [selectedProject, projects]);
 
-    if (!user) {
+    if (isLoadingAuth) {
         return (
             <div className="min-h-screen bg-transparent flex items-center justify-center">
                 <Loader2 className="w-10 h-10 animate-spin text-red-600" />
             </div>
         );
+    }
+
+    if (!user) {
+        if (typeof window !== 'undefined') {
+            window.location.href = '/Login';
+        }
+        return null;
     }
 
     if (projects.length === 0) {
