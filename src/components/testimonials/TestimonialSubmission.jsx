@@ -60,13 +60,11 @@ export default function TestimonialSubmission() {
 
     const submitMutation = useMutation({
         mutationFn: async (data) => {
-            const { data: result, error } = await supabase
+            const { error } = await supabase
                 .from('testimonials')
-                .insert([{ ...data, status: 'pending' }])
-                .select()
-                .single();
+                .insert([{ ...data, status: 'pending' }]);
             if (error) throw error;
-            return result;
+            return true;
         },
         onSuccess: () => {
             setIsSuccess(true);
