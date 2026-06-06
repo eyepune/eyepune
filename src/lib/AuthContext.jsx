@@ -21,10 +21,12 @@ export const AuthProvider = ({ children }) => {
       async (event, session) => {
         if (event === 'SIGNED_IN' && session) {
           await fetchUserProfile(session.user.id, session.user);
+          setIsLoadingAuth(false);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setIsAuthenticated(false);
           setAuthError(null);
+          setIsLoadingAuth(false);
         }
       }
     );
@@ -35,6 +37,11 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAppState = async () => {
+    // Safety fallback to prevent infinite loaders
+    const fallbackTimeout = setTimeout(() => {
+      setIsLoadingAuth(false);
+    }, 8000);
+
     try {
       setIsLoadingAuth(true);
       setAuthError(null);
@@ -46,6 +53,7 @@ export const AuthProvider = ({ children }) => {
           type: 'config_missing', 
           message: 'Supabase credentials are missing. Please check your .env file.' 
         });
+        clearTimeout(fallbackTimeout);
         setIsLoadingAuth(false);
         return;
       }
@@ -56,6 +64,7 @@ export const AuthProvider = ({ children }) => {
       if (authError && authError.message !== 'Auth session missing!') {
         console.error('Session check failed:', authError);
         setAuthError({ type: 'unknown', message: authError.message });
+        clearTimeout(fallbackTimeout);
         setIsLoadingAuth(false);
         return;
       }
@@ -67,6 +76,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
       }
 
+      clearTimeout(fallbackTimeout);
       setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
     } catch (error) {
