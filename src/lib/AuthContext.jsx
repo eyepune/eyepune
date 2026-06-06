@@ -58,6 +58,18 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
+      // Manually process OAuth code if present in the URL (Fallback if server-side callback is bypassed)
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get('code');
+        if (code) {
+          console.log('Explicitly exchanging PKCE code...');
+          await supabase.auth.exchangeCodeForSession(code);
+          url.searchParams.delete('code');
+          window.history.replaceState({}, document.title, url.toString());
+        }
+      }
+
       // Check if user has an active session
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
 

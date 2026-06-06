@@ -182,10 +182,14 @@ export default function Login() {
                                         onClick={async () => {
                                             setLoading(true);
                                             try {
+                                                const callbackUrl = window.location.origin.includes('eyepune.com') 
+                                                    ? 'https://www.eyepune.com/api/auth/callback' 
+                                                    : window.location.origin + '/api/auth/callback';
+
                                                 const { error } = await supabase.auth.signInWithOAuth({
                                                     provider: 'google',
                                                     options: {
-                                                        redirectTo: window.location.origin + '/api/auth/callback'
+                                                        redirectTo: callbackUrl
                                                     }
                                                 });
                                                 if (error) throw error;
@@ -211,10 +215,14 @@ export default function Login() {
                                         onClick={async () => {
                                             setLoading(true);
                                             try {
+                                                const callbackUrl = window.location.origin.includes('eyepune.com') 
+                                                    ? 'https://www.eyepune.com/api/auth/callback' 
+                                                    : window.location.origin + '/api/auth/callback';
+
                                                 const { error } = await supabase.auth.signInWithOAuth({
                                                     provider: 'linkedin_oidc',
                                                     options: {
-                                                        redirectTo: window.location.origin + '/api/auth/callback'
+                                                        redirectTo: callbackUrl
                                                     }
                                                 });
                                                 if (error) throw error;
