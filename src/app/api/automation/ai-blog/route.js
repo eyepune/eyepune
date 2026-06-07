@@ -21,7 +21,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 export async function GET(request) {
     // 1. Auth Check (for Vercel Cron or Manual Trigger)
     const authHeader = request.headers.get('authorization');
-    if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
+    if (process.env.NODE_ENV !== 'development' && CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -64,7 +64,7 @@ export async function GET(request) {
             console.error('[AI-Blog] Failed to save error logs to Supabase:', e.message);
         }
 
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ error: error.message, stack: error.stack }, { status: 200 });
     }
 }
 
@@ -86,7 +86,10 @@ async function generateAndPostBlog(audience) {
              "category": "ai_automation",
              "tags": ["AI", "Enterprise", "Global Scale", "Growth"]
            }
-        3. Do not include markdown or backticks in the response, just the raw JSON.
+        3. Internal Linking: Naturally inject exactly 2 HTML links within the content pointing to our money pages:
+           - <a href="/Booking">Book a Free Strategy Session</a> (or similar context)
+           - <a href="/Pricing">View our Growth Packages</a> (or similar context)
+        4. Do not include markdown or backticks in the response, just the raw JSON.
     `;
 
     let llmData = null;
@@ -234,6 +237,38 @@ async function generateAndPostBlog(audience) {
                 status: 'warning'
             }]);
         } catch (e) {}
+    }
+
+    // ── STEP 5: AUTO-SYNDICATION (Dev.to, Hashnode, etc.) ──
+    try {
+        const { syndicateBlog } = await import('@/lib/syndication');
+        await syndicateBlog(newPost);
+    } catch (e) {
+        console.warn('[AI-Blog] Syndication failed or module missing:', e.message);
+    }
+
+    // ── STEP 6: INSTANT GOOGLE INDEXING ──
+    try {
+        const { pingGoogleIndexing } = await import('@/lib/google-indexing');
+        await pingGoogleIndexing(`https://www.eyepune.com/blog/${newPost.slug}`);
+    } catch (e) {
+        console.warn('[AI-Blog] Google Indexing ping failed:', e.message);
+    }
+
+    // ── STEP 7: X (TWITTER) VIRAL THREAD ──
+    try {
+        const { generateAndPostTwitterThread } = await import('@/lib/twitter');
+        await generateAndPostTwitterThread(newPost);
+    } catch (e) {
+        console.warn('[AI-Blog] Twitter Thread generation failed:', e.message);
+    }
+
+    // ── STEP 8: GOOGLE BUSINESS PROFILE UPDATE ──
+    try {
+        const { autoPostToGMB } = await import('@/lib/gmb');
+        await autoPostToGMB(newPost);
+    } catch (e) {
+        console.warn('[AI-Blog] GMB Auto-post failed:', e.message);
     }
 
     return { id: newPost.id, title: newPost.title, audience };

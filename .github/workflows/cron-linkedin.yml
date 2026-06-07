@@ -12,5 +12,7 @@ jobs:
     steps:
       - name: Trigger LinkedIn Endpoint
         run: |
-          curl -X GET "https://www.eyepune.com/api/automation/linkedin/daily-post" \
-          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+          curl -X POST "https://www.eyepune.com/api/automation/linkedin/daily-post" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          -H "Content-Type: application/json" \
+          -d '{}'

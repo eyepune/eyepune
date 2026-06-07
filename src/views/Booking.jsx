@@ -88,7 +88,7 @@ export default function Booking() {
                 booking_time: timeStr,
                 duration: '30 min',
                 status: 'pending',
-                notes: formData.notes,
+                notes: formData.notes ? formData.notes + '\n\n[DPDP Consent: Explicitly given]' : '[DPDP Consent: Explicitly given]',
                 meeting_link: 'https://meet.google.com/lookup/eyepune'
             }]);
             if (bookingError) {
@@ -97,7 +97,7 @@ export default function Booking() {
             }
 
             // 2. Create lead in Supabase
-            await supabase.from('leads').insert([{
+            const { data: newLead } = await supabase.from('leads').insert([{
                 full_name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
@@ -105,8 +105,23 @@ export default function Booking() {
                 source: 'booking',
                 status: 'contacted',
                 score: 50,
-                notes: `Consultation booked for ${selectedDate.toLocaleString()}`
-            }]).catch(({ error }) => { if (error) console.warn('Lead creation failed:', error); });
+                notes: `Consultation booked for ${selectedDate.toLocaleString()}\n[DPDP Consent: Explicitly given]`
+            }]).select().single().catch(({ error }) => { if (error) console.warn('Lead creation failed:', error); return { data: null }; });
+
+            // 🔥 2.5 Trigger AI Sales Intelligence Engine (Background process)
+            if (newLead?.id) {
+                fetch('/api/automation/sales-intel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: formData.email,
+                        company: formData.company,
+                        industry: 'Consultation',
+                        id: newLead.id,
+                        tableType: 'leads'
+                    })
+                }).catch(err => console.warn('Sales Intel Trigger Failed:', err));
+            }
 
             // 2.1 Fallback to inquiries for visibility in Admin Panel
             await supabase.from('inquiries').insert([{
@@ -115,7 +130,7 @@ export default function Booking() {
                 phone: formData.phone,
                 company: formData.company,
                 service_interest: 'Discovery Call / Booking',
-                message: `Consultation booked for ${dateStr} at ${timeStr}. Notes: ${formData.notes}`,
+                message: `Consultation booked for ${dateStr} at ${timeStr}. Notes: ${formData.notes}\n[DPDP Consent: Explicitly given]`,
                 source: 'booking',
                 status: 'new'
             }]).catch((err) => { console.warn('Inquiry fallback failed:', err); });
@@ -353,6 +368,17 @@ export default function Booking() {
                                             onChange={handleChange}
                                             className="mt-2 min-h-[100px]"
                                         />
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <input 
+                                            type="checkbox" 
+                                            id="consent"
+                                            required 
+                                            className="mt-1 w-4 h-4 rounded border-border bg-card accent-red-600 focus:ring-red-500" 
+                                        />
+                                        <Label htmlFor="consent" className="text-sm text-muted-foreground leading-relaxed font-normal">
+                                            I consent to EyE PunE collecting and processing my personal data as per the DPDP Act, India. I agree to the <a href="/Privacy" className="text-red-600 hover:text-red-500 underline">Privacy Policy</a> and <a href="/Terms" className="text-red-600 hover:text-red-500 underline">Terms of Service</a>.
+                                        </Label>
                                     </div>
                                     <Button
                                         type="submit"

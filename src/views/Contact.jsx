@@ -44,7 +44,7 @@ export default function Contact() {
                     phone: formData.phone,
                     company: formData.company,
                     service_interest: formData.service_interest,
-                    message: formData.message,
+                    message: formData.message + '\n\n[DPDP Consent: User explicitly agreed to terms and data processing policies]',
                     hp_verification: formData.hp_verification
                 })
             });
@@ -187,6 +187,19 @@ export default function Contact() {
                                                 className="bg-white/[0.03] border-white/[0.08] text-white placeholder:text-gray-700 focus:border-red-500/50 min-h-[140px] rounded-xl"
                                                 placeholder="What are your goals and challenges?" />
                                         </div>
+
+                                        <div className="flex items-start gap-3">
+                                            <input 
+                                                type="checkbox" 
+                                                id="consent"
+                                                required 
+                                                className="mt-1 w-4 h-4 rounded border-white/20 bg-white/5 accent-red-600 focus:ring-red-500 focus:ring-offset-gray-900" 
+                                            />
+                                            <Label htmlFor="consent" className="text-sm text-gray-400 leading-relaxed font-normal">
+                                                I consent to EyE PunE collecting and processing my personal data as per the DPDP Act, India. I agree to the <a href="/Privacy" className="text-red-400 hover:text-red-300 underline">Privacy Policy</a> and <a href="/Terms" className="text-red-400 hover:text-red-300 underline">Terms of Service</a>.
+                                            </Label>
+                                        </div>
+
                                         <Button type="submit" disabled={isSubmitting}
                                             className="w-full py-6 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white rounded-xl text-base font-bold shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all">
                                             {isSubmitting ? 'Sending...' : <><Send className="w-4 h-4 mr-2 inline" />Send Message</>}

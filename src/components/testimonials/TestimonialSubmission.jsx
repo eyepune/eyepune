@@ -60,9 +60,14 @@ export default function TestimonialSubmission() {
 
     const submitMutation = useMutation({
         mutationFn: async (data) => {
+            const payload = {
+                ...data,
+                content: data.content + '\n\n[DPDP Consent: Explicitly given by user to display this testimonial]',
+                status: 'pending'
+            };
             const { error } = await supabase
                 .from('testimonials')
-                .insert([{ ...data, status: 'pending' }]);
+                .insert([payload]);
             if (error) throw error;
             return true;
         },
@@ -283,6 +288,18 @@ export default function TestimonialSubmission() {
                                 </Button>
                             </div>
                         </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                        <input 
+                            type="checkbox" 
+                            id="consent"
+                            required 
+                            className="mt-1 w-4 h-4 rounded border-border bg-card accent-red-600 focus:ring-red-500" 
+                        />
+                        <Label htmlFor="consent" className="text-sm text-muted-foreground leading-relaxed font-normal">
+                            I consent to EyE PunE collecting and displaying my testimonial and personal data publicly as per the DPDP Act, India. I agree to the <a href="/Privacy" className="text-red-600 hover:text-red-500 underline">Privacy Policy</a>.
+                        </Label>
                     </div>
 
                     <Button type="submit" className="w-full" disabled={submitMutation.isPending}>
