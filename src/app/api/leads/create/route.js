@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { triggerAutomation } from '@/lib/automation-service';
 import { notifyNewInquiry } from '@/lib/admin-notifier';
+import { triggerWhatsAppSequence } from '@/lib/whatsapp-service';
 
 export async function POST(request) {
   try {
@@ -99,6 +100,15 @@ export async function POST(request) {
       });
     } catch (err) {
       console.warn('[Leads API] Admin notification trigger failed:', err.message);
+    }
+
+    // WhatsApp Sequence Trigger (send template to lead if they provided a phone number)
+    if (phone) {
+      triggerWhatsAppSequence({
+        triggerType: 'new_inquiry',
+        recipientPhone: phone,
+        recipientName: name
+      }).catch(err => console.warn('[Leads API] WhatsApp sequence trigger failed:', err.message));
     }
 
     return NextResponse.json({ success: true });

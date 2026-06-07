@@ -54,6 +54,12 @@ export async function GET() {
       configured: !!(process.env.LINKEDIN_ACCESS_TOKEN || process.env.LINKEDIN_CLIENT_ID) || !!dbLinkedIn,
     };
 
+    // Check WhatsApp Configuration
+    report.whatsapp = {
+      configured: !!(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_ID),
+      admin_number: process.env.ADMIN_WHATSAPP_NUMBER ? '***' + process.env.ADMIN_WHATSAPP_NUMBER.slice(-4) : null,
+    };
+
     return Response.json({ success: true, report });
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 500 });

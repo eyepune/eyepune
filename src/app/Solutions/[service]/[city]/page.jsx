@@ -13,13 +13,13 @@ export async function generateMetadata({ params }) {
   const service = rawService.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   
   // Asynchronous ping to Google Indexing to auto-index this programmatic page when crawled/generated
-  pingGoogleIndexing(\`https://www.eyepune.com/Solutions/\${rawService}/\${rawCity}\`);
+  pingGoogleIndexing(`https://www.eyepune.com/Solutions/${rawService}/${rawCity}`);
 
   return {
-    title: \`Top \${service} Agency in \${city} | EyE PunE\`,
-    description: \`Looking for the best \${service} experts in \${city}? EyE PunE engineers high-converting \${service} solutions to dominate your local market.\`,
+    title: `Top ${service} Agency in ${city} | EyE PunE`,
+    description: `Looking for the best ${service} experts in ${city}? EyE PunE engineers high-converting ${service} solutions to dominate your local market.`,
     alternates: {
-      canonical: \`/Solutions/\${rawService}/\${rawCity}\`,
+      canonical: `/Solutions/${rawService}/${rawCity}`,
     }
   };
 }

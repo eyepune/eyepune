@@ -572,8 +572,10 @@ function Admin_Marketing() {
                                             <p className="text-xs text-gray-500 mt-1">Environment variables check</p>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                            <span className="text-xs font-black uppercase text-green-500">Configured</span>
+                                            <div className={`w-2 h-2 rounded-full ${systemStatus?.whatsapp?.configured ? 'bg-green-500 animate-pulse' : 'bg-amber-500'}`} />
+                                            <span className={`text-xs font-black uppercase ${systemStatus?.whatsapp?.configured ? 'text-green-500' : 'text-amber-500'}`}>
+                                                {systemStatus?.whatsapp?.configured ? 'Configured' : 'Not Configured'}
+                                            </span>
                                         </div>
                                     </div>
 

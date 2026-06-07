@@ -26,7 +26,7 @@ export async function POST(request) {
             
             // 2. Trigger WhatsApp Alert to Admin
             // We use sendWhatsAppText for direct alerts to the admin
-            const adminNumber = process.env.ADMIN_WHATSAPP_NUMBER || '919511210191';
+            const adminNumber = process.env.ADMIN_WHATSAPP_NUMBER || '919284712033';
             const alertText = `🔥 *AI SALES SNIPER* 🔥\n\n*User:* ${userIdentifier || 'Anonymous'}\n*Message:* "${message}"\n\n*Action:* Jump into CRM now to see live feed!\nhttps://eyepune.com/Admin-Dashboard`;
 
             await sendWhatsAppText({

@@ -6,7 +6,7 @@ import { sendEmail } from './email-service';
  * Centralized utility for alerting the EyE PunE team about critical business events.
  */
 
-const ADMIN_NUMBER = process.env.ADMIN_WHATSAPP_NUMBER || '919511210191';
+const ADMIN_NUMBER = process.env.ADMIN_WHATSAPP_NUMBER || '919284712033';
 const ADMIN_EMAIL = 'team@eyepune.com';
 
 export async function notifyAdmin(message) {

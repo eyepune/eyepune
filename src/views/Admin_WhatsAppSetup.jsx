@@ -1,296 +1,329 @@
-import React, { useState, useEffect } from 'react';
-import { base44 } from "@/api/base44Client";
+'use client';
+
+import React, { useState } from 'react';
+import AdminGuard from "@/components/admin/AdminGuard";
+import AdminLayout from "@/components/admin/AdminLayout";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Check, Smartphone, Send, Loader2, CheckCircle2 } from 'lucide-react';
-import AdminGuard from "@/components/admin/AdminGuard";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { 
+    MessageCircle, Check, Smartphone, Send, Loader2, 
+    CheckCircle2, AlertCircle, ExternalLink, Copy, Shield,
+    Zap, ArrowRight, Globe
+} from 'lucide-react';
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 
-export default function Admin_WhatsAppSetup() {
-    const [isSendingTest, setIsSendingTest] = useState(false);
-    const whatsappURL = base44.agents.getWhatsAppConnectURL('salesAssistant');
-    
-    // Check if WhatsApp is connected
-    const { data: conversations } = useQuery({
-        queryKey: ['whatsapp-status'],
+function WhatsAppSetupContent() {
+    const [testPhone, setTestPhone] = useState('');
+    const [isTesting, setIsTesting] = useState(false);
+    const queryClient = useQueryClient();
+
+    // Check system status (tells us if WA env vars are set)
+    const { data: systemStatus, isLoading: isLoadingStatus } = useQuery({
+        queryKey: ['whatsapp-system-status'],
         queryFn: async () => {
             try {
-                return await base44.agents.listConversations({ agent_name: 'salesAssistant' });
+                const res = await fetch('/api/system/verify');
+                if (!res.ok) return { whatsapp: { configured: false } };
+                const data = await res.json();
+                return data.report || { whatsapp: { configured: false } };
             } catch {
-                return [];
+                return { whatsapp: { configured: false } };
             }
         }
     });
 
-    const { data: currentUser } = useQuery({
-        queryKey: ['current-user'],
-        queryFn: () => base44.auth.me()
-    });
-    
-    // Check if current user has connected their WhatsApp
-    const myConv = conversations?.find(c => 
-        c.metadata?.is_admin_notifications === true && 
-        c.metadata?.admin_email === currentUser?.email
-    );
-    // Check if actually connected via WhatsApp (has any messages - means they sent the initial message)
-    const isMyWhatsAppConnected = !!myConv && myConv.messages && myConv.messages.length > 0;
-    
-    // Get all admin conversations and check their connection status
-    const allAdminConnections = (conversations?.filter(c => c.metadata?.is_admin_notifications === true) || [])
-        .map(conv => ({
-            ...conv,
-            isConnected: !!(conv.messages && conv.messages.length > 0)
-        }));
+    const isConnected = !!systemStatus?.whatsapp?.configured;
 
-    const handleSendTest = async () => {
-        setIsSendingTest(true);
+    const handleTestMessage = async () => {
+        if (!testPhone) return toast.error('Enter a phone number with country code (e.g. 919284712033)');
+        setIsTesting(true);
         try {
-            const response = await base44.functions.invoke('sendTestWhatsAppNotification');
-            if (response.data.success) {
-                toast.success('Test notification sent! Check WhatsApp at +91 9284712033');
+            const res = await fetch('/api/system/whatsapp/test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: testPhone })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data.success) {
+                toast.success('✅ Test message sent! Check your WhatsApp.');
             } else {
-                toast.error('Failed to send test notification');
+                toast.error(`Failed: ${data.error || data.details || 'Check your credentials'}`);
             }
-        } catch (error) {
-            toast.error('Error sending test notification');
-            console.error(error);
+        } catch (e) {
+            toast.error('Network error — is the server running?');
+        } finally {
+            setIsTesting(false);
         }
-        setIsSendingTest(false);
+    };
+
+    const copyWebhookUrl = () => {
+        navigator.clipboard.writeText('https://eyepune.com/api/whatsapp/webhook');
+        toast.success('Webhook URL copied to clipboard');
     };
 
     return (
-        <AdminGuard>
-            <div className="min-h-screen bg-background p-6">
-                <div className="max-w-4xl mx-auto">
-                    <div className="mb-8">
-                        <h1 className="text-4xl font-bold mb-2">WhatsApp Notifications</h1>
-                        <p className="text-muted-foreground text-lg">
-                            Get instant notifications for important events
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Header */}
+            <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4">
+                    <MessageCircle className="w-3.5 h-3.5 text-green-500" />
+                    <span className="text-xs font-medium text-gray-300">WhatsApp Business API</span>
+                </div>
+                <h1 className="text-4xl font-bold text-white tracking-tight">WhatsApp Setup</h1>
+                <p className="text-gray-400 mt-2 text-sm max-w-xl">
+                    Connect the Meta WhatsApp Cloud API to send automated notifications, lead alerts, and engage with customers directly.
+                </p>
+            </div>
+
+            {/* Connection Status */}
+            <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden relative group">
+                <div className={cn(
+                    "absolute inset-0 bg-gradient-to-r opacity-100 transition-opacity",
+                    isConnected ? "from-green-600/5 to-transparent" : "from-amber-600/5 to-transparent"
+                )} />
+                <CardContent className="p-6 flex items-center gap-4 relative z-10">
+                    <div className={cn(
+                        "w-14 h-14 rounded-2xl flex items-center justify-center border",
+                        isConnected ? "bg-green-500/10 border-green-500/20" : "bg-amber-500/10 border-amber-500/20"
+                    )}>
+                        <Smartphone className={cn("w-7 h-7", isConnected ? "text-green-500" : "text-amber-500")} />
+                    </div>
+                    <div className="flex-1">
+                        <p className="text-lg font-bold text-white flex items-center gap-2">
+                            Meta Cloud API 
+                            {isConnected 
+                                ? <CheckCircle2 className="w-4 h-4 text-green-500" /> 
+                                : <AlertCircle className="w-4 h-4 text-amber-500" />}
+                        </p>
+                        <p className="text-sm text-gray-400 mt-1">
+                            {isLoadingStatus 
+                                ? 'Checking status...'
+                                : isConnected 
+                                    ? 'Connected — WhatsApp Business API is active and sending messages'
+                                    : 'Not configured — Add your API credentials in the .env file'}
                         </p>
                     </div>
+                    <Badge className={cn(
+                        "text-xs font-bold uppercase tracking-wider px-3 py-1",
+                        isConnected 
+                            ? "bg-green-500/10 text-green-500 border-green-500/20" 
+                            : "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                    )}>
+                        {isConnected ? 'LIVE' : 'SETUP NEEDED'}
+                    </Badge>
+                </CardContent>
+            </Card>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                        {/* Connect Card */}
-                        <Card className={isMyWhatsAppConnected ? "border-green-500" : ""}>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    {isMyWhatsAppConnected ? (
-                                        <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                    ) : (
-                                        <MessageCircle className="w-5 h-5 text-green-600" />
-                                    )}
-                                    {isMyWhatsAppConnected ? 'Your WhatsApp Connected' : 'Connect Your WhatsApp'}
-                                </CardTitle>
-                                <CardDescription>
-                                    {isMyWhatsAppConnected 
-                                        ? 'Your WhatsApp is connected and receiving notifications'
-                                        : 'Link your WhatsApp number to receive real-time notifications'
-                                    }
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                {isMyWhatsAppConnected && (
-                                    <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
-                                        <div className="flex items-center gap-2 text-green-900 dark:text-green-100 font-semibold mb-2">
-                                            <CheckCircle2 className="w-5 h-5" />
-                                            Active & Connected
-                                        </div>
-                                        <p className="text-sm text-green-700 dark:text-green-300">
-                                            Account: {currentUser?.full_name || currentUser?.email}
-                                        </p>
-                                        <p className="text-sm text-green-700 dark:text-green-300">
-                                            You will receive all admin notifications.
-                                        </p>
-                                    </div>
-                                )}
-                                
-                                <div className="p-4 bg-muted rounded-lg">
-                                    <p className="text-sm mb-3">You'll receive notifications for:</p>
-                                    <ul className="space-y-2">
-                                        <li className="flex items-center gap-2 text-sm">
-                                            <Check className="w-4 h-4 text-green-600" />
-                                            New AI assessments completed
-                                        </li>
-                                        <li className="flex items-center gap-2 text-sm">
-                                            <Check className="w-4 h-4 text-green-600" />
-                                            High-value leads (70+ score)
-                                        </li>
-                                        <li className="flex items-center gap-2 text-sm">
-                                            <Check className="w-4 h-4 text-green-600" />
-                                            New bookings confirmed
-                                        </li>
-                                        <li className="flex items-center gap-2 text-sm">
-                                            <Check className="w-4 h-4 text-green-600" />
-                                            Qualified leads ready for proposals
-                                        </li>
-                                    </ul>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Setup Instructions */}
+                <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                    <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6">
+                        <CardTitle className="text-white text-xl flex items-center gap-3">
+                            <Shield className="w-5 h-5 text-green-500" />
+                            Setup Guide
+                        </CardTitle>
+                        <CardDescription className="text-gray-500 mt-1">
+                            Follow these steps to activate WhatsApp messaging
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-8 space-y-6">
+                        {[
+                            {
+                                step: 1,
+                                title: 'Create a Meta Business App',
+                                desc: 'Go to Meta Developer Dashboard and create a Business app with WhatsApp product enabled.',
+                                link: 'https://developers.facebook.com/apps/',
+                                linkText: 'Open Meta Dashboard'
+                            },
+                            {
+                                step: 2,
+                                title: 'Get your Phone Number ID',
+                                desc: 'In WhatsApp > API Setup, find your "Phone number ID" and add it as WHATSAPP_PHONE_ID in your .env file.',
+                            },
+                            {
+                                step: 3,
+                                title: 'Generate Permanent Token',
+                                desc: 'Create a System User in Business Settings > System Users, then generate a permanent access token with whatsapp_business_messaging permission.',
+                                link: 'https://business.facebook.com/settings/system-users',
+                                linkText: 'Business Settings'
+                            },
+                            {
+                                step: 4,
+                                title: 'Set Webhook URL',
+                                desc: 'Configure your webhook in Meta Developer Dashboard to receive inbound messages.',
+                            },
+                        ].map(({ step, title, desc, link, linkText }) => (
+                            <div key={step} className="flex gap-4 group/step">
+                                <div className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center flex-shrink-0 group-hover/step:bg-green-500/20 transition-colors">
+                                    <span className="text-sm font-black text-green-500">{step}</span>
                                 </div>
-                                
-                                {!isMyWhatsAppConnected && (
-                                    <>
-                                        <a href={whatsappURL} target="_blank" rel="noopener noreferrer">
-                                            <Button className="w-full bg-green-600 hover:bg-green-700">
-                                                <Smartphone className="w-4 h-4 mr-2" />
-                                                Connect My WhatsApp
-                                            </Button>
+                                <div>
+                                    <p className="font-bold text-white group-hover/step:text-green-400 transition-colors">{title}</p>
+                                    <p className="text-sm text-gray-400 mt-1 leading-relaxed">{desc}</p>
+                                    {link && (
+                                        <a href={link} target="_blank" rel="noopener noreferrer" 
+                                            className="inline-flex items-center gap-1.5 text-xs text-green-400 hover:text-green-300 mt-2 font-medium">
+                                            {linkText} <ExternalLink className="w-3 h-3" />
                                         </a>
-
-                                        <p className="text-xs text-muted-foreground text-center">
-                                            Opens WhatsApp to authenticate. One-time setup per admin.
-                                        </p>
-                                    </>
-                                )}
-
-                                {isMyWhatsAppConnected && (
-                                    <div className="pt-4 border-t">
-                                        <Button
-                                            onClick={handleSendTest}
-                                            variant="outline"
-                                            className="w-full"
-                                            disabled={isSendingTest}
-                                        >
-                                            {isSendingTest ? (
-                                                <>
-                                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                                    Sending...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Send className="w-4 h-4 mr-2" />
-                                                    Send Test to My WhatsApp
-                                                </>
-                                            )}
-                                        </Button>
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-
-                        {/* Info Card */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>How It Works</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="space-y-3">
-                                    <div className="flex gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
-                                            <span className="text-sm font-bold text-red-600">1</span>
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold">Click Connect</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                Opens WhatsApp with a pre-filled message
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
-                                            <span className="text-sm font-bold text-red-600">2</span>
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold">Send the Message</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                This authenticates your WhatsApp
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
-                                            <span className="text-sm font-bold text-red-600">3</span>
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold">Get Notified</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                Instant alerts for important events
-                                            </p>
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
+                            </div>
+                        ))}
 
-                                <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
-                                    <p className="text-sm font-semibold text-green-900 dark:text-green-100 mb-1">
-                                        💡 Pro Tip
-                                    </p>
-                                    <p className="text-sm text-green-700 dark:text-green-300">
-                                        You can also chat with the Sales Assistant through WhatsApp to qualify leads and check CRM data on the go!
-                                    </p>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
+                        {/* Webhook URL */}
+                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-3">
+                            <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Your Webhook URL</p>
+                            <div className="flex items-center gap-2">
+                                <code className="flex-1 text-sm text-green-400 font-mono bg-black/50 px-4 py-2.5 rounded-xl border border-white/5 truncate">
+                                    https://eyepune.com/api/whatsapp/webhook
+                                </code>
+                                <Button 
+                                    variant="outline" 
+                                    size="icon" 
+                                    onClick={copyWebhookUrl}
+                                    className="border-white/10 text-gray-400 hover:text-white hover:bg-white/5 h-10 w-10"
+                                >
+                                    <Copy className="w-4 h-4" />
+                                </Button>
+                            </div>
+                            <p className="text-[10px] text-gray-600">
+                                Verify Token: <code className="text-gray-400">eyepune_whatsapp_verify_2026</code>
+                            </p>
+                        </div>
+                    </CardContent>
+                </Card>
 
-                    {/* Connected Admins List */}
-                    {allAdminConnections.length > 0 && (
-                        <Card className="mt-6">
-                            <CardHeader>
-                                <CardTitle>Admin WhatsApp Status</CardTitle>
-                                <CardDescription>
-                                    {allAdminConnections.filter(c => c.isConnected).length} of {allAdminConnections.length} admin numbers connected
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-3">
-                                    {allAdminConnections.map((conv, idx) => (
-                                        <div 
-                                            key={conv.id} 
-                                            className={`flex items-center justify-between p-3 rounded-lg ${
-                                                conv.isConnected 
-                                                    ? 'bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800' 
-                                                    : 'bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800'
-                                            }`}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                                    conv.isConnected 
-                                                        ? 'bg-green-100 dark:bg-green-900/30' 
-                                                        : 'bg-orange-100 dark:bg-orange-900/30'
-                                                }`}>
-                                                    <CheckCircle2 className={`w-5 h-5 ${
-                                                        conv.isConnected ? 'text-green-600' : 'text-orange-600'
-                                                    }`} />
-                                                </div>
-                                                <div>
-                                                    <div className="flex items-center gap-2">
-                                                        <p className="font-medium">
-                                                            {conv.metadata?.admin_name || 'Admin User'}
-                                                        </p>
-                                                        {conv.isConnected ? (
-                                                            <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded">
-                                                                Connected
-                                                            </span>
-                                                        ) : (
-                                                            <span className="text-xs bg-orange-600 text-white px-2 py-0.5 rounded">
-                                                                Pending
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {conv.metadata?.admin_email}
-                                                    </p>
-                                                    {!conv.isConnected && (
-                                                        <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
-                                                            Awaiting WhatsApp authentication
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            {conv.metadata?.admin_email === currentUser?.email && (
-                                                <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-600 px-2 py-1 rounded">
-                                                    You
-                                                </span>
-                                            )}
-                                        </div>
-                                    ))}
+                {/* Test & Status */}
+                <div className="space-y-8">
+                    {/* Test Connection */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                        <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6">
+                            <CardTitle className="text-white text-xl flex items-center gap-3">
+                                <Send className="w-5 h-5 text-green-500" />
+                                Test Connection
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-8 space-y-6">
+                            <div className="space-y-2">
+                                <Label className="text-gray-300 text-xs uppercase tracking-widest font-bold">
+                                    Recipient Phone Number
+                                </Label>
+                                <Input
+                                    placeholder="e.g. 919284712033 (with country code, no +)"
+                                    value={testPhone}
+                                    onChange={(e) => setTestPhone(e.target.value)}
+                                    className="bg-[#111] border-white/10 h-12 focus:border-green-500/50 font-mono"
+                                />
+                            </div>
+                            <Button
+                                onClick={handleTestMessage}
+                                disabled={isTesting || !isConnected}
+                                className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-500 hover:to-emerald-400 text-white font-bold shadow-lg shadow-green-500/20 disabled:opacity-50"
+                            >
+                                {isTesting 
+                                    ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending...</> 
+                                    : <><Send className="w-4 h-4 mr-2" /> Send Test Message</>}
+                            </Button>
+                            <p className="text-[10px] text-gray-600 text-center italic">
+                                Sends the standard "hello_world" Meta test template. Recipient must have the WhatsApp app installed.
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    {/* What's Active */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                        <CardHeader className="border-b border-white/5 bg-white/[0.01] px-8 py-6">
+                            <CardTitle className="text-white text-xl flex items-center gap-3">
+                                <Zap className="w-5 h-5 text-green-500" />
+                                Active Automations
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-6 space-y-4">
+                            {[
+                                { 
+                                    title: 'Lead Alert Notifications', 
+                                    desc: 'Instant WhatsApp + email when a new lead submits a form',
+                                    active: true 
+                                },
+                                { 
+                                    title: 'Booking Confirmation Alerts', 
+                                    desc: 'Notify you when a consultation is booked',
+                                    active: true 
+                                },
+                                { 
+                                    title: 'AI Assessment Alerts', 
+                                    desc: 'Alert when a high-intent assessment is completed',
+                                    active: true 
+                                },
+                                { 
+                                    title: 'Sales Sniper — Hot Lead Detection', 
+                                    desc: 'Real-time alerts when chatbot detects buying intent',
+                                    active: true 
+                                },
+                                { 
+                                    title: 'Inbound Auto-Responder', 
+                                    desc: 'Auto-replies to common WhatsApp queries from customers',
+                                    active: true 
+                                },
+                            ].map((item, i) => (
+                                <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-green-500/20 transition-colors group">
+                                    <div className={cn(
+                                        "w-2 h-2 rounded-full flex-shrink-0",
+                                        item.active && isConnected ? "bg-green-500 animate-pulse" : "bg-gray-600"
+                                    )} />
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-medium text-white group-hover:text-green-400 transition-colors">{item.title}</p>
+                                        <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+                                    </div>
+                                    <Badge className={cn(
+                                        "text-[9px] uppercase font-bold tracking-widest",
+                                        item.active && isConnected 
+                                            ? "bg-green-500/10 text-green-500 border-green-500/20" 
+                                            : "bg-gray-500/10 text-gray-500 border-gray-500/20"
+                                    )}>
+                                        {item.active && isConnected ? 'Active' : 'Pending'}
+                                    </Badge>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    )}
+                            ))}
+                        </CardContent>
+                    </Card>
+
+                    {/* Required Environment Variables */}
+                    <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
+                        <CardContent className="p-6">
+                            <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Required Environment Variables</p>
+                            <div className="space-y-2.5">
+                                {[
+                                    { key: 'WHATSAPP_ACCESS_TOKEN', desc: 'Permanent access token from System User' },
+                                    { key: 'WHATSAPP_PHONE_ID', desc: 'Phone Number ID from Meta API Setup' },
+                                    { key: 'ADMIN_WHATSAPP_NUMBER', desc: 'Your admin number (no +, e.g. 919284712033)' },
+                                    { key: 'WHATSAPP_VERIFY_TOKEN', desc: 'Webhook verification token' },
+                                ].map((v) => (
+                                    <div key={v.key} className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                                        <code className="text-xs font-mono text-green-400 font-bold">{v.key}</code>
+                                        <span className="text-[10px] text-gray-600 ml-auto">{v.desc}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
+        </div>
+    );
+}
+
+export default function Admin_WhatsAppSetup() {
+    return (
+        <AdminGuard>
+            <AdminLayout>
+                <WhatsAppSetupContent />
+            </AdminLayout>
         </AdminGuard>
     );
 }
