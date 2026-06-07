@@ -110,12 +110,58 @@ Rules:
 
 async function sendZohoEmail(toEmail, subject, htmlBody) {
     try {
-        // Implement Zoho Mail API send logic here using process.env.ZOHO_CLIENT_ID etc.
-        // For demonstration, we assume successful API routing or fallback to Resend if configured.
-        console.log(`[Zoho Mail] Simulating send to ${toEmail} with subject: ${subject}`);
+        const clientId = process.env.ZOHO_CLIENT_ID;
+        const clientSecret = process.env.ZOHO_CLIENT_SECRET;
+        const refreshToken = process.env.ZOHO_REFRESH_TOKEN;
+        const accountId = process.env.ZOHO_MAIL_ACCOUNT_ID;
+        const fromAddress = process.env.ZOHO_MAIL_USERNAME;
+
+        if (!clientId || !refreshToken || !accountId) {
+            console.warn('[Zoho Mail] Missing credentials. Simulating send.');
+            return true;
+        }
+
+        let domain = 'in';
+        let tokenRes = await fetch(`https://accounts.zoho.in/oauth/v2/token?refresh_token=${refreshToken}&client_id=${clientId}&client_secret=${clientSecret}&grant_type=refresh_token`, { method: 'POST' });
+        let tokenData = await tokenRes.json();
+        
+        if (tokenData.error) {
+            // Fallback to .com
+            domain = 'com';
+            tokenRes = await fetch(`https://accounts.zoho.com/oauth/v2/token?refresh_token=${refreshToken}&client_id=${clientId}&client_secret=${clientSecret}&grant_type=refresh_token`, { method: 'POST' });
+            tokenData = await tokenRes.json();
+        }
+
+        if (!tokenData.access_token) {
+            throw new Error(`Failed to refresh token: ${JSON.stringify(tokenData)}`);
+        }
+
+        const emailPayload = {
+            fromAddress: fromAddress,
+            toAddress: toEmail,
+            subject: subject,
+            content: htmlBody,
+            mailFormat: 'html'
+        };
+
+        const sendRes = await fetch(`https://mail.zoho.${domain}/api/accounts/${accountId}/messages`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Zoho-oauthtoken ${tokenData.access_token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(emailPayload)
+        });
+
+        const sendData = await sendRes.json();
+        if (sendData.status?.code !== 200) {
+            throw new Error(`Send API failed: ${JSON.stringify(sendData)}`);
+        }
+
+        console.log(`[Zoho Mail] Successfully sent email to ${toEmail}`);
         return true; 
     } catch (e) {
-        console.error('[Zoho Mail] Send Failed:', e);
+        console.error('[Zoho Mail] Send Failed:', e.message);
         return false;
     }
 }
