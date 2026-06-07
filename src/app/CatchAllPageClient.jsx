@@ -194,6 +194,8 @@ export default function CatchAllPageClient({ initialData }) {
   if (rawPageName.toLowerCase().startsWith('solutions/') || rawPageName.toLowerCase().startsWith('solution/')) {
     isProgrammatic = true;
     resolvedPageName = 'Solution-Programmatic';
+  } else if (rawPageName.toLowerCase().startsWith('blog/') && rawPageName.split('/').length > 1) {
+    resolvedPageName = 'Blog-Post';
   } else if (!PAGE_MAP[resolvedPageName]) {
     const lowerName = rawPageName.toLowerCase().replace(/[-\/]/g, '_');
     const matchKey = Object.keys(PAGE_MAP).find(k => k.toLowerCase().replace(/[-\/]/g, '_') === lowerName);

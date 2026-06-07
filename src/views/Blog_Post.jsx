@@ -5,7 +5,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { Calendar, User, ArrowLeft, MessageCircle, Clock, Share2, Facebook, Twitter, Linkedin, Copy, Check } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,8 +34,16 @@ const getFallback = (id) => {
 
 export default function BlogPost({ initialData }) {
     const searchParams = useSearchParams();
+    const pathname = usePathname();
     const postId = searchParams.get('id');
-    const postSlug = searchParams.get('slug');
+    let postSlug = searchParams.get('slug');
+    
+    if (!postSlug && pathname) {
+        const pathParts = pathname.split('/').filter(Boolean);
+        if (pathParts.length >= 2 && (pathParts[0].toLowerCase() === 'blog' || pathParts[0].toLowerCase() === 'blog-post')) {
+            postSlug = pathParts[1];
+        }
+    }
     const queryClient = useQueryClient();
     const [copied, setCopied] = useState(false);
 
