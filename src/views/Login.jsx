@@ -12,7 +12,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { Loader2, Mail, Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Login() {
     const { user, isAuthenticated, isLoadingAuth } = useAuth();
@@ -23,15 +23,20 @@ export default function Login() {
     const [fullName, setFullName] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const searchParams = useSearchParams();
+    const redirectUrl = searchParams.get('redirect');
+
     React.useEffect(() => {
         if (!isLoadingAuth && isAuthenticated && user) {
-            if (user.role === 'admin') {
+            if (redirectUrl) {
+                router.push(redirectUrl);
+            } else if (user.role === 'admin') {
                 router.push('/Admin-Dashboard');
             } else {
                 router.push('/Client-Dashboard');
             }
         }
-    }, [isLoadingAuth, isAuthenticated, user, router]);
+    }, [isLoadingAuth, isAuthenticated, user, router, redirectUrl]);
 
     if (isLoadingAuth) {
         return (
@@ -182,9 +187,12 @@ export default function Login() {
                                         onClick={async () => {
                                             setLoading(true);
                                             try {
-                                                const callbackUrl = window.location.origin.includes('eyepune.com') 
+                                                let callbackUrl = window.location.origin.includes('eyepune.com') 
                                                     ? 'https://www.eyepune.com/api/auth/callback' 
                                                     : window.location.origin + '/api/auth/callback';
+                                                if (redirectUrl) {
+                                                    callbackUrl += `?next=${encodeURIComponent(redirectUrl)}`;
+                                                }
 
                                                 const { error } = await supabase.auth.signInWithOAuth({
                                                     provider: 'google',
@@ -215,9 +223,12 @@ export default function Login() {
                                         onClick={async () => {
                                             setLoading(true);
                                             try {
-                                                const callbackUrl = window.location.origin.includes('eyepune.com') 
+                                                let callbackUrl = window.location.origin.includes('eyepune.com') 
                                                     ? 'https://www.eyepune.com/api/auth/callback' 
                                                     : window.location.origin + '/api/auth/callback';
+                                                if (redirectUrl) {
+                                                    callbackUrl += `?next=${encodeURIComponent(redirectUrl)}`;
+                                                }
 
                                                 const { error } = await supabase.auth.signInWithOAuth({
                                                     provider: 'linkedin_oidc',

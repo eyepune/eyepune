@@ -44,7 +44,12 @@ export default function ChatbotWidget() {
 
     useEffect(() => {
         if (scrollRef.current) {
-            scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+            const viewport = scrollRef.current.closest('[data-radix-scroll-area-viewport]');
+            if (viewport) {
+                viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
+            } else {
+                scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
     }, [messages, showLeadForm]);
 
