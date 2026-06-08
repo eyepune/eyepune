@@ -28,6 +28,7 @@ export default function ChatbotWidget() {
     const [leadData, setLeadData] = useState({ name: '', email: '', phone: '', hp_verification: '' });
     const [messageCount, setMessageCount] = useState(0);
     const scrollRef = useRef(null);
+    const lastMessageRef = useRef(null);
     const messageId = useRef(2);
 
     // 0. Path check — Hide on Admin pages
@@ -43,15 +44,33 @@ export default function ChatbotWidget() {
     }, []);
 
     useEffect(() => {
-        if (scrollRef.current) {
-            const viewport = scrollRef.current.closest('[data-radix-scroll-area-viewport]');
+        if (lastMessageRef.current || scrollRef.current) {
+            const element = lastMessageRef.current || scrollRef.current;
+            const viewport = element.closest('[data-radix-scroll-area-viewport]');
+            
             if (viewport) {
+                const isAssistant = messages[messages.length - 1]?.role === 'assistant';
+                const messageElement = lastMessageRef.current;
+                
+                if (isAssistant && messageElement) {
+                    const messageTop = messageElement.offsetTop;
+                    const messageHeight = messageElement.offsetHeight;
+                    const viewportHeight = viewport.clientHeight;
+                    
+                    // If message is tall, scroll to its top so the user can start reading
+                    if (messageHeight > viewportHeight * 0.5) {
+                        viewport.scrollTo({ top: messageTop - 24, behavior: 'smooth' });
+                        return;
+                    }
+                }
+                
+                // Default: scroll to bottom
                 viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
-            } else {
+            } else if (scrollRef.current) {
                 scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
-    }, [messages, showLeadForm]);
+    }, [messages, showLeadForm, isLoading]);
 
     // After LEAD_CAPTURE_THRESHOLD user messages, show lead form
     useEffect(() => {
@@ -251,9 +270,12 @@ Response rules:
                         {/* Messages */}
                         <ScrollArea className="flex-1 px-4 py-3">
                             <div className="space-y-3">
-                                {messages.map((message) => (
+                                {messages.map((message, index) => {
+                                    const isLast = index === messages.length - 1;
+                                    return (
                                     <motion.div
                                         key={message.id}
+                                        ref={isLast ? lastMessageRef : null}
                                         initial={{ opacity: 0, y: 8 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -268,7 +290,7 @@ Response rules:
                                             {message.content}
                                         </div>
                                     </motion.div>
-                                ))}
+                                )})}
 
                                 {/* Lead capture form */}
                                 {showLeadForm && !leadCaptured && (
