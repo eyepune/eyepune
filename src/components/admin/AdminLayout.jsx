@@ -8,7 +8,7 @@ import Logo from '@/components/shared/Logo';
 import {
     LayoutDashboard, Users, UserPlus, Mail, Star, Image as ImageIcon,
     FileText, LogOut, ChevronLeft, ChevronRight, MessageSquare, Search, ShieldAlert,
-    Bell, Settings, Menu, Beaker, Zap, ActivitySquare, Target
+    Bell, Settings, Menu, Beaker, Zap, ActivitySquare, Target, Bot
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const NAV_ITEMS = [
     { name: 'Dashboard', href: '/Admin-Dashboard', icon: LayoutDashboard },
     { name: 'CRM / Leads', href: '/Admin-CRM', icon: Users },
+    { name: 'Chatbot Funnel', href: '/Admin-Chatbot', icon: Bot },
     { name: 'Outreach & Sales', href: '/Admin-Outreach', icon: Target },
     { name: 'Analytics & Insights', href: '/Admin-Analytics', icon: ActivitySquare },
     { name: 'Marketing & Automation', href: '/Admin-Marketing', icon: Mail },
