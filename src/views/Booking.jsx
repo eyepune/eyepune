@@ -37,7 +37,22 @@ export default function Booking() {
         }
     }, [isSuccess]);
 
+        // Pre-fill from chatbot lead data (sessionStorage set by AIChatbot.jsx)
     useEffect(() => {
+        try {
+            const chatbotLead = JSON.parse(sessionStorage.getItem('chatbot_lead') || '{}');
+            if (chatbotLead.name || chatbotLead.email || chatbotLead.phone) {
+                setFormData(prev => ({
+                    ...prev,
+                    name: chatbotLead.name || prev.name,
+                    email: chatbotLead.email || prev.email,
+                    phone: chatbotLead.phone || prev.phone,
+                }));
+            }
+        } catch {}
+    }, []);
+
+useEffect(() => {
         if (formData.scheduled_date) {
             fetchAvailableSlots(formData.scheduled_date);
         }
