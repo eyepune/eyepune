@@ -106,6 +106,18 @@ export default function ChatbotWidget() {
         e.preventDefault();
         if (!input.trim()) return;
 
+        // Auto-extract contact info from chat text
+        const emailMatch = input.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+        const phoneMatch = input.match(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\b\d{10,12}\b/);
+        
+        if (!leadCaptured && (emailMatch || phoneMatch)) {
+            const extractedEmail = emailMatch ? emailMatch[0] : '';
+            const extractedPhone = phoneMatch ? phoneMatch[0] : '';
+            saveLead('Chat Lead', extractedEmail, extractedPhone);
+            setLeadCaptured(true);
+            setShowLeadForm(false);
+        }
+
         const userMessage = {
             id: messageId.current++,
             role: 'user',
@@ -141,7 +153,8 @@ Response rules:
 - Always end your message with a compelling question that drives them to take action.
 - NEVER mention specific prices. If asked about pricing, explain that we charge based on the exact requirements and scope of work, and immediately push them to book a free consultation at: https://eyepune.com/Booking
 - Emphasize that we only take 3 new clients per month (scarcity).
-- Never make up specific claims — stick to the facts above.`;
+- Never make up specific claims — stick to the facts above.
+- IMPORTANT: If a user asks you to send something (like a growth map, audit, or report) to their WhatsApp or Email, YOU MUST ASK for their phone number or email first. Do NOT say "I have sent it" unless they have actually typed their contact info in the chat. If they provide it, say "Thanks! I've saved your details and our team will send it over shortly."`;
 
             const response = await fetch('/api/llm', {
                 method: 'POST',
