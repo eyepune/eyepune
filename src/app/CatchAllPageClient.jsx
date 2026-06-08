@@ -21,6 +21,7 @@ import Admin_EmailCampaigns from '@/views/Admin_EmailCampaigns';
 import Admin_EmailTemplates from '@/views/Admin_EmailTemplates';
 import Admin_DripAutomations from '@/views/Admin_DripAutomations';
 import Admin_TestAutomation from '@/views/Admin_TestAutomation';
+import Admin_Chatbot from '@/views/Admin_Chatbot';
 
 import Admin_Feedback from '@/views/Admin_Feedback';
 import Admin_Marketing from '@/views/Admin_Marketing';
@@ -97,6 +98,7 @@ const PAGE_MAP = {
   'Admin-EmailCampaigns': Admin_EmailCampaigns,
   'Admin-EmailTemplates': Admin_EmailTemplates,
   'Admin-DripAutomations': Admin_DripAutomations,
+  'Admin-Chatbot': Admin_Chatbot,
 
   'Admin-Feedback': Admin_Feedback,
   'Admin-Forms': Admin_Forms,
