@@ -111,11 +111,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
-      <head>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6360575790240563" crossOrigin="anonymous"></script>
-      </head>
       <CSPostHogProvider>
         <body className="min-h-screen bg-transparent text-white antialiased font-sans">
+          <Script 
+            async 
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6360575790240563" 
+            crossOrigin="anonymous" 
+            strategy="afterInteractive" 
+          />
           <SEO_JSONLD />
           <GoogleAnalytics />
           <Suspense fallback={null}>
