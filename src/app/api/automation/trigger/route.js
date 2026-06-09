@@ -46,10 +46,17 @@ export async function GET(request) {
   if (test === 'blog') {
     try {
       const { generateAndPostBlog } = await import('./../ai-blog/route.js');
-      // ai-blog route exports the logic in generateAndPostBlog or POST
-      // Wait, ai-blog doesn't export generateAndPostBlog, it's just inside POST.
-      // So let's just trigger it by making a POST to ourselves? Or just return that it needs POST.
       return NextResponse.json({ message: 'Blog test must be via POST to /api/automation/ai-blog' });
+    } catch (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+  }
+
+  if (test === 'reddit') {
+    try {
+      const { GET: redditGet } = await import('./../reddit-sniper/route.js');
+      const res = await redditGet(request);
+      return res;
     } catch (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }

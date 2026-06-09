@@ -1,0 +1,15 @@
+name: Reddit Sniper Automation
+
+on:
+  schedule:
+    - cron: '0 */4 * * *' # Run every 4 hours
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  snipe-reddit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Reddit Sniper Endpoint
+        run: |
+          curl -f -X GET https://eyepune.com/api/automation/reddit-sniper \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

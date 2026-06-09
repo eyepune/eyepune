@@ -259,6 +259,12 @@ export default function GrowthCommandCenter() {
                                     >
                                         <span className="mr-2">📝</span> Test Blog Gen (NIM + Supabase)
                                     </button>
+                                    <button 
+                                        onClick={() => runAutomationTest('reddit')}
+                                        className="bg-orange-600 hover:bg-orange-500 px-6 py-3 rounded text-white font-bold transition shadow-lg flex items-center"
+                                    >
+                                        <span className="mr-2">🎯</span> Test Reddit Sniper
+                                    </button>
                                 </div>
 
                                 {testLog && (
