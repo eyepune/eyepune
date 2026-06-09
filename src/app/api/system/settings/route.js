@@ -6,7 +6,7 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { key, value } = body;
+        const { key, value, urn } = body;
 
         if (!key || !value) {
             return NextResponse.json({ error: 'Key and Value are required' }, { status: 400 });
