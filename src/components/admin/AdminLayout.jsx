@@ -22,6 +22,7 @@ const NAV_ITEMS = [
     { name: 'Analytics & Insights', href: '/Admin-Analytics', icon: ActivitySquare },
     { name: 'Marketing & Automation', href: '/Admin-Marketing', icon: Mail },
     { name: 'Drip Automations', href: '/Admin-DripAutomations', icon: Zap },
+    { name: 'Social Media / X', href: '/Admin-SocialMedia', icon: Target }, // Using Target as fallback since Twitter isn't imported here
     { name: 'Automation Lab', href: '/Admin-TestAutomation', icon: Beaker },
     { name: 'Documents', href: '/Admin-Documents', icon: FileText },
     { name: 'Testimonials', href: '/Admin-Testimonials', icon: Star },
