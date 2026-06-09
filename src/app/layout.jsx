@@ -1,5 +1,6 @@
 import '@/globals.css';
 import { Suspense } from 'react';
+import Script from 'next/script';
 import { Providers } from './providers';
 import { CSPostHogProvider } from './PostHogProvider';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
