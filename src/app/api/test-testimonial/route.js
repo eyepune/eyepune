@@ -42,7 +42,7 @@ export async function GET(req) {
       rating: 5,
       service: 'full_service',
       status: 'pending'
-    }]).select();
+    }]);
     
     // 5. Cleanup
     await supabase.auth.admin.deleteUser(user.user.id);
