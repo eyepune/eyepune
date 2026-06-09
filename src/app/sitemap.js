@@ -156,5 +156,23 @@ export default async function sitemap() {
         priority: 0.9,
     }));
 
-    return [...staticRoutes, ...blogRoutes, ...programmaticRoutes, ...locationRoutes];
+    // Service + City Combinations for Programmatic SEO
+    const coreServices = [
+        "Social-Media", "Web-Development", "AI-Automation", 
+        "Paid-Ads", "Branding", "Sales-Funnels"
+    ];
+
+    const serviceLocationRoutes = [];
+    coreServices.forEach(service => {
+        targetCities.forEach(city => {
+            serviceLocationRoutes.push({
+                url: `${baseUrl}/Solutions/${service}/${city}`,
+                lastModified: now,
+                changeFrequency: 'weekly',
+                priority: 0.85,
+            });
+        });
+    });
+
+    return [...staticRoutes, ...blogRoutes, ...programmaticRoutes, ...locationRoutes, ...serviceLocationRoutes];
 }
