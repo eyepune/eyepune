@@ -123,14 +123,6 @@ export default function AIChatbot() {
         }
     }, []);
 
-<<<<<<< HEAD
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const scrollRef = useRef(null);
-
-    // Delayed Visibility & Proactive Messaging
-=======
     // ── 1. Load persisted history ────────────────────────────────────────
     useEffect(() => {
         try {
@@ -155,7 +147,6 @@ export default function AIChatbot() {
     }, [messages]);
 
     // ── 3. A/B Trigger + proactive messaging ────────────────────────────
->>>>>>> 4d6fd3b (fix: resolve silent automation failures, update blog schema, and add growth diagnostics dashboard)
     useEffect(() => {
         let hasTriggered = false;
 
@@ -164,147 +155,7 @@ export default function AIChatbot() {
             hasTriggered = true;
             setIsVisible(true);
 
-<<<<<<< HEAD
-            const path = window.location.pathname;
-            let initialMsg =
-                "Namaste! 🙏 I'm EyE BoT, your AI growth strategist. I noticed you're exploring our ecosystem—how can I help you transform your business today?";
 
-            if (path.includes('Solution-Founders')) {
-                initialMsg =
-                    "Founder, your time is elite. 🚀 Ready to build an automated sales engine that works while you sleep? I can audit your current systems right now.";
-            } else if (path.includes('Solution-YouTubers')) {
-                initialMsg =
-                    "Creator, your content is gold. 🎥 Ready to dominate the global algorithm with our Viral Slicer AI? Let's talk distribution.";
-            } else if (path.includes('Solution-Startups')) {
-                initialMsg =
-                    "Ready to go from MVP to Global? 🦄 We build the tech stacks that unicorns are made of. Want to see our startup roadmap?";
-            } else if (path.includes('AI-Intelligence-Hub')) {
-                initialMsg =
-                    "Welcome to the frontier. 🧠 We orchestrate OpenAI, Claude, Gemini, and Meta to build your unfair advantage. Which model are you curious about?";
-            } else if (path.includes('Service-AI')) {
-                initialMsg =
-                    "Stop doing manual work. 🤖 Our Multi-Model AI systems save businesses 20+ hours a week. Ready for your 90-day automation roadmap?";
-            }
-
-            setMessages([{ role: 'assistant', content: initialMsg }]);
-        };
-
-        const timer = setTimeout(triggerProactive, 5000);
-
-        const handleScroll = () => {
-            const scrollPercent =
-                (window.scrollY /
-                    (document.documentElement.scrollHeight - window.innerHeight)) *
-                100;
-            if (scrollPercent > 20) triggerProactive();
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => {
-            clearTimeout(timer);
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    // Scroll to bottom on new messages
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-        }
-    }, [messages, isLoading]);
-
-    // Silently save lead info via the API route (no client-side DB access)
-    const saveLead = async (email, phone) => {
-        try {
-            await fetch('/api/leads/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: 'Chatbot Prospect',
-                    email: email || 'no-email@eyepune.com',
-                    phone: phone || '',
-                    service_interest: 'AI Chatbot Conversation',
-                    message: `Lead captured during chat. Email: ${email || 'N/A'}, Phone: ${phone || 'N/A'}`,
-                    source: 'chatbot',
-                    hp_verification: ''
-                })
-            });
-        } catch (err) {
-            console.warn('[AIChatbot] Lead save failed (non-fatal):', err.message);
-        }
-    };
-
-    // Fire-and-forget admin alert for high-intent keywords
-    const fireIntentAlert = (message) => {
-        fetch('/api/chatbot/analyze-intent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sessionId: null, message, userIdentifier: 'Chat User' })
-        }).catch(() => {});
-    };
-
-    const handleSend = async () => {
-        if (!input.trim() || isLoading) return;
-
-        const userInput = input.trim();
-        const userMessage = { role: 'user', content: userInput };
-
-        setMessages((prev) => [...prev, userMessage]);
-        setInput('');
-        setIsLoading(true);
-
-        // Auto-extract contact info for lead saving
-        const emailMatch = userInput.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-        const phoneMatch = userInput.match(/(\+91|91|0)?[6-9]\d{9}/);
-        if (emailMatch || phoneMatch) {
-            saveLead(emailMatch?.[0], phoneMatch?.[0]);
-        }
-
-        // Fire high-intent alert (non-blocking)
-        fireIntentAlert(userInput);
-
-        try {
-            // Build conversation history for the LLM (last 10 messages for context)
-            const conversationHistory = messages.slice(-10).map((m) => ({
-                role: m.role,
-                content: m.content,
-            }));
-
-            const response = await fetch('/api/llm', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    messages: [
-                        { role: 'system', content: SYSTEM_PROMPT },
-                        ...conversationHistory,
-                        { role: 'user', content: userInput },
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 350,
-                }),
-            });
-
-            if (!response.ok) {
-                const err = await response.json().catch(() => ({}));
-                throw new Error(err.error || `API error ${response.status}`);
-            }
-
-            const data = await response.json();
-            const content = data.content || '';
-
-            setMessages((prev) => [...prev, { role: 'assistant', content }]);
-        } catch (error) {
-            console.error('[AIChatbot] Error:', error);
-            const isRateLimit =
-                error.message?.includes('429') ||
-                error.message?.toLowerCase().includes('rate limit');
-            const errorMessage = isRateLimit
-                ? "I'm a bit busy right now with many Pune businesses! 📈 Please give me a minute to catch my breath and ask again."
-                : "I'm experiencing a quick blip! You can also reach us directly at connect@eyepune.com or [book a call](https://eyepune.com/Booking). 🚀";
-
-            setMessages((prev) => [...prev, { role: 'assistant', content: errorMessage }]);
-        } finally {
-=======
             // Only set initial message if no history loaded
             setMessages(prev => {
                 if (prev.length > 0) return prev; // has history — keep it
@@ -455,7 +306,6 @@ export default function AIChatbot() {
             const content = data.content || '';
 
             // 5. Artificial typing delay (makes it feel human)
->>>>>>> 4d6fd3b (fix: resolve silent automation failures, update blog schema, and add growth diagnostics dashboard)
             setIsLoading(false);
             setIsTyping(true);
             const typingDelay = Math.min(800 + content.length * 8, 2500); // scale with message length, max 2.5s
