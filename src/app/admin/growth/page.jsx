@@ -70,7 +70,7 @@ export default function GrowthCommandCenter() {
             let res;
             if (type === 'blog') {
                 res = await fetch('/api/automation/ai-blog', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'eyepune-admin-cron'}` }
                 });
             } else {
