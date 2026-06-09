@@ -65,12 +65,21 @@ Be concise, aggressive, and highly strategic.
         const llmData = await llmResponse.json();
         const intelReport = llmData.choices?.[0]?.message?.content || "Intel generation failed.";
 
+        // Fetch original row to preserve existing notes
+        const { data: existingRow } = await supabase
+            .from(tableType)
+            .select('notes')
+            .eq('id', id)
+            .single();
+            
+        const originalNotes = existingRow?.notes || 'None';
+
         // Append to database
         // Assuming tableType is 'bookings' or 'inquiries'
         const { error } = await supabase
             .from(tableType)
             .update({ 
-                notes: `[AI SALES INTEL DOSSIER]\n${intelReport}\n\n[Original Notes:]\n` 
+                notes: `[AI SALES INTEL DOSSIER]\n${intelReport}\n\n[Original Notes:]\n${originalNotes}` 
             })
             .eq('id', id);
 
