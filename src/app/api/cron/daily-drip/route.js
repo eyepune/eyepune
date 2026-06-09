@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email-service';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   // CRON job route to process all active drip campaigns
   try {
