@@ -5,10 +5,10 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 // We require an Authorization header to prevent random people from triggering this
-export async function POST(request) {
+async function generateBlog(request) {
     try {
         const authHeader = request.headers.get('authorization');
         if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -78,20 +78,20 @@ Format it strictly in Markdown. Do not include any generic intros or outros like
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/(^-|-$)+/g, '');
 
-        // Insert into Supabase
+        // Insert into Supabase (use correct column names from schema)
         const { data, error } = await supabase.from('blog_posts').insert([
             {
                 title,
-                slug,
+                slug: slug + '-' + Math.floor(Math.random() * 9999), // prevent duplicate slug errors
+                excerpt: `Learn about ${selectedTopic.toLowerCase()} with insights from EyE PunE's AI experts.`,
                 content,
                 author: 'EyE PunE AI',
                 status: 'published',
-                seo_title: `${title} | EyE PunE Blog`,
-                seo_description: `Learn about ${selectedTopic.toLowerCase()} with insights from EyE PunE's AI experts.`,
+                category: 'ai_automation',
                 tags: ['AI', 'Growth', 'Automation'],
-                published_at: new Date().toISOString()
+                published_date: new Date().toISOString()
             }
-        ]);
+        ]).select().single();
 
         if (error) {
             // If slug already exists, supabase might throw a unique constraint error
@@ -101,11 +101,20 @@ Format it strictly in Markdown. Do not include any generic intros or outros like
         return NextResponse.json({ 
             success: true, 
             message: 'Blog post generated and published successfully',
-            post: { title, slug }
+            post: { title, id: data?.id }
         });
 
     } catch (err) {
         console.error('[Cron Generate Blog] Error:', err.message);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
+}
+
+export async function POST(request) {
+    return generateBlog(request);
+}
+
+// Support GET for Vercel cron triggers
+export async function GET(request) {
+    return generateBlog(request);
 }

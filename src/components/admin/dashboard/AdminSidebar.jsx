@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { createPageUrl } from '@/utils';
 import {
   LayoutDashboard, Users, FolderKanban, Calendar, Megaphone,
-  FileText, Settings, LogOut, ExternalLink, TrendingUp, BookOpen, Receipt, Send
+  FileText, Settings, LogOut, ExternalLink, TrendingUp, BookOpen, Receipt, Send, Bot
 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import Logo from '@/components/shared/Logo';
@@ -11,6 +11,7 @@ import Logo from '@/components/shared/Logo';
 const navItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'crm', label: 'CRM & Sales', icon: TrendingUp },
+  { id: 'chatbot', label: 'Chatbot Funnel', icon: Bot },
   { id: 'proposals', label: 'Proposals', icon: FileText },
   { id: 'invoices', label: 'Invoices', icon: Receipt },
   { id: 'projects', label: 'Projects', icon: FolderKanban },

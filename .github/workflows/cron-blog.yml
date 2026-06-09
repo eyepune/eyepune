@@ -12,5 +12,5 @@ jobs:
     steps:
       - name: Trigger AI Blog Endpoint
         run: |
-          curl -X GET "https://www.eyepune.com/api/automation/ai-blog" \
+          curl -f -X GET "https://www.eyepune.com/api/automation/ai-blog" \
           -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

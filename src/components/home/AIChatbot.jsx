@@ -1,12 +1,59 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, X, Send, MessageSquare, Sparkles, Loader2, Minus, Maximize2 } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from 'react-markdown';
 
-// ── System Prompt for EyE BoT ────────────────────────────────────────────
+// ── Constants ────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'eyebot_history';
+const MAX_STORED_MESSAGES = 20;
+
+// ── A/B Test: Trigger timing (persisted per user so they see the same experience) ──
+function getTriggerDelay() {
+    if (typeof window === 'undefined') return 5000;
+    const stored = localStorage.getItem('eyebot_trigger_delay');
+    if (stored) return Number(stored);
+    const variants = [3000, 5000, 8000];
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    localStorage.setItem('eyebot_trigger_delay', String(pick));
+    // Track which variant they got
+    try {
+        fetch('/api/chatbot/analyze-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId: null, message: `[AB_TEST] trigger_delay=${pick}ms`, userIdentifier: 'AB_TEST' })
+        }).catch(() => {});
+    } catch {}
+    return pick;
+}
+
+// ── UTM → Personalised Greeting ─────────────────────────────────────────
+function getInitialMessage() {
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const utm_campaign = params?.get('utm_campaign') || '';
+    const utm_source = params?.get('utm_source') || '';
+    const ref = params?.get('ref') || '';
+
+    // Ad / campaign aware
+    if (utm_campaign || utm_source || ref) {
+        const src = utm_campaign || utm_source || ref;
+        return `Hey! 👋 Glad you found us via *${src}*. I'm EyE BoT — your AI growth strategist. We've helped businesses just like yours 3× their leads in 90 days. What's the #1 growth challenge you're facing right now?`;
+    }
+    // Page-specific
+    if (path.includes('Solution-Founders')) return "Founder, your time is elite. 🚀 Ready to build an automated sales engine that works while you sleep? I can audit your current systems right now.";
+    if (path.includes('Solution-YouTubers')) return "Creator, your content is gold. 🎥 Ready to dominate the global algorithm with our Viral Slicer AI? Let's talk distribution.";
+    if (path.includes('Solution-Startups')) return "Ready to go from MVP to Global? 🦄 We build the tech stacks that unicorns are made of. Want to see our startup roadmap?";
+    if (path.includes('AI-Intelligence-Hub')) return "Welcome to the frontier. 🧠 We orchestrate OpenAI, Claude, Gemini, and Meta to build your unfair advantage. Which model are you curious about?";
+    if (path.includes('Service-AI')) return "Stop doing manual work. 🤖 Our Multi-Model AI systems save businesses 20+ hours a week. Ready for your 90-day automation roadmap?";
+    if (path.includes('Pricing')) return "Great timing! 💰 Our packages are engineered for maximum ROI. Want me to match the right bundle to your exact business goals?";
+    if (path.includes('Booking')) return "You're one step from unlocking serious growth. 🔥 Got questions before you book? I'll get you the answers in 30 seconds.";
+    return "Namaste! 🙏 I'm EyE BoT, your AI growth strategist. I noticed you're exploring our ecosystem—how can I help you transform your business today?";
+}
+
+// ── System Prompt ────────────────────────────────────────────────────────
 const SYSTEM_PROMPT = `You are "EyE BoT", the elite AI Growth Strategist for "EyE PunE". Your mission is to convert website visitors into high-value leads by showcasing our mastery in Global AI Orchestration.
 
 Strategic Identity:
@@ -36,34 +83,79 @@ Tone & Persona:
 - Keep it concise. Break long explanations into bullet points.
 - NEVER generate placeholder text like [Email address: ...] or [Calendly link: ...]. Use real links only: https://eyepune.com/Booking for booking.`;
 
+// ── Funnel Tracker ───────────────────────────────────────────────────────
+function trackFunnelEvent(event, data = {}) {
+    try {
+        fetch('/api/chatbot/analyze-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                sessionId: null,
+                message: `[FUNNEL] ${event}`,
+                userIdentifier: data.contact || 'anonymous',
+                ...data
+            })
+        }).catch(() => {});
+    } catch {}
+}
+
 export default function AIChatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
-
-    // Path check — Hide on Admin/Lex-Pro pages
     const [isPathAllowed, setIsPathAllowed] = useState(true);
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isTyping, setIsTyping] = useState(false); // artificial typing delay
+    const [leadSaved, setLeadSaved] = useState(false);
+    const scrollRef = useRef(null);
+    const exitIntentFired = useRef(false);
+    const hasOpened = useRef(false);
 
+    // ── Path guard ───────────────────────────────────────────────────────
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const path = window.location.pathname;
-            if (
-                path.startsWith('/Admin') ||
-                path.startsWith('/Admin-') ||
-                path.startsWith('/SignProposal') ||
-                path.startsWith('/lex-pro')
-            ) {
+            if (path.startsWith('/Admin') || path.startsWith('/Admin-') || path.startsWith('/SignProposal') || path.startsWith('/lex-pro')) {
                 setIsPathAllowed(false);
             }
         }
     }, []);
 
+<<<<<<< HEAD
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const scrollRef = useRef(null);
 
     // Delayed Visibility & Proactive Messaging
+=======
+    // ── 1. Load persisted history ────────────────────────────────────────
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    setMessages(parsed.slice(-MAX_STORED_MESSAGES));
+                    return;
+                }
+            }
+        } catch {}
+        // Fresh session — will be set in the proactive trigger
+    }, []);
+
+    // ── 2. Persist messages to localStorage ─────────────────────────────
+    useEffect(() => {
+        if (messages.length === 0) return;
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-MAX_STORED_MESSAGES)));
+        } catch {}
+    }, [messages]);
+
+    // ── 3. A/B Trigger + proactive messaging ────────────────────────────
+>>>>>>> 4d6fd3b (fix: resolve silent automation failures, update blog schema, and add growth diagnostics dashboard)
     useEffect(() => {
         let hasTriggered = false;
 
@@ -72,6 +164,7 @@ export default function AIChatbot() {
             hasTriggered = true;
             setIsVisible(true);
 
+<<<<<<< HEAD
             const path = window.location.pathname;
             let initialMsg =
                 "Namaste! 🙏 I'm EyE BoT, your AI growth strategist. I noticed you're exploring our ecosystem—how can I help you transform your business today?";
@@ -211,7 +304,181 @@ export default function AIChatbot() {
 
             setMessages((prev) => [...prev, { role: 'assistant', content: errorMessage }]);
         } finally {
+=======
+            // Only set initial message if no history loaded
+            setMessages(prev => {
+                if (prev.length > 0) return prev; // has history — keep it
+                return [{ role: 'assistant', content: getInitialMessage() }];
+            });
+
+            trackFunnelEvent('chatbot_visible');
+        };
+
+        const delay = getTriggerDelay();
+        const timer = setTimeout(triggerProactive, delay);
+
+        const handleScroll = () => {
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            if (scrollPercent > 20) triggerProactive();
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    // ── 4. Exit Intent ───────────────────────────────────────────────────
+    useEffect(() => {
+        const handleMouseLeave = (e) => {
+            if (e.clientY <= 10 && !exitIntentFired.current && isVisible && !isOpen) {
+                exitIntentFired.current = true;
+                setIsOpen(true);
+                setIsMinimized(false);
+                // Inject an exit-intent message
+                setMessages(prev => {
+                    const exitMsg = { role: 'assistant', content: "⚡ Wait! Before you go — did you know we offer a **FREE AI Growth Audit** for your business? Takes 3 minutes and reveals exactly where you're losing leads. Want one?" };
+                    const last = prev[prev.length - 1];
+                    if (last?.content === exitMsg.content) return prev;
+                    return [...prev, exitMsg];
+                });
+                trackFunnelEvent('exit_intent_triggered');
+            }
+        };
+
+        document.addEventListener('mouseleave', handleMouseLeave);
+        return () => document.removeEventListener('mouseleave', handleMouseLeave);
+    }, [isVisible, isOpen]);
+
+    // ── 5. Track open event ──────────────────────────────────────────────
+    useEffect(() => {
+        if (isOpen && !hasOpened.current) {
+            hasOpened.current = true;
+            trackFunnelEvent('chatbot_opened');
+        }
+    }, [isOpen]);
+
+    // ── Scroll to bottom ─────────────────────────────────────────────────
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+        }
+    }, [messages, isLoading, isTyping]);
+
+    // ── Pre-fill: push contact info to sessionStorage for Booking page ──
+    const persistContactForBooking = useCallback((email, phone, name) => {
+        try {
+            const existing = JSON.parse(sessionStorage.getItem('chatbot_lead') || '{}');
+            sessionStorage.setItem('chatbot_lead', JSON.stringify({
+                ...existing,
+                ...(email && { email }),
+                ...(phone && { phone }),
+                ...(name && { name }),
+            }));
+        } catch {}
+    }, []);
+
+    // ── Save lead via API ────────────────────────────────────────────────
+    const saveLead = useCallback(async (email, phone, name) => {
+        if (leadSaved && !email && !phone) return;
+        try {
+            await fetch('/api/leads/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name || 'Chatbot Prospect',
+                    email: email || 'no-email@eyepune.com',
+                    phone: phone || '',
+                    service_interest: 'AI Chatbot Conversation',
+                    message: `Lead captured during chat. Email: ${email || 'N/A'}, Phone: ${phone || 'N/A'}`,
+                    source: 'chatbot',
+                    hp_verification: ''
+                })
+            });
+            setLeadSaved(true);
+            persistContactForBooking(email, phone, name);
+            trackFunnelEvent('lead_captured', { contact: email || phone || 'unknown' });
+        } catch (err) {
+            console.warn('[AIChatbot] Lead save failed (non-fatal):', err.message);
+        }
+    }, [leadSaved, persistContactForBooking]);
+
+    // ── Send message ─────────────────────────────────────────────────────
+    const handleSend = async () => {
+        if (!input.trim() || isLoading || isTyping) return;
+
+        const userInput = input.trim();
+        setMessages(prev => [...prev, { role: 'user', content: userInput }]);
+        setInput('');
+        setIsLoading(true);
+
+        trackFunnelEvent('message_sent');
+
+        // Auto-extract contact info
+        const emailMatch = userInput.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+        const phoneMatch = userInput.match(/(\+91|91|0)?[6-9]\d{9}/);
+        if (emailMatch || phoneMatch) {
+            saveLead(emailMatch?.[0], phoneMatch?.[0], null);
+        }
+
+        // Fire high-intent alert
+        fetch('/api/chatbot/analyze-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId: null, message: userInput, userIdentifier: emailMatch?.[0] || phoneMatch?.[0] || 'Chat User' })
+        }).catch(() => {});
+
+        try {
+            const conversationHistory = messages.slice(-10).map(m => ({ role: m.role, content: m.content }));
+
+            const response = await fetch('/api/llm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [
+                        { role: 'system', content: SYSTEM_PROMPT },
+                        ...conversationHistory,
+                        { role: 'user', content: userInput },
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 350,
+                }),
+            });
+
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || `API error ${response.status}`);
+            }
+
+            const data = await response.json();
+            const content = data.content || '';
+
+            // 5. Artificial typing delay (makes it feel human)
+>>>>>>> 4d6fd3b (fix: resolve silent automation failures, update blog schema, and add growth diagnostics dashboard)
             setIsLoading(false);
+            setIsTyping(true);
+            const typingDelay = Math.min(800 + content.length * 8, 2500); // scale with message length, max 2.5s
+            await new Promise(resolve => setTimeout(resolve, typingDelay));
+            setIsTyping(false);
+
+            setMessages(prev => [...prev, { role: 'assistant', content }]);
+
+            // Track if [BOOK_MEETING] was triggered
+            if (content.includes('[BOOK_MEETING]')) {
+                trackFunnelEvent('book_meeting_cta_shown');
+            }
+        } catch (error) {
+            console.error('[AIChatbot] Error:', error);
+            setIsLoading(false);
+            setIsTyping(false);
+            const isRateLimit = error.message?.includes('429') || error.message?.toLowerCase().includes('rate limit');
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: isRateLimit
+                    ? "I'm a bit busy right now with many Pune businesses! 📈 Please give me a minute and ask again."
+                    : "I'm experiencing a quick blip! You can also reach us at connect@eyepune.com or [book a call](https://eyepune.com/Booking). 🚀"
+            }]);
         }
     };
 
@@ -234,7 +501,7 @@ export default function AIChatbot() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-                        className={`bg-black border border-white/10 rounded-[20px] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 pointer-events-auto ${
+                        className={`bg-black border border-white/10 rounded-[20px] shadow-2xl flex flex-col overflow-hidden pointer-events-auto ${
                             isMinimized
                                 ? 'h-16 w-[calc(100vw-2rem)] sm:w-80'
                                 : 'w-[calc(100vw-2rem)] sm:w-full max-w-[380px]'
@@ -265,11 +532,7 @@ export default function AIChatbot() {
                                     onClick={() => setIsMinimized(!isMinimized)}
                                     className="p-2 hover:bg-white/10 rounded-full transition-colors"
                                 >
-                                    {isMinimized ? (
-                                        <Maximize2 className="w-4 h-4 text-white" />
-                                    ) : (
-                                        <Minus className="w-4 h-4 text-white" />
-                                    )}
+                                    {isMinimized ? <Maximize2 className="w-4 h-4 text-white" /> : <Minus className="w-4 h-4 text-white" />}
                                 </button>
                                 <button
                                     aria-label="Close chatbot"
@@ -289,36 +552,23 @@ export default function AIChatbot() {
                                     className="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
                                 >
                                     {messages.map((m, i) => (
-                                        <div
-                                            key={i}
-                                            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                                        >
-                                            <div
-                                                className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                                                    m.role === 'user'
-                                                        ? 'bg-red-600 text-white rounded-tr-sm'
-                                                        : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-sm'
-                                                }`}
-                                            >
+                                        <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                                                m.role === 'user'
+                                                    ? 'bg-red-600 text-white rounded-tr-sm'
+                                                    : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-sm'
+                                            }`}>
                                                 {m.content.includes('[BOOK_MEETING]') ? (
                                                     <div className="space-y-3">
                                                         <ReactMarkdown
                                                             className="prose prose-invert prose-sm max-w-none"
-                                                            components={{
-                                                                a: ({ node, ...props }) => (
-                                                                    <a
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="text-orange-300 underline underline-offset-2 hover:text-orange-200"
-                                                                        {...props}
-                                                                    />
-                                                                ),
-                                                            }}
+                                                            components={{ a: ({ node, ...props }) => <a target="_blank" rel="noopener noreferrer" className="text-orange-300 underline underline-offset-2 hover:text-orange-200" {...props} /> }}
                                                         >
                                                             {m.content.replace(/\[BOOK_MEETING\]/g, '')}
                                                         </ReactMarkdown>
                                                         <a
                                                             href="/Booking"
+                                                            onClick={() => trackFunnelEvent('book_meeting_clicked')}
                                                             className="block w-full text-center bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black py-3 px-4 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all animate-pulse text-sm"
                                                         >
                                                             🔥 Book Your Strategy Call
@@ -327,16 +577,7 @@ export default function AIChatbot() {
                                                 ) : (
                                                     <ReactMarkdown
                                                         className="prose prose-invert prose-sm max-w-none"
-                                                        components={{
-                                                            a: ({ node, ...props }) => (
-                                                                <a
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="text-orange-300 underline underline-offset-2 hover:text-orange-200"
-                                                                    {...props}
-                                                                />
-                                                            ),
-                                                        }}
+                                                        components={{ a: ({ node, ...props }) => <a target="_blank" rel="noopener noreferrer" className="text-orange-300 underline underline-offset-2 hover:text-orange-200" {...props} /> }}
                                                     >
                                                         {m.content}
                                                     </ReactMarkdown>
@@ -345,12 +586,21 @@ export default function AIChatbot() {
                                         </div>
                                     ))}
 
-                                    {isLoading && (
+                                    {/* Typing / loading indicator */}
+                                    {(isLoading || isTyping) && (
                                         <div className="flex justify-start">
                                             <div className="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-2">
-                                                <Loader2 className="w-4 h-4 animate-spin text-red-500 flex-shrink-0" />
+                                                {isTyping ? (
+                                                    <div className="flex gap-1">
+                                                        {[0, 150, 300].map(d => (
+                                                            <span key={d} className="w-1.5 h-1.5 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: `${d}ms` }} />
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <Loader2 className="w-4 h-4 animate-spin text-red-500 flex-shrink-0" />
+                                                )}
                                                 <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">
-                                                    AI is thinking...
+                                                    {isTyping ? 'EyE BoT is typing...' : 'AI is thinking...'}
                                                 </span>
                                             </div>
                                         </div>
@@ -362,17 +612,17 @@ export default function AIChatbot() {
                                     <div className="relative flex items-center gap-2">
                                         <Input
                                             value={input}
-                                            onChange={(e) => setInput(e.target.value)}
+                                            onChange={e => setInput(e.target.value)}
                                             onKeyDown={handleKeyDown}
                                             placeholder="Ask anything about EyE PunE..."
-                                            disabled={isLoading}
+                                            disabled={isLoading || isTyping}
                                             className="bg-white/5 border-white/10 rounded-2xl h-12 pl-4 pr-14 text-white placeholder:text-gray-600 focus:border-red-600/50 text-sm"
                                             aria-label="Chat message input"
                                         />
                                         <button
                                             aria-label="Send message"
                                             onClick={handleSend}
-                                            disabled={isLoading || !input.trim()}
+                                            disabled={isLoading || isTyping || !input.trim()}
                                             className="absolute right-2 p-2.5 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:bg-gray-800 disabled:cursor-not-allowed rounded-xl transition-all"
                                         >
                                             <Send className="w-4 h-4 text-white" />

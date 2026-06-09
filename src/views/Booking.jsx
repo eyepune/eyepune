@@ -37,7 +37,7 @@ export default function Booking() {
         }
     }, [isSuccess]);
 
-        // Pre-fill from chatbot lead data (sessionStorage set by AIChatbot.jsx)
+    // Pre-fill from chatbot lead data (sessionStorage set by AIChatbot.jsx)
     useEffect(() => {
         try {
             const chatbotLead = JSON.parse(sessionStorage.getItem('chatbot_lead') || '{}');

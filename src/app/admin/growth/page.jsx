@@ -14,6 +14,7 @@ export default function GrowthCommandCenter() {
     const [salesIntel, setSalesIntel] = useState([]);
     const [outboundLeads, setOutboundLeads] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [testLog, setTestLog] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -63,6 +64,34 @@ export default function GrowthCommandCenter() {
         fetchData();
     };
 
+    const runAutomationTest = async (type) => {
+        setTestLog(`Testing ${type} automation... Please wait (this can take 30-60s)`);
+        try {
+            let res;
+            if (type === 'blog') {
+                res = await fetch('/api/automation/ai-blog', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'eyepune-admin-cron'}` }
+                });
+            } else {
+                res = await fetch(`/api/automation/trigger?test=${type}`);
+            }
+            
+            // Check if response is JSON, if not get text
+            const contentType = res.headers.get("content-type");
+            let data;
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                data = await res.json();
+            } else {
+                data = await res.text();
+            }
+            
+            setTestLog(`[${type.toUpperCase()}] Result: ${typeof data === 'string' ? data : JSON.stringify(data, null, 2)}`);
+        } catch (e) {
+            setTestLog(`[${type.toUpperCase()}] Error: ${e.message}`);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white p-8 font-sans pt-24">
             <div className="max-w-7xl mx-auto">
@@ -79,18 +108,18 @@ export default function GrowthCommandCenter() {
                 </header>
 
                 {/* Tabs */}
-                <div className="flex space-x-4 mb-8 border-b border-gray-800 pb-2">
-                    {['reddit', 'sales-intel', 'outbound'].map(tab => (
+                <div className="flex space-x-4 mb-8 border-b border-gray-800 pb-2 overflow-x-auto">
+                    {['reddit', 'sales-intel', 'outbound', 'automation-tester'].map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`px-6 py-3 rounded-t-lg font-semibold transition-all ${
+                            className={`px-6 py-3 rounded-t-lg font-semibold transition-all whitespace-nowrap ${
                                 activeTab === tab 
                                     ? 'bg-blue-600/10 text-blue-400 border-b-2 border-blue-500' 
                                     : 'text-gray-500 hover:text-gray-300'
                             }`}
                         >
-                            {tab === 'reddit' ? 'Reddit Sniper' : tab === 'sales-intel' ? 'Sales Intel' : 'Outbound Sniper'}
+                            {tab === 'reddit' ? 'Reddit Sniper' : tab === 'sales-intel' ? 'Sales Intel' : tab === 'outbound' ? 'Outbound Sniper' : 'Automation Diagnostics'}
                         </button>
                     ))}
                 </div>
@@ -203,6 +232,38 @@ export default function GrowthCommandCenter() {
                                                 ))}
                                             </tbody>
                                         </table>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* AUTOMATION TESTER TAB */}
+                        {activeTab === 'automation-tester' && (
+                            <div>
+                                <h2 className="text-2xl font-bold mb-6 text-gray-200">Automation Diagnostics</h2>
+                                <p className="text-gray-400 mb-6">Trigger the core automated workflows directly to diagnose API or token issues.</p>
+                                
+                                <div className="flex space-x-4 mb-8">
+                                    <button 
+                                        onClick={() => runAutomationTest('linkedin')}
+                                        className="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded text-white font-bold transition shadow-lg flex items-center"
+                                    >
+                                        <span className="mr-2">🔗</span> Test LinkedIn Post
+                                    </button>
+                                    <button 
+                                        onClick={() => runAutomationTest('blog')}
+                                        className="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded text-white font-bold transition shadow-lg flex items-center"
+                                    >
+                                        <span className="mr-2">📝</span> Test Blog Gen (NIM + Supabase)
+                                    </button>
+                                </div>
+
+                                {testLog && (
+                                    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+                                        <h3 className="text-blue-400 text-sm font-bold uppercase mb-4">Diagnostic Output</h3>
+                                        <pre className="font-mono text-xs text-gray-300 whitespace-pre-wrap overflow-auto max-h-96 custom-scrollbar">
+                                            {testLog}
+                                        </pre>
                                     </div>
                                 )}
                             </div>
