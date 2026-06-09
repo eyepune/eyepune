@@ -74,7 +74,10 @@ export default function GrowthCommandCenter() {
                     headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'eyepune-admin-cron'}` }
                 });
             } else {
-                res = await fetch(`/api/automation/trigger?test=${type}`);
+                res = await fetch(`/api/automation/trigger?test=${type}`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'eyepune-admin-cron'}` }
+                });
             }
             
             // Check if response is JSON, if not get text

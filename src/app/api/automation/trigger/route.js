@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 import { triggerAutomation } from '@/lib/automation-service';
 
 export async function POST(request) {
+  const authHeader = request.headers.get('authorization');
+  if (process.env.NODE_ENV !== 'development' && process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const triggerType = body.triggerType || body.trigger;
@@ -20,6 +25,11 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const authHeader = request.headers.get('authorization');
+  if (process.env.NODE_ENV !== 'development' && process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const url = new URL(request.url);
   const test = url.searchParams.get('test');
 

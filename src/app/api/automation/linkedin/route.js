@@ -4,6 +4,11 @@ import { NextResponse } from 'next/server';
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 export async function POST(request) {
+    const authHeader = request.headers.get('authorization');
+    if (process.env.NODE_ENV !== 'development' && process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     try {
         const { postId } = await request.json();
 
