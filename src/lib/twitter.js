@@ -1,15 +1,30 @@
-// src/lib/twitter.js
+import { supabaseAdmin } from './supabase-admin';
 
 export async function generateAndPostTwitterThread(post) {
     console.log('[Twitter] Starting thread generation for:', post.title);
 
-    const API_KEY = process.env.TWITTER_API_KEY;
-    const API_SECRET = process.env.TWITTER_API_SECRET;
-    const ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN;
-    const ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET;
+    // Fetch database configuration
+    let dbTwitter = null;
+    try {
+        const { data } = await supabaseAdmin
+            .from('system_settings')
+            .select('value')
+            .eq('key', 'twitter_config')
+            .single();
+        if (data && data.value) {
+            dbTwitter = data.value;
+        }
+    } catch (e) {
+        console.warn('[Twitter] Could not fetch DB config for Twitter, falling back to ENV.');
+    }
+
+    const API_KEY = dbTwitter?.apiKey || process.env.TWITTER_API_KEY;
+    const API_SECRET = dbTwitter?.apiSecret || process.env.TWITTER_API_SECRET;
+    const ACCESS_TOKEN = dbTwitter?.accessToken || process.env.TWITTER_ACCESS_TOKEN;
+    const ACCESS_SECRET = dbTwitter?.accessSecret || process.env.TWITTER_ACCESS_SECRET;
     
     if (!API_KEY || !ACCESS_TOKEN) {
-        console.warn('[Twitter] Missing Twitter API keys. Skipping Twitter thread.');
+        console.warn('[Twitter] Missing Twitter API keys in DB and ENV. Skipping Twitter thread.');
         return false;
     }
 

@@ -38,6 +38,7 @@ import Admin_Testimonials from '@/views/Admin_Testimonials';
 import Admin_Users from '@/views/Admin_Users';
 import Admin_WhatsAppMarketing from '@/views/Admin_WhatsAppMarketing';
 import Admin_WhatsAppSetup from '@/views/Admin_WhatsAppSetup';
+import Admin_SocialMedia from '@/views/Admin_SocialMedia';
 import Blog from '@/views/Blog';
 import Blog_Post from '@/views/Blog_Post';
 import Booking from '@/views/Booking';
@@ -117,6 +118,7 @@ const PAGE_MAP = {
   'Admin-Users': Admin_Users,
   'Admin-WhatsAppMarketing': Admin_WhatsAppMarketing,
   'Admin-WhatsAppSetup': Admin_WhatsAppSetup,
+  'Admin-SocialMedia': Admin_SocialMedia,
   'Blog': Blog,
   'Blog-Post': Blog_Post,
   'Booking': Booking,

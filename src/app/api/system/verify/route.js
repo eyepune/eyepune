@@ -43,6 +43,7 @@ export async function GET() {
     const dbLinkedIn = dbSettings?.find(s => s.key === 'linkedin_token' || s.key === 'linkedin_config')?.value;
     const dbZoho = dbSettings?.find(s => s.key === 'zoho_config' || s.key === 'zoho_token')?.value;
     const dbWhatsApp = dbSettings?.find(s => s.key === 'whatsapp_config')?.value;
+    const dbTwitter = dbSettings?.find(s => s.key === 'twitter_config')?.value;
 
     // Check Zoho Configuration
     report.zoho = {
@@ -59,6 +60,11 @@ export async function GET() {
     report.whatsapp = {
       configured: !!(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_ID) || !!(dbWhatsApp?.token && dbWhatsApp?.phone_id),
       admin_number: process.env.ADMIN_WHATSAPP_NUMBER ? '***' + process.env.ADMIN_WHATSAPP_NUMBER.slice(-4) : null,
+    };
+
+    // Check Twitter Configuration
+    report.twitter = {
+      configured: !!(process.env.TWITTER_API_KEY && process.env.TWITTER_ACCESS_TOKEN) || !!(dbTwitter?.apiKey && dbTwitter?.accessToken),
     };
 
     return Response.json({ success: true, report });
