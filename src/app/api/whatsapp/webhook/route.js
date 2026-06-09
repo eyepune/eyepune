@@ -85,8 +85,16 @@ export async function POST(request) {
                 }
 
                 // Auto-reply logic for common queries (within the 24h window)
-                const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
-                const WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
+                let WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
+                let WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
+
+                if (!WHATSAPP_PHONE_ID || !WHATSAPP_TOKEN) {
+                    const { data: config } = await supabaseAdmin.from('system_settings').select('value').eq('key', 'whatsapp_config').single();
+                    if (config?.value) {
+                        WHATSAPP_PHONE_ID = config.value.phone_id || WHATSAPP_PHONE_ID;
+                        WHATSAPP_TOKEN = config.value.token || WHATSAPP_TOKEN;
+                    }
+                }
 
                 if (WHATSAPP_PHONE_ID && WHATSAPP_TOKEN) {
                     const lowerMsg = messageBody.toLowerCase().trim();

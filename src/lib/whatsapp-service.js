@@ -7,8 +7,17 @@
 export async function sendWhatsAppMessage({ to, templateName, components, languageCode = 'en_US' }) {
     console.log(`[WhatsAppService] Sending template "${templateName}" to ${to}`);
 
-    const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
-    const WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
+    let WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
+    let WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
+
+    if (!WHATSAPP_PHONE_ID || !WHATSAPP_TOKEN) {
+        const { supabaseAdmin } = await import('@/lib/supabase-admin');
+        const { data: config } = await supabaseAdmin.from('system_settings').select('value').eq('key', 'whatsapp_config').single();
+        if (config?.value) {
+            WHATSAPP_PHONE_ID = config.value.phone_id || WHATSAPP_PHONE_ID;
+            WHATSAPP_TOKEN = config.value.token || WHATSAPP_TOKEN;
+        }
+    }
 
     if (!WHATSAPP_PHONE_ID || !WHATSAPP_TOKEN) {
         console.warn('[WhatsAppService] WhatsApp credentials missing — skipping');
@@ -59,8 +68,17 @@ export async function sendWhatsAppMessage({ to, templateName, components, langua
  * Sends a generic text message (only allowed if there's an active 24h window)
  */
 export async function sendWhatsAppText({ to, text }) {
-    const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
-    const WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
+    let WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
+    let WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
+
+    if (!WHATSAPP_PHONE_ID || !WHATSAPP_TOKEN) {
+        const { supabaseAdmin } = await import('@/lib/supabase-admin');
+        const { data: config } = await supabaseAdmin.from('system_settings').select('value').eq('key', 'whatsapp_config').single();
+        if (config?.value) {
+            WHATSAPP_PHONE_ID = config.value.phone_id || WHATSAPP_PHONE_ID;
+            WHATSAPP_TOKEN = config.value.token || WHATSAPP_TOKEN;
+        }
+    }
 
     if (!WHATSAPP_PHONE_ID || !WHATSAPP_TOKEN) return { success: false };
 

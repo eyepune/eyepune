@@ -293,22 +293,55 @@ function WhatsAppSetupContent() {
                         </CardContent>
                     </Card>
 
-                    {/* Required Environment Variables */}
+                    {/* Configuration */}
                     <Card className="bg-[#0c0c0c]/80 backdrop-blur-xl border-white/5 overflow-hidden">
-                        <CardContent className="p-6">
-                            <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mb-4">Required Environment Variables</p>
-                            <div className="space-y-2.5">
-                                {[
-                                    { key: 'WHATSAPP_ACCESS_TOKEN', desc: 'Permanent access token from System User' },
-                                    { key: 'WHATSAPP_PHONE_ID', desc: 'Phone Number ID from Meta API Setup' },
-                                    { key: 'ADMIN_WHATSAPP_NUMBER', desc: 'Your admin number (no +, e.g. 919284712033)' },
-                                    { key: 'WHATSAPP_VERIFY_TOKEN', desc: 'Webhook verification token' },
-                                ].map((v) => (
-                                    <div key={v.key} className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                                        <code className="text-xs font-mono text-green-400 font-bold">{v.key}</code>
-                                        <span className="text-[10px] text-gray-600 ml-auto">{v.desc}</span>
-                                    </div>
-                                ))}
+                        <CardContent className="p-6 space-y-4">
+                            <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Database Configuration</p>
+                            <p className="text-sm text-gray-400">Instead of using .env variables, you can save your credentials directly to the secure database.</p>
+                            
+                            <div className="space-y-4 pt-2">
+                                <div className="space-y-2">
+                                    <Label className="text-gray-300">Permanent Access Token</Label>
+                                    <Input 
+                                        id="wa-token"
+                                        type="password"
+                                        placeholder="EAAL..." 
+                                        className="bg-[#111] border-white/10 font-mono text-sm"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className="text-gray-300">Phone Number ID</Label>
+                                    <Input 
+                                        id="wa-phone-id"
+                                        placeholder="1234567890" 
+                                        className="bg-[#111] border-white/10 font-mono text-sm"
+                                    />
+                                </div>
+                                <Button 
+                                    onClick={async () => {
+                                        const token = document.getElementById('wa-token').value;
+                                        const phoneId = document.getElementById('wa-phone-id').value;
+                                        if (!token || !phoneId) return toast.error('Both Token and Phone ID are required');
+                                        
+                                        const res = await fetch('/api/system/settings', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                key: 'whatsapp_config',
+                                                value: { token, phone_id: phoneId }
+                                            })
+                                        });
+                                        if (res.ok) {
+                                            toast.success('Configuration saved successfully!');
+                                            setTimeout(() => window.location.reload(), 1500);
+                                        } else {
+                                            toast.error('Failed to save configuration');
+                                        }
+                                    }}
+                                    className="w-full bg-blue-600 hover:bg-blue-500 text-white"
+                                >
+                                    Save Configuration to Database
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>

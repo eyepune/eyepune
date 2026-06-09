@@ -42,6 +42,7 @@ export async function GET() {
     const { data: dbSettings } = await supabase.from('system_settings').select('key, value');
     const dbLinkedIn = dbSettings?.find(s => s.key === 'linkedin_token' || s.key === 'linkedin_config')?.value;
     const dbZoho = dbSettings?.find(s => s.key === 'zoho_config' || s.key === 'zoho_token')?.value;
+    const dbWhatsApp = dbSettings?.find(s => s.key === 'whatsapp_config')?.value;
 
     // Check Zoho Configuration
     report.zoho = {
@@ -56,7 +57,7 @@ export async function GET() {
 
     // Check WhatsApp Configuration
     report.whatsapp = {
-      configured: !!(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_ID),
+      configured: !!(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_ID) || !!(dbWhatsApp?.token && dbWhatsApp?.phone_id),
       admin_number: process.env.ADMIN_WHATSAPP_NUMBER ? '***' + process.env.ADMIN_WHATSAPP_NUMBER.slice(-4) : null,
     };
 
