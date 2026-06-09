@@ -13,13 +13,13 @@ export async function POST(request) {
         }
 
         // We store settings in a dedicated 'system_settings' table
-        // Schema: id (uuid), key (text, unique), value (text), updated_at (timestamp)
+        // Schema: key (text, unique), value (jsonb), updated_at (timestamp)
         const { error } = await supabase
-            .from('crm_sync_configs')
+            .from('system_settings')
             .upsert({ 
-                provider: key,
-                api_key: value
-            }, { onConflict: 'provider' });
+                key: key,
+                value: { token: value, urn: urn || null }
+            }, { onConflict: 'key' });
 
         if (error) throw error;
 

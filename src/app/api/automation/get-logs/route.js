@@ -27,9 +27,9 @@ export async function GET(request) {
             .limit(5);
 
         const { data: syncConfig, error: syncError } = await supabase
-            .from('crm_sync_configs')
+            .from('system_settings')
             .select('*')
-            .eq('provider', 'linkedin_config');
+            .eq('key', 'linkedin_config');
 
         return NextResponse.json({
             success: true,

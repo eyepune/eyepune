@@ -24,22 +24,17 @@ export async function generateAndPostToLinkedin(type = 'random') {
     try {
         // 1. Get LinkedIn Config from Database
         const { data: config } = await supabase
-            .from('crm_sync_configs')
-            .select('api_key')
-            .eq('provider', 'linkedin_config')
+            .from('system_settings')
+            .select('value')
+            .eq('key', 'linkedin_config')
             .single();
 
         let token = process.env.LINKEDIN_ACCESS_TOKEN;
         let urn = null;
 
-        if (config?.api_key) {
-            try {
-                const parsed = JSON.parse(config.api_key);
-                token = parsed.token;
-                urn = parsed.urn;
-            } catch (e) {
-                token = config.api_key;
-            }
+        if (config?.value) {
+            token = config.value.token || token;
+            urn = config.value.urn || null;
         }
 
         if (!token) {

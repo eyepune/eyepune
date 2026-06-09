@@ -39,9 +39,9 @@ export async function GET() {
     report.auth.has_admin = (adminCount || 0) > 0;
 
     // Check Database Settings for Overrides
-    const { data: dbSettings } = await supabase.from('crm_sync_configs').select('provider, api_key');
-    const dbLinkedIn = dbSettings?.find(s => s.provider === 'linkedin_token' || s.provider === 'linkedin_config')?.api_key;
-    const dbZoho = dbSettings?.find(s => s.provider === 'zoho_config' || s.provider === 'zoho_token')?.api_key;
+    const { data: dbSettings } = await supabase.from('system_settings').select('key, value');
+    const dbLinkedIn = dbSettings?.find(s => s.key === 'linkedin_token' || s.key === 'linkedin_config')?.value;
+    const dbZoho = dbSettings?.find(s => s.key === 'zoho_config' || s.key === 'zoho_token')?.value;
 
     // Check Zoho Configuration
     report.zoho = {
