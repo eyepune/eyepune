@@ -39,6 +39,9 @@ function Admin_CRM() {
     const [searchTerm, setSearchTerm] = useState(initialSearch);
     const [statusFilter, setStatusFilter] = useState(initialStatus);
     const [isUploading, setIsUploading] = useState(false);
+    const [selectedLeadIds, setSelectedLeadIds] = useState(new Set());
+    const [isBulkEmailDialogOpen, setIsBulkEmailDialogOpen] = useState(false);
+    const [bulkEmailData, setBulkEmailData] = useState({ subject: '', html: '' });
     const fileInputRef = useRef(null);
     const queryClient = useQueryClient();
 
@@ -116,9 +119,59 @@ function Admin_CRM() {
             const { error } = await supabase.from('leads').delete().eq('id', id);
             if (error) throw error;
         },
-        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-leads'] }); toast.success('Lead deleted'); },
+        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-leads'] }); toast.success('Lead deleted'); setSelectedLeadIds(new Set()); },
         onError: (e) => toast.error(e.message),
     });
+
+    const sendBulkEmailMutation = useMutation({
+        mutationFn: async (data) => {
+            const response = await fetch('/api/email/send-bulk', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) throw new Error(await response.text());
+            return response.json();
+        },
+        onSuccess: () => {
+            toast.success(`Sent emails to ${selectedLeadIds.size} leads!`);
+            setIsBulkEmailDialogOpen(false);
+            setSelectedLeadIds(new Set());
+            setBulkEmailData({ subject: '', html: '' });
+        },
+        onError: (e) => toast.error(`Email failed: ${e.message}`)
+    });
+
+    const toggleSelectLead = (id) => {
+        const newSet = new Set(selectedLeadIds);
+        if (newSet.has(id)) newSet.delete(id);
+        else newSet.add(id);
+        setSelectedLeadIds(newSet);
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedLeadIds.size === filteredLeads.length) {
+            setSelectedLeadIds(new Set());
+        } else {
+            setSelectedLeadIds(new Set(filteredLeads.map(l => l.id)));
+        }
+    };
+
+    const handleSendBulkEmail = () => {
+        if (!bulkEmailData.subject || !bulkEmailData.html) return toast.error('Subject and content required');
+        
+        const recipients = leads
+            .filter(l => selectedLeadIds.has(l.id) && l.email)
+            .map(l => ({ email: l.email, name: l.full_name }));
+            
+        if (recipients.length === 0) return toast.error('No valid emails selected');
+
+        sendBulkEmailMutation.mutate({
+            subject: bulkEmailData.subject,
+            html: bulkEmailData.html,
+            recipients: recipients
+        });
+    };
 
     const resetForm = () => {
         setFormData({ full_name: '', email: '', phone: '', company: '', source: 'website', status: 'new', notes: '', score: 50 });
@@ -269,7 +322,16 @@ function Admin_CRM() {
                         Track, manage, and convert your incoming leads into successful clients.
                     </p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap justify-end gap-3">
+                    {selectedLeadIds.size > 0 && (
+                        <Button 
+                            onClick={() => setIsBulkEmailDialogOpen(true)}
+                            className="bg-purple-600 hover:bg-purple-700 text-white h-10 shadow-lg border-0 mr-2"
+                        >
+                            <Mail className="w-4 h-4 mr-2" /> 
+                            Email Selected ({selectedLeadIds.size})
+                        </Button>
+                    )}
                     <input type="file" ref={fileInputRef} hidden accept=".csv,.json" onChange={handleFileUpload} />
                     <Button 
                         onClick={() => fileInputRef.current?.click()} 
@@ -400,6 +462,14 @@ function Admin_CRM() {
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-white/[0.02] text-gray-400 text-xs uppercase tracking-wider">
                                     <tr>
+                                        <th className="px-6 py-4 font-medium border-b border-white/5 w-12 text-center">
+                                            <input 
+                                                type="checkbox" 
+                                                className="w-4 h-4 rounded border-white/20 bg-white/5 accent-blue-600 cursor-pointer"
+                                                checked={filteredLeads.length > 0 && selectedLeadIds.size === filteredLeads.length}
+                                                onChange={toggleSelectAll}
+                                            />
+                                        </th>
                                         <th className="px-6 py-4 font-medium border-b border-white/5">Lead Details</th>
                                         <th className="px-6 py-4 font-medium border-b border-white/5">Contact Info</th>
                                         <th className="px-6 py-4 font-medium border-b border-white/5">Source</th>
@@ -410,7 +480,15 @@ function Admin_CRM() {
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
                                     {filteredLeads.map((lead) => (
-                                        <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors group">
+                                        <tr key={lead.id} className={`hover:bg-white/[0.02] transition-colors group ${selectedLeadIds.has(lead.id) ? 'bg-blue-500/5' : ''}`}>
+                                            <td className="px-6 py-4 text-center">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="w-4 h-4 rounded border-white/20 bg-white/5 accent-blue-600 cursor-pointer"
+                                                    checked={selectedLeadIds.has(lead.id)}
+                                                    onChange={() => toggleSelectLead(lead.id)}
+                                                />
+                                            </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-bold border border-white/10 shadow-inner flex-shrink-0">
@@ -634,6 +712,60 @@ function Admin_CRM() {
                             </Button>
                         </div>
                     </form>
+                </DialogContent>
+            </Dialog>
+
+            {/* Bulk Email Dialog */}
+            <Dialog open={isBulkEmailDialogOpen} onOpenChange={setIsBulkEmailDialogOpen}>
+                <DialogContent className="bg-[#0c0c0c]/95 backdrop-blur-2xl border-white/10 text-white max-w-3xl p-0 overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-pink-500" />
+                    
+                    <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-white/[0.01]">
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            <Mail className="w-5 h-5 text-purple-500" />
+                            Send Bulk AI Email ({selectedLeadIds.size} recipients)
+                        </DialogTitle>
+                    </DialogHeader>
+                    
+                    <div className="p-6 space-y-6">
+                        <div className="space-y-2">
+                            <Label className="text-gray-300 font-semibold text-xs uppercase tracking-wider">Email Subject</Label>
+                            <Input 
+                                value={bulkEmailData.subject} 
+                                onChange={(e) => setBulkEmailData({...bulkEmailData, subject: e.target.value})} 
+                                placeholder="E.g., Exclusive Strategy Document for you"
+                                className="bg-[#111] border-white/10 focus:border-purple-500/50 transition-colors h-11" 
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label className="text-gray-300 font-semibold text-xs uppercase tracking-wider">Email Content (HTML)</Label>
+                            <Textarea 
+                                value={bulkEmailData.html} 
+                                onChange={(e) => setBulkEmailData({...bulkEmailData, html: e.target.value})} 
+                                rows={10} 
+                                placeholder="<p>Hi {{name}},</p><p>We have a special offer for your business.</p>"
+                                className="bg-[#111] border-white/10 focus:border-purple-500/50 transition-colors resize-none font-mono text-sm custom-scrollbar" 
+                            />
+                            <p className="text-xs text-gray-500 mt-2">You can use standard HTML to format your email. The system will send this directly from your connected email provider.</p>
+                        </div>
+                        <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+                            <Button 
+                                variant="outline" 
+                                onClick={() => setIsBulkEmailDialogOpen(false)} 
+                                className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
+                            >
+                                Cancel
+                            </Button>
+                            <Button 
+                                onClick={handleSendBulkEmail} 
+                                disabled={sendBulkEmailMutation.isPending} 
+                                className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-pink-500 text-white border-0 shadow-lg shadow-purple-500/20 px-8"
+                            >
+                                {sendBulkEmailMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
+                                Send Emails
+                            </Button>
+                        </div>
+                    </div>
                 </DialogContent>
             </Dialog>
 

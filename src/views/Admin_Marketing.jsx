@@ -311,9 +311,10 @@ function Admin_Marketing() {
                             <Button 
                                 onClick={async () => {
                                     try {
-                                        const res = await fetch('/api/automation/linkedin/daily-post?type=educational');
+                                        toast.info('Generating AI post... this may take 30-60 seconds.');
+                                        const res = await fetch('/api/automation/ai-blog?manual_trigger=true');
                                         const data = await res.json().catch(() => ({}));
-                                        if (res.ok && data.success) toast.success('Educational post live on LinkedIn!');
+                                        if (res.ok && data.success) toast.success('AI Blog generated and posted to LinkedIn!');
                                         else toast.error(data.error || 'LinkedIn post failed');
                                     } catch (err) {
                                         toast.error('Network error during LinkedIn post');
@@ -322,7 +323,7 @@ function Admin_Marketing() {
                                 variant="outline"
                                 className="h-9 text-xs px-4 border-[#0077b5]/30 text-[#0077b5] hover:bg-[#0077b5]/5"
                             >
-                                Test Educational
+                                Generate & Post AI Blog
                             </Button>
                             <Button 
                                 onClick={() => setIsEditingLinkedin(true)} 
