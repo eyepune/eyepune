@@ -1,4 +1,4 @@
-import { supabaseAdmin } from './supabase-admin';
+import { supabaseAdmin } from './supabase-admin.js';
 
 export async function generateAndPostTwitterThread(post) {
     console.log('[Twitter] Starting thread generation for:', post.title);

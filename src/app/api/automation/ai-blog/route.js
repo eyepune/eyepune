@@ -339,50 +339,72 @@ async function directPostToLinkedIn(post) {
 
     // 2. Resolve Profile URN (Company Page takes priority)
     let authorUrn = null;
+    let personUrn = null;
+    try {
+        const meRes = await fetch('https://api.linkedin.com/v2/userinfo', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const meData = await meRes.json();
+        if (meData.sub) personUrn = `urn:li:person:${meData.sub}`;
+    } catch (e) {}
+
     if (process.env.LINKEDIN_ORGANIZATION_ID) {
         authorUrn = `urn:li:organization:${process.env.LINKEDIN_ORGANIZATION_ID}`;
     } else if (urn) {
         authorUrn = urn;
     } else {
-        const meRes = await fetch('https://api.linkedin.com/v2/userinfo', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const meData = await meRes.json();
-        if (!meData.sub) {
-            throw new Error(`Profile access rejected by LinkedIn: ${meData.message || 'Invalid Token'}`);
-        }
-        authorUrn = `urn:li:person:${meData.sub}`;
+        authorUrn = personUrn;
     }
+
+    if (!authorUrn) throw new Error('Could not resolve LinkedIn Author URN. Make sure your profile token is active.');
 
     // 3. Publish UGC Post via LinkedIn API (Native Plain-Text Post)
     // The LinkedIn Algorithm heavily favors native text posts without external links.
     const postText = post.linkedin_post || `🔥 New Insight from EyE PunE:\n\n${post.title}\n\n${post.excerpt}`;
     
-    const shareRes = await fetch('https://api.linkedin.com/v2/ugcPosts', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'X-Restli-Protocol-Version': '2.0.0'
-        },
-        body: JSON.stringify({
-            author: authorUrn,
-            lifecycleState: "PUBLISHED",
-            specificContent: {
-                "com.linkedin.ugc.ShareContent": {
-                    shareCommentary: {
-                        text: postText
-                    },
-                    shareMediaCategory: "NONE"
-                }
-            },
-            visibility: {
-                "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
-            }
-        })
-    });
+    let shareRes;
+    let shareData;
+    let maxRetries = 3;
 
-    const shareData = await shareRes.json();
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        shareRes = await fetch('https://api.linkedin.com/v2/ugcPosts', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'X-Restli-Protocol-Version': '2.0.0'
+            },
+            body: JSON.stringify({
+                author: authorUrn,
+                lifecycleState: "PUBLISHED",
+                specificContent: {
+                    "com.linkedin.ugc.ShareContent": {
+                        shareCommentary: {
+                            text: postText
+                        },
+                        shareMediaCategory: "NONE"
+                    }
+                },
+                visibility: {
+                    "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+                }
+            })
+        });
+
+        try { shareData = await shareRes.clone().json(); } catch(e) { shareData = {}; }
+
+        if (shareRes.ok) break;
+
+        if (attempt < maxRetries) {
+            console.warn(`[AI-Blog] Publish attempt ${attempt} failed: ${shareRes.status}. Retrying...`);
+            if (shareRes.status === 403 && personUrn && authorUrn !== personUrn) {
+                console.log(`[AI-Blog] 403 Forbidden. Falling back from ${authorUrn} to personal profile URN: ${personUrn}`);
+                authorUrn = personUrn;
+            }
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+    }
+
     if (!shareRes.ok) {
         throw new Error(shareData.message || 'LinkedIn Share request rejected.');
     }

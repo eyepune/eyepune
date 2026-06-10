@@ -109,16 +109,24 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
 
         // 3. Resolve Author URN (Company Page takes priority)
         let authorUrn = null;
+        let personUrn = null;
+        
+        try {
+            const meRes = await fetch('https://api.linkedin.com/v2/userinfo', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const meData = await meRes.json();
+            if (meData.sub) personUrn = `urn:li:person:${meData.sub}`;
+        } catch (e) {
+            console.warn('[LinkedIn-Automation] Could not fetch user profile details:', e.message);
+        }
+
         if (process.env.LINKEDIN_ORGANIZATION_ID) {
             authorUrn = `urn:li:organization:${process.env.LINKEDIN_ORGANIZATION_ID}`;
         } else if (urn) {
             authorUrn = urn;
         } else {
-            const meRes = await fetch('https://api.linkedin.com/v2/userinfo', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const meData = await meRes.json();
-            if (meData.sub) authorUrn = `urn:li:person:${meData.sub}`;
+            authorUrn = personUrn;
         }
 
         if (!authorUrn) throw new Error('Could not resolve LinkedIn Author URN. Make sure your profile token is active.');
@@ -161,6 +169,12 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
             
             if (attempt < maxRetries) {
                 console.warn(`[LinkedIn-Automation] Publish attempt ${attempt} failed: ${publishRes.status}. Retrying in 2 seconds...`);
+                
+                if (publishRes.status === 403 && personUrn && authorUrn !== personUrn) {
+                    console.log(`[LinkedIn-Automation] 403 Forbidden. Falling back from ${authorUrn} to personal profile URN: ${personUrn}`);
+                    authorUrn = personUrn;
+                }
+                
                 await new Promise(resolve => setTimeout(resolve, 2000)); // wait 2 seconds before retry
             }
         }
