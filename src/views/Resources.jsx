@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import GlowCard from '@/components/shared/GlowCard';
 import SEOHead from '@/components/seo/SEOHead';
+import GoogleAd from '@/components/shared/GoogleAd';
 
 export default function Resources() {
   const tools = [
@@ -84,44 +85,58 @@ export default function Resources() {
         {/* Resources Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {tools.map((tool, idx) => (
-            <div key={idx} className="h-full flex flex-col">
-              <GlowCard className="h-full flex flex-col p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm relative overflow-hidden group">
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${tool.color} opacity-10 rounded-bl-full transform translate-x-8 -translate-y-8 transition-transform group-hover:scale-110`} />
-                
-                <div className="text-4xl mb-4">
-                  {tool.icon}
-                </div>
-                
-                <span className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2">
-                  {tool.category}
-                </span>
-                
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
-                  {tool.name}
-                </h3>
-                
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow">
-                  {tool.description}
-                </p>
-                
-                {/* Affiliate Link (Placeholder for now until user puts real link) */}
-                <a 
-                  href={tool.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-slate-900 dark:bg-white dark:text-slate-900 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-100 transition-colors mt-auto"
-                >
-                  {tool.buttonText}
-                </a>
+            <React.Fragment key={idx}>
+              <div className="h-full flex flex-col">
+                <GlowCard className="h-full flex flex-col p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm relative overflow-hidden group">
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${tool.color} opacity-10 rounded-bl-full transform translate-x-8 -translate-y-8 transition-transform group-hover:scale-110`} />
+                  
+                  <div className="text-4xl mb-4">
+                    {tool.icon}
+                  </div>
+                  
+                  <span className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2">
+                    {tool.category}
+                  </span>
+                  
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
+                    {tool.name}
+                  </h3>
+                  
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow">
+                    {tool.description}
+                  </p>
+                  
+                  {/* Affiliate Link (Placeholder for now until user puts real link) */}
+                  <a 
+                    href={tool.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-slate-900 dark:bg-white dark:text-slate-900 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-100 transition-colors mt-auto"
+                  >
+                    {tool.buttonText}
+                  </a>
 
-                {/* Internal Admin Note - Invisible to regular users, but helpful for the user setting this up */}
-                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded text-xs text-blue-700 dark:text-blue-300">
-                  <span className="font-bold block mb-1">Affiliate Setup Note:</span>
-                  {tool.instruction}
+                  {/* Internal Admin Note - Invisible to regular users, but helpful for the user setting this up */}
+                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded text-xs text-blue-700 dark:text-blue-300">
+                    <span className="font-bold block mb-1">Affiliate Setup Note:</span>
+                    {tool.instruction}
+                  </div>
+                </GlowCard>
+              </div>
+
+              {/* Native In-Feed Ad in the Grid */}
+              {idx === 2 && (
+                <div className="h-full min-h-[300px] flex">
+                  <GoogleAd slot="resources-in-feed" format="fluid" className="w-full rounded-2xl border border-slate-200 dark:border-slate-800" />
                 </div>
-              </GlowCard>
-            </div>
+              )}
+            </React.Fragment>
           ))}
+        </div>
+
+        {/* Global Bottom Ad */}
+        <div className="mt-16 w-full flex justify-center">
+          <GoogleAd slot="resources-bottom-banner" format="horizontal" responsive="true" className="w-full max-w-4xl min-h-[150px] rounded-2xl" />
         </div>
 
         {/* Call to Action for Services */}

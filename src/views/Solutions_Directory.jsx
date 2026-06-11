@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import SEOHead, { generateBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { ArrowRight, Globe, Layers } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import GoogleAd from "@/components/shared/GoogleAd";
 
 const programmaticSeoQueries = [
     "B2B paid ads agency India",
@@ -105,14 +106,22 @@ export default function Solutions_Directory() {
                         {programmaticSeoQueries.map((query, i) => {
                             const slug = query.split(' ').join('-');
                             return (
-                                <Link 
-                                    key={i} 
-                                    href={`/Solutions/${slug}`}
-                                    className="p-4 bg-white/[0.02] border border-white/5 hover:border-red-500/30 rounded-xl hover:bg-white/[0.04] transition-all group flex items-center justify-between"
-                                >
-                                    <span className="text-sm text-gray-300 group-hover:text-white capitalize">{query}</span>
-                                    <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-red-400 transition-colors" />
-                                </Link>
+                                <React.Fragment key={i}>
+                                    <Link 
+                                        href={`/Solutions/${slug}`}
+                                        className="p-4 bg-white/[0.02] border border-white/5 hover:border-red-500/30 rounded-xl hover:bg-white/[0.04] transition-all group flex items-center justify-between"
+                                    >
+                                        <span className="text-sm text-gray-300 group-hover:text-white capitalize">{query}</span>
+                                        <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-red-400 transition-colors" />
+                                    </Link>
+                                    
+                                    {/* Native In-Feed Ad Every 15 Items */}
+                                    {(i + 1) % 15 === 0 && (
+                                        <div className="col-span-full md:col-span-2 lg:col-span-3 my-4">
+                                            <GoogleAd slot="solutions-in-feed" format="fluid" className="w-full min-h-[120px] rounded-xl border border-white/5" />
+                                        </div>
+                                    )}
+                                </React.Fragment>
                             );
                         })}
                     </div>
