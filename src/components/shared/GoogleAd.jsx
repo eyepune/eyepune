@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export default function GoogleAd({ slot, format = 'auto', responsive = 'true', className = '' }) {
+  const adPushed = useRef(false);
+
   useEffect(() => {
+    if (adPushed.current) return;
+    
     try {
-      // Pushes the ad to Google's engine once it mounts
       if (typeof window !== 'undefined') {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
+        adPushed.current = true;
       }
     } catch (err) {
       console.warn('AdSense error', err);
