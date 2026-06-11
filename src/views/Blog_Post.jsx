@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import SEOHead from "@/components/seo/SEOHead";
+import GoogleAd from "@/components/shared/GoogleAd";
 
 const fallbackImages = [
     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
@@ -280,6 +281,8 @@ export default function BlogPost({ initialData }) {
                             </div>
                         )}
 
+                        <GoogleAd slot="1234567890" className="mb-12" />
+
                         <div className="prose prose-invert prose-base md:prose-lg max-w-none 
                             prose-headings:font-black prose-headings:tracking-tighter prose-headings:text-white
                             prose-h2:text-2xl md:text-3xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5
@@ -296,6 +299,8 @@ export default function BlogPost({ initialData }) {
                                 </ReactMarkdown>
                             )}
                         </div>
+
+                        <GoogleAd slot="0987654321" className="mt-12" />
 
                         {/* Partner Affiliate Banner (Razorpay) */}
                         <div className="mt-16 p-8 bg-gradient-to-br from-blue-900/40 to-sky-900/20 border border-blue-500/20 rounded-3xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8 justify-between">

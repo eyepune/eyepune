@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import SEOHead from "@/components/seo/SEOHead";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
+import GoogleAd from '@/components/shared/GoogleAd';
 
 const fallbackImages = [
     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800', // Blue digital
@@ -169,48 +170,55 @@ export default function Blog() {
                                         </div>
                                     ) : (
                                         otherPosts.map((post, idx) => (
-                                            <motion.article
-                                                key={post.id}
-                                                layout
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, scale: 0.9 }}
-                                                transition={{ delay: idx * 0.05 }}
-                                                className="group"
-                                            >
-                                                <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
-                                                    <div className="bg-white/[0.02] border border-white/[0.05] rounded-[2rem] p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 h-full flex flex-col">
-                                                        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6">
-                                                            <img 
-                                                                src={post.featured_image || fallbackImages[idx % fallbackImages.length]} 
-                                                                alt={post.title}
-                                                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                                                onError={(e) => { e.target.src = fallbackImages[idx % fallbackImages.length] }}
-                                                            />
-                                                        </div>
-                                                        <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-gray-500 uppercase mb-4">
-                                                            <span className="text-red-500">{post.category?.replace('_', ' ')}</span>
-                                                            <span>•</span>
-                                                            <span>{formatDate(post.published_date)}</span>
-                                                        </div>
-                                                        <h3 className="text-2xl font-black mb-4 group-hover:text-red-500 transition-colors line-clamp-2 leading-tight">
-                                                            {post.title}
-                                                        </h3>
-                                                        <p className="text-gray-500 text-sm line-clamp-3 mb-8 flex-1 leading-relaxed">
-                                                            {post.excerpt}
-                                                        </p>
-                                                        <div className="flex items-center justify-between pt-6 border-t border-white/[0.05]">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-[10px] font-black">E</div>
-                                                                <span className="text-xs font-bold text-gray-400">{post.author || 'EyE PunE'}</span>
+                                            <React.Fragment key={post.id}>
+                                                <motion.article
+                                                    layout
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, scale: 0.9 }}
+                                                    transition={{ delay: idx * 0.05 }}
+                                                    className="group"
+                                                >
+                                                    <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
+                                                        <div className="bg-white/[0.02] border border-white/[0.05] rounded-[2rem] p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 h-full flex flex-col">
+                                                            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6">
+                                                                <img 
+                                                                    src={post.featured_image || fallbackImages[idx % fallbackImages.length]} 
+                                                                    alt={post.title}
+                                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                                    onError={(e) => { e.target.src = fallbackImages[idx % fallbackImages.length] }}
+                                                                />
                                                             </div>
-                                                            <div className="flex items-center gap-2 text-red-500 text-xs font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform">
-                                                                Read <ArrowRight className="w-3 h-3" />
+                                                            <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-gray-500 uppercase mb-4">
+                                                                <span className="text-red-500">{post.category?.replace('_', ' ')}</span>
+                                                                <span>•</span>
+                                                                <span>{formatDate(post.published_date)}</span>
+                                                            </div>
+                                                            <h3 className="text-2xl font-black mb-4 group-hover:text-red-500 transition-colors line-clamp-2 leading-tight">
+                                                                {post.title}
+                                                            </h3>
+                                                            <p className="text-gray-500 text-sm line-clamp-3 mb-8 flex-1 leading-relaxed">
+                                                                {post.excerpt}
+                                                            </p>
+                                                            <div className="flex items-center justify-between pt-6 border-t border-white/[0.05]">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-[10px] font-black">E</div>
+                                                                    <span className="text-xs font-bold text-gray-400">{post.author || 'EyE PunE'}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-2 text-red-500 text-xs font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                                                                    Read <ArrowRight className="w-3 h-3" />
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    </Link>
+                                                </motion.article>
+                                                {/* In-Feed Native Ad every 4 posts */}
+                                                {(idx + 1) % 4 === 0 && (
+                                                    <div className="col-span-full md:col-span-1 h-full min-h-[400px] flex">
+                                                        <GoogleAd slot="in-feed-grid-ad" format="fluid" className="h-full w-full rounded-[2rem] border-dashed border-2 border-white/10 flex-1" />
                                                     </div>
-                                                </Link>
-                                            </motion.article>
+                                                )}
+                                            </React.Fragment>
                                         ))
                                     )}
                                 </AnimatePresence>
