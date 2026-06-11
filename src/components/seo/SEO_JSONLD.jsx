@@ -147,6 +147,31 @@ export default function SEO_JSONLD() {
         }
     };
 
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.eyepune.com"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Services",
+                "item": "https://www.eyepune.com/Services"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Global Locations",
+                "item": "https://www.eyepune.com/Locations"
+            }
+        ]
+    };
+
     return (
         <>
             <script
@@ -164,6 +189,10 @@ export default function SEO_JSONLD() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
         </>
     );
