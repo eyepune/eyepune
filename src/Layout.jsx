@@ -35,6 +35,7 @@ const footerLinks = {
     Company: [
         { name: 'About Us', page: 'About' },
         { name: 'Blog', page: 'Blog' },
+        { name: 'Global Locations', page: 'Locations' },
         { name: 'Testimonials', page: 'Testimonials' },
         { name: 'Contact', page: 'Contact' },
     ],

@@ -109,6 +109,8 @@ export const metadata = {
   },
 };
 
+import ExitIntentPopup from '@/components/shared/ExitIntentPopup';
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
@@ -131,6 +133,7 @@ export default function RootLayout({ children }) {
               <GlobalCanvas />
               <PremiumEffects />
               {children}
+              <ExitIntentPopup />
               <AIChatbot />
             </SmoothScroll>
             <Analytics />

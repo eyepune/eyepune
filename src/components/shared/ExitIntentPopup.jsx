@@ -10,6 +10,7 @@ export default function ExitIntentPopup() {
     const [show, setShow] = useState(false);
     const [dismissed, setDismissed] = useState(false);
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const pathname = usePathname() || '';
 
@@ -74,7 +75,7 @@ export default function ExitIntentPopup() {
                 body: JSON.stringify({
                     name: 'Exit Intent Lead',
                     email: email,
-                    phone: '',
+                    phone: phone,
                     company: '',
                     service_interest: 'custom',
                     message: 'Requested free audit via exit popup',
@@ -151,6 +152,15 @@ export default function ExitIntentPopup() {
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="Enter your email address"
                                         aria-label="Email Address"
+                                        required
+                                        className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-red-500/40 transition-colors"
+                                    />
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        placeholder="Enter your phone number"
+                                        aria-label="Phone Number"
                                         required
                                         className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-red-500/40 transition-colors"
                                     />

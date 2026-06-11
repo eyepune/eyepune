@@ -162,6 +162,24 @@ export default function SEOLocationPage({ params }) {
           </div>
         </div>
 
+        {/* Internal SEO Linking (The Spiderweb) */}
+        <div className="max-w-4xl mx-auto mb-10 pt-10 border-t border-white/10 text-center">
+            <h3 className="text-gray-500 font-semibold mb-4 text-sm uppercase tracking-widest">Explore Other Global Service Areas</h3>
+            <div className="flex flex-wrap justify-center gap-4">
+                {["Mumbai", "London", "New-York", "Dubai", "Singapore", "Bangalore", "Delhi", "Sydney", "Toronto", "Pune"]
+                    .filter(c => c !== rawCity)
+                    .map(c => (
+                        <Link key={c} href={`/Locations/${c}`} className="text-gray-400 hover:text-red-400 text-sm transition-colors">
+                            {c.replace(/-/g, ' ')}
+                        </Link>
+                    ))
+                }
+                <Link href="/Locations" className="text-red-500 hover:text-red-400 text-sm font-bold ml-2">
+                    View All Locations →
+                </Link>
+            </div>
+        </div>
+
       </div>
     </main>
   );

@@ -302,6 +302,14 @@ async function generateAndPostBlog(audience) {
         console.warn('[AI-Blog] Twitter Thread generation failed:', e.message);
     }
 
+    // ── STEP 8: HIGH-TRAFFIC REDDIT JACKING ──
+    try {
+        const { postToReddit } = await import('@/lib/reddit');
+        await postToReddit(newPost.content);
+    } catch (e) {
+        console.warn('[AI-Blog] Reddit Jacking failed:', e.message);
+    }
+
     // ── STEP 8: GOOGLE BUSINESS PROFILE UPDATE ──
     try {
         const { autoPostToGMB } = await import('@/lib/gmb');
