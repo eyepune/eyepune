@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send, MessageSquare, Sparkles, Loader2, Minus, Maximize2 } from 'lucide-react';
+import { Bot, X, Send, MessageSquare, Sparkles, Loader2, Minus, Maximize2, Phone } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from 'react-markdown';
 
@@ -377,6 +377,18 @@ export default function AIChatbot() {
                                 </div>
                             </div>
                             <div className="flex items-center gap-1">
+                                <a
+                                    href="https://wa.me/919284712033?text=Hi%20EyE%20PunE%2C%20I%20was%20just%20chatting%20with%20your%20AI%20bot%20and%20want%20to%20connect%20with%20a%20human."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-2 hover:bg-white/10 rounded-full transition-colors group relative"
+                                    aria-label="Connect on WhatsApp"
+                                    onClick={() => trackFunnelEvent('whatsapp_header_clicked')}
+                                >
+                                    <Phone className="w-4 h-4 text-white group-hover:text-green-400 transition-colors" />
+                                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-ping" />
+                                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" />
+                                </a>
                                 <button
                                     aria-label={isMinimized ? 'Maximize' : 'Minimize'}
                                     onClick={() => setIsMinimized(!isMinimized)}

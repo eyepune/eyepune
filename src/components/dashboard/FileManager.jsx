@@ -1,14 +1,42 @@
-import React, { useState } from 'react';
-import { FileText, Download, Trash2, Search, Filter, Calendar } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { FileText, Download, Trash2, Search, Filter, Calendar, UploadCloud, Loader2 } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { toast } from 'sonner';
 
-export default function FileManager({ files, onDelete }) {
+export default function FileManager({ files, onDelete, onUpload }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('all');
     const [sortBy, setSortBy] = useState('recent');
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef(null);
+
+    const handleFileUpload = async (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        if (file.size > 50 * 1024 * 1024) {
+            toast.error("File size must be less than 50MB");
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            if (onUpload) {
+                await onUpload(file);
+                toast.success("File uploaded to secure vault successfully!");
+            } else {
+                toast.error("Upload function not provided");
+            }
+        } catch (error) {
+            toast.error(error.message || "Upload failed");
+        } finally {
+            setIsUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+    };
 
     const filteredFiles = files
         .filter(file => {
@@ -33,9 +61,40 @@ export default function FileManager({ files, onDelete }) {
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-6">
+            {/* Secure Vault Upload Area */}
+            {onUpload && (
+                <div 
+                    className="border-2 border-dashed border-white/10 rounded-[2rem] p-10 text-center hover:bg-white/[0.02] hover:border-red-500/30 transition-all cursor-pointer group"
+                    onClick={() => fileInputRef.current?.click()}
+                >
+                    <input 
+                        type="file" 
+                        className="hidden" 
+                        ref={fileInputRef}
+                        onChange={handleFileUpload}
+                    />
+                    {isUploading ? (
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <Loader2 className="w-12 h-12 text-red-500 animate-spin" />
+                            <p className="text-white font-medium">Encrypting and uploading to vault...</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-500/10 transition-all">
+                                <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-red-500" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-1">Upload Brand Assets</h3>
+                                <p className="text-sm text-gray-500">Drag and drop files here, or click to browse (Max 50MB)</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
             {/* Filters */}
-            <div className="flex flex-col md:flex-row gap-3">
+            <div className="flex flex-col md:flex-row gap-3 bg-[#0c0c0c] p-4 rounded-2xl border border-white/5">
                 <div className="flex-1 relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input

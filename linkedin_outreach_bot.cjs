@@ -58,15 +58,13 @@ async function runOutreach() {
 
         // 4. Find all "Connect" buttons on the page (faster and broader DOM scan)
         const buttonsHandle = await page.evaluateHandle(() => {
-            const allElements = document.querySelectorAll('button, a, div[role="button"], span');
+            const allElements = document.querySelectorAll('button');
             return Array.from(allElements).filter(el => {
                 const text = (el.innerText || el.textContent || '').trim().toLowerCase();
                 const aria = (el.getAttribute('aria-label') || '').toLowerCase();
                 
-                // If it's a span, it must be inside a button
-                if (el.tagName === 'SPAN' && !el.closest('button') && !el.closest('a')) return false;
-                
-                return text === 'connect' || aria.includes('connect');
+                // Only find literal connect buttons, ignore ones that say "Message" or "Follow"
+                return text === 'connect' || aria.includes('invite') && aria.includes('connect');
             });
         });
 
@@ -104,8 +102,8 @@ async function runOutreach() {
                 await page.evaluate(b => b.scrollIntoView({block: 'center', inline: 'center'}), button);
                 await randomDelay(1, 2);
                 
-                // Click the "Connect" button using native click
-                await button.click();
+                // Click the "Connect" button using native Puppeteer click to prevent event bubbling
+                await button.click({ delay: Math.floor(Math.random() * 50) + 20 });
                 
                 // Explicitly wait for the modal to pop up
                 let modalAppeared = true;
@@ -119,14 +117,19 @@ async function runOutreach() {
                     // Sometimes LinkedIn instantly sends the request without a modal!
                     // Let's check if the button changed to "Pending"
                     try {
-                        const newText = await page.evaluate(el => (el.innerText || '').trim().toLowerCase(), button);
+                        // Re-query the button state safely
+                        const newText = await page.evaluate(el => {
+                            if (!document.body.contains(el)) return 'lost';
+                            return (el.innerText || '').trim().toLowerCase();
+                        }, button);
+                        
                         if (newText === 'pending') {
                             requestsSent++;
                             console.log(`✅ Sent request ${requestsSent}/${MAX_REQUESTS_PER_DAY} to ${name}! (Instantly sent without modal)`);
                             await randomDelay(60, 120); 
                             continue; // Move to next person
                         } else {
-                            throw new Error(`Modal didn't appear, and button text became "${newText}". It might be blocked or redirecting.`);
+                            throw new Error(`Modal didn't appear, button state: "${newText}".`);
                         }
                     } catch (err) {
                         throw new Error(`Modal didn't appear and button lost from DOM.`);

@@ -1,2 +1,16 @@
 {
+  "crons": [
+    {
+      "path": "/api/automation/ai-blog",
+      "schedule": "0 8 * * 1,3,5" 
+    },
+    {
+      "path": "/api/automation/reddit-sniper",
+      "schedule": "0 */4 * * *"
+    },
+    {
+      "path": "/api/automation/linkedin",
+      "schedule": "0 9 * * 1-5"
+    }
+  ]
 }

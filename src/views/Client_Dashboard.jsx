@@ -372,6 +372,7 @@ export default function Client_Dashboard() {
                                 <TabsList className="bg-white/[0.02] border border-white/[0.05] p-1.5 rounded-2xl h-auto">
                                     <TabsTrigger value="overview" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Overview</TabsTrigger>
                                     <TabsTrigger value="deliverables" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Deliverables</TabsTrigger>
+                                    <TabsTrigger value="vault" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Secure Vault</TabsTrigger>
                                     <TabsTrigger value="invoices" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Invoices & Payments</TabsTrigger>
                                     <TabsTrigger value="milestones" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Milestones</TabsTrigger>
                                     <TabsTrigger value="analytics" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white/[0.05] data-[state=active]:text-white">Growth Analytics</TabsTrigger>
@@ -470,6 +471,44 @@ export default function Client_Dashboard() {
                                                 />
                                             ))
                                         )}
+                                    </motion.div>
+                                </TabsContent>
+
+                                <TabsContent value="vault" className="mt-0 outline-none">
+                                    <motion.div 
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        className="space-y-6"
+                                    >
+                                        <FileManager 
+                                            files={files} 
+                                            onUpload={async (file) => {
+                                                const fileName = `${Date.now()}_${file.name}`;
+                                                const { data, error } = await supabase.storage
+                                                    .from('client_vault')
+                                                    .upload(`${selectedProject.id}/${fileName}`, file);
+                                                
+                                                if (error) throw error;
+                                                
+                                                const { data: { publicUrl } } = supabase.storage
+                                                    .from('client_vault')
+                                                    .getPublicUrl(`${selectedProject.id}/${fileName}`);
+                                                    
+                                                await supabase.from('client_files').insert({
+                                                    project_id: selectedProject.id,
+                                                    file_name: file.name,
+                                                    file_url: publicUrl,
+                                                    file_size: file.size,
+                                                    category: 'asset',
+                                                    uploaded_by: user.email
+                                                });
+                                                queryClient.invalidateQueries(['client-files']);
+                                            }}
+                                            onDelete={async (fileId) => {
+                                                await supabase.from('client_files').delete().eq('id', fileId);
+                                                queryClient.invalidateQueries(['client-files']);
+                                            }}
+                                        />
                                     </motion.div>
                                 </TabsContent>
 

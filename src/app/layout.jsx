@@ -107,6 +107,9 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
+  other: {
+    'google-adsense-account': 'ca-pub-6360575790240563'
+  }
 };
 
 export default function RootLayout({ children }) {
