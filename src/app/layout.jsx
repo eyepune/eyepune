@@ -112,7 +112,12 @@ export const metadata = {
   },
   other: {
     'google-adsense-account': 'ca-pub-6360575790240563'
-  }
+  },
+  alternates: {
+    types: {
+      'application/rss+xml': 'https://www.eyepune.com/feed.xml',
+    },
+  },
 };
 
 export default function RootLayout({ children }) {
