@@ -11,5 +11,5 @@ jobs:
     steps:
       - name: Trigger Reddit Sniper Endpoint
         run: |
-          curl -f -X GET https://eyepune.com/api/automation/reddit-sniper \
+          curl -f -X GET https://www.eyepune.com/api/automation/reddit-sniper \
           -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
