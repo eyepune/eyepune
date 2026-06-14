@@ -30,13 +30,13 @@ export async function GET() {
             <guid isPermaLink="true">${baseUrl}/Blog-Post?id=${post.slug}</guid>
             <pubDate>${new Date(post.published_date || new Date()).toUTCString()}</pubDate>
             <description><![CDATA[${post.excerpt || post.title}]]></description>
-            ${post.featured_image ? `<enclosure url="${post.featured_image}" length="0" type="image/jpeg"/>` : ''}
-            <author>${post.author_name || 'EyE PunE Insights'}</author>
+            ${post.featured_image ? `<enclosure url="${post.featured_image.replace(/&/g, '&amp;')}" length="0" type="image/jpeg"/>` : ''}
+            <dc:creator><![CDATA[${post.author_name || 'EyE PunE Insights'}]]></dc:creator>
         </item>
     `).join('');
 
     const rssFeed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
         <title>EyE PunE Insights</title>
         <link>${baseUrl}/Blog</link>
