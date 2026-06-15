@@ -23,7 +23,7 @@ export default function RecentInsights() {
                 .select('*')
                 .eq('status', 'published')
                 .order('published_date', { ascending: false })
-                .limit(3);
+                .limit(6); // Increased limit for better marquee flow
             if (error) { console.warn('[RecentInsights] fetch error:', error.message); return []; }
             return data || [];
         },
@@ -39,7 +39,9 @@ export default function RecentInsights() {
         });
     };
 
-    if (isLoading || posts.length === 0) return null; // Hide section if no insights are loaded yet
+    if (isLoading || posts.length === 0) return null;
+
+    const marqueeItems = [...posts, ...posts]; // Duplicate array for seamless looping
 
     return (
         <section className="py-32 bg-transparent relative overflow-hidden">
@@ -74,62 +76,68 @@ export default function RecentInsights() {
                         </Link>
                     </motion.div>
                 </div>
+            </div>
 
-                <div className="grid md:grid-cols-3 gap-8">
-                    {posts.map((post, idx) => (
-                        <motion.div
-                            key={post.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        >
-                            <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
-                                <GlowCard className="group h-full flex flex-col p-6 cursor-pointer !rounded-3xl border border-white/5 hover:border-red-500/20">
-                                    <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-6 border border-white/10">
-                                        <Image 
-                                            src={post.featured_image || fallbackImages[idx % fallbackImages.length]} 
-                                            alt={post.title}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                            onError={(e) => { 
-                                                e.currentTarget.srcset = "";
-                                                e.currentTarget.src = fallbackImages[idx % fallbackImages.length];
-                                            }}
-                                        />
-                                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md border border-white/10 w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <ArrowUpRight className="w-5 h-5 text-white" />
+            {/* Reverse Infinite Marquee */}
+            <div className="relative w-full overflow-hidden pb-8 mt-4 -mx-6 px-6 lg:mx-0 lg:px-0">
+                <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-background via-background/90 to-transparent z-10 pointer-events-none" />
+                <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-background via-background/90 to-transparent z-10 pointer-events-none" />
+                
+                <div className="flex whitespace-nowrap">
+                    <motion.div 
+                        animate={{ x: ["-50%", "0%"] }} // Starts at -50% and moves right to 0%
+                        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                        className="flex gap-4 md:gap-6 items-stretch px-4 md:px-6 hover:[animation-play-state:paused]"
+                    >
+                        {marqueeItems.map((post, idx) => (
+                            <div key={`${post.id}-${idx}`} className="w-[280px] sm:w-[320px] md:w-[420px] whitespace-normal shrink-0">
+                                <Link href={createPageUrl(`Blog_Post?slug=${post.slug}`)} className="block h-full">
+                                    <GlowCard className="group h-full flex flex-col p-6 cursor-pointer !rounded-3xl border border-white/10 hover:border-red-500/30 bg-black/40 backdrop-blur-sm">
+                                        <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-6 border border-white/10">
+                                            <Image 
+                                                src={post.featured_image || fallbackImages[idx % fallbackImages.length]} 
+                                                alt={post.title}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                                onError={(e) => { 
+                                                    e.currentTarget.srcset = "";
+                                                    e.currentTarget.src = fallbackImages[idx % fallbackImages.length];
+                                                }}
+                                            />
+                                            <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md border border-white/10 w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <ArrowUpRight className="w-5 h-5 text-white" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div className="flex items-center gap-3 text-[10px] font-bold tracking-widest text-gray-500 uppercase mb-4">
-                                        <span className="text-red-400">{post.category?.replace('_', ' ') || 'Insight'}</span>
-                                        <span>•</span>
-                                        <span>{formatDate(post.published_date)}</span>
-                                    </div>
-                                    
-                                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors line-clamp-2 leading-tight">
-                                        {post.title}
-                                    </h3>
-                                    
-                                    <p className="text-gray-300 text-sm line-clamp-3 mb-6 flex-1 leading-relaxed">
-                                        {post.excerpt}
-                                    </p>
-                                    
-                                    <div className="flex items-center justify-between pt-4 border-t border-white/[0.05] mt-auto">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 rounded-full bg-red-950 flex items-center justify-center text-[10px] font-black text-red-400 border border-red-500/30">E</div>
-                                            <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">{post.author || 'EyE PunE'}</span>
+                                        
+                                        <div className="flex items-center gap-3 text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-4">
+                                            <span className="text-red-400">{post.category?.replace('_', ' ') || 'Insight'}</span>
+                                            <span>•</span>
+                                            <span>{formatDate(post.published_date)}</span>
                                         </div>
-                                        <div className="text-[10px] uppercase tracking-wider text-red-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                            Read More
+                                        
+                                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors line-clamp-2 leading-tight">
+                                            {post.title}
+                                        </h3>
+                                        
+                                        <p className="text-gray-300 text-sm line-clamp-3 mb-6 flex-1 leading-relaxed">
+                                            {post.excerpt}
+                                        </p>
+                                        
+                                        <div className="flex items-center justify-between pt-4 border-t border-white/10 mt-auto">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-6 h-6 rounded-full bg-red-950 flex items-center justify-center text-[10px] font-black text-red-400 border border-red-500/30">E</div>
+                                                <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">{post.author || 'EyE PunE'}</span>
+                                            </div>
+                                            <div className="text-[10px] uppercase tracking-wider text-red-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                                Read More
+                                            </div>
                                         </div>
-                                    </div>
-                                </GlowCard>
-                            </Link>
-                        </motion.div>
-                    ))}
+                                    </GlowCard>
+                                </Link>
+                            </div>
+                        ))}
+                    </motion.div>
                 </div>
             </div>
         </section>
