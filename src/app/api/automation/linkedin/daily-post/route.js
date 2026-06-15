@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { generateAndPostToLinkedin } from '@/lib/linkedin-automation';
 
+export const maxDuration = 60;
+
 /**
  * Daily LinkedIn Automation Endpoint
  * Hits this endpoint 2x a day to rotate educational and promotional content.
