@@ -1,0 +1,19 @@
+name: Autonomous Cold Email Engine
+
+on:
+  schedule:
+    # Runs every day at 10:00 AM UTC (3:30 PM IST)
+    - cron: '0 10 * * *'
+  workflow_dispatch: # Allows manual triggering from the GitHub UI
+
+jobs:
+  run-outbound:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger EyE PunE Cold Email Engine
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/cold-email" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          --fail \
+          --silent \
+          --show-error
