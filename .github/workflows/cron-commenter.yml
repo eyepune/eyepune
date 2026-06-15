@@ -1,0 +1,16 @@
+name: AI LinkedIn Commenter
+
+on:
+  schedule:
+    - cron: '30 8,14 * * *' # Run at 8:30 AM and 2:30 PM UTC
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  engage-linkedin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger LinkedIn Commenter Endpoint
+        run: |
+          curl -f -X POST https://www.eyepune.com/api/automation/linkedin-commenter \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          -H "Content-Type: application/json"
