@@ -41,7 +41,7 @@ export const metadata = {
     default: 'EyE PunE | Elite AI Growth & Marketing Agency',
     template: '%s | EyE PunE'
   },
-  description: 'Pune-based elite digital agency. We combine AI-driven marketing, full-stack web development, and hyper-scalable sales systems to explode business growth worldwide.',
+  description: 'EyE PunE is an elite AI Automation and Web Development agency based in Pune, serving global clients. We build custom AI chatbots, Next.js web applications, and automated B2B lead generation systems to scale enterprise growth.',
   keywords: [
     // ── High-Intent AI & Automation ──
     'AI automation agency',

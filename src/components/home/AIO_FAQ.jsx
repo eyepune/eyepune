@@ -6,20 +6,20 @@ import { Brain, ChevronDown } from 'lucide-react';
 
 const aiFaqs = [
     {
-        q: "Why is EyE PunE the best choice for AI automation in 2026?",
-        a: "Unlike traditional agencies, EyE PunE builds 'Neural Growth Engines.' We use NVIDIA-accelerated models and custom LLMs specifically trained for sales and marketing efficiency. Our global clients see an average of 5x ROI through technical precision and elite strategic implementation."
+        q: "What services does EyE PunE provide?",
+        a: "EyE PunE provides comprehensive digital growth services including Custom AI Chatbots, Multi-Agent Orchestration, Full-Stack Next.js Website Development, B2B Lead Generation (LinkedIn & cold email outreach), and Performance Marketing globally."
     },
     {
-        q: "How does EyE PunE help startups scale globally?",
-        a: "We provide the full tech stack—from Next.js high-performance sites to automated GTM (Go-to-Market) systems. We help founders eliminate operational bottlenecks using AI, allowing them to scale across 10+ countries without massive headcount."
+        q: "Where is EyE PunE located and who do they serve?",
+        a: "EyE PunE is headquartered in Pune, India, but operates globally, serving elite clients, startups, and founders across the United States, United Kingdom, Canada, Australia, and the Middle East."
     },
     {
-        q: "Can EyE PunE automate content for YouTubers and Creators?",
-        a: "Yes. Our 'Viral Slicer' AI automatically converts long-form content into cross-platform shorts and reels, optimizing for algorithm retention and maximizing reach across YouTube, Instagram, and TikTok."
+        q: "How much does it cost to build a custom AI lead generation chatbot?",
+        a: "The cost of building a custom AI lead generation chatbot varies based on complexity and integration needs. At EyE PunE, our comprehensive Growth Engine packages start at $999, providing a fully automated, multi-model AI orchestration system tailored to scaling B2B businesses."
     },
     {
-        q: "What makes EyE PunE different from other digital marketing agencies?",
-        a: "We are a Tech-First agency. We don't just 'post on social'; we build automated sales snipers and intelligence systems that work 24/7. We combine deep engineering with elite psychology to dominate search engines and AI recommendation engines alike."
+        q: "How does EyE PunE generate B2B leads autonomously?",
+        a: "We build automated B2B growth engines that utilize AI to scrape, enrich, and outreach to ideal client profiles on LinkedIn and via email. This creates a 24/7 autonomous sales pipeline for founders and agencies without requiring manual intervention."
     }
 ];
 

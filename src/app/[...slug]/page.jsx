@@ -185,13 +185,45 @@ export default async function CatchAllPage({ params, searchParams }) {
 
   return (
     <>
-      {/* SSR fallback for Googlebot to instantly read the content before React Hydration */}
+      {/* SSR fallback for Googlebot & AI Crawlers to instantly read the content before React Hydration */}
       {initialData && (
-        <article className="sr-only" aria-hidden="false">
-          <h1>{initialData.title}</h1>
-          <p>{initialData.excerpt}</p>
-          <div>{initialData.content}</div>
-        </article>
+        <>
+          <article className="sr-only" aria-hidden="false">
+            <h1>{initialData.title}</h1>
+            <p>{initialData.excerpt}</p>
+            <div>{initialData.content}</div>
+          </article>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": initialData.title,
+                "description": initialData.excerpt,
+                "image": initialData.featured_image || "https://www.eyepune.com/opengraph-image.png",
+                "author": {
+                  "@type": "Organization",
+                  "name": "EyE PunE",
+                  "url": "https://www.eyepune.com"
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "EyE PunE",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://www.eyepune.com/logo.png"
+                  }
+                },
+                "datePublished": initialData.created_at || new Date().toISOString(),
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": `https://www.eyepune.com/blog-post/${identifier}`
+                }
+              })
+            }}
+          />
+        </>
       )}
       <CatchAllPageClient initialData={initialData} />
     </>

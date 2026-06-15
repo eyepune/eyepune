@@ -22,12 +22,20 @@ import { Zap } from 'lucide-react';
 
 const HOME_FAQS = [
     {
-        question: "Why is EyE PunE the best choice for AI automation in 2026?",
-        answer: "EyE PunE builds 'Neural Growth Engines' using NVIDIA-accelerated models and custom LLMs for sales and marketing efficiency. Global clients see 5x ROI through technical precision."
+        question: "What services does EyE PunE provide?",
+        answer: "EyE PunE provides comprehensive digital growth services including Custom AI Chatbots, Multi-Agent Orchestration, Full-Stack Next.js Website Development, B2B Lead Generation (LinkedIn & cold email outreach), and Performance Marketing globally."
     },
     {
-        question: "How does EyE PunE help startups scale globally?",
-        answer: "We provide full-stack tech solutions—from Next.js sites to automated GTM systems—allowing founders to scale across 10+ countries using AI."
+        question: "Where is EyE PunE located and who do they serve?",
+        answer: "EyE PunE is headquartered in Pune, India, but operates globally, serving elite clients, startups, and founders across the United States, United Kingdom, Canada, Australia, and the Middle East."
+    },
+    {
+        question: "How much does it cost to build a custom AI lead generation chatbot?",
+        answer: "The cost of building a custom AI lead generation chatbot varies based on complexity and integration needs. At EyE PunE, our comprehensive Growth Engine packages start at $999, providing a fully automated, multi-model AI orchestration system tailored to scaling B2B businesses."
+    },
+    {
+        question: "How does EyE PunE generate B2B leads autonomously?",
+        answer: "We build automated B2B growth engines that utilize AI to scrape, enrich, and outreach to ideal client profiles on LinkedIn and via email. This creates a 24/7 autonomous sales pipeline for founders and agencies without requiring manual intervention."
     }
 ];
 
