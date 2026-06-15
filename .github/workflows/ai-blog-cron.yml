@@ -1,0 +1,19 @@
+name: Daily AI Blog Generator & Syndication
+
+on:
+  schedule:
+    # Runs every day at 02:00 UTC (7:30 AM IST)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allows manual triggering from the GitHub UI
+
+jobs:
+  run-automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger EyE PunE AI Blog Endpoint
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/ai-blog" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          --fail \
+          --silent \
+          --show-error
