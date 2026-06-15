@@ -1,8 +1,47 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
+// In-memory rate limiter
+const rateLimiter = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000 * 5; // 5 minutes
+const RATE_LIMIT_MAX = 3;
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const record = rateLimiter.get(ip);
+  if (!record || now - record.timestamp > RATE_LIMIT_WINDOW) {
+    rateLimiter.set(ip, { timestamp: now, count: 1 });
+    return true;
+  }
+  if (record.count >= RATE_LIMIT_MAX) return false;
+  record.count++;
+  return true;
+}
+
 export async function POST(request) {
   try {
+    // ── ORIGIN / CORS ENFORCEMENT ──
+    const origin = request.headers.get('origin');
+    const referer = request.headers.get('referer');
+    const isLocalDev = process.env.NODE_ENV === 'development';
+    
+    if (!isLocalDev) {
+        const allowedDomain = 'eyepune.com';
+        const isValidOrigin = origin && origin.includes(allowedDomain);
+        const isValidReferer = referer && referer.includes(allowedDomain);
+        
+        if (!isValidOrigin && !isValidReferer) {
+            console.warn(`[Assessment API] Blocked cross-origin request from Origin: ${origin}`);
+            return NextResponse.json({ error: 'Unauthorized origin' }, { status: 403 });
+        }
+    }
+
+    const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    if (!checkRateLimit(clientIp)) {
+      console.warn(`[Assessment API] Rate limit exceeded for IP: ${clientIp}`);
+      return NextResponse.json({ success: true, bot: true });
+    }
+
     const body = await request.json();
     const {
       name,
@@ -32,6 +71,37 @@ export async function POST(request) {
 
     if (!name || !email) {
       return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
+    }
+
+    // ── ADVANCED SPAM & BOT DETECTION ──
+    const isBot = (() => {
+        if (name.length > 10 && !name.includes(' ')) {
+            const upperCount = (name.match(/[A-Z]/g) || []).length;
+            const lowerCount = (name.match(/[a-z]/g) || []).length;
+            if (upperCount > 3 && lowerCount > 3) return true;
+        }
+
+        if (email.toLowerCase().endsWith('@gmail.com')) {
+            const localPart = email.split('@')[0];
+            const dotCount = (localPart.match(/\./g) || []).length;
+            if (dotCount >= 2) return true;
+        }
+
+        if (biggest_challenge) {
+            const urlPattern = /(http:\/\/|https:\/\/|www\.)/i;
+            const htmlPattern = /(<a\s+href=|<script>|\[url=)/i;
+            if (urlPattern.test(biggest_challenge) || htmlPattern.test(biggest_challenge)) return true;
+            
+            const cyrillicPattern = /[\u0400-\u04FF]/;
+            if (cyrillicPattern.test(biggest_challenge) || cyrillicPattern.test(name)) return true;
+        }
+
+        return false;
+    })();
+
+    if (isBot) {
+        console.warn(`[Assessment API] Advanced Bot Detected - Blocked submission from: ${name} (${email})`);
+        return NextResponse.json({ success: true, bot: true });
     }
 
     // 1. Save Assessment (bypassing RLS with service_role)
