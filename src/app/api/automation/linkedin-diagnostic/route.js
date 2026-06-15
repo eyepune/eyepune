@@ -9,6 +9,7 @@ export async function GET(request) {
         const setOrgId = searchParams.get('orgId');
         const clearOrgId = searchParams.get('clearOrgId');
         const dedupe = searchParams.get('dedupe');
+        const updateAuthor = searchParams.get('updateAuthor');
         
         const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -54,6 +55,19 @@ export async function GET(request) {
                 return NextResponse.json({ success: true, message: `SUCCESS! Deleted ${toDelete.length} duplicate blog posts from your database.` });
             }
             return NextResponse.json({ success: false, message: 'Could not fetch posts.' });
+        }
+
+        if (updateAuthor) {
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .update({ author: 'EyE PunE Team' })
+                .eq('author', 'EyE PunE AI')
+                .select();
+                
+            if (error) {
+                return NextResponse.json({ success: false, message: 'Could not update author.', error });
+            }
+            return NextResponse.json({ success: true, message: `SUCCESS! Updated author to 'EyE PunE Team' across ${data.length} legacy blog posts.` });
         }
 
         // -- AUTO-FIX FEATURE --
