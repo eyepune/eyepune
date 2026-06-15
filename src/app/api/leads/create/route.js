@@ -23,6 +23,23 @@ function checkRateLimit(ip) {
 
 export async function POST(request) {
   try {
+    // ── ORIGIN / CORS ENFORCEMENT ──
+    const origin = request.headers.get('origin');
+    const referer = request.headers.get('referer');
+    const isLocalDev = process.env.NODE_ENV === 'development';
+    
+    // In production, block direct API requests that don't come from our domain
+    if (!isLocalDev) {
+        const allowedDomain = 'eyepune.com';
+        const isValidOrigin = origin && origin.includes(allowedDomain);
+        const isValidReferer = referer && referer.includes(allowedDomain);
+        
+        if (!isValidOrigin && !isValidReferer) {
+            console.warn(`[Leads API] Blocked cross-origin request from Origin: ${origin}, Referer: ${referer}`);
+            return NextResponse.json({ error: 'Unauthorized origin' }, { status: 403 });
+        }
+    }
+
     const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     if (!checkRateLimit(clientIp)) {
       console.warn(`[Leads API] Rate limit exceeded for IP: ${clientIp}`);
