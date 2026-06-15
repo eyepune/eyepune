@@ -117,7 +117,7 @@ async function generateAndPostBlog(audience) {
              "title": "Compelling Title",
              "excerpt": "Hooking 2-sentence summary",
              "content": "Full HTML content with <h2> and <p> tags. Must be 1000+ words.",
-             "linkedin_post": "A highly engaging, native LinkedIn text post (around 150-200 words). Use strong hooks, short sentences, line breaks, and emojis. Do not include external links.",
+             "linkedin_post": "A highly engaging, native LinkedIn text post (150-200 words). Use strong hooks and short sentences. MUST aggressively pitch EyE PunE's services (AI Automation, Web Development, Performance Marketing, Pitch Decks, Logos, Brochures, Visiting Cards, and complete Branding materials). MUST end with this exact Call-To-Action: 'Run a Free AI Assessment at eyepune.com/AI-Assessment'.",
              "category": "ai_automation",
              "tags": ["AI", "Enterprise", "Global Scale", "Growth"]
            }

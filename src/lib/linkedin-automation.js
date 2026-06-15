@@ -46,7 +46,7 @@ export async function generateAndPostToLinkedin(type = 'random') {
 Generate a high-impact, viral-optimized LinkedIn post of type: ${type.toUpperCase()}.
 
 Agency Context:
-- Services: Multi-Model AI Automations, Enterprise Web Architectures, Performance Marketing.
+- Services: AI Automations, Web Architectures, Performance Marketing, Pitch Decks, Logos, Brochures, Visiting Cards, and Full Branding.
 - Value Prop: We build sub-2-second loading digital infrastructure and AI-driven sales engines to scale global B2B brands.
 - Target: Founders, C-Suite executives, and Enterprise Directors.
 
