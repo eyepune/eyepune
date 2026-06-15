@@ -247,7 +247,7 @@ async function generateAndPostBlog(audience) {
             featured_image: imageUrl,
             status: 'published',
             published_date: new Date().toISOString(),
-            author: 'EyE PunE AI'
+            author: 'EyE PunE Team'
         })
         .select()
         .single();
