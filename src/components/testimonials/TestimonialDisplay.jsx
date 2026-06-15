@@ -24,17 +24,28 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
             let results = data || [];
 
             // Enforce explicit ordering rules as requested
-            const vinothIndex = results.findIndex(t => t.customer_name?.toLowerCase().includes('vinoth'));
-            if (vinothIndex > -1) {
-                const vinoth = results.splice(vinothIndex, 1)[0];
-                results.unshift(vinoth);
-            }
+            const getAndRemove = (keyword) => {
+                const idx = results.findIndex(t => 
+                    t.customer_name?.toLowerCase().includes(keyword) || 
+                    t.customer_company?.toLowerCase().includes(keyword)
+                );
+                if (idx > -1) return results.splice(idx, 1)[0];
+                return null;
+            };
 
-            const deepaIndex = results.findIndex(t => t.customer_name?.toLowerCase().includes('deepa'));
-            if (deepaIndex > -1) {
-                const deepa = results.splice(deepaIndex, 1)[0];
-                results.push(deepa);
+            const vinoth = getAndRemove('vinoth');
+            const karry = getAndRemove('karry'); // "karry on 2"
+            const nostalgia = getAndRemove('nostalgia'); // "nostalgia 90s 4th"
+            const deepa = getAndRemove('deepa');
+
+            if (vinoth) results.unshift(vinoth);
+            if (karry) results.splice(1, 0, karry);
+            if (nostalgia) {
+                // Ensure there are at least 3 items before inserting at index 3
+                const insertIdx = Math.min(results.length, 3);
+                results.splice(insertIdx, 0, nostalgia);
             }
+            if (deepa) results.push(deepa);
 
             return results.slice(0, limit); // Apply limit AFTER sorting
         }
