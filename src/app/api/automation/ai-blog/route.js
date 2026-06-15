@@ -234,6 +234,18 @@ async function generateAndPostBlog(audience) {
 
     const slug = postData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(Math.random() * 1000);
     
+    // ── STEP 2.5: DUPLICATE PREVENTION ──
+    const { data: existingPost } = await supabase
+        .from('blog_posts')
+        .select('id')
+        .eq('title', postData.title)
+        .single();
+        
+    if (existingPost) {
+        console.log(`[AI-Blog] Duplicate blog detected with title: "${postData.title}". Skipping insertion.`);
+        return { success: false, error: 'Duplicate blog post detected.' };
+    }
+
     console.log(`[AI-Blog] Saving blog post: "${postData.title}" with slug: "${slug}"`);
     const { data: newPost, error: dbError } = await supabase
         .from('blog_posts')

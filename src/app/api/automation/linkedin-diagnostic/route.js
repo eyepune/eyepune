@@ -8,6 +8,7 @@ export async function GET(request) {
         const { searchParams } = new URL(request.url);
         const setOrgId = searchParams.get('orgId');
         const clearOrgId = searchParams.get('clearOrgId');
+        const dedupe = searchParams.get('dedupe');
         
         const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -33,6 +34,26 @@ export async function GET(request) {
                 success: true,
                 message: `SUCCESS! Organization ID cleared. The system will now natively post strictly to the Founder's Personal Profile.`
             });
+        }
+
+        if (dedupe) {
+            const { data: posts } = await supabase.from('blog_posts').select('id, title, created_at').order('created_at', { ascending: false });
+            if (posts) {
+                const seen = new Set();
+                const toDelete = [];
+                for (const post of posts) {
+                    if (seen.has(post.title)) {
+                        toDelete.push(post.id);
+                    } else {
+                        seen.add(post.title);
+                    }
+                }
+                if (toDelete.length > 0) {
+                    await supabase.from('blog_posts').delete().in('id', toDelete);
+                }
+                return NextResponse.json({ success: true, message: `SUCCESS! Deleted ${toDelete.length} duplicate blog posts from your database.` });
+            }
+            return NextResponse.json({ success: false, message: 'Could not fetch posts.' });
         }
 
         // -- AUTO-FIX FEATURE --
