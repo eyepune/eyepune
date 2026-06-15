@@ -7,11 +7,32 @@ export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
         const setOrgId = searchParams.get('orgId');
+        const clearOrgId = searchParams.get('clearOrgId');
         
         const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
             process.env.SUPABASE_SERVICE_ROLE_KEY
         );
+
+        if (clearOrgId) {
+            const { data: config } = await supabase
+                .from('system_settings')
+                .select('value')
+                .eq('key', 'linkedin_config')
+                .single();
+
+            let newValue = config?.value || {};
+            delete newValue.urn; // Remove the organization URN
+
+            await supabase
+                .from('system_settings')
+                .upsert({ key: 'linkedin_config', value: newValue });
+
+            return NextResponse.json({
+                success: true,
+                message: `SUCCESS! Organization ID cleared. The system will now natively post strictly to the Founder's Personal Profile.`
+            });
+        }
 
         // -- AUTO-FIX FEATURE --
         if (setOrgId) {
