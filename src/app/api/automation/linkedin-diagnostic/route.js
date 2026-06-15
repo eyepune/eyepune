@@ -22,11 +22,12 @@ export async function GET(request) {
                 .single();
 
             let newValue = config?.value || {};
-            delete newValue.urn; // Remove the organization URN
+            newValue.urn = null;
 
             await supabase
                 .from('system_settings')
-                .upsert({ key: 'linkedin_config', value: newValue });
+                .update({ value: newValue })
+                .eq('key', 'linkedin_config');
 
             return NextResponse.json({
                 success: true,
