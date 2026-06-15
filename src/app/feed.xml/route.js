@@ -50,7 +50,7 @@ export async function GET() {
     return new Response(rssFeed, {
         headers: {
             'Content-Type': 'application/rss+xml; charset=utf-8',
-            'Cache-Control': 's-maxage=3600, stale-while-revalidate=86400',
+            'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
         },
     });
 }
