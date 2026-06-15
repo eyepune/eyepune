@@ -28,6 +28,32 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
     }
 
+    // ── ADVANCED SPAM & BOT DETECTION ──
+    const isBot = (() => {
+        // 1. Check for gibberish name (no spaces, weird capitalization, or super long without vowels)
+        if (name.length > 10 && !name.includes(' ')) {
+            const upperCount = (name.match(/[A-Z]/g) || []).length;
+            const lowerCount = (name.match(/[a-z]/g) || []).length;
+            // If it's a mix of random caps like "qeIMhqODmdVrllY"
+            if (upperCount > 3 && lowerCount > 3) return true;
+        }
+
+        // 2. Check for "dot trick" in Gmail (e.g., j.oy.bek.09@gmail.com)
+        if (email.toLowerCase().endsWith('@gmail.com')) {
+            const localPart = email.split('@')[0];
+            const dotCount = (localPart.match(/\./g) || []).length;
+            if (dotCount >= 2) return true; // High probability of spam alias
+        }
+
+        return false;
+    })();
+
+    if (isBot) {
+        console.warn(`[Leads API] Advanced Bot Detected - Blocked submission from: ${name} (${email})`);
+        // Return success so the bot thinks it worked and doesn't try a different method
+        return NextResponse.json({ success: true, bot: true });
+    }
+
     // 1. Save lead to CRM (bypassing RLS with service_role)
     const { error: leadError } = await supabaseAdmin.from('leads').insert([{
       full_name: name,
