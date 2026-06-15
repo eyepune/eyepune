@@ -101,7 +101,7 @@ export default function Home() {
                                 <span className="text-gray-500 ml-2 text-sm">Rated 5/5</span>
                             </div>
                         </motion.div>
-                        <TestimonialDisplay featured={true} limit={6} />
+                        <TestimonialDisplay featured={true} limit={6} isMarquee={true} />
                         <div className="text-center mt-12">
                             <Link href={createPageUrl("Testimonials")}>
                                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-white/25 rounded-full px-8 py-5">
