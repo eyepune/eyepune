@@ -4,8 +4,31 @@ import { triggerAutomation } from '@/lib/automation-service';
 import { notifyNewInquiry } from '@/lib/admin-notifier';
 import { triggerWhatsAppSequence } from '@/lib/whatsapp-service';
 
+// In-memory rate limiter (mitigates burst attacks on the same serverless instance)
+const rateLimiter = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000 * 5; // 5 minutes
+const RATE_LIMIT_MAX = 3; // Max 3 submissions per 5 minutes
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const record = rateLimiter.get(ip);
+  if (!record || now - record.timestamp > RATE_LIMIT_WINDOW) {
+    rateLimiter.set(ip, { timestamp: now, count: 1 });
+    return true;
+  }
+  if (record.count >= RATE_LIMIT_MAX) return false;
+  record.count++;
+  return true;
+}
+
 export async function POST(request) {
   try {
+    const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    if (!checkRateLimit(clientIp)) {
+      console.warn(`[Leads API] Rate limit exceeded for IP: ${clientIp}`);
+      return NextResponse.json({ success: true, bot: true }); // Ghost the spammer
+    }
+
     const body = await request.json();
     const {
       name,
@@ -43,6 +66,17 @@ export async function POST(request) {
             const localPart = email.split('@')[0];
             const dotCount = (localPart.match(/\./g) || []).length;
             if (dotCount >= 2) return true; // High probability of spam alias
+        }
+
+        // 3. Block submissions containing links (Bots drop SEO spam links)
+        if (message) {
+            const urlPattern = /(http:\/\/|https:\/\/|www\.)/i;
+            const htmlPattern = /(<a\s+href=|<script>|\[url=)/i;
+            if (urlPattern.test(message) || htmlPattern.test(message)) return true;
+            
+            // 4. Block Cyrillic/Russian characters (Massive source of form spam)
+            const cyrillicPattern = /[\u0400-\u04FF]/;
+            if (cyrillicPattern.test(message) || cyrillicPattern.test(name)) return true;
         }
 
         return false;
