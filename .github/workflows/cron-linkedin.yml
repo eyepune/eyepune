@@ -2,8 +2,8 @@ name: LinkedIn Automation Cron
 
 on:
   schedule:
-    # Runs at 9:00 AM and 6:00 PM IST (3:30 AM and 12:30 PM UTC) every day
-    - cron: '30 3,12 * * *'
+    # Runs at 9:00 AM IST (3:30 AM UTC) once a day to save Vercel CPU
+    - cron: '30 3 * * *'
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:

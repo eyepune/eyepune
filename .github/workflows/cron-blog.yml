@@ -2,8 +2,8 @@ name: AI Blog Automation Cron
 
 on:
   schedule:
-    # Runs every 6 hours to drastically scale SEO content generation
-    - cron: '0 */6 * * *'
+    # Runs once a day to save Vercel compute limits
+    - cron: '0 5 * * *'
   workflow_dispatch: # Allows manual trigger
 
 jobs:

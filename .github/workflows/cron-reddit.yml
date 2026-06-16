@@ -2,7 +2,7 @@ name: Reddit Sniper Automation
 
 on:
   schedule:
-    - cron: '0 */4 * * *' # Run every 4 hours
+    - cron: '0 6 * * *' # Run once a day at 6:00 AM UTC to save Vercel CPU
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:

@@ -2,7 +2,7 @@ name: AI LinkedIn Commenter
 
 on:
   schedule:
-    - cron: '30 8,14 * * *' # Run at 8:30 AM and 2:30 PM UTC
+    - cron: '30 8 * * *' # Run at 8:30 AM UTC once a day to save Vercel CPU
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:
