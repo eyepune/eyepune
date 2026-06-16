@@ -137,9 +137,9 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
                     <div className="absolute inset-y-0 right-0 w-12 md:w-24 bg-gradient-to-l from-background via-background/90 to-transparent z-10 pointer-events-none hidden md:block" />
                     
                     {/* Mobile: Grid (No Scroll) */}
-                    <div className="grid grid-cols-1 gap-6 md:hidden">
+                    <div className="grid grid-cols-1 gap-6 place-items-center md:hidden">
                         {testimonials.map((testimonial) => (
-                            <div key={testimonial.id}>
+                            <div key={testimonial.id} className="w-full max-w-[320px] sm:max-w-[420px]">
                                 <TestimonialCard testimonial={testimonial} />
                             </div>
                         ))}

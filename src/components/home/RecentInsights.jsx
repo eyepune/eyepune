@@ -131,9 +131,9 @@ export default function RecentInsights() {
                 <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-background via-background/90 to-transparent z-10 pointer-events-none hidden md:block" />
                 
                 {/* Mobile: Grid (No Scroll) */}
-                <div className="grid grid-cols-1 gap-6 md:hidden">
+                <div className="grid grid-cols-1 gap-6 place-items-center md:hidden">
                     {posts.map((post, idx) => (
-                        <div key={`${post.id}-mobile`} className="w-full">
+                        <div key={`${post.id}-mobile`} className="w-full max-w-[320px] sm:max-w-[420px]">
                             <PostCard post={post} idx={idx} />
                         </div>
                     ))}
