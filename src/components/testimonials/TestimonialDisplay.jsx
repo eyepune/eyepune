@@ -133,10 +133,20 @@ export default function TestimonialDisplay({ serviceFilter = null, featured = fa
         <>
             {isMarquee ? (
                 <div className="relative w-full overflow-hidden py-4 -mx-6 px-6 lg:mx-0 lg:px-0">
-                    <div className="absolute inset-y-0 left-0 w-12 md:w-24 bg-gradient-to-r from-background via-background/90 to-transparent z-10 pointer-events-none" />
-                    <div className="absolute inset-y-0 right-0 w-12 md:w-24 bg-gradient-to-l from-background via-background/90 to-transparent z-10 pointer-events-none" />
+                    <div className="absolute inset-y-0 left-0 w-12 md:w-24 bg-gradient-to-r from-background via-background/90 to-transparent z-10 pointer-events-none hidden md:block" />
+                    <div className="absolute inset-y-0 right-0 w-12 md:w-24 bg-gradient-to-l from-background via-background/90 to-transparent z-10 pointer-events-none hidden md:block" />
                     
-                    <div className="flex whitespace-nowrap">
+                    {/* Mobile: Grid (No Scroll) */}
+                    <div className="grid grid-cols-1 gap-6 md:hidden">
+                        {testimonials.map((testimonial) => (
+                            <div key={testimonial.id}>
+                                <TestimonialCard testimonial={testimonial} />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Desktop: Marquee */}
+                    <div className="hidden md:flex whitespace-nowrap">
                         <motion.div 
                             animate={{ x: ["0%", "-50%"] }}
                             transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
