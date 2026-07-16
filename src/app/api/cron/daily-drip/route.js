@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email-service';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60; // Prevent timeout when sending bulk drip emails
 
 export async function GET(request) {
   // CRON job route to process all active drip campaigns

@@ -1,19 +1,19 @@
-name: Daily AI Blog Generator & Syndication
+# ⚠️ DEPRECATED — This workflow has been consolidated into ai-automation.yml
+# The AI Blog generation is now triggered by: .github/workflows/ai-automation.yml (runs at 09:00 UTC / 2:30 PM IST)
+# Keeping this file to avoid a 404 in GitHub UI — but the schedule is disabled.
+#
+# DO NOT re-enable this cron — doing so will trigger DOUBLE blog posts per day.
+
+name: "[DISABLED] Daily AI Blog Generator - Consolidated"
 
 on:
-  schedule:
-    # Runs every day at 02:00 UTC (7:30 AM IST)
-    - cron: '0 2 * * *'
-  workflow_dispatch: # Allows manual triggering from the GitHub UI
+  workflow_dispatch: # Manual trigger only for emergency use
 
 jobs:
-  run-automation:
+  noop:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger EyE PunE AI Blog Endpoint
+      - name: This workflow is disabled
         run: |
-          curl -X GET "https://www.eyepune.com/api/automation/ai-blog" \
-          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-          --fail \
-          --silent \
-          --show-error
+          echo "⚠️ This workflow is DISABLED. The blog generation now runs via ai-automation.yml"
+          echo "See: .github/workflows/ai-automation.yml"

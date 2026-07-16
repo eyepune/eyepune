@@ -105,16 +105,26 @@ async function generateAndPostBlog(audience) {
             break;
     }
 
+    // Unique seed based on today's date to prevent duplicate titles on repeated runs
+    const today = new Date();
+    const dateStr = today.toISOString().split('T')[0];
+    const uniqueSeed = `${dateStr}-${audience}-${dayOfWeek}`;
+
     const prompt = `
         You are an expert content strategist for 'EyE PunE', an elite global digital agency and AI growth partner. 
         Write a high-converting, highly technical, and insightful blog post for C-suite executives and tech founders.
         Topic area: ${topicPrompt}
         
+        CRITICAL: Today's date is ${dateStr}. You MUST generate a UNIQUE title that has never been published before.
+        Include a specific 2026 trend, statistic, or technology angle in the title to make it fresh.
+        Do NOT use these overused titles: "Autonomous Sales Pipelines", "Sub-Second Digital Architecture", "Accelerating Enterprise SaaS Scale".
+        Session uniqueness key: ${uniqueSeed}
+        
         Requirements:
         1. Tone: Elite, authoritative, visionary, and technical.
         2. Format: Return ONLY a valid JSON object with:
            {
-             "title": "Compelling Title",
+             "title": "Compelling, UNIQUE Title incorporating a fresh ${today.getFullYear()} angle",
              "excerpt": "Hooking 2-sentence summary",
              "content": "Full HTML content with <h2> and <p> tags. Must be 1000+ words.",
              "linkedin_post": "A highly engaging, native LinkedIn text post (150-200 words). Use strong hooks and short sentences. MUST aggressively pitch EyE PunE's services (AI Automation, Web Development, Performance Marketing, Pitch Decks, Logos, Brochures, Visiting Cards, and complete Branding materials). MUST end with this exact Call-To-Action: 'Run a Free AI Assessment at eyepune.com/AI-Assessment'.",
@@ -505,26 +515,80 @@ function getFallbackBlogContent(audience) {
             category: "ai_automation",
             tags: ["NVIDIA NIM", "LLM Scale", "B2B Marketing", "SaaS Growth"],
             content: `
-                <p>The acceleration of AI technology has created a massive challenge for enterprise SaaS products: latency. Running complex, multi-million parameter LLMs to generate real-time recommendations, custom content, or dynamic user audits has traditionally been too slow to use inside live web sessions. However, the introduction of NVIDIA NIM (NVIDIA Inference Microservices) has completely shifted the landscape. By optimizing model execution directly on GPUs, enterprise brands can deploy elite models at scale, securing sub-second reasoning speeds.</p>
-                
+                <p>The acceleration of AI technology has created a massive challenge for enterprise SaaS products: latency. Running complex, multi-million parameter LLMs to generate real-time recommendations, custom content, or dynamic user audits has traditionally been too slow to use inside live web sessions. However, the introduction of NVIDIA NIM has completely shifted the landscape. By optimizing model execution directly on GPUs, enterprise brands can deploy elite models at scale, securing sub-second reasoning speeds.</p>
                 <h2>1. What is NVIDIA NIM?</h2>
-                <p>NVIDIA NIM is a set of easy-to-use microservices designed to accelerate the deployment of generative AI models across cloud, data centers, and local workstations. Rather than dealing with complex model weights and CUDA configurations, NIM packages models into optimized containerized environments. By running models like Llama-3.1 or Moonshot Kimi within these optimized microservices, inference speeds are accelerated up to 4x compared to raw deployments, drastically reducing the cost-per-token and latency.</p>
-                
-                <h2>2. Harnessing Accelerators for Real-Time Growth Marketing</h2>
-                <p>In B2B growth workflows, NIM-accelerated models enable dynamic personalization at scale:</p>
+                <p>NVIDIA NIM is a set of easy-to-use microservices designed to accelerate the deployment of generative AI models. NIM packages models into optimized containerized environments, accelerating inference speeds up to 4x compared to raw deployments.</p>
+                <h2>2. Real-Time Growth Marketing Applications</h2>
                 <ul>
-                    <li><strong>Dynamic SEO Landing Pages:</strong> Generates real-time, highly relevant landing pages customized to the search intent of the incoming enterprise lead.</li>
-                    <li><strong>Automated Strategic Audits:</strong> Runs complex marketing intelligence assessments and compiles detailed, multi-page strategy reports instantly while the user is engaged on the site.</li>
-                    <li><strong>Smart Content Personalization:</strong> Adapts site copy, testimonials, and case studies based on industry and team data fetched silently during session initialization.</li>
+                    <li><strong>Dynamic SEO Landing Pages:</strong> Generates real-time, highly relevant landing pages customized to incoming enterprise leads.</li>
+                    <li><strong>Automated Strategic Audits:</strong> Compiles detailed strategy reports instantly while the user is engaged on site.</li>
+                    <li><strong>Smart Content Personalization:</strong> Adapts site copy based on industry data fetched during session initialization.</li>
                 </ul>
-                
-                <h2>3. Building the Future of Intelligent Web Infrastructure</h2>
-                <p>At EyE PunE, we integrate high-speed NVIDIA NIM endpoints directly into our modern headless web builds. This unique combination of ultra-fast frontends and ultra-fast generative models allows us to engineer platforms that are not only blazingly fast but incredibly intelligent. The future of the web is autonomous, fast, and personalized. By deploying accelerated AI microservices, global brands can secure unmatched competitive advantages, maximizing ROI at scale.</p>
+                <h2>3. The EyE PunE NIM Integration</h2>
+                <p>At EyE PunE, we integrate high-speed NVIDIA NIM endpoints directly into our modern headless web builds. <a href="/Booking">Book a Free Strategy Session</a> to see a live demo, or explore our complete <a href="/Pricing">AI Growth Packages</a>.</p>
+            `
+        },
+        {
+            title: "WhatsApp Business API: The 98% Open-Rate Channel Transforming B2B Sales in 2026",
+            excerpt: "With a 98% open rate versus email's 21%, WhatsApp Business API is the highest-ROI outreach channel available to enterprise sales teams today.",
+            category: "marketing_automation",
+            tags: ["WhatsApp API", "B2B Sales", "Automation", "Lead Nurture"],
+            content: `
+                <p>Email open rates are collapsing. Average B2B email open rates have fallen below 21% globally. Meanwhile, WhatsApp boasts a 98% open rate and a 40% click-through rate — and it sits largely untapped by enterprise sales teams. For global brands targeting decision-makers across Asia, the Middle East, and Europe, WhatsApp Business API is not just a messaging app — it is the dominant business communication layer of the decade.</p>
+                <h2>1. API vs. App: The Critical Distinction</h2>
+                <p>The free WhatsApp Business App limits businesses to one device, manual messaging, and zero CRM integration. The Meta Cloud API unlocks enterprise-scale automation: templated sequences, AI chatbots, CRM sync, and full multi-agent team inboxes — all through a single webhook endpoint.</p>
+                <h2>2. High-ROI B2B Use Cases</h2>
+                <ul>
+                    <li><strong>Instant Lead Response:</strong> Automated WhatsApp fires within 90 seconds of form submission — before a competitor can call.</li>
+                    <li><strong>Booking Reminders:</strong> 24-hour and 1-hour automated reminders reduce no-shows by up to 60%.</li>
+                    <li><strong>Drip Education Sequences:</strong> Multi-day nurture sequences graduate leads from awareness to purchase intent without manual touchpoints.</li>
+                </ul>
+                <h2>3. Implementation with EyE PunE</h2>
+                <p>We build complete WhatsApp automation engines: API provisioning, template approvals, CRM webhook integration, and AI response agents. <a href="/Booking">Book a Free Strategy Session</a> to see how WhatsApp automation doubles your lead response rate, or explore our <a href="/Pricing">Growth Packages</a>.</p>
+            `
+        },
+        {
+            title: "Brand Identity ROI: Why Premium Branding Delivers 3x Higher B2B Conversion Rates",
+            excerpt: "Branding is not a cost center — it is a revenue multiplier. Discover the measurable ROI of investing in premium logo, pitch deck, and visual identity systems.",
+            category: "branding",
+            tags: ["Branding", "Logo Design", "Pitch Deck", "B2B Growth"],
+            content: `
+                <p>In B2B sales, the first impression is almost always visual. Before a prospect reads your pitch or hears your team, they have formed a trust judgment based on your logo, your website, and your collateral quality. Research by Lucidpress confirms that consistent brand presentation increases revenue by up to 23%. Yet most SMEs operate with disconnected, outdated brand identities — leaving serious money on the table every single quarter.</p>
+                <h2>1. The Psychology of Premium Brand Perception</h2>
+                <p>Humans process visual information 60,000 times faster than text. A professionally designed logo signals competence and stability within milliseconds. In high-value B2B contexts, buyers instinctively reduce risk by gravitating toward brands that look established. A low-quality logo or amateurish pitch deck can disqualify a superior product from a shortlist entirely.</p>
+                <h2>2. The Complete Brand Identity System</h2>
+                <ul>
+                    <li><strong>Primary Logo Suite:</strong> Vector files with full color, monochrome, and icon variants.</li>
+                    <li><strong>Brand Style Guide:</strong> Typography, color palette with exact hex codes, spacing rules, and usage guidelines.</li>
+                    <li><strong>Pitch Deck Architecture:</strong> A narrative-driven investor or client-facing deck that communicates value proposition within the first 3 slides.</li>
+                </ul>
+                <h2>3. The EyE PunE Branding Process</h2>
+                <p>Our branding team engineers identities grounded in market positioning, competitor analysis, and psychological color theory. Clients emerge commanding premium pricing and winning high-value accounts. <a href="/Booking">Book a Brand Strategy Session</a> or explore our complete <a href="/Pricing">Branding Packages</a>.</p>
+            `
+        },
+        {
+            title: "Local SEO Domination: How Pune Businesses Can Capture #1 Google Rankings in 90 Days",
+            excerpt: "With the right technical foundation and hyperlocal content strategy, businesses can capture 78% of high-intent local searches and dominate their city market.",
+            category: "seo",
+            tags: ["Local SEO", "Pune Business", "Google Ranking", "Digital Marketing"],
+            content: `
+                <p>Every day, thousands of potential customers search Google for services your business provides — and the majority never scroll past the first three results. Local SEO is the systematic process of ensuring your business appears prominently when high-intent buyers search for your category in your geographic area. For Pune-based businesses, a structured local SEO strategy is the single highest-ROI marketing investment available in 2026.</p>
+                <h2>1. Google Business Profile: Your Most Powerful Free Asset</h2>
+                <p>Fully optimized Google Business Profiles appear in the coveted Local Pack — the three results appearing above all organic listings. Businesses in the Local Pack receive 44% of all clicks from local searches, making GBP optimization the single most impactful action any local business can take.</p>
+                <h2>2. Technical SEO Foundations</h2>
+                <ul>
+                    <li><strong>Schema Markup:</strong> LocalBusiness JSON-LD tells Google exactly what your business does and where it operates.</li>
+                    <li><strong>Core Web Vitals:</strong> Google's ranking algorithm includes page speed. Businesses on slow servers are algorithmically penalized.</li>
+                    <li><strong>Mobile Optimization:</strong> Over 73% of local searches occur on mobile — a non-responsive site is invisible to your target market.</li>
+                </ul>
+                <h2>3. The 90-Day Local Domination Roadmap</h2>
+                <p>Month 1: Technical audits, GBP optimization, citation building. Month 2: Hyperlocal content targeting intent-based queries. Month 3: Authority building through strategic PR. Clients see 40-70% increases in organic traffic within the first quarter. <a href="/Booking">Book a Free SEO Audit</a> or review our <a href="/Pricing">Local SEO Packages</a>.</p>
             `
         }
     ];
 
-    // Pick a fallback template based on a deterministic hash of the audience/date, or just at random
-    const index = Math.floor(Math.random() * fallbacks.length);
+    // Rotate deterministically by day-of-year so each day uses a different fallback
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+    const index = dayOfYear % fallbacks.length;
     return fallbacks[index];
 }

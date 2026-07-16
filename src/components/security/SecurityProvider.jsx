@@ -88,20 +88,9 @@ export default function SecurityProvider() {
       }
     }, 100);
 
-    // 3. DevTools Dimension Check (Fallback)
-    // Checks if the window size changes drastically (often happens when DevTools opens docked)
-    const checkDevTools = () => {
-      const widthThreshold = window.outerWidth - window.innerWidth > 160;
-      const heightThreshold = window.outerHeight - window.innerHeight > 160;
-      
-      if (widthThreshold || heightThreshold) {
-         window.location.href = "about:blank";
-      }
-    };
-    
-    window.addEventListener('resize', checkDevTools);
-    // Initial check
-    checkDevTools();
+    // Removed DevTools Dimension Check because it falsely triggers on mobile browsers
+    // due to dynamic address bars and bottom navigation causing large differences 
+    // between outerHeight and innerHeight.
 
     // Cleanup
     return () => {
@@ -111,7 +100,6 @@ export default function SecurityProvider() {
       document.removeEventListener('cut', handleCut);
       document.removeEventListener('selectstart', handleSelectStart);
       document.removeEventListener('dragstart', handleDragStart);
-      window.removeEventListener('resize', checkDevTools);
       clearInterval(clearConsoleInterval);
       clearInterval(debuggerTrap);
     };

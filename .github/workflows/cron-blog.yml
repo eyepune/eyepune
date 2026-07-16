@@ -1,16 +1,20 @@
-name: AI Blog Automation Cron
+# ⚠️ DEPRECATED — This workflow has been consolidated into ai-automation.yml
+# The AI Blog generation is now triggered by: .github/workflows/ai-automation.yml (runs at 09:00 UTC / 2:30 PM IST)
+# This file is kept to avoid confusion but the schedule has been DISABLED.
+#
+# DO NOT re-enable this cron — there are 3 workflows pointing to the same endpoint.
+# Only ai-automation.yml should trigger /api/automation/ai-blog
+
+name: "[DISABLED] AI Blog Automation Cron - Consolidated"
 
 on:
-  schedule:
-    # Runs once a day to save Vercel compute limits
-    - cron: '0 5 * * *'
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch: # Manual trigger only
 
 jobs:
-  generate-blog:
+  noop:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger AI Blog Endpoint
+      - name: This workflow is disabled
         run: |
-          curl -f -X GET "https://www.eyepune.com/api/automation/ai-blog" \
-          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+          echo "⚠️ This workflow is DISABLED. Blog generation runs via ai-automation.yml"
+          echo "See: .github/workflows/ai-automation.yml (runs at 09:00 UTC)"

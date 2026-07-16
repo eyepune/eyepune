@@ -12,5 +12,7 @@ jobs:
     steps:
       - name: Trigger Daily Drip Endpoint
         run: |
-          curl -X GET "https://www.eyepune.com/api/cron/daily-drip" \
-          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+          curl -f -X GET "https://www.eyepune.com/api/cron/daily-drip" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          --show-error \
+          --silent
