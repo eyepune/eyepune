@@ -1,0 +1,46 @@
+name: Autonomous AI Marketing Engine (Cron)
+
+on:
+  schedule:
+    # Run CRM Sync every day at 8:00 AM UTC
+    - cron: '0 8 * * *'
+    
+    # Run AI Blog Post every day at 9:00 AM UTC
+    - cron: '0 9 * * *'
+    
+    # Run LinkedIn Educational Post at 4:00 AM UTC
+    - cron: '0 4 * * *'
+    
+    # Run LinkedIn Promotional Post at 10:00 AM UTC
+    - cron: '0 10 * * *'
+    
+    # Run Daily Email Drip at 11:00 AM UTC
+    - cron: '0 11 * * *'
+
+  # Allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  run-automations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger CRM Sync (Smart Promotions & Nurturing)
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/crm-sync" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+
+      - name: Trigger AI Blog Generation
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/ai-blog" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+
+      - name: Trigger LinkedIn Post
+        run: |
+          curl -X POST "https://www.eyepune.com/api/automation/linkedin/daily-post" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          -H "Content-Type: application/json"
+
+      - name: Trigger Daily Email Drip Sequences
+        run: |
+          curl -X GET "https://www.eyepune.com/api/cron/daily-drip" \
+          -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

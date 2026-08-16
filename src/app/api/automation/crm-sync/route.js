@@ -4,7 +4,7 @@ import { sendEmail } from '@/lib/email-service';
 import { fetchWixContacts } from '@/lib/wix-api';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 export async function GET(request) {
     const authHeader = request.headers.get('authorization');

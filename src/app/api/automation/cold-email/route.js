@@ -3,7 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email-service';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 300; // 5 minute execution for LLM
+export const maxDuration = 60; // 5 minute execution for LLM
 
 const LLM_API_URL = process.env.LLM_API_URL || 'https://integrate.api.nvidia.com/v1/chat/completions';
 const LLM_API_KEY = process.env.LLM_API_KEY;
