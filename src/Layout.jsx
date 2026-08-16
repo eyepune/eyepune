@@ -213,14 +213,7 @@ function LayoutContent({ children, currentPageName }) {
                                             </Button>
                                         </Link>
                                     )}
-                                    <a href={process.env.NEXT_PUBLIC_CLIENT_PORTAL_URL || '#'} target="_blank" rel="noopener noreferrer">
-                                        <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-                                            <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white px-4 xl:px-5 py-2 xl:py-2.5 rounded-full text-[13px] xl:text-sm font-bold shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all">
-                                                <MessageSquare className="w-4 h-4 mr-1.5" />
-                                                AI Auto Reply
-                                            </Button>
-                                        </motion.div>
-                                    </a>
+
                                     <Link href={createPageUrl("AI-Assessment")}>
                                         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                                             <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white px-4 xl:px-5 py-2 xl:py-2.5 rounded-full text-[13px] xl:text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all">
