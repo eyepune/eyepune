@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SEOHead from "@/components/seo/SEOHead";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { motion } from 'framer-motion';
 import { Check, Sparkles, ArrowRight, Zap, Globe, Share2, Code, TrendingUp, Palette, Bot, Command, Database, MessageCircle, Instagram, Facebook, Linkedin, Twitter, Hash, ShieldCheck } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ export default function Pricing() {
 
     const { data: plans = [], isLoading } = useQuery({
         queryKey: ['pricing-plans'],
-        queryFn: () => base44.entities.Pricing_Plan.filter({ is_active: true }, 'name', 100),
+        queryFn: () => supabase.entities.Pricing_Plan.filter({ is_active: true }, 'name', 100),
     });
 
     const getPlansByCategory = (planNames) =>

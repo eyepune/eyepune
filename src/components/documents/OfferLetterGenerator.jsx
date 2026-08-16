@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,7 @@ Include:
 
 Return as a single well-formatted string.`;
 
-            const result = await base44.integrations.Core.InvokeLLM({ prompt });
+            const result = await supabase.integrations.Core.InvokeLLM({ prompt });
             setFormData(prev => ({ ...prev, job_description: result }));
         } catch (error) {
             console.error('AI generation error:', error);
@@ -56,7 +56,7 @@ Return as a single well-formatted string.`;
 
     const createOfferMutation = useMutation({
         mutationFn: async (data) => {
-            return await base44.entities.OfferLetter.create({
+            return await supabase.entities.OfferLetter.create({
                 ...data,
                 offer_number: `OFFER-${Date.now()}`,
                 status: 'draft'

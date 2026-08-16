@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,12 +25,12 @@ export default function DashboardCustomizer({ preferences, user }) {
     const updatePreferencesMutation = useMutation({
         mutationFn: async ({ widgets, order }) => {
             if (preferences?.id) {
-                return await base44.entities.DashboardPreference.update(preferences.id, {
+                return await supabase.entities.DashboardPreference.update(preferences.id, {
                     enabled_widgets: widgets,
                     widget_order: order
                 });
             } else {
-                return await base44.entities.DashboardPreference.create({
+                return await supabase.entities.DashboardPreference.create({
                     user_email: user.email,
                     enabled_widgets: widgets,
                     widget_order: order

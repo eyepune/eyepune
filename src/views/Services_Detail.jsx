@@ -190,40 +190,7 @@ export default function Services_Detail() {
                 <ROICalculator />
             </section>
 
-            {/* ── LEX PRO PROMO ── */}
-            <section className="py-24 border-t border-white/[0.06] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-950/20 to-transparent" />
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full max-w-[500px] h-[500px] pointer-events-none"
-                    style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.07) 0%, transparent 70%)' }}
-                />
-                <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-                    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/20 bg-orange-500/5 mb-8">
-                            <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
-                            <span className="text-orange-400 text-sm font-medium">⚖️ New Product Launch</span>
-                        </div>
-                        <h2 className="text-5xl md:text-6xl font-black mb-6">
-                            Introducing{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400">Lex Pro</span>
-                        </h2>
-                        <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
-                            India's #1 AI Contract Management platform. Draft, review, risk-score, and e-sign contracts fully compliant with Indian law — in minutes, not days.
-                        </p>
-                        <div className="grid md:grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
-                            {['Indian Law Compliance', 'Risk Score Analysis', 'Full Contract Lifecycle'].map((item, i) => (
-                                <div key={i} className="p-4 rounded-xl bg-white/[0.025] border border-orange-500/10 hover:border-orange-500/30 transition-all text-sm text-gray-300">
-                                    {item}
-                                </div>
-                            ))}
-                        </div>
-                        <a href="https://lex-pro.base44.app" target="_blank" rel="noopener noreferrer">
-                            <Button className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-10 py-6 text-lg rounded-full font-bold shadow-[0_0_30px_rgba(249,115,22,0.4)]">
-                                Try Lex Pro Free <ChevronRight className="w-5 h-5 ml-1" />
-                            </Button>
-                        </a>
-                    </motion.div>
-                </div>
-            </section>
+
 
             {/* ── TESTIMONIALS ── */}
             <section className="py-24 border-t border-white/[0.06]">

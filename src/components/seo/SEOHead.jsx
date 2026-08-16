@@ -1,5 +1,6 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function SEOHead({ 
     title = "EyE PunE - Elite Digital Marketing, Web Development & AI Automation Agency",
@@ -10,9 +11,46 @@ export default function SEOHead({
     structuredData,
     author = "EyE PunE"
 }) {
+    const pathname = usePathname();
+    const [dynamicSEO, setDynamicSEO] = useState({ title, description });
+    const [tracked, setTracked] = useState(false);
+
+    useEffect(() => {
+        // Fetch A/B SEO variant
+        const fetchVariant = async () => {
+            try {
+                const res = await fetch(`/api/seo-variant?page=${pathname}`);
+                const data = await res.json();
+                
+                if (!data.fallback && data.id) {
+                    setDynamicSEO({
+                        title: data.title || title,
+                        description: data.description || description
+                    });
+
+                    // Track the view
+                    if (!tracked) {
+                        await fetch('/api/track-view', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ variant_id: data.id, page_url: pathname })
+                        });
+                        setTracked(true);
+                    }
+                }
+            } catch (e) {
+                // Ignore errors and use fallback
+            }
+        };
+
+        if (pathname) {
+            fetchVariant();
+        }
+    }, [pathname, title, description, tracked]);
+
     useEffect(() => {
         // Update document title
-        document.title = title;
+        document.title = dynamicSEO.title;
 
         // Helper to update or create meta tag
         const setMetaTag = (name, content, isProperty = false) => {
@@ -28,15 +66,15 @@ export default function SEOHead({
         };
 
         // Basic meta tags
-        setMetaTag('description', description);
+        setMetaTag('description', dynamicSEO.description);
         setMetaTag('keywords', keywords);
         setMetaTag('author', author);
         setMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
         setMetaTag('viewport', 'width=device-width, initial-scale=1.0');
         
         // Open Graph tags (handled by App Router dynamically)
-        setMetaTag('og:title', title, true);
-        setMetaTag('og:description', description, true);
+        setMetaTag('og:title', dynamicSEO.title, true);
+        setMetaTag('og:description', dynamicSEO.description, true);
         // setMetaTag('og:image', ogImage, true);
         setMetaTag('og:type', 'website', true);
         setMetaTag('og:site_name', 'EyE PunE', true);
@@ -48,8 +86,8 @@ export default function SEOHead({
 
         // Twitter Card tags (handled by App Router dynamically)
         setMetaTag('twitter:card', 'summary_large_image');
-        setMetaTag('twitter:title', title);
-        setMetaTag('twitter:description', description);
+        setMetaTag('twitter:title', dynamicSEO.title);
+        setMetaTag('twitter:description', dynamicSEO.description);
         // setMetaTag('twitter:image', ogImage);
         setMetaTag('twitter:site', '@eyepune');
         setMetaTag('twitter:creator', '@eyepune');
@@ -76,7 +114,7 @@ export default function SEOHead({
             script.textContent = JSON.stringify(structuredData);
             document.head.appendChild(script);
         }
-    }, [title, description, keywords, ogImage, canonicalUrl, structuredData, author]);
+    }, [dynamicSEO.title, dynamicSEO.description, keywords, ogImage, canonicalUrl, structuredData, author]);
 
     return null;
 }

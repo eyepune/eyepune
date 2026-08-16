@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +51,7 @@ export default function ContractGenerator({ open, onOpenChange, lead }) {
     
     const { data: templates = [] } = useQuery({
         queryKey: ['templates', 'contract'],
-        queryFn: () => base44.entities.DocumentTemplate.filter({ document_type: 'contract', is_active: true })
+        queryFn: () => supabase.entities.DocumentTemplate.filter({ document_type: 'contract', is_active: true })
     });
 
     const [formData, setFormData] = useState({
@@ -74,7 +74,7 @@ export default function ContractGenerator({ open, onOpenChange, lead }) {
 
     const createContractMutation = useMutation({
         mutationFn: async ({ formData, shouldSendForSignature }) => {
-            const contract = await base44.entities.Contract.create({
+            const contract = await supabase.entities.Contract.create({
                 ...formData,
                 contract_number: `CONT-${Date.now()}`,
                 deliverables: formData.deliverables.split('\n').filter(d => d.trim()),
@@ -82,7 +82,7 @@ export default function ContractGenerator({ open, onOpenChange, lead }) {
             });
             
             if (shouldSendForSignature) {
-                await base44.functions.invoke('sendContractForSignature', { 
+                await supabase.functions.invoke('sendContractForSignature', { 
                     contract_id: contract.id 
                 });
             }
@@ -206,7 +206,7 @@ Contract details:
 
 Include specific, actionable items and clear responsibilities. Be professional and comprehensive.`;
 
-            const result = await base44.integrations.Core.InvokeLLM({ prompt });
+            const result = await supabase.integrations.Core.InvokeLLM({ prompt });
             handleChange('scope_of_work', result);
         } catch (error) {
             alert('Failed to generate scope');
@@ -230,7 +230,7 @@ Category: ${formData.contract_category}
 
 Return only the deliverable items, one per line, without numbering.`;
 
-            const result = await base44.integrations.Core.InvokeLLM({ prompt });
+            const result = await supabase.integrations.Core.InvokeLLM({ prompt });
             handleChange('deliverables', result);
         } catch (error) {
             alert('Failed to generate deliverables');
@@ -250,7 +250,7 @@ Current contract details:
 
 Return as JSON array of objects with 'title' and 'description' fields.`;
 
-            const result = await base44.integrations.Core.InvokeLLM({
+            const result = await supabase.integrations.Core.InvokeLLM({
                 prompt,
                 response_json_schema: {
                     type: "object",
@@ -300,7 +300,7 @@ Provide:
 
 Return as JSON.`;
 
-            const result = await base44.integrations.Core.InvokeLLM({
+            const result = await supabase.integrations.Core.InvokeLLM({
                 prompt,
                 response_json_schema: {
                     type: "object",
@@ -353,7 +353,7 @@ Return as JSON.`;
                                         deliverables: template.template_data.default_deliverables || '',
                                         terms_and_conditions: template.template_data.default_terms || ''
                                     });
-                                    base44.entities.DocumentTemplate.update(val, {
+                                    supabase.entities.DocumentTemplate.update(val, {
                                         usage_count: (template.usage_count || 0) + 1
                                     });
                                 }

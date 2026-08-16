@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ function Admin_Reports() {
     const { data: metrics, isLoading, refetch } = useQuery({
         queryKey: ['dashboard-metrics', period],
         queryFn: async () => {
-            const response = await base44.functions.invoke('generateDashboardMetrics', { period });
+            const response = await supabase.functions.invoke('generateDashboardMetrics', { body: { period } });
             return response.data;
         }
     });

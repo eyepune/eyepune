@@ -1,0 +1,15 @@
+name: Autonomous SEO Optimizer
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  run-seo-optimizer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping SEO Optimizer API
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/seo-optimizer" \
+               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

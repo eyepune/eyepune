@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +21,7 @@ export default function ProjectDiscussionForum({ project, user }) {
     const { data: threads = [] } = useQuery({
         queryKey: ['discussion-threads', project.id],
         queryFn: async () => {
-            const all = await base44.entities.TaskComment.list('-createdDate', 200);
+            const all = await supabase.entities.TaskComment.list('-createdDate', 200);
             // Group by parent threads (comments without parent_comment_id)
             return all.filter(c => c.projectId === project.id && !c.parentCommentId);
         },
@@ -31,7 +31,7 @@ export default function ProjectDiscussionForum({ project, user }) {
         queryKey: ['discussion-replies', selectedThread?.id],
         queryFn: async () => {
             if (!selectedThread) return [];
-            const all = await base44.entities.TaskComment.list('-createdDate', 500);
+            const all = await supabase.entities.TaskComment.list('-createdDate', 500);
             return all.filter(c => c.parentCommentId === selectedThread.id);
         },
         enabled: !!selectedThread,
@@ -39,7 +39,7 @@ export default function ProjectDiscussionForum({ project, user }) {
 
     // Real-time subscription
     useEffect(() => {
-        const unsubscribe = base44.entities.TaskComment.subscribe((event) => {
+        const unsubscribe = supabase.entities.TaskComment.subscribe((event) => {
             queryClient.invalidateQueries(['discussion-threads']);
             queryClient.invalidateQueries(['discussion-replies']);
         });
@@ -47,7 +47,7 @@ export default function ProjectDiscussionForum({ project, user }) {
     }, [queryClient]);
 
     const createThreadMutation = useMutation({
-        mutationFn: (data) => base44.entities.TaskComment.create(data),
+        mutationFn: (data) => supabase.entities.TaskComment.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['discussion-threads']);
             setShowNewThread(false);
@@ -57,7 +57,7 @@ export default function ProjectDiscussionForum({ project, user }) {
     });
 
     const createReplyMutation = useMutation({
-        mutationFn: (data) => base44.entities.TaskComment.create(data),
+        mutationFn: (data) => supabase.entities.TaskComment.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['discussion-replies']);
             setReplyContent('');

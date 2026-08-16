@@ -1,18 +1,18 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { History, CheckCircle2, XCircle, Clock, TrendingUp } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function PaymentHistory({ user }) {
   const { data: invoices = [], isLoading: loadingInv } = useQuery({
     queryKey: ['client-paid-invoices', user.email],
-    queryFn: () => base44.entities.Invoice.filter({ client_email: user.email }, '-created_date', 200),
+    queryFn: () => supabase.entities.Invoice.filter({ client_email: user.email }, '-created_date', 200),
   });
 
   const { data: payments = [], isLoading: loadingPay } = useQuery({
     queryKey: ['client-payments', user.email],
-    queryFn: () => base44.entities.Payment.filter({ customer_email: user.email }, '-created_date', 200),
+    queryFn: () => supabase.entities.Payment.filter({ customer_email: user.email }, '-created_date', 200),
   });
 
   const isLoading = loadingInv || loadingPay;

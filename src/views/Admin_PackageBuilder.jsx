@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ function Admin_PackageBuilder() {
 
     const generateMutation = useMutation({
         mutationFn: async (data) => {
-            const response = await base44.functions.invoke('generatePackageRecommendations', data);
+            const response = await supabase.functions.invoke('generatePackageRecommendations', data);
             return response.data;
         },
         onSuccess: (data) => {
@@ -45,7 +45,7 @@ function Admin_PackageBuilder() {
     const createPackagesMutation = useMutation({
         mutationFn: async (packages) => {
             return Promise.all(
-                packages.map(pkg => base44.entities.Pricing_Plan.create({
+                packages.map(pkg => supabase.entities.Pricing_Plan.create({
                     name: pkg.name,
                     description: pkg.description,
                     price: pkg.price,
@@ -67,7 +67,7 @@ function Admin_PackageBuilder() {
     const createAddonsMutation = useMutation({
         mutationFn: async (addons) => {
             return Promise.all(
-                addons.map(addon => base44.entities.ServiceAddon.create({
+                addons.map(addon => supabase.entities.ServiceAddon.create({
                     name: addon.name,
                     description: addon.description,
                     price: addon.price,

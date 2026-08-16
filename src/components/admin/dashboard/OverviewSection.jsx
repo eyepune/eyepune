@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Users, FolderKanban, Calendar, TrendingUp, MessageSquare, IndianRupee, Clock, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
 import WixSyncWidget from './WixSyncWidget';
@@ -25,11 +25,11 @@ function StatCard({ icon: Icon, label, value, sub, color = 'red' }) {
 }
 
 export default function OverviewSection() {
-  const { data: leads = [] } = useQuery({ queryKey: ['leads'], queryFn: () => base44.entities.Lead.list('-created_date', 2000) });
-  const { data: projects = [] } = useQuery({ queryKey: ['projects'], queryFn: () => base44.entities.ClientProject.list('-created_date', 100) });
-  const { data: bookings = [] } = useQuery({ queryKey: ['bookings'], queryFn: () => base44.entities.Booking.list('-created_date', 20) });
-  const { data: inquiries = [] } = useQuery({ queryKey: ['inquiries'], queryFn: () => base44.entities.Inquiry.list('-created_date', 20) });
-  const { data: payments = [] } = useQuery({ queryKey: ['payments'], queryFn: () => base44.entities.Payment.list('-created_date', 50) });
+  const { data: leads = [] } = useQuery({ queryKey: ['leads'], queryFn: () => supabase.entities.Lead.list('-created_date', 2000) });
+  const { data: projects = [] } = useQuery({ queryKey: ['projects'], queryFn: () => supabase.entities.ClientProject.list('-created_date', 100) });
+  const { data: bookings = [] } = useQuery({ queryKey: ['bookings'], queryFn: () => supabase.entities.Booking.list('-created_date', 20) });
+  const { data: inquiries = [] } = useQuery({ queryKey: ['inquiries'], queryFn: () => supabase.entities.Inquiry.list('-created_date', 20) });
+  const { data: payments = [] } = useQuery({ queryKey: ['payments'], queryFn: () => supabase.entities.Payment.list('-created_date', 50) });
 
   const newLeads = leads.filter(l => l.status === 'new').length;
   const activeProjects = projects.filter(p => p.status === 'in_progress').length;

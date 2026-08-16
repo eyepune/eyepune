@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
@@ -24,7 +24,7 @@ export default function KanbanBoard({ tasks = [] }) {
     const queryClient = useQueryClient();
 
     const updateTaskMutation = useMutation({
-        mutationFn: ({ taskId, status }) => base44.entities.ProjectTask.update(taskId, { status }),
+        mutationFn: ({ taskId, status }) => supabase.entities.ProjectTask.update(taskId, { status }),
         onSuccess: () => {
             queryClient.invalidateQueries(['project-tasks']);
         },

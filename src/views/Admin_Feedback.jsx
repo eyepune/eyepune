@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from "@/components/admin/AdminGuard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,31 +20,31 @@ function Admin_Feedback() {
 
     const { data: user } = useQuery({
         queryKey: ['current-user'],
-        queryFn: () => base44.auth.me(),
+        queryFn: () => supabase.auth.getSession().then(({data}) => data.session?.user),
     });
 
     const { data: allFeedback = [] } = useQuery({
         queryKey: ['all-feedback'],
-        queryFn: () => base44.entities.ClientFeedback.list('-created_date', 200),
+        queryFn: () => supabase.entities.ClientFeedback.list('-created_date', 200),
     });
 
     const { data: projects = [] } = useQuery({
         queryKey: ['all-projects'],
-        queryFn: () => base44.entities.ClientProject.list(),
+        queryFn: () => supabase.entities.ClientProject.list(),
     });
 
     const { data: milestones = [] } = useQuery({
         queryKey: ['all-milestones'],
-        queryFn: () => base44.entities.ClientMilestone.list(),
+        queryFn: () => supabase.entities.ClientMilestone.list(),
     });
 
     const { data: deliverables = [] } = useQuery({
         queryKey: ['all-deliverables'],
-        queryFn: () => base44.entities.DeliverableApproval.list(),
+        queryFn: () => supabase.entities.DeliverableApproval.list(),
     });
 
     const updateFeedbackMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.ClientFeedback.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.ClientFeedback.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries(['all-feedback']);
             setSelectedFeedback(null);

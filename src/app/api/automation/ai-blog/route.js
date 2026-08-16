@@ -128,6 +128,7 @@ async function generateAndPostBlog(audience) {
              "excerpt": "Hooking 2-sentence summary",
              "content": "Full HTML content with <h2> and <p> tags. Must be 1000+ words.",
              "linkedin_post": "A highly engaging, native LinkedIn text post (150-200 words). Use strong hooks and short sentences. MUST aggressively pitch EyE PunE's services (AI Automation, Web Development, Performance Marketing, Pitch Decks, Logos, Brochures, Visiting Cards, and complete Branding materials). MUST end with this exact Call-To-Action: 'Run a Free AI Assessment at eyepune.com/AI-Assessment'.",
+             "image_prompt": "A highly specific, descriptive prompt for an AI image generator (e.g. 'A sleek, hyper-realistic neon-lit server room reflecting in a dark puddle, cinematic lighting, 8k'). This must visually represent the core concept of the blog post.",
              "category": "ai_automation",
              "tags": ["AI", "Enterprise", "Global Scale", "Growth"]
            }
@@ -143,9 +144,9 @@ async function generateAndPostBlog(audience) {
 
     // ── STEP 1: GENERATE CONTENT WITH RETRY & FALLBACK MODELS ──
     if (LLM_API_KEY) {
-        // Model Attempt 1: Kimi K2.6 with thinking (NVIDIA NIM)
+        // Model Attempt 1: Llama 3.1 70B Instruct
         try {
-            console.log('[AI-Blog] Attempting content generation with moonshotai/kimi-k2.6...');
+            console.log('[AI-Blog] Attempting content generation with meta/llama-3.1-70b-instruct...');
             const llmResponse = await fetch(LLM_API_URL, {
                 method: 'POST',
                 headers: { 
@@ -154,13 +155,12 @@ async function generateAndPostBlog(audience) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: 'moonshotai/kimi-k2.6',
+                    model: 'meta/llama-3.1-70b-instruct',
                     messages: [{ role: 'user', content: prompt }],
                     max_tokens: 4096,
                     temperature: 0.8,
                     top_p: 1.0,
-                    stream: false,
-                    chat_template_kwargs: { thinking: true }
+                    stream: false
                 })
             });
 
@@ -168,14 +168,14 @@ async function generateAndPostBlog(audience) {
                 llmData = await llmResponse.json();
                 if (llmData?.choices?.[0]?.message?.content) {
                     success = true;
-                    console.log('[AI-Blog] Successfully generated blog content with Kimi K2.6.');
+                    console.log('[AI-Blog] Successfully generated blog content with Llama 3.1 70B.');
                 }
             } else {
                 const errorText = await llmResponse.text();
                 throw new Error(`Upstream NIM API error (${llmResponse.status}): ${errorText}`);
             }
         } catch (err) {
-            console.warn('[AI-Blog] Kimi K2.6 generation failed. Trying Llama 3.1 fallback...', err.message);
+            console.warn('[AI-Blog] Llama 70B generation failed. Trying Llama 3.1 8B fallback...', err.message);
             lastError = err;
         }
 
@@ -239,8 +239,8 @@ async function generateAndPostBlog(audience) {
     }
 
     // ── STEP 3: IMAGE ASSIGNMENT & DB SAVE ──
-    const imagePrompt = `Hyper-realistic futuristic digital art for a blog header. Theme: ${postData.title}. Aesthetic: Sleek high-tech dark mode with red neon accents`;
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(imagePrompt)}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
+    const generatedPrompt = postData.image_prompt || `Hyper-realistic futuristic digital art for a blog header. Theme: ${postData.title}. Aesthetic: Sleek high-tech dark mode with red neon accents`;
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(generatedPrompt)}?width=1024&height=576&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
 
     const slug = postData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(Math.random() * 1000);
     

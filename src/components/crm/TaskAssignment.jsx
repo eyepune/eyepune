@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -26,13 +26,13 @@ export default function TaskAssignment({ leadId }) {
 
     const { data: tasks = [] } = useQuery({
         queryKey: ['lead-tasks', leadId],
-        queryFn: () => base44.entities.ProjectTask.filter({ project_id: leadId }, '-created_date', 50),
+        queryFn: () => supabase.entities.ProjectTask.filter({ project_id: leadId }, '-created_date', 50),
         enabled: !!leadId,
     });
 
     const { data: users = [] } = useQuery({
         queryKey: ['team-users'],
-        queryFn: () => base44.entities.User.list('', 50),
+        queryFn: () => supabase.entities.User.list('', 50),
     });
 
     const priorityColors = {
@@ -55,7 +55,7 @@ export default function TaskAssignment({ leadId }) {
         setIsSubmitting(true);
 
         try {
-            await base44.entities.ProjectTask.create({
+            await supabase.entities.ProjectTask.create({
                 project_id: leadId,
                 task_name: formData.task_name,
                 description: formData.description,
@@ -77,7 +77,7 @@ export default function TaskAssignment({ leadId }) {
 
     const handleTaskStatusChange = async (taskId, newStatus) => {
         try {
-            await base44.entities.ProjectTask.update(taskId, { status: newStatus });
+            await supabase.entities.ProjectTask.update(taskId, { status: newStatus });
             queryClient.invalidateQueries({ queryKey: ['lead-tasks', leadId] });
         } catch (error) {
             console.error('Error updating task:', error);
@@ -87,7 +87,7 @@ export default function TaskAssignment({ leadId }) {
     const handleDeleteTask = async (taskId) => {
         if (confirm('Delete this task?')) {
             try {
-                await base44.entities.ProjectTask.delete(taskId);
+                await supabase.entities.ProjectTask.delete(taskId);
                 queryClient.invalidateQueries({ queryKey: ['lead-tasks', leadId] });
             } catch (error) {
                 console.error('Error deleting task:', error);

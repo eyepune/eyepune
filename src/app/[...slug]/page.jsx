@@ -1,4 +1,5 @@
 import CatchAllPageClient from '../CatchAllPageClient';
+import { getActiveSEOVariant } from '@/utils/seo-server';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
@@ -141,6 +142,13 @@ export async function generateMetadata({ params, searchParams }) {
     description = `Professional ${identifier.replace(/-/g, ' ')} services by EyE PunE. Our elite Pune-based team delivers high-impact digital solutions to transform your brand.`;
   } else if (!identifier && !META_DEFAULTS[routeKey]) {
     title = `${title} | EyE PunE`;
+  }
+
+  // A/B Testing SEO Variant Override
+  const abVariant = await getActiveSEOVariant(`/${baseRoute}`);
+  if (abVariant) {
+    title = abVariant.title;
+    description = abVariant.description;
   }
 
   return {

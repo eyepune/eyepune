@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,7 +68,7 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
     const { data: progress } = useQuery({
         queryKey: ['onboarding-progress', user?.email],
         queryFn: async () => {
-            const results = await base44.entities.OnboardingProgress.filter({ userEmail: user.email });
+            const results = await supabase.entities.OnboardingProgress.filter({ userEmail: user.email });
             return results[0];
         },
         enabled: !!user
@@ -103,9 +103,9 @@ export default function SetupWizard({ open, onOpenChange, user, project }) {
     const saveProgressMutation = useMutation({
         mutationFn: async (data) => {
             if (progress?.id) {
-                return await base44.entities.OnboardingProgress.update(progress.id, data);
+                return await supabase.entities.OnboardingProgress.update(progress.id, data);
             } else {
-                return await base44.entities.OnboardingProgress.create({
+                return await supabase.entities.OnboardingProgress.create({
                     userEmail: user.email,
                     projectId: project?.id,
                     ...data

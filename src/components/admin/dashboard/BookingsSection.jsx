@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Calendar, Video, CheckCircle2, XCircle } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -16,11 +16,11 @@ export default function BookingsSection() {
 
   const { data: bookings = [], isLoading } = useQuery({
     queryKey: ['bookings-admin'],
-    queryFn: () => base44.entities.Booking.list('-created_date', 100),
+    queryFn: () => supabase.entities.Booking.list('-created_date', 100),
   });
 
   const updateBooking = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.Booking.update(id, data),
+    mutationFn: ({ id, data }) => supabase.entities.Booking.update(id, data),
     onSuccess: () => qc.invalidateQueries(['bookings-admin']),
   });
 

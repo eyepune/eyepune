@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Download, Sparkles, Loader2 } from 'lucide-react';
@@ -12,7 +12,7 @@ export default function ReportsHistory({ project }) {
     const generateOnDemandReport = async () => {
         setGeneratingReport(true);
         try {
-            const response = await base44.functions.invoke('clientReportGenerator', {
+            const response = await supabase.functions.invoke('clientReportGenerator', {
                 action: 'generateReport',
                 project_id: project.id,
                 custom_sections: ['progress', 'achievements', 'milestones', 'risks', 'time_logs']

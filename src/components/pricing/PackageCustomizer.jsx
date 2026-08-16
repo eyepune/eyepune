@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,7 @@ export default function PackageCustomizer({ open, onOpenChange, basePackage, onC
 
     const { data: addons = [] } = useQuery({
         queryKey: ['service-addons'],
-        queryFn: () => base44.entities.ServiceAddon.filter({ is_active: true }),
+        queryFn: () => supabase.entities.ServiceAddon.filter({ is_active: true }),
         enabled: open
     });
 

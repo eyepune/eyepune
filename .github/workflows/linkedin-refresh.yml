@@ -1,0 +1,20 @@
+name: LinkedIn Token Automation
+
+on:
+  schedule:
+    - cron: '0 0 1,15 * *' # Runs on the 1st and 15th of every month
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  run-linkedin-automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh Access Token
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/linkedin/refresh" \
+               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+
+      - name: Check Refresh Token Expiry
+        run: |
+          curl -X GET "https://www.eyepune.com/api/automation/linkedin/check-expiry" \
+               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

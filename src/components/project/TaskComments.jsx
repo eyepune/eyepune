@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
@@ -15,7 +15,7 @@ export default function TaskComments({ task, onClose }) {
     const { data: comments = [] } = useQuery({
         queryKey: ['task-comments', task.id],
         queryFn: async () => {
-            const allComments = await base44.entities.TaskComment.list();
+            const allComments = await supabase.entities.TaskComment.list();
             return allComments
                 .filter(c => c.task_id === task.id)
                 .sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
@@ -26,14 +26,14 @@ export default function TaskComments({ task, onClose }) {
     const { data: teamMembers = [] } = useQuery({
         queryKey: ['team-members'],
         queryFn: async () => {
-            const users = await base44.entities.User.list();
+            const users = await supabase.entities.User.list();
             return users.filter(u => u.role === 'admin');
         },
     });
 
     const createCommentMutation = useMutation({
         mutationFn: async (data) => {
-            return await base44.entities.TaskComment.create(data);
+            return await supabase.entities.TaskComment.create(data);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['task-comments'] });

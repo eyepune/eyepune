@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -11,7 +11,7 @@ export default function WixSyncWidget() {
     const handleSync = async () => {
         setIsLoading(true);
         try {
-            const response = await base44.functions.invoke('syncWixContacts', {});
+            const response = await supabase.functions.invoke('syncWixContacts', { body: {} });
             setSyncResult(response.data);
             setLastSync(new Date());
         } catch (error) {

@@ -12,7 +12,6 @@ const TestimonialDisplay = dynamic(() => import("@/components/testimonials/Testi
 const SuccessTicker = dynamic(() => import("@/components/home/SuccessTicker"), { ssr: true });
 const ServicesSection = dynamic(() => import("@/components/home/ServicesSection"), { ssr: true });
 const WhyChooseUs = dynamic(() => import("@/components/home/WhyChooseUs"), { ssr: true });
-const LexProSection = dynamic(() => import("@/components/home/LexProSection"), { ssr: false });
 const CTASection = dynamic(() => import("@/components/home/CTASection"), { ssr: false });
 const AIO_FAQ = dynamic(() => import("@/components/home/AIO_FAQ"), { ssr: false });
 const Scroll3DReveal = dynamic(() => import("@/components/shared/Scroll3DReveal"), { ssr: true });
@@ -39,7 +38,7 @@ const HOME_FAQS = [
     }
 ];
 
-export default function Home() {
+export default function Home({ company }) {
     return (
         <>
             <SEOHead
@@ -56,7 +55,7 @@ export default function Home() {
             <div className="bg-transparent text-white">
 
                 {/* 1. Hero — animated eye canvas + typewriter */}
-                <HeroSection />
+                <HeroSection company={company} />
 
                 {/* 2. Success Ticker — Live ROI & Social Proof */}
                 <Scroll3DReveal direction="up" rotation={false} delay={0.2}>
@@ -71,11 +70,6 @@ export default function Home() {
                 {/* 4. Why EyE PunE */}
                 <Scroll3DReveal direction="scale" rotation={true}>
                     <WhyChooseUs />
-                </Scroll3DReveal>
-
-                {/* 5. Lex Pro product spotlight */}
-                <Scroll3DReveal direction="right" rotation={true}>
-                    <LexProSection />
                 </Scroll3DReveal>
 
                 {/* 6. Testimonials */}

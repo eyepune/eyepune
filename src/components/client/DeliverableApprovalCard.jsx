@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,14 +15,14 @@ export default function DeliverableApprovalCard({ deliverable, onApprove, onRequ
 
     const updateApprovalMutation = useMutation({
         mutationFn: async ({ status, feedbackText }) => {
-            await base44.entities.DeliverableApproval.update(deliverable.id, {
+            await supabase.entities.DeliverableApproval.update(deliverable.id, {
                 status,
                 feedbackText: feedbackText,
                 reviewedDate: new Date().toISOString()
             });
             
             // Trigger notification to team
-            await base44.functions.invoke('sendClientCommunication', {
+            await supabase.functions.invoke('sendClientCommunication', {
                 event_type: 'deliverable_reviewed',
                 project_id: deliverable.projectId,
                 deliverable_name: deliverable.deliverableName,

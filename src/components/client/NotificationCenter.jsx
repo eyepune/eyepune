@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -17,7 +17,7 @@ export default function NotificationCenter({ user }) {
     const { data: notifications = [] } = useQuery({
         queryKey: ['client-notifications', user?.email],
         queryFn: async () => {
-            const all = await base44.entities.ClientNotification.list('-createdAt', 50);
+            const all = await supabase.entities.ClientNotification.list('-createdAt', 50);
             return all.filter(n => n.userEmail === user.email);
         },
         enabled: !!user?.email,
@@ -28,7 +28,7 @@ export default function NotificationCenter({ user }) {
     useEffect(() => {
         if (!user?.email) return;
 
-        const unsubscribe = base44.entities.ClientNotification.subscribe((event) => {
+        const unsubscribe = supabase.entities.ClientNotification.subscribe((event) => {
             if (event.type === 'create' && event.data?.userEmail === user.email) {
                 queryClient.invalidateQueries({ queryKey: ['client-notifications'] });
             }
@@ -38,7 +38,7 @@ export default function NotificationCenter({ user }) {
     }, [user?.email, queryClient]);
 
     const markAsReadMutation = useMutation({
-        mutationFn: (id) => base44.entities.ClientNotification.update(id, { isRead: true }),
+        mutationFn: (id) => supabase.entities.ClientNotification.update(id, { isRead: true }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['client-notifications'] });
         }
@@ -48,7 +48,7 @@ export default function NotificationCenter({ user }) {
         mutationFn: async () => {
             const unread = notifications.filter(n => !n.isRead);
             await Promise.all(unread.map(n => 
-                base44.entities.ClientNotification.update(n.id, { isRead: true })
+                supabase.entities.ClientNotification.update(n.id, { isRead: true })
             ));
         },
         onSuccess: () => {
@@ -57,7 +57,7 @@ export default function NotificationCenter({ user }) {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: (id) => base44.entities.ClientNotification.delete(id),
+        mutationFn: (id) => supabase.entities.ClientNotification.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['client-notifications'] });
         }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from "@/components/admin/AdminGuard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,11 +27,11 @@ export default function AdminTemplates() {
 
     const { data: templates = [] } = useQuery({
         queryKey: ['project-templates'],
-        queryFn: () => base44.entities.ProjectTemplate.list('-created_date'),
+        queryFn: () => supabase.entities.ProjectTemplate.list('-created_date'),
     });
 
     const createMutation = useMutation({
-        mutationFn: (data) => base44.entities.ProjectTemplate.create(data),
+        mutationFn: (data) => supabase.entities.ProjectTemplate.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['project-templates']);
             resetForm();
@@ -40,7 +40,7 @@ export default function AdminTemplates() {
     });
 
     const updateMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.ProjectTemplate.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.ProjectTemplate.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries(['project-templates']);
             resetForm();
@@ -49,7 +49,7 @@ export default function AdminTemplates() {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: (id) => base44.entities.ProjectTemplate.delete(id),
+        mutationFn: (id) => supabase.entities.ProjectTemplate.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries(['project-templates']);
         },

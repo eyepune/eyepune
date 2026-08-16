@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,7 +22,7 @@ export default function CommunicationHistory({ leadId }) {
 
     const { data: activities = [] } = useQuery({
         queryKey: ['lead-activities', leadId],
-        queryFn: () => base44.entities.Activity.filter({ lead_id: leadId }, '-created_date', 50),
+        queryFn: () => supabase.entities.Activity.filter({ lead_id: leadId }, '-created_date', 50),
         enabled: !!leadId,
     });
 
@@ -49,12 +49,12 @@ export default function CommunicationHistory({ leadId }) {
         setIsSubmitting(true);
 
         try {
-            await base44.entities.Activity.create({
+            await supabase.entities.Activity.create({
                 lead_id: leadId,
                 activity_type: formData.activity_type,
                 title: formData.title,
                 description: formData.description,
-                performed_by: (await base44.auth.me()).email,
+                performed_by: (await supabase.auth.getSession().then(({data}) => data.session?.user)).email,
             });
 
             queryClient.invalidateQueries({ queryKey: ['lead-activities', leadId] });

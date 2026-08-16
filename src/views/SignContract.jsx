@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ export default function SignContract() {
 
     const { data: contract, isLoading } = useQuery({
         queryKey: ['contract', contractId],
-        queryFn: () => base44.entities.Contract.filter({ id: contractId }),
+        queryFn: () => supabase.entities.Contract.filter({ id: contractId }),
         enabled: !!contractId,
         select: (data) => data[0]
     });
@@ -44,7 +44,7 @@ export default function SignContract() {
             const canvas = canvasRef.current;
             const signatureImage = canvas.toDataURL();
 
-            await base44.entities.Contract.update(contractId, {
+            await supabase.entities.Contract.update(contractId, {
                 status: 'signed',
                 signed_date: new Date().toISOString(),
                 signature_data: {

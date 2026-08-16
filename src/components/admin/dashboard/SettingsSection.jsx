@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Users, Package, IndianRupee, PuzzleIcon, UserPlus } from 'lucide-react';
 
 function Tab({ label, active, onClick }) {
@@ -17,7 +17,7 @@ function Tab({ label, active, onClick }) {
 function UsersTab() {
   const { data: users = [] } = useQuery({
     queryKey: ['users-settings'],
-    queryFn: () => base44.entities.User.list(),
+    queryFn: () => supabase.entities.User.list(),
   });
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('user');
@@ -28,7 +28,7 @@ function UsersTab() {
     if (!inviteEmail) return;
     setInviting(true);
     try {
-      await base44.users.inviteUser(inviteEmail, inviteRole);
+      await supabase.users.inviteUser(inviteEmail, inviteRole);
       setInviteMsg(`Invite sent to ${inviteEmail}`);
       setInviteEmail('');
     } catch (e) {
@@ -96,11 +96,11 @@ function UsersTab() {
 function PackagesTab() {
   const { data: packages = [] } = useQuery({
     queryKey: ['packages-settings'],
-    queryFn: () => base44.entities.ServicePackage.list(),
+    queryFn: () => supabase.entities.ServicePackage.list(),
   });
   const { data: plans = [] } = useQuery({
     queryKey: ['plans-settings'],
-    queryFn: () => base44.entities.Pricing_Plan.list(),
+    queryFn: () => supabase.entities.Pricing_Plan.list(),
   });
 
   return (

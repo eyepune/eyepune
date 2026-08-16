@@ -11,7 +11,7 @@ const timeline = [
     { year: 'Nov 2022', label: 'Day One', event: 'EyE PunE was born in Pune — founded with a bold vision to make world-class digital growth accessible to every Indian business.' },
     { year: '2023', label: 'First Wins', event: 'Onboarded our first 20+ clients, built a reputation for results-driven social media, branding, and web development across Pune.' },
     { year: 'Mid 2023', label: 'Going Deeper', event: 'Launched WhatsApp automation, CRM integration, and lead nurturing systems — helping clients convert more leads with less effort.' },
-    { year: '2024', label: 'AI Era', event: 'Introduced AI-powered tools including automated campaigns, smart analytics, and launched Lex Pro — India\'s AI contract management platform.' },
+    { year: '2024', label: 'AI Era', event: 'Introduced AI-powered tools including automated campaigns and smart analytics.' },
     { year: '2025', label: 'Going Global', event: 'Crossed 100+ happy clients. Expanded operations to serve international brands across UAE, UK, and USA with dedicated growth engines.' },
     { year: '2026', label: 'AI Intelligence Hub', event: 'Today, EyE PunE operates as a multi-model AI orchestration engine — leveraging OpenAI, Anthropic, Google, and Meta to scale global businesses predictably.' },
 ];

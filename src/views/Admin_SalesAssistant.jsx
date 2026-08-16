@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -23,25 +23,25 @@ export default function Admin_SalesAssistant() {
 
     const { data: conversations = [] } = useQuery({
         queryKey: ['sales-conversations'],
-        queryFn: () => base44.agents.listConversations({ agent_name: 'salesAssistant' }),
+        queryFn: () => supabase.agents.listConversations({ agent_name: 'salesAssistant' }),
         refetchInterval: 5000
     });
 
     const { data: leads = [] } = useQuery({
         queryKey: ['leads-for-assistant'],
-        queryFn: () => base44.entities.Lead.filter({ source: 'ai_assessment' }, '-created_date', 100)
+        queryFn: () => supabase.entities.Lead.filter({ source: 'ai_assessment' }, '-created_date', 100)
     });
 
     const { data: activeConversation, isLoading: loadingConversation } = useQuery({
         queryKey: ['conversation-detail', selectedConversation?.id],
-        queryFn: () => base44.agents.getConversation(selectedConversation.id),
+        queryFn: () => supabase.agents.getConversation(selectedConversation.id),
         enabled: !!selectedConversation,
         refetchInterval: 2000
     });
 
     useEffect(() => {
         if (activeConversation && selectedConversation) {
-            const unsubscribe = base44.agents.subscribeToConversation(selectedConversation.id, (data) => {
+            const unsubscribe = supabase.agents.subscribeToConversation(selectedConversation.id, (data) => {
                 queryClient.setQueryData(['conversation-detail', selectedConversation.id], data);
             });
             return () => unsubscribe();
@@ -55,7 +55,7 @@ export default function Admin_SalesAssistant() {
     const createConversationMutation = useMutation({
         mutationFn: async (leadId) => {
             const lead = leads.find(l => l.id === leadId);
-            return await base44.agents.createConversation({
+            return await supabase.agents.createConversation({
                 agent_name: 'salesAssistant',
                 metadata: {
                     name: `Sales - ${lead.full_name}`,
@@ -74,7 +74,7 @@ export default function Admin_SalesAssistant() {
 
     const sendMessageMutation = useMutation({
         mutationFn: async ({ conversation, message }) => {
-            return await base44.agents.addMessage(conversation, {
+            return await supabase.agents.addMessage(conversation, {
                 role: 'user',
                 content: message
             });

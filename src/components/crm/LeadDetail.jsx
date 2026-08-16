@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -29,7 +29,7 @@ export default function LeadDetail({ lead, onBack }) {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            await base44.entities.Lead.update(lead.id, formData);
+            await supabase.entities.Lead.update(lead.id, formData);
             queryClient.invalidateQueries({ queryKey: ['leads'] });
             setIsEditing(false);
         } catch (error) {

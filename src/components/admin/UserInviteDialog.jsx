@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ export default function UserInviteDialog({ open, onOpenChange }) {
 
     const inviteMutation = useMutation({
         mutationFn: async ({ email, role }) => {
-            await base44.users.inviteUser(email, role);
+            await supabase.users.inviteUser(email, role);
         },
         onSuccess: () => {
             toast.success('User invitation sent successfully');

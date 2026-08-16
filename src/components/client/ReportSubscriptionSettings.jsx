@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,7 @@ export default function ReportSubscriptionSettings({ project, user }) {
     const { data: subscription } = useQuery({
         queryKey: ['report-subscription', project.id],
         queryFn: async () => {
-            const subs = await base44.entities.ClientReportSubscription.list();
+            const subs = await supabase.entities.ClientReportSubscription.list();
             return subs.find(s => s.project_id === project.id && s.client_email === user.email);
         },
     });
@@ -22,9 +22,9 @@ export default function ReportSubscriptionSettings({ project, user }) {
     const createOrUpdateMutation = useMutation({
         mutationFn: async (data) => {
             if (subscription) {
-                return await base44.entities.ClientReportSubscription.update(subscription.id, data);
+                return await supabase.entities.ClientReportSubscription.update(subscription.id, data);
             } else {
-                return await base44.entities.ClientReportSubscription.create({
+                return await supabase.entities.ClientReportSubscription.create({
                     project_id: project.id,
                     client_email: user.email,
                     ...data

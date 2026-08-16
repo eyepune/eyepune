@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 
 export function useCurrency() {
     const [currency, setCurrency] = useState({
@@ -14,7 +14,7 @@ export function useCurrency() {
     useEffect(() => {
         const fetchCurrency = async () => {
             try {
-                const response = await base44.functions.invoke('getUserCountry');
+                const response = await supabase.functions.invoke('getUserCountry');
                 setCurrency({
                     code: response.data.currency,
                     symbol: response.data.currencySymbol,

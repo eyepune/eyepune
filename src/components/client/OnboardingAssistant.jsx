@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,7 +20,7 @@ export default function OnboardingAssistant({ user, project, onComplete, forceOp
     const { data: hasSeenOnboarding } = useQuery({
         queryKey: ['onboarding-status', user?.email],
         queryFn: async () => {
-            const prefs = await base44.entities.DashboardPreference.list();
+            const prefs = await supabase.entities.DashboardPreference.list();
             const userPref = prefs.find(p => p.user_email === user.email);
             return !!userPref; // If preferences exist, they've been onboarded
         },
@@ -40,7 +40,7 @@ export default function OnboardingAssistant({ user, project, onComplete, forceOp
 
     const initializeConversation = async () => {
         try {
-            const conv = await base44.agents.createConversation({
+            const conv = await supabase.agents.createConversation({
                 agent_name: 'clientOnboardingAssistant',
                 metadata: {
                     name: 'Onboarding Session',
@@ -56,7 +56,7 @@ export default function OnboardingAssistant({ user, project, onComplete, forceOp
                 ? `Hello! I'm a new client for the project: ${project.project_name} (${project.project_type}). Please help me get started with onboarding.`
                 : 'Hello! I just joined as a new client.';
             
-            await base44.agents.addMessage(conv, {
+            await supabase.agents.addMessage(conv, {
                 role: 'user',
                 content: greeting
             });
@@ -68,7 +68,7 @@ export default function OnboardingAssistant({ user, project, onComplete, forceOp
     useEffect(() => {
         if (!conversation) return;
 
-        const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
+        const unsubscribe = supabase.agents.subscribeToConversation(conversation.id, (data) => {
             setMessages(data.messages);
             setIsStreaming(data.messages[data.messages.length - 1]?.role === 'assistant' && 
                           data.messages[data.messages.length - 1]?.streaming);
@@ -87,7 +87,7 @@ export default function OnboardingAssistant({ user, project, onComplete, forceOp
         const userMessage = message;
         setMessage('');
         
-        await base44.agents.addMessage(conversation, {
+        await supabase.agents.addMessage(conversation, {
             role: 'user',
             content: userMessage
         });

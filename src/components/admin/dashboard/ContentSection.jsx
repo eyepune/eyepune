@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { Eye, Edit3, Trash2 } from 'lucide-react';
 
@@ -16,21 +16,21 @@ export default function ContentSection() {
 
   const { data: posts = [], isLoading } = useQuery({
     queryKey: ['blog-admin'],
-    queryFn: () => base44.entities.BlogPost.list('-created_date', 100),
+    queryFn: () => supabase.entities.BlogPost.list('-created_date', 100),
   });
 
   const { data: cmsPages = [] } = useQuery({
     queryKey: ['cms-admin'],
-    queryFn: () => base44.entities.CMS_Page.list('-created_date', 50),
+    queryFn: () => supabase.entities.CMS_Page.list('-created_date', 50),
   });
 
   const deletePost = useMutation({
-    mutationFn: (id) => base44.entities.BlogPost.delete(id),
+    mutationFn: (id) => supabase.entities.BlogPost.delete(id),
     onSuccess: () => qc.invalidateQueries(['blog-admin']),
   });
 
   const updatePost = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.BlogPost.update(id, data),
+    mutationFn: ({ id, data }) => supabase.entities.BlogPost.update(id, data),
     onSuccess: () => qc.invalidateQueries(['blog-admin']),
   });
 

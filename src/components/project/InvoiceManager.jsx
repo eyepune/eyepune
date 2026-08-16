@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,7 @@ export default function InvoiceManager({ project }) {
     const { data: invoices = [], isLoading } = useQuery({
         queryKey: ['invoices', project.id],
         queryFn: async () => {
-            const allInvoices = await base44.entities.Invoice.list();
+            const allInvoices = await supabase.entities.Invoice.list();
             return allInvoices.filter(inv => inv.project_id === project.id);
         },
     });
@@ -23,7 +23,7 @@ export default function InvoiceManager({ project }) {
     const { data: timeLogs = [] } = useQuery({
         queryKey: ['time-logs', project.id],
         queryFn: async () => {
-            const allLogs = await base44.entities.TimeLog.list();
+            const allLogs = await supabase.entities.TimeLog.list();
             return allLogs.filter(log => log.project_id === project.id && log.billable);
         },
     });
@@ -31,7 +31,7 @@ export default function InvoiceManager({ project }) {
     const generateInvoiceMutation = useMutation({
         mutationFn: async () => {
             setGeneratingInvoice(true);
-            const response = await base44.functions.invoke('invoiceManager', {
+            const response = await supabase.functions.invoke('invoiceManager', {
                 action: 'generateInvoice',
                 project_id: project.id
             });
@@ -46,7 +46,7 @@ export default function InvoiceManager({ project }) {
 
     const sendInvoiceMutation = useMutation({
         mutationFn: async (invoiceId) => {
-            const response = await base44.functions.invoke('invoiceManager', {
+            const response = await supabase.functions.invoke('invoiceManager', {
                 action: 'sendInvoice',
                 invoice_id: invoiceId
             });

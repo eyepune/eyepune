@@ -11,6 +11,7 @@ export default function ExitIntentPopup() {
     const [dismissed, setDismissed] = useState(false);
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [countryCode, setCountryCode] = useState('+91');
     const [submitted, setSubmitted] = useState(false);
     const pathname = usePathname() || '';
 
@@ -65,7 +66,7 @@ export default function ExitIntentPopup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!email) return;
+        if (!email || !phone) return;
         
         try {
             // Still log the lead quietly in the background
@@ -75,7 +76,7 @@ export default function ExitIntentPopup() {
                 body: JSON.stringify({
                     name: 'Exit Intent Lead',
                     email: email,
-                    phone: phone,
+                    phone: `${countryCode}${phone}`,
                     company: '',
                     service_interest: 'custom',
                     message: 'Requested free audit via exit popup',
@@ -155,15 +156,29 @@ export default function ExitIntentPopup() {
                                         required
                                         className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-red-500/40 transition-colors"
                                     />
-                                    <input
-                                        type="tel"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        placeholder="Enter your phone number"
-                                        aria-label="Phone Number"
-                                        required
-                                        className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-red-500/40 transition-colors"
-                                    />
+                                    <div className="flex gap-2">
+                                        <select
+                                            value={countryCode}
+                                            onChange={(e) => setCountryCode(e.target.value)}
+                                            className="bg-white/[0.05] border border-white/[0.08] rounded-xl px-3 py-3 text-white text-sm focus:outline-none focus:border-red-500/40 transition-colors cursor-pointer"
+                                            aria-label="Country Code"
+                                        >
+                                            <option value="+91" className="bg-[#0a0a0a] text-white">🇮🇳 +91</option>
+                                            <option value="+1" className="bg-[#0a0a0a] text-white">🇺🇸 +1</option>
+                                            <option value="+44" className="bg-[#0a0a0a] text-white">🇬🇧 +44</option>
+                                            <option value="+61" className="bg-[#0a0a0a] text-white">🇦🇺 +61</option>
+                                            <option value="+971" className="bg-[#0a0a0a] text-white">🇦🇪 +971</option>
+                                        </select>
+                                        <input
+                                            type="tel"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            placeholder="Enter your phone number"
+                                            aria-label="Phone Number"
+                                            required
+                                            className="flex-1 w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-red-500/40 transition-colors"
+                                        />
+                                    </div>
                                     <Button type="submit" className="w-full bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl py-5 font-bold shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]">
                                         {ctaText} <ArrowRight className="w-4 h-4 ml-1" />
                                     </Button>

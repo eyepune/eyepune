@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,7 +14,7 @@ export default function AIAssistant({ open, onClose, action, context, title, onU
     const generateResponse = async () => {
         setIsLoading(true);
         try {
-            const response = await base44.functions.invoke('adminAIAssistant', {
+            const response = await supabase.functions.invoke('adminAIAssistant', {
                 action,
                 context
             });

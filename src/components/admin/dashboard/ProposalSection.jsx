@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Plus, Send, FileText, CheckCircle2, Clock, X, ExternalLink, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
@@ -36,16 +36,16 @@ export default function ProposalSection({ defaultLead = null }) {
 
   const { data: proposals = [] } = useQuery({
     queryKey: ['proposals'],
-    queryFn: () => base44.entities.Proposal.list('-created_date', 200),
+    queryFn: () => supabase.entities.Proposal.list('-created_date', 200),
   });
 
   const { data: leads = [] } = useQuery({
     queryKey: ['leads-proposal'],
-    queryFn: () => base44.entities.Lead.list('-created_date', 500),
+    queryFn: () => supabase.entities.Lead.list('-created_date', 500),
   });
 
   const createProposal = useMutation({
-    mutationFn: (data) => base44.entities.Proposal.create(data),
+    mutationFn: (data) => supabase.entities.Proposal.create(data),
     onSuccess: () => {
       qc.invalidateQueries(['proposals']);
       setShowForm(false);
@@ -55,7 +55,7 @@ export default function ProposalSection({ defaultLead = null }) {
   });
 
   const deleteProposal = useMutation({
-    mutationFn: (id) => base44.entities.Proposal.delete(id),
+    mutationFn: (id) => supabase.entities.Proposal.delete(id),
     onSuccess: () => { qc.invalidateQueries(['proposals']); toast.success('Deleted'); },
   });
 
@@ -87,7 +87,7 @@ export default function ProposalSection({ defaultLead = null }) {
   const handleSend = async (proposal) => {
     setSending(proposal.id);
     try {
-      const res = await base44.functions.invoke('sendProposalToClient', { proposal_id: proposal.id });
+      const res = await supabase.functions.invoke('sendProposalToClient', { body: { proposal_id: proposal.id } });
       qc.invalidateQueries(['proposals']);
       toast.success('Proposal sent via email!');
       if (res.data?.wa_link) {

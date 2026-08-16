@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from "@/components/admin/AdminGuard";
 import { motion } from 'framer-motion';
 import { 
@@ -35,29 +35,29 @@ function Admin_ProjectManagement() {
 
     const { data: projects = [] } = useQuery({
         queryKey: ['admin-projects'],
-        queryFn: () => base44.entities.ClientProject.list('-created_date', 100),
+        queryFn: () => supabase.entities.ClientProject.list('-created_date', 100),
     });
 
     const { data: tasks = [] } = useQuery({
         queryKey: ['project-tasks'],
-        queryFn: () => base44.entities.ProjectTask.list('-created_date', 500),
+        queryFn: () => supabase.entities.ProjectTask.list('-created_date', 500),
     });
 
     const { data: timeLogs = [] } = useQuery({
         queryKey: ['time-logs'],
-        queryFn: () => base44.entities.TimeLog.list('-date', 500),
+        queryFn: () => supabase.entities.TimeLog.list('-date', 500),
     });
 
     const { data: teamMembers = [] } = useQuery({
         queryKey: ['team-members'],
         queryFn: async () => {
-            const users = await base44.entities.User.list();
+            const users = await supabase.entities.User.list();
             return users.filter(u => u.role === 'admin');
         },
     });
 
     const createTaskMutation = useMutation({
-        mutationFn: (data) => base44.entities.ProjectTask.create(data),
+        mutationFn: (data) => supabase.entities.ProjectTask.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['project-tasks'] });
             setShowTaskDialog(false);
@@ -68,7 +68,7 @@ function Admin_ProjectManagement() {
     });
 
     const updateTaskMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.ProjectTask.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.ProjectTask.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['project-tasks'] });
             setShowTaskDialog(false);
@@ -79,7 +79,7 @@ function Admin_ProjectManagement() {
     });
 
     const deleteTaskMutation = useMutation({
-        mutationFn: (id) => base44.entities.ProjectTask.delete(id),
+        mutationFn: (id) => supabase.entities.ProjectTask.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['project-tasks'] });
             toast.success('Task deleted successfully');
@@ -88,7 +88,7 @@ function Admin_ProjectManagement() {
     });
 
     const createTimeLogMutation = useMutation({
-        mutationFn: (data) => base44.entities.TimeLog.create(data),
+        mutationFn: (data) => supabase.entities.TimeLog.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['time-logs'] });
             setShowTimeLogDialog(false);

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from "@/components/admin/AdminGuard";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { motion } from 'framer-motion';
@@ -11,22 +11,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 function Admin_Analytics() {
     const { data: leads = [] } = useQuery({
         queryKey: ['leads'],
-        queryFn: () => base44.entities.Lead.list('-created_date', 1000),
+        queryFn: () => supabase.entities.Lead.list('-created_date', 1000),
     });
 
     const { data: payments = [] } = useQuery({
         queryKey: ['payments'],
-        queryFn: () => base44.entities.Payment.list('-created_date', 1000),
+        queryFn: () => supabase.entities.Payment.list('-created_date', 1000),
     });
 
     const { data: assessments = [] } = useQuery({
         queryKey: ['assessments'],
-        queryFn: () => base44.entities.AI_Assessment.list('-created_date', 1000),
+        queryFn: () => supabase.entities.AI_Assessment.list('-created_date', 1000),
     });
 
     const { data: bookings = [] } = useQuery({
         queryKey: ['bookings'],
-        queryFn: () => base44.entities.Booking.list('-created_date', 1000),
+        queryFn: () => supabase.entities.Booking.list('-created_date', 1000),
     });
 
     const leadsBySource = useMemo(() => {

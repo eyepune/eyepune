@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,7 @@ export default function ProposalGenerator({ open, onOpenChange, lead }) {
     const createProposalMutation = useMutation({
         mutationFn: async (data) => {
             const total = data.pricing_items.reduce((sum, item) => sum + Number(item.amount), 0);
-            const proposal = await base44.entities.Proposal.create({
+            const proposal = await supabase.entities.Proposal.create({
                 ...data,
                 proposal_number: `PROP-${Date.now()}`,
                 pricing: {

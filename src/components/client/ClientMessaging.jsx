@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,7 +22,7 @@ export default function ClientMessaging({ project, user }) {
     const { data: messages = [], dataUpdatedAt } = useQuery({
         queryKey: ['client-messages', project.id],
         queryFn: async () => {
-            const allMessages = await base44.entities.ClientMessage.list('-created_date', 100);
+            const allMessages = await supabase.entities.ClientMessage.list('-created_date', 100);
             return allMessages
                 .filter(m => m.project_id === project.id)
                 .sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
@@ -33,7 +33,7 @@ export default function ClientMessaging({ project, user }) {
     useEffect(() => {
         if (!project?.id) return;
 
-        const unsubscribe = base44.entities.ClientMessage.subscribe((event) => {
+        const unsubscribe = supabase.entities.ClientMessage.subscribe((event) => {
             if (event.type === 'create' && event.data?.project_id === project.id) {
                 // Show notification for messages from team
                 if (event.data.sender_email !== user.email) {
@@ -63,12 +63,12 @@ export default function ClientMessaging({ project, user }) {
             
             if (attachmentFile) {
                 setIsUploading(true);
-                const uploadResult = await base44.integrations.Core.UploadFile({ file: attachmentFile });
+                const uploadResult = await supabase.storage.from('uploads').upload( file: attachmentFile );
                 attachmentUrl = uploadResult.file_url;
                 setIsUploading(false);
             }
             
-            return await base44.entities.ClientMessage.create({
+            return await supabase.entities.ClientMessage.create({
                 ...data,
                 attachment_url: attachmentUrl
             });

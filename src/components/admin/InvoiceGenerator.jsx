@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,7 +59,7 @@ export default function InvoiceGenerator({ open, onClose, project }) {
         setIsGenerating(true);
         try {
             // Create invoice in database
-            await base44.entities.Invoice.create({
+            await supabase.entities.Invoice.create({
                 project_id: project?.id,
                 invoice_number: formData.invoice_number,
                 client_email: formData.client_email,

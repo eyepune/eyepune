@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import ReactMarkdown from 'react-markdown';
 import { useSearchParams } from 'next/navigation';
@@ -13,7 +13,7 @@ export default function CMSPage() {
         queryKey: ['cms-page', slug],
         queryFn: async () => {
             console.log('[CMSPage] Fetching slug:', slug);
-            const pages = await base44.entities.CMS_Page.filter({ slug });
+            const pages = await supabase.entities.CMS_Page.filter({ slug });
             console.log('[CMSPage] Results:', pages);
             return pages.length > 0 ? pages[0] : null;
         },

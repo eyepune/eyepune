@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Activity, MessageSquare, FileText, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -9,7 +9,7 @@ export default function ActivityWidget({ project }) {
     const { data: messages = [] } = useQuery({
         queryKey: ['client-messages', project?.id],
         queryFn: async () => {
-            const all = await base44.entities.ClientMessage.list('-createdAt', 10);
+            const all = await supabase.entities.ClientMessage.list('-createdAt', 10);
             return all.filter(m => m.projectId === project.id).slice(0, 3);
         },
         enabled: !!project?.id,
@@ -18,7 +18,7 @@ export default function ActivityWidget({ project }) {
     const { data: files = [] } = useQuery({
         queryKey: ['recent-files', project?.id],
         queryFn: async () => {
-            const all = await base44.entities.ClientFile.list('-createdAt', 10);
+            const all = await supabase.entities.ClientFile.list('-createdAt', 10);
             return all.filter(f => f.projectId === project.id).slice(0, 2);
         },
         enabled: !!project?.id,

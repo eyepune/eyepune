@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useAuth } from './AuthContext';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function NavigationTracker() {
     const pathname = usePathname();
@@ -25,7 +25,7 @@ export default function NavigationTracker() {
             activityData.user_email = user.email;
         }
 
-        base44.entities.UserActivity.create(activityData).catch(() => {});
+        supabase.entities.UserActivity.create(activityData).catch(() => {});
     }, [pathname, searchParams, user]);
 
     return null;

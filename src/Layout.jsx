@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Menu, X, LayoutDashboard, LogOut, LogIn, ChevronDown, Bot, 
     Home as HomeIcon, Briefcase, Tag, BookOpen, Users, Mail, Sparkles, Calendar,
-    Instagram, Linkedin, MessageCircle, Target, Phone, MapPin
+    Instagram, Linkedin, MessageCircle, Target, Phone, MapPin, MessageSquare
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -15,7 +15,7 @@ import Logo from "@/components/shared/Logo";
 import { ThemeProvider, useTheme } from "@/components/shared/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import WhatsAppFloat from "@/components/shared/WhatsAppFloat";
 import ExitIntentPopup from "@/components/shared/ExitIntentPopup";
@@ -213,6 +213,14 @@ function LayoutContent({ children, currentPageName }) {
                                             </Button>
                                         </Link>
                                     )}
+                                    <a href={process.env.NEXT_PUBLIC_CLIENT_PORTAL_URL || '#'} target="_blank" rel="noopener noreferrer">
+                                        <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+                                            <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white px-4 xl:px-5 py-2 xl:py-2.5 rounded-full text-[13px] xl:text-sm font-bold shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all">
+                                                <MessageSquare className="w-4 h-4 mr-1.5" />
+                                                AI Auto Reply
+                                            </Button>
+                                        </motion.div>
+                                    </a>
                                     <Link href={createPageUrl("AI-Assessment")}>
                                         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                                             <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-orange-500 text-white px-4 xl:px-5 py-2 xl:py-2.5 rounded-full text-[13px] xl:text-sm font-bold shadow-[0_0_20px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transition-all">
@@ -238,14 +246,14 @@ function LayoutContent({ children, currentPageName }) {
                                         </div>
                                         <DropdownMenuSeparator className="bg-white/10" />
                                         <DropdownMenuItem asChild><Link href={createPageUrl("Profile")} className="text-gray-300">Profile</Link></DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => base44.auth.logout()} className="text-red-400 hover:text-red-300 cursor-pointer">
+                                        <DropdownMenuItem onClick={() => supabase.auth.signOut()} className="text-red-400 hover:text-red-300 cursor-pointer">
                                             <LogOut className="w-4 h-4 mr-2" /> Sign Out
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             ) : (
                                 <button
-                                    onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
+                                    onClick={() => window.location.href = '/login'}
                                     className="flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-2 rounded-full border border-white/10 hover:border-white/25 text-gray-400 hover:text-white text-[13px] xl:text-sm transition-all"
                                 >
                                     <LogIn className="w-4 h-4" /> Sign In / Sign Up
@@ -337,12 +345,12 @@ function LayoutContent({ children, currentPageName }) {
                                                     <LayoutDashboard className="w-4 h-4 mr-2" /> Dashboard
                                                 </Button>
                                             </Link>
-                                            <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl py-5" onClick={() => { setMobileMenuOpen(false); base44.auth.logout(); }}>
+                                            <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl py-5" onClick={() => { setMobileMenuOpen(false); supabase.auth.signOut(); }}>
                                                 <LogOut className="w-4 h-4 mr-2" /> Sign Out
                                             </Button>
                                         </>
                                     ) : (
-                                        <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl" onClick={() => { setMobileMenuOpen(false); base44.auth.redirectToLogin(window.location.pathname); }}>
+                                        <Button variant="outline" className="w-full border-white/10 text-gray-300 rounded-xl" onClick={() => { setMobileMenuOpen(false); window.location.href = '/login'; }}>
                                             <LogIn className="w-4 h-4 mr-2" /> Sign In / Sign Up
                                         </Button>
                                     )}

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Home, ArrowLeft } from 'lucide-react';
@@ -15,7 +15,7 @@ export default function PageNotFound() {
         queryKey: ['current-user-404'],
         queryFn: async () => {
             try {
-                const user = await base44.auth.me();
+                const user = await supabase.auth.getSession().then(({data}) => data.session?.user);
                 return { user, isAuthenticated: true };
             } catch {
                 return { user: null, isAuthenticated: false };

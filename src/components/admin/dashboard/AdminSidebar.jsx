@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Users, FolderKanban, Calendar, Megaphone,
   FileText, Settings, LogOut, ExternalLink, TrendingUp, BookOpen, Receipt, Send, Bot
 } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import Logo from '@/components/shared/Logo';
 
 const navItems = [
@@ -58,7 +58,7 @@ export default function AdminSidebar({ activeSection, onNavigate }) {
           View Website
         </Link>
         <button
-          onClick={() => base44.auth.logout()}
+          onClick={() => supabase.auth.signOut()}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-500 hover:text-red-400 hover:bg-red-500/[0.06] transition-all"
         >
           <LogOut className="w-4 h-4" />

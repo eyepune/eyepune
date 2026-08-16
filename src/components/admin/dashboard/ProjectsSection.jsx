@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -22,21 +22,21 @@ export default function ProjectsSection() {
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects-admin'],
-    queryFn: () => base44.entities.ClientProject.list('-created_date', 100),
+    queryFn: () => supabase.entities.ClientProject.list('-created_date', 100),
   });
 
   const { data: milestones = [] } = useQuery({
     queryKey: ['milestones-admin'],
-    queryFn: () => base44.entities.ClientMilestone.list('-created_date', 200),
+    queryFn: () => supabase.entities.ClientMilestone.list('-created_date', 200),
   });
 
   const updateProject = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.ClientProject.update(id, data),
+    mutationFn: ({ id, data }) => supabase.entities.ClientProject.update(id, data),
     onSuccess: () => qc.invalidateQueries(['projects-admin']),
   });
 
   const createProject = useMutation({
-    mutationFn: (data) => base44.entities.ClientProject.create(data),
+    mutationFn: (data) => supabase.entities.ClientProject.create(data),
     onSuccess: () => { qc.invalidateQueries(['projects-admin']); setShowForm(false); },
   });
 

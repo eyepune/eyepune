@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,21 +38,21 @@ function AdminBlogContent() {
 
     const { data: user } = useQuery({
         queryKey: ['current-user'],
-        queryFn: () => base44.auth.me()
+        queryFn: () => supabase.auth.getSession().then(({data}) => data.session?.user)
     });
 
     const { data: posts = [], isLoading } = useQuery({
         queryKey: ['admin-blog-posts'],
-        queryFn: () => base44.entities.BlogPost.list('-created_date', 100)
+        queryFn: () => supabase.entities.BlogPost.list('-created_date', 100)
     });
 
     const { data: comments = [] } = useQuery({
         queryKey: ['pending-comments'],
-        queryFn: () => base44.entities.BlogComment.filter({ status: 'pending' })
+        queryFn: () => supabase.entities.BlogComment.filter({ status: 'pending' })
     });
 
     const createMutation = useMutation({
-        mutationFn: (data) => base44.entities.BlogPost.create(data),
+        mutationFn: (data) => supabase.entities.BlogPost.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['admin-blog-posts']);
             resetForm();
@@ -60,7 +60,7 @@ function AdminBlogContent() {
     });
 
     const updateMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.BlogPost.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.BlogPost.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries(['admin-blog-posts']);
             resetForm();
@@ -68,14 +68,14 @@ function AdminBlogContent() {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: (id) => base44.entities.BlogPost.delete(id),
+        mutationFn: (id) => supabase.entities.BlogPost.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries(['admin-blog-posts']);
         }
     });
 
     const approveCommentMutation = useMutation({
-        mutationFn: ({ id, status }) => base44.entities.BlogComment.update(id, { status }),
+        mutationFn: ({ id, status }) => supabase.entities.BlogComment.update(id, { status }),
         onSuccess: () => {
             queryClient.invalidateQueries(['pending-comments']);
         }
@@ -129,7 +129,7 @@ function AdminBlogContent() {
         if (!file) return;
 
         setUploadingImage(true);
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        const { file_url } = await supabase.storage.from('uploads').upload( file );
         setFormData({ ...formData, featured_image: file_url });
         setUploadingImage(false);
     };
@@ -147,7 +147,7 @@ function AdminBlogContent() {
                             variant="outline"
                             onClick={async () => {
                                 try {
-                                    const response = await base44.functions.invoke('generateMissingBlogImages');
+                                    const response = await supabase.functions.invoke('generateMissingBlogImages');
                                     if (response.data.success) {
                                         alert(`Generated ${response.data.success_count} images for blog posts!`);
                                         queryClient.invalidateQueries(['admin-blog-posts']);
@@ -163,7 +163,7 @@ function AdminBlogContent() {
                             variant="outline"
                             onClick={async () => {
                                 try {
-                                    const response = await base44.functions.invoke('optimizeBlogSEO', {});
+                                    const response = await supabase.functions.invoke('optimizeBlogSEO', { body: {} });
                                     if (response.data.success) {
                                         alert(`Optimized SEO for ${response.data.success_count} blog posts!`);
                                         queryClient.invalidateQueries(['admin-blog-posts']);
@@ -179,7 +179,7 @@ function AdminBlogContent() {
                             variant="outline"
                             onClick={async () => {
                                 try {
-                                    const response = await base44.functions.invoke('generateBlogSitemap', {});
+                                    const response = await supabase.functions.invoke('generateBlogSitemap', { body: {} });
                                     const blob = new Blob([response.data], { type: 'application/xml' });
                                     const url = window.URL.createObjectURL(blob);
                                     const a = document.createElement('a');
@@ -243,7 +243,7 @@ function AdminBlogContent() {
                                                                 variant="outline"
                                                                 onClick={async () => {
                                                                     try {
-                                                                        const response = await base44.functions.invoke('optimizeBlogSEO', { post_id: post.id });
+                                                                        const response = await supabase.functions.invoke('optimizeBlogSEO', { body: { post_id: post.id } });
                                                                         if (response.data.success) {
                                                                             alert('SEO optimized for this post!');
                                                                             queryClient.invalidateQueries(['admin-blog-posts']);
@@ -431,7 +431,7 @@ function AdminBlogContent() {
                                                 onClick={async () => {
                                                     setUploadingImage(true);
                                                     try {
-                                                        const result = await base44.integrations.Core.GenerateImage({
+                                                        const result = await supabase.integrations.Core.GenerateImage({
                                                             prompt: `Professional blog header image for article about: ${formData.title}. Modern, clean, business-focused design.`
                                                         });
                                                         setFormData({ ...formData, featured_image: result.url });

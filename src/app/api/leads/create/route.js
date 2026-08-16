@@ -179,6 +179,27 @@ export async function POST(request) {
       console.warn('[Leads API] Admin notification trigger failed:', err.message);
     }
 
+    // ── ZOHO CRM WEBHOOK INTEGRATION ──
+    if (process.env.ZOHO_CRM_WEBHOOK_URL) {
+      try {
+        await fetch(process.env.ZOHO_CRM_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            Last_Name: name,
+            Email: email,
+            Phone: phone || '',
+            Company: company || '',
+            Description: `Service Interest: ${service_interest}\nMessage: ${message}`,
+            Lead_Source: source
+          })
+        });
+        console.log('[Leads API] Lead successfully pushed to Zoho CRM Webhook.');
+      } catch (err) {
+        console.warn('[Leads API] Zoho CRM Webhook failed:', err.message);
+      }
+    }
+
     // WhatsApp Sequence Trigger (send template to lead if they provided a phone number)
     if (phone) {
       triggerWhatsAppSequence({

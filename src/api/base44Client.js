@@ -2,9 +2,9 @@
  * Base44 SDK Compatibility Layer — Supabase-backed
  * 
  * This module replaces the original `@base44/sdk` client with a Supabase-backed
- * implementation that provides the same API surface (`base44.entities`, `base44.auth`,
- * `base44.integrations`). This allows all existing component imports of
- * `import { base44 } from '@/api/base44Client'` to continue working without changes.
+ * implementation that provides the same API surface (`supabase.entities`, `supabase.auth`,
+ * `supabase.integrations`). This allows all existing component imports of
+ * `import { supabase } from '@/integrations/supabase/client';` to continue working without changes.
  * 
  * Migration path: Components can gradually migrate to direct Supabase imports.
  */
@@ -203,7 +203,7 @@ const functions = {
    * Invoke various business logic functions
    */
   async invoke(functionName, params) {
-    console.log(`[base44.functions] Invoking ${functionName}`, params);
+    console.log(`[supabase.functions] Invoking ${functionName}`, params);
 
     // 1. Sign Proposal Logic
     if (functionName === 'signProposal') {

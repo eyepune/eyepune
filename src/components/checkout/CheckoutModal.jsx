@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from "@tanstack/react-query";
 
 // Load Razorpay script
@@ -39,7 +39,7 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
         queryKey: ['current-user'],
         queryFn: async () => {
             try {
-                return await base44.auth.me();
+                return await supabase.auth.getSession().then(({data}) => data.session?.user);
             } catch {
                 return null;
             }
@@ -106,7 +106,7 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
         const isTestMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('test_payment') === 'true';
         if (!user && !isTestMode) {
             alert('Please login to continue with payment');
-            base44.auth.redirectToLogin(window.location.href);
+            window.location.href = '/login';
             return;
         }
 
@@ -258,7 +258,7 @@ export default function CheckoutModal({ pkg, isOpen, onClose }) {
                                                 type="button"
                                                 size="sm"
                                                 className="mt-3 bg-yellow-600 hover:bg-yellow-700 text-white"
-                                                onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                                                onClick={() => window.location.href = '/login'}
                                             >
                                                 <LogIn className="w-4 h-4 mr-2" />
                                                 Login to Continue

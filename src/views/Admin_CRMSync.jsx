@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from '@/components/admin/AdminGuard';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,11 +23,11 @@ export default function Admin_CRMSync() {
 
     const { data: configs, isLoading } = useQuery({
         queryKey: ['crm-configs'],
-        queryFn: () => base44.entities.CRMSyncConfig.list()
+        queryFn: () => supabase.entities.CRMSyncConfig.list()
     });
 
     const createMutation = useMutation({
-        mutationFn: (data) => base44.entities.CRMSyncConfig.create(data),
+        mutationFn: (data) => supabase.entities.CRMSyncConfig.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['crm-configs']);
             toast.success('CRM configuration created');
@@ -36,7 +36,7 @@ export default function Admin_CRMSync() {
     });
 
     const updateMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.CRMSyncConfig.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.CRMSyncConfig.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries(['crm-configs']);
             toast.success('CRM configuration updated');
@@ -44,7 +44,7 @@ export default function Admin_CRMSync() {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: (id) => base44.entities.CRMSyncConfig.delete(id),
+        mutationFn: (id) => supabase.entities.CRMSyncConfig.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries(['crm-configs']);
             toast.success('CRM configuration deleted');
@@ -55,7 +55,7 @@ export default function Admin_CRMSync() {
         setIsSyncing(true);
         try {
             const functionName = direction === 'from' ? 'syncFromCRM' : 'syncToCRM';
-            const response = await base44.functions.invoke(functionName);
+            const response = await supabase.functions.invoke(functionName);
             
             if (response.data.success) {
                 toast.success(`Sync completed: ${response.data.results?.length || 0} operations`);
@@ -71,7 +71,7 @@ export default function Admin_CRMSync() {
 
     const testConnection = async (provider) => {
         try {
-            const response = await base44.functions.invoke('testCRMConnection', { crm_provider: provider });
+            const response = await supabase.functions.invoke('testCRMConnection', { body: { crm_provider: provider } });
             if (response.data.success) {
                 toast.success(`Connected! Found ${response.data.contact_count} contacts`);
             } else {

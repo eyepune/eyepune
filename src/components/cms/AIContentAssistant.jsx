@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -21,7 +21,7 @@ export default function AIContentAssistant({ open, onClose, onApply, contentType
         if (!topic.trim()) return;
         setIsLoading(true);
         try {
-            const response = await base44.integrations.Core.InvokeLLM({
+            const response = await supabase.integrations.Core.InvokeLLM({
                 prompt: `Generate a comprehensive blog post about: ${topic}. 
                 Include: 
                 - An engaging introduction
@@ -51,7 +51,7 @@ export default function AIContentAssistant({ open, onClose, onApply, contentType
         if (!existingContent.trim()) return;
         setIsLoading(true);
         try {
-            const response = await base44.integrations.Core.InvokeLLM({
+            const response = await supabase.integrations.Core.InvokeLLM({
                 prompt: `Analyze this content and provide SEO optimization suggestions:
                 
                 Content: ${existingContent}
@@ -83,7 +83,7 @@ export default function AIContentAssistant({ open, onClose, onApply, contentType
         if (!existingContent.trim()) return;
         setIsLoading(true);
         try {
-            const response = await base44.integrations.Core.InvokeLLM({
+            const response = await supabase.integrations.Core.InvokeLLM({
                 prompt: `Rewrite this content to improve clarity, engagement, and professionalism. 
                 Keep the same meaning but make it more compelling:
                 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from '@/components/admin/AdminGuard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import GrowthEngine from '@/components/admin/GrowthEngine';
 import { Zap } from 'lucide-react';
 
-const PITCH_DECK_URL = 'https://media.base44.com/files/public/69697d1626923688ef1d9afa/cf0b23f7b_PitchDeck-PDF.pdf';
+const PITCH_DECK_URL = 'https://media.supabase.com/files/public/69697d1626923688ef1d9afa/cf0b23f7b_PitchDeck-PDF.pdf';
 
 function OutreachContent() {
     const [selectedLeads, setSelectedLeads] = useState([]);
@@ -27,15 +27,16 @@ function OutreachContent() {
 
     const { data: leads = [] } = useQuery({
         queryKey: ['leads-outreach'],
-        queryFn: () => base44.entities.Lead.list('-created_date', 2000),
+        queryFn: () => supabase.entities.Lead.list('-created_date', 2000),
     });
 
     const fetchWixData = async () => {
         setLoadingWix(true);
         try {
-            const res = await base44.functions.invoke('fetchWixPastData', { type: 'all' });
-            setWixData(res.data);
-            toast.success(`Fetched ${res.data.past_clients?.length || 0} past clients from Wix`);
+            const res = await fetch('/api/wix/contacts');
+            const data = await res.json();
+            setWixData(data);
+            toast.success(`Fetched ${data.past_clients?.length || 0} past clients from Wix`);
         } catch (e) {
             toast.error('Failed to fetch Wix data: ' + e.message);
         }
@@ -65,7 +66,7 @@ function OutreachContent() {
                 lead_id: l.lead_id || l.id,
             })).filter(r => r.email || r.phone);
 
-            const res = await base44.functions.invoke('sendPitchDeck', {
+            const res = await supabase.functions.invoke('sendPitchDeck', {
                 recipients,
                 channel,
                 subject: customSubject || undefined,

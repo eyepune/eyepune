@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ReactMarkdown from 'react-markdown';
 import { Bot, ChevronRight, ChevronLeft, CheckCircle, Loader2, TrendingUp, AlertCircle, Lightbulb, Target, Zap, Award, Sparkles, Clock, Phone, Brain, Globe } from 'lucide-react';
 import Link from 'next/link';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { createPageUrl } from "@/utils";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 import SEOHead from '@/components/seo/SEOHead';
@@ -196,7 +196,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
     React.useEffect(() => {
         const checkAuth = async () => {
             try {
-                const currentUser = await base44.auth.me();
+                const currentUser = await supabase.auth.getSession().then(({data}) => data.session?.user);
                 setUser(currentUser);
                 setFormData(prev => ({
                     ...prev,

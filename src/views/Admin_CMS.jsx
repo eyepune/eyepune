@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from "@/components/admin/AdminGuard";
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Eye, Search, Sparkles } from 'lucide-react';
@@ -24,11 +24,11 @@ function Admin_CMS() {
 
     const { data: pages = [], isLoading } = useQuery({
         queryKey: ['cms-pages'],
-        queryFn: () => base44.entities.CMS_Page.list('-created_date', 100),
+        queryFn: () => supabase.entities.CMS_Page.list('-created_date', 100),
     });
 
     const createPageMutation = useMutation({
-        mutationFn: (data) => base44.entities.CMS_Page.create(data),
+        mutationFn: (data) => supabase.entities.CMS_Page.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['cms-pages'] });
             setIsEditing(false);
@@ -38,7 +38,7 @@ function Admin_CMS() {
     });
 
     const updatePageMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.CMS_Page.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.CMS_Page.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['cms-pages'] });
             setIsEditing(false);
@@ -48,7 +48,7 @@ function Admin_CMS() {
     });
 
     const deletePageMutation = useMutation({
-        mutationFn: (id) => base44.entities.CMS_Page.delete(id),
+        mutationFn: (id) => supabase.entities.CMS_Page.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['cms-pages'] });
         },

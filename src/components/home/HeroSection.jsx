@@ -103,7 +103,7 @@ function AnimatedEye() {
     );
 }
 
-export default function HeroSection() {
+export default function HeroSection({ company }) {
     const heroRef = useRef(null);
     const { scrollY } = useScroll();
     const y = useTransform(scrollY, [0, 600], [0, 100]);
@@ -166,7 +166,7 @@ export default function HeroSection() {
                                 </AnimatePresence>
                             </div>
                             <br />
-                            for Global Visionaries
+                            for {company ? company : "Global Visionaries"}
                         </h1>
 
                         <motion.p

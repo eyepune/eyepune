@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,7 +65,7 @@ Include:
 
 Return JSON with: { responsibilities: string, terms_and_conditions: string }`;
 
-            const result = await base44.integrations.Core.InvokeLLM({
+            const result = await supabase.integrations.Core.InvokeLLM({
                 prompt,
                 response_json_schema: {
                     type: "object",
@@ -90,7 +90,7 @@ Return JSON with: { responsibilities: string, terms_and_conditions: string }`;
 
     const createAgreementMutation = useMutation({
         mutationFn: async (data) => {
-            return await base44.entities.EmployeeAgreement.create({
+            return await supabase.entities.EmployeeAgreement.create({
                 ...data,
                 agreement_number: `EMP-${Date.now()}`,
                 status: 'draft'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +23,7 @@ export default function ClientDocuments({ userEmail, projectId = null }) {
         queryFn: async () => {
             const query = { party_email: userEmail };
             if (projectId) query.project_id = projectId;
-            return await base44.entities.Contract.filter(query, '-created_date');
+            return await supabase.entities.Contract.filter(query, '-created_date');
         }
     });
 
@@ -32,7 +32,7 @@ export default function ClientDocuments({ userEmail, projectId = null }) {
         queryKey: ['client-proposals', userEmail],
         queryFn: async () => {
             const query = { client_email: userEmail };
-            return await base44.entities.Proposal.filter(query, '-created_date');
+            return await supabase.entities.Proposal.filter(query, '-created_date');
         }
     });
 
@@ -42,7 +42,7 @@ export default function ClientDocuments({ userEmail, projectId = null }) {
         queryFn: async () => {
             const query = { client_email: userEmail };
             if (projectId) query.project_id = projectId;
-            return await base44.entities.Invoice.filter(query, '-created_date');
+            return await supabase.entities.Invoice.filter(query, '-created_date');
         }
     });
 
@@ -50,7 +50,7 @@ export default function ClientDocuments({ userEmail, projectId = null }) {
     const signContractMutation = useMutation({
         mutationFn: async ({ contractId, signatureData }) => {
             const contract = contracts.find(c => c.id === contractId);
-            return await base44.entities.Contract.update(contractId, {
+            return await supabase.entities.Contract.update(contractId, {
                 status: 'signed',
                 signed_date: new Date().toISOString(),
                 signature_data: {

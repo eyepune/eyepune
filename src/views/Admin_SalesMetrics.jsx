@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from '@/components/admin/AdminGuard';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -24,12 +24,12 @@ export default function Admin_SalesMetrics() {
         queryKey: ['sales-metrics'],
         queryFn: async () => {
             try {
-                const response = await base44.functions.invoke('getSalesMetrics');
+                const response = await supabase.functions.invoke('getSalesMetrics');
                 if (response.data) return response.data;
                 throw new Error('No data from function');
             } catch (err) {
                 console.log('Edge function failed, falling back to RPC...', err);
-                const { data, error: rpcError } = await base44.rpc('get_sales_metrics');
+                const { data, error: rpcError } = await supabase.rpc('get_sales_metrics');
                 if (rpcError) throw rpcError;
                 // Transform RPC data to match expected metrics structure if needed
                 return { metrics: data };

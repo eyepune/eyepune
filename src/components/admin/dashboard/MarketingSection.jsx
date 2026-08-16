@@ -1,22 +1,22 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 
 export default function MarketingSection() {
   const { data: campaigns = [] } = useQuery({
     queryKey: ['campaigns-admin'],
-    queryFn: () => base44.entities.Campaign.list('-created_date', 50),
+    queryFn: () => supabase.entities.Campaign.list('-created_date', 50),
   });
 
   const { data: assessments = [] } = useQuery({
     queryKey: ['assessments-admin'],
-    queryFn: () => base44.entities.AI_Assessment.list('-created_date', 50),
+    queryFn: () => supabase.entities.AI_Assessment.list('-created_date', 50),
   });
 
   const { data: payments = [] } = useQuery({
     queryKey: ['payments-marketing'],
-    queryFn: () => base44.entities.Payment.list('-created_date', 50),
+    queryFn: () => supabase.entities.Payment.list('-created_date', 50),
   });
 
   const STATUS_COLORS = {

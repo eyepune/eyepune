@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { FileText, CheckCircle2, Clock, ExternalLink, Download } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -15,7 +15,7 @@ const STATUS_CONFIG = {
 export default function ProposalViewer({ user }) {
   const { data: proposals = [], isLoading } = useQuery({
     queryKey: ['client-proposals', user.email],
-    queryFn: () => base44.entities.Proposal.filter({ client_email: user.email }, '-created_date', 50),
+    queryFn: () => supabase.entities.Proposal.filter({ client_email: user.email }, '-created_date', 50),
   });
 
   if (isLoading) return (

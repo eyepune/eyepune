@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,21 +15,21 @@ export default function DeliverableDiscussion({ deliverable, projectId }) {
     const { data: comments = [] } = useQuery({
         queryKey: ['deliverable-comments', deliverable.id],
         queryFn: async () => {
-            const all = await base44.entities.TaskComment.list('-created_date', 500);
+            const all = await supabase.entities.TaskComment.list('-created_date', 500);
             return all.filter(c => c.task_id === deliverable.id);
         },
     });
 
     // Real-time updates
     useEffect(() => {
-        const unsubscribe = base44.entities.TaskComment.subscribe((event) => {
+        const unsubscribe = supabase.entities.TaskComment.subscribe((event) => {
             queryClient.invalidateQueries(['deliverable-comments']);
         });
         return unsubscribe;
     }, [queryClient]);
 
     const createCommentMutation = useMutation({
-        mutationFn: (data) => base44.entities.TaskComment.create(data),
+        mutationFn: (data) => supabase.entities.TaskComment.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['deliverable-comments']);
             setCommentText('');

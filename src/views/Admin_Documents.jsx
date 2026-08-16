@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,27 +29,27 @@ function Admin_Documents() {
 
     const { data: contracts = [] } = useQuery({
         queryKey: ['contracts'],
-        queryFn: () => base44.entities.Contract.list('-created_date', 50),
+        queryFn: () => supabase.entities.Contract.list('-created_date', 50),
     });
 
     const { data: proposals = [] } = useQuery({
         queryKey: ['proposals'],
-        queryFn: () => base44.entities.Proposal.list('-created_date', 50),
+        queryFn: () => supabase.entities.Proposal.list('-created_date', 50),
     });
 
     const { data: invoices = [] } = useQuery({
         queryKey: ['invoices'],
-        queryFn: () => base44.entities.Invoice.list('-created_date', 50),
+        queryFn: () => supabase.entities.Invoice.list('-created_date', 50),
     });
 
     const { data: employeeAgreements = [] } = useQuery({
         queryKey: ['employee-agreements'],
-        queryFn: () => base44.entities.EmployeeAgreement.list('-created_date', 50),
+        queryFn: () => supabase.entities.EmployeeAgreement.list('-created_date', 50),
     });
 
     const { data: offerLetters = [] } = useQuery({
         queryKey: ['offer-letters'],
-        queryFn: () => base44.entities.OfferLetter.list('-created_date', 50),
+        queryFn: () => supabase.entities.OfferLetter.list('-created_date', 50),
     });
 
     const statusColors = {
@@ -66,7 +66,7 @@ function Admin_Documents() {
 
     const sendContractMutation = useMutation({
         mutationFn: async (contractId) => {
-            return await base44.functions.invoke('sendContractForSignature', { 
+            return await supabase.functions.invoke('sendContractForSignature', { 
                 contract_id: contractId 
             });
         },

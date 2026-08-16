@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Plus, Search, FileText, Receipt } from 'lucide-react';
 
 import { format } from 'date-fns';
@@ -29,16 +29,16 @@ export default function CRMSection({ onNavigate }) {
 
   const { data: leads = [], isLoading } = useQuery({
     queryKey: ['leads-crm'],
-    queryFn: () => base44.entities.Lead.list('-created_date', 2000),
+    queryFn: () => supabase.entities.Lead.list('-created_date', 2000),
   });
 
   const { data: inquiries = [] } = useQuery({
     queryKey: ['inquiries-crm'],
-    queryFn: () => base44.entities.Inquiry.list('-created_date', 50),
+    queryFn: () => supabase.entities.Inquiry.list('-created_date', 50),
   });
 
   const updateLead = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.Lead.update(id, data),
+    mutationFn: ({ id, data }) => supabase.entities.Lead.update(id, data),
     onSuccess: (_, { data }) => {
       qc.invalidateQueries(['leads-crm']);
       if (data.status === 'closed_won' && onNavigate) {
@@ -48,7 +48,7 @@ export default function CRMSection({ onNavigate }) {
   });
 
   const createLead = useMutation({
-    mutationFn: (data) => base44.entities.Lead.create(data),
+    mutationFn: (data) => supabase.entities.Lead.create(data),
     onSuccess: () => { qc.invalidateQueries(['leads-crm']); setShowAddForm(false); setNewLead({ full_name: '', email: '', phone: '', company: '', source: 'website', status: 'new', assigned_to: '', billing_address: '', billing_city: '', billing_state: '', billing_pincode: '' }); setFormError(''); },
   });
 

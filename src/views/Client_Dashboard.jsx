@@ -51,7 +51,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { cn } from "@/lib/utils";
 import ClientLayout from "@/components/client/ClientLayout";
 
@@ -103,9 +103,9 @@ export default function Client_Dashboard() {
             const isAdmin = user?.role === 'admin' || user?.email === 'connect@eyepune.com';
             
             if (isAdmin) {
-                return await base44.entities.ClientProject.list('-created_at', 50);
+                return await supabase.entities.ClientProject.list('-created_at', 50);
             } else {
-                return await base44.entities.ClientProject.filter({ clientEmail: user?.email });
+                return await supabase.entities.ClientProject.filter({ clientEmail: user?.email });
             }
         },
         enabled: !!user?.email,
@@ -114,7 +114,7 @@ export default function Client_Dashboard() {
     const { data: milestones = [] } = useQuery({
         queryKey: ['milestones', selectedProject?.id],
         queryFn: async () => {
-            return await base44.entities.ClientMilestone.filter({ projectId: selectedProject.id });
+            return await supabase.entities.ClientMilestone.filter({ projectId: selectedProject.id });
         },
         enabled: !!selectedProject?.id,
     });
@@ -122,7 +122,7 @@ export default function Client_Dashboard() {
     const { data: files = [] } = useQuery({
         queryKey: ['client-files', selectedProject?.id],
         queryFn: async () => {
-            return await base44.entities.ClientFile.filter({ projectId: selectedProject.id });
+            return await supabase.entities.ClientFile.filter({ projectId: selectedProject.id });
         },
         enabled: !!selectedProject?.id,
     });
@@ -130,7 +130,7 @@ export default function Client_Dashboard() {
     const { data: tasks = [] } = useQuery({
         queryKey: ['onboarding-tasks', selectedProject?.id],
         queryFn: async () => {
-            return await base44.entities.OnboardingTask.filter({ 
+            return await supabase.entities.OnboardingTask.filter({ 
                 projectId: selectedProject.id,
                 taskType: 'client'
             });
@@ -141,7 +141,7 @@ export default function Client_Dashboard() {
     const { data: projectTasks = [] } = useQuery({
         queryKey: ['project-tasks', selectedProject?.id],
         queryFn: async () => {
-            return await base44.entities.ProjectTask.filter({ projectId: selectedProject.id });
+            return await supabase.entities.ProjectTask.filter({ projectId: selectedProject.id });
         },
         enabled: !!selectedProject?.id,
     });
@@ -149,7 +149,7 @@ export default function Client_Dashboard() {
     const { data: deliverables = [] } = useQuery({
         queryKey: ['deliverable-approvals', selectedProject?.id],
         queryFn: async () => {
-            return await base44.entities.DeliverableApproval.filter({ projectId: selectedProject.id }, '-createdAt');
+            return await supabase.entities.DeliverableApproval.filter({ projectId: selectedProject.id }, '-createdAt');
         },
         enabled: !!selectedProject?.id,
     });
@@ -157,7 +157,7 @@ export default function Client_Dashboard() {
     const { data: preferences } = useQuery({
         queryKey: ['dashboard-preferences', user?.email],
         queryFn: async () => {
-            const results = await base44.entities.DashboardPreference.filter({ userEmail: user.email });
+            const results = await supabase.entities.DashboardPreference.filter({ userEmail: user.email });
             return results[0] || null;
         },
         enabled: !!user?.email,

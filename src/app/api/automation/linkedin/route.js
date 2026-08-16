@@ -41,12 +41,12 @@ export async function POST(request) {
         // 3. Get LinkedIn User URN (if not provided in config)
         let authorUrn = urn;
         if (!authorUrn) {
-            const meRes = await fetch('https://api.linkedin.com/v2/me', {
+            const meRes = await fetch('https://api.linkedin.com/v2/userinfo', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const meData = await meRes.json();
-            if (!meData.id) throw new Error('Invalid LinkedIn token or profile not accessible.');
-            authorUrn = `urn:li:person:${meData.id}`;
+            if (!meData.sub) throw new Error('Invalid LinkedIn token or profile not accessible.');
+            authorUrn = `urn:li:person:${meData.sub}`;
         }
 
         // 4. Create the Post

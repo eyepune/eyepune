@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ export default function InvoiceGenerator({ open, onOpenChange, project }) {
             const tax = subtotal * (data.tax_percentage / 100);
             const total = subtotal + tax;
 
-            const invoice = await base44.entities.Invoice.create({
+            const invoice = await supabase.entities.Invoice.create({
                 project_id: project?.id,
                 client_email: data.client_email,
                 client_name: data.client_name,

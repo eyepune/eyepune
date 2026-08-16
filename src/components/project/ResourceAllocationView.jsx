@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,19 +18,19 @@ export default function ResourceAllocationView({ projects }) {
 
     const { data: allocations = [] } = useQuery({
         queryKey: ['resource-allocations'],
-        queryFn: () => base44.entities.ResourceAllocation.list(),
+        queryFn: () => supabase.entities.ResourceAllocation.list(),
     });
 
     const { data: teamMembers = [] } = useQuery({
         queryKey: ['team-members'],
         queryFn: async () => {
-            const users = await base44.entities.User.list();
+            const users = await supabase.entities.User.list();
             return users.filter(u => u.role === 'admin');
         },
     });
 
     const createAllocationMutation = useMutation({
-        mutationFn: (data) => base44.entities.ResourceAllocation.create(data),
+        mutationFn: (data) => supabase.entities.ResourceAllocation.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['resource-allocations'] });
             setShowDialog(false);

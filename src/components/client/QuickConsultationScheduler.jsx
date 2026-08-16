@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ export default function QuickConsultationScheduler({ project, user, open, onClos
     const fetchAvailableSlots = async (date) => {
         setLoadingSlots(true);
         try {
-            const response = await base44.functions.invoke('manageCalendarBooking', {
+            const response = await supabase.functions.invoke('manageCalendarBooking', {
                 action: 'getAvailableSlots',
                 date: date
             });
@@ -47,7 +47,7 @@ export default function QuickConsultationScheduler({ project, user, open, onClos
 
         try {
             // Create Google Calendar event
-            const calendarResponse = await base44.functions.invoke('manageCalendarBooking', {
+            const calendarResponse = await supabase.functions.invoke('manageCalendarBooking', {
                 action: 'createEvent',
                 bookingData: {
                     name: user.full_name,
@@ -63,7 +63,7 @@ export default function QuickConsultationScheduler({ project, user, open, onClos
             }
 
             // Create booking in database
-            await base44.entities.Booking.create({
+            await supabase.entities.Booking.create({
                 name: user.full_name,
                 email: user.email,
                 booking_type: 'consultation',
@@ -76,7 +76,7 @@ export default function QuickConsultationScheduler({ project, user, open, onClos
             });
 
             // Send notification message
-            await base44.entities.ClientMessage.create({
+            await supabase.entities.ClientMessage.create({
                 project_id: project.id,
                 sender_email: user.email,
                 sender_name: user.full_name,

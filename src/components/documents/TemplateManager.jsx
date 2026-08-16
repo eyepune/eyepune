@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -38,12 +38,12 @@ export default function TemplateManager({ documentType }) {
         queryKey: ['templates', documentType],
         queryFn: async () => {
             const filters = documentType ? { document_type: documentType } : {};
-            return await base44.entities.DocumentTemplate.filter(filters);
+            return await supabase.entities.DocumentTemplate.filter(filters);
         }
     });
 
     const createTemplateMutation = useMutation({
-        mutationFn: (data) => base44.entities.DocumentTemplate.create(data),
+        mutationFn: (data) => supabase.entities.DocumentTemplate.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['templates']);
             setOpen(false);
@@ -52,7 +52,7 @@ export default function TemplateManager({ documentType }) {
     });
 
     const updateTemplateMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.DocumentTemplate.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.DocumentTemplate.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries(['templates']);
             setOpen(false);
@@ -61,7 +61,7 @@ export default function TemplateManager({ documentType }) {
     });
 
     const deleteTemplateMutation = useMutation({
-        mutationFn: (id) => base44.entities.DocumentTemplate.delete(id),
+        mutationFn: (id) => supabase.entities.DocumentTemplate.delete(id),
         onSuccess: () => queryClient.invalidateQueries(['templates'])
     });
 
@@ -87,7 +87,7 @@ export default function TemplateManager({ documentType }) {
     const handleAIGenerate = async () => {
         setAiGenerating(true);
         try {
-            const { data } = await base44.functions.invoke('aiTemplateGenerator', {
+            const { data } = await supabase.functions.invoke('aiTemplateGenerator', {
                 action: 'generate',
                 document_type: formData.document_type,
                 template_type: formData.template_data.contract_type || 'standard',
@@ -112,7 +112,7 @@ export default function TemplateManager({ documentType }) {
     const handleAISuggest = async () => {
         setAiGenerating(true);
         try {
-            const { data } = await base44.functions.invoke('aiTemplateGenerator', {
+            const { data } = await supabase.functions.invoke('aiTemplateGenerator', {
                 action: 'suggest_improvements',
                 document_type: formData.document_type,
                 existing_template: formData.template_data

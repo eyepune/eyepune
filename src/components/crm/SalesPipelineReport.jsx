@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Card } from '@/components/ui/card';
 import { TrendingUp, Users, Target, CheckCircle2 } from 'lucide-react';
@@ -11,7 +11,7 @@ const COLORS = ['#EF4444', '#FBBF24', '#10B981', '#8B5CF6', '#06B6D4', '#EC4899'
 export default function SalesPipelineReport() {
     const { data: leads = [] } = useQuery({
         queryKey: ['all-leads-report'],
-        queryFn: () => base44.entities.Lead.list('-updated_date', 500),
+        queryFn: () => supabase.entities.Lead.list('-updated_date', 500),
     });
 
     // Calculate metrics

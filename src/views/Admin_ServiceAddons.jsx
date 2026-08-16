@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,11 +32,11 @@ export default function Admin_ServiceAddons() {
 
     const { data: addons = [], isLoading } = useQuery({
         queryKey: ['service-addons'],
-        queryFn: () => base44.entities.ServiceAddon.list('-created_date')
+        queryFn: () => supabase.entities.ServiceAddon.list('-created_date')
     });
 
     const createMutation = useMutation({
-        mutationFn: (data) => base44.entities.ServiceAddon.create(data),
+        mutationFn: (data) => supabase.entities.ServiceAddon.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries(['service-addons']);
             resetForm();
@@ -45,7 +45,7 @@ export default function Admin_ServiceAddons() {
     });
 
     const updateMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.ServiceAddon.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.ServiceAddon.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries(['service-addons']);
             resetForm();
@@ -54,7 +54,7 @@ export default function Admin_ServiceAddons() {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: (id) => base44.entities.ServiceAddon.delete(id),
+        mutationFn: (id) => supabase.entities.ServiceAddon.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries(['service-addons']);
         }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { CheckCircle2, AlertCircle, Loader2, Clock, Shield, Edit3, Save, X, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -53,7 +53,7 @@ export default function SignProposal() {
 
   useEffect(() => {
     if (!proposalId) { setError('missing_id'); setLoading(false); return; }
-    base44.functions.invoke('getProposalPublic', { proposal_id: proposalId })
+    supabase.functions.invoke('getProposalPublic', { body: { proposal_id: proposalId } })
       .then(res => {
         if (res.data?.proposal) { setProposal(res.data.proposal); setDraft(res.data.proposal); }
         else setError('not_found');
@@ -65,7 +65,7 @@ export default function SignProposal() {
   const handleSaveDraft = async () => {
     setSaving(true);
     try {
-      await base44.functions.invoke('updateProposalContent', {
+      await supabase.functions.invoke('updateProposalContent', {
         proposal_id: proposalId,
         updates: {
           project_title: draft.project_title,
@@ -102,7 +102,7 @@ export default function SignProposal() {
     let ip = 'unknown';
     try { const r = await fetch('https://api.ipify.org?format=json'); ip = (await r.json()).ip; } catch (_) {}
     try {
-      const res = await base44.functions.invoke('signProposal', { proposal_id: proposalId, signature_name: signName, client_ip: ip });
+      const res = await supabase.functions.invoke('signProposal', { body: { proposal_id: proposalId, signature_name: signName, client_ip: ip } });
       if (res.data?.success) setSigned(true);
       else setSignError(res.data?.error || 'Failed to sign. Please try again.');
     } catch (e) { setSignError('Failed to sign. Please try again.'); }

@@ -1,7 +1,7 @@
 /**
  * Supabase Compatibility Layer
  * 
- * This module provides a drop-in replacement for the `base44.entities` API,
+ * This module provides a drop-in replacement for the `supabase.entities` API,
  * backed by Supabase. It maps the Base44 entity names to Supabase table names
  * (snake_case) and translates the Base44 query syntax to Supabase queries.
  * 

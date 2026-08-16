@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,13 +19,13 @@ export default function Profile() {
 
     const { data: user } = useQuery({
         queryKey: ['current-user'],
-        queryFn: () => base44.auth.me()
+        queryFn: () => supabase.auth.getSession().then(({data}) => data.session?.user)
     });
 
     const { data: profile } = useQuery({
         queryKey: ['user-profile', user?.email],
         queryFn: async () => {
-            const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+            const profiles = await supabase.entities.UserProfile.filter({ user_email: user.email });
             return profiles[0] || null;
         },
         enabled: !!user
@@ -40,7 +40,7 @@ export default function Profile() {
     }, [user]);
 
     const handleNameSave = async () => {
-        await base44.auth.updateMe({ full_name: nameValue });
+        await supabase.auth.updateMe({ full_name: nameValue });
         setNameSaved(true);
         queryClient.invalidateQueries(['current-user']);
         setTimeout(() => setNameSaved(false), 2500);
@@ -94,9 +94,9 @@ export default function Profile() {
     const updateMutation = useMutation({
         mutationFn: async (data) => {
             if (profile) {
-                return await base44.entities.UserProfile.update(profile.id, data);
+                return await supabase.entities.UserProfile.update(profile.id, data);
             } else {
-                return await base44.entities.UserProfile.create(data);
+                return await supabase.entities.UserProfile.create(data);
             }
         },
         onSuccess: () => {
@@ -109,7 +109,7 @@ export default function Profile() {
         if (!file) return;
 
         setUploadingImage(true);
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        const { file_url } = await supabase.storage.from('uploads').upload( file );
         setFormData({ ...formData, profile_image: file_url });
         setUploadingImage(false);
     };

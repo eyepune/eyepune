@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,28 +22,28 @@ export default function SharedDocumentEditor({ project, user }) {
     const { data: documents = [] } = useQuery({
         queryKey: ['shared-documents', project.id],
         queryFn: async () => {
-            const all = await base44.entities.SharedDocument.list('-updated_date', 100);
+            const all = await supabase.entities.SharedDocument.list('-updated_date', 100);
             return all.filter(d => d.project_id === project.id);
         },
     });
 
     // Real-time subscription for document updates
     useEffect(() => {
-        const unsubscribe = base44.entities.SharedDocument.subscribe((event) => {
+        const unsubscribe = supabase.entities.SharedDocument.subscribe((event) => {
             queryClient.invalidateQueries(['shared-documents']);
         });
         return unsubscribe;
     }, [queryClient]);
 
     const saveMutation = useMutation({
-        mutationFn: (data) => base44.entities.SharedDocument.update(selectedDoc.id, data),
+        mutationFn: (data) => supabase.entities.SharedDocument.update(selectedDoc.id, data),
         onSuccess: () => {
             queryClient.invalidateQueries(['shared-documents']);
         },
     });
 
     const createMutation = useMutation({
-        mutationFn: (data) => base44.entities.SharedDocument.create(data),
+        mutationFn: (data) => supabase.entities.SharedDocument.create(data),
         onSuccess: (newDoc) => {
             queryClient.invalidateQueries(['shared-documents']);
             setSelectedDoc(newDoc);

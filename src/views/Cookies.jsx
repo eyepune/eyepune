@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import ReactMarkdown from 'react-markdown';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -8,7 +8,7 @@ export default function Cookies() {
     const { data: page, isLoading } = useQuery({
         queryKey: ['cms-page', 'cookie-policy'],
         queryFn: async () => {
-            const pages = await base44.entities.CMS_Page.filter({ slug: 'cookie-policy' });
+            const pages = await supabase.entities.CMS_Page.filter({ slug: 'cookie-policy' });
             return pages.length > 0 ? pages[0] : null;
         },
         retry: 2,

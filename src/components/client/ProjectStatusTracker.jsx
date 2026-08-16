@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -10,17 +10,17 @@ import moment from "moment";
 export default function ProjectStatusTracker({ projectId }) {
     const { data: project } = useQuery({
         queryKey: ['client-project', projectId],
-        queryFn: () => base44.entities.ClientProject.filter({ id: projectId }).then(r => r[0])
+        queryFn: () => supabase.entities.ClientProject.filter({ id: projectId }).then(r => r[0])
     });
 
     const { data: milestones = [] } = useQuery({
         queryKey: ['project-milestones', projectId],
-        queryFn: () => base44.entities.ClientMilestone.filter({ project_id: projectId }, 'target_date')
+        queryFn: () => supabase.entities.ClientMilestone.filter({ project_id: projectId }, 'target_date')
     });
 
     const { data: tasks = [] } = useQuery({
         queryKey: ['project-tasks', projectId],
-        queryFn: () => base44.entities.ProjectTask.filter({ project_id: projectId })
+        queryFn: () => supabase.entities.ProjectTask.filter({ project_id: projectId })
     });
 
     if (!project) return null;

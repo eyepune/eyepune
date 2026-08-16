@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -13,7 +13,7 @@ export default function OnboardingProgress({ project, onShowAssistant }) {
     const { data: tasks = [] } = useQuery({
         queryKey: ['onboarding-tasks', project?.id],
         queryFn: async () => {
-            const allTasks = await base44.entities.OnboardingTask.list();
+            const allTasks = await supabase.entities.OnboardingTask.list();
             return allTasks
                 .filter(t => t.projectId === project.id)
                 .sort((a, b) => a.order - b.order);
@@ -22,7 +22,7 @@ export default function OnboardingProgress({ project, onShowAssistant }) {
     });
 
     const completeTaskMutation = useMutation({
-        mutationFn: ({ id, status }) => base44.entities.OnboardingTask.update(id, { status }),
+        mutationFn: ({ id, status }) => supabase.entities.OnboardingTask.update(id, { status }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['onboarding-tasks'] });
         }

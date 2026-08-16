@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/integrations/supabase/client';
 import { Plus, Send, Receipt, CheckCircle2, X, Trash2, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
@@ -38,16 +38,16 @@ export default function InvoiceSection({ defaultProposal = null }) {
 
   const { data: invoices = [] } = useQuery({
     queryKey: ['invoices'],
-    queryFn: () => base44.entities.Invoice.list('-created_date', 200),
+    queryFn: () => supabase.entities.Invoice.list('-created_date', 200),
   });
 
   const { data: proposals = [] } = useQuery({
     queryKey: ['proposals-inv'],
-    queryFn: () => base44.entities.Proposal.list('-created_date', 200),
+    queryFn: () => supabase.entities.Proposal.list('-created_date', 200),
   });
 
   const createInvoice = useMutation({
-    mutationFn: (data) => base44.entities.Invoice.create(data),
+    mutationFn: (data) => supabase.entities.Invoice.create(data),
     onSuccess: () => {
       qc.invalidateQueries(['invoices']);
       setShowForm(false);
@@ -57,7 +57,7 @@ export default function InvoiceSection({ defaultProposal = null }) {
   });
 
   const deleteInvoice = useMutation({
-    mutationFn: (id) => base44.entities.Invoice.delete(id),
+    mutationFn: (id) => supabase.entities.Invoice.delete(id),
     onSuccess: () => { qc.invalidateQueries(['invoices']); toast.success('Deleted'); },
   });
 
@@ -100,7 +100,7 @@ export default function InvoiceSection({ defaultProposal = null }) {
   const handleSend = async (invoice) => {
     setSending(invoice.id);
     try {
-      const res = await base44.functions.invoke('sendInvoiceToClient', { invoice_id: invoice.id });
+      const res = await supabase.functions.invoke('sendInvoiceToClient', { body: { invoice_id: invoice.id } });
       qc.invalidateQueries(['invoices']);
       toast.success('Invoice sent!');
       if (res.data?.wa_link) window.open(res.data.wa_link, '_blank');

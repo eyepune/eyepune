@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from '@/integrations/supabase/client';
 import AdminGuard from "@/components/admin/AdminGuard";
 import { motion } from 'framer-motion';
 import { Plus, Play, Edit, Trash2, FileStack, FileText, FileSignature, Receipt, Sparkles } from 'lucide-react';
@@ -32,20 +32,20 @@ function Admin_Projects() {
 
     const { data: projects = [] } = useQuery({
         queryKey: ['all-projects'],
-        queryFn: () => base44.entities.ClientProject.list('-created_date', 100),
+        queryFn: () => supabase.entities.ClientProject.list('-created_date', 100),
     });
 
     const { data: templates = [] } = useQuery({
         queryKey: ['project-templates'],
-        queryFn: () => base44.entities.ProjectTemplate.filter({ is_active: true }),
+        queryFn: () => supabase.entities.ProjectTemplate.filter({ is_active: true }),
     });
 
     const createProjectMutation = useMutation({
         mutationFn: async (data) => {
-            const project = await base44.entities.ClientProject.create(data);
+            const project = await supabase.entities.ClientProject.create(data);
             // Auto-generate personalized onboarding checklist
             try {
-                await base44.functions.invoke('generatePersonalizedOnboarding', {
+                await supabase.functions.invoke('generatePersonalizedOnboarding', {
                     project_id: project.id,
                     client_email: data.client_email
                 });
@@ -64,7 +64,7 @@ function Admin_Projects() {
     });
 
     const updateProjectMutation = useMutation({
-        mutationFn: ({ id, data }) => base44.entities.ClientProject.update(id, data),
+        mutationFn: ({ id, data }) => supabase.entities.ClientProject.update(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['all-projects'] });
             setIsEditing(false);
@@ -75,7 +75,7 @@ function Admin_Projects() {
     });
 
     const deleteProjectMutation = useMutation({
-        mutationFn: (id) => base44.entities.ClientProject.delete(id),
+        mutationFn: (id) => supabase.entities.ClientProject.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['all-projects'] });
             toast.success('Project deleted successfully!');
@@ -84,7 +84,7 @@ function Admin_Projects() {
     });
 
     const initiateOnboardingMutation = useMutation({
-        mutationFn: (projectId) => base44.functions.invoke('initiateClientOnboarding', { projectId }),
+        mutationFn: (projectId) => supabase.functions.invoke('initiateClientOnboarding', { body: { projectId } }),
         onSuccess: () => {
             toast.success('Onboarding initiated successfully!');
         },
@@ -93,7 +93,7 @@ function Admin_Projects() {
 
     const applyTemplateMutation = useMutation({
         mutationFn: ({ project_id, template_id }) => 
-            base44.functions.invoke('applyProjectTemplate', { project_id, template_id }),
+            supabase.functions.invoke('applyProjectTemplate', { body: { project_id, template_id } }),
         onSuccess: (response) => {
             queryClient.invalidateQueries(['all-projects']);
             toast.success(`Template applied: ${response.data.results.milestones.length} milestones, ${response.data.results.tasks.length} tasks, ${response.data.results.documents.length} documents created`);
@@ -187,7 +187,7 @@ function Admin_Projects() {
                                         size="sm"
                                         onClick={async () => {
                                             try {
-                                                await base44.functions.invoke('generatePersonalizedOnboarding', {
+                                                await supabase.functions.invoke('generatePersonalizedOnboarding', {
                                                     project_id: project.id,
                                                     client_email: project.clientEmail
                                                 });
