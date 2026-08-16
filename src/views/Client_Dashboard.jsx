@@ -51,7 +51,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
-import { supabase } from '@/integrations/supabase/client';
 import { cn } from "@/lib/utils";
 import ClientLayout from "@/components/client/ClientLayout";
 
