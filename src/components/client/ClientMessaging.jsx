@@ -63,7 +63,7 @@ export default function ClientMessaging({ project, user }) {
             
             if (attachmentFile) {
                 setIsUploading(true);
-                const uploadResult = await supabase.storage.from('uploads').upload( file: attachmentFile );
+                const uploadResult = await supabase.storage.from('uploads').upload(attachmentFile.name, attachmentFile);
                 attachmentUrl = uploadResult.file_url;
                 setIsUploading(false);
             }
