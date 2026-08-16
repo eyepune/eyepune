@@ -11,7 +11,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import ReactMarkdown from 'react-markdown';
 import { Bot, ChevronRight, ChevronLeft, CheckCircle, Loader2, TrendingUp, AlertCircle, Lightbulb, Target, Zap, Award, Sparkles, Clock, Phone, Brain, Globe } from 'lucide-react';
 import Link from 'next/link';
-import { supabase } from '@/integrations/supabase/client';
 import { createPageUrl } from "@/utils";
 import HeroFloatingIcons from '@/components/shared/HeroFloatingIcons';
 import SEOHead from '@/components/seo/SEOHead';
