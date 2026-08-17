@@ -34,13 +34,50 @@ export default function Pricing() {
         planNames.map(name => plans.find(p => p.name === name)).filter(Boolean);
 
     return (
-        <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
+        <main className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
         <SEOHead
             title="Growth Packages & Pricing – Web Design, AI & Marketing in Pune"
             description="Explore transparent pricing for Social Media Growth (₹30k+), Custom Web Dev (₹25k+), and AI Business Automation (₹40k+). ROI-focused packages designed for Pune businesses of all sizes."
             keywords="marketing packages pune, website development cost pune, social media management price pune, AI automation cost india, eyepune pricing plans"
             canonicalUrl="https://eyepune.com/Pricing"
-            structuredData={{"@context":"https://schema.org","@type":"WebPage","name":"EyE PunE Pricing & Packages","url":"https://eyepune.com/Pricing"}}
+            structuredData={[
+                {
+                    "@context": "https://schema.org",
+                    "@type": "WebPage",
+                    "name": "EyE PunE Pricing & Packages",
+                    "url": "https://eyepune.com/Pricing"
+                },
+                {
+                    "@context": "https://schema.org",
+                    "@type": "OfferCatalog",
+                    "name": "EyE PunE Service Packages",
+                    "description": "Transparent pricing for elite digital growth services.",
+                    "itemListElement": [
+                        {
+                            "@type": "OfferCatalog",
+                            "name": "Website Development",
+                            "itemListElement": [
+                                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Starter Website" }, "price": "25000", "priceCurrency": "INR" },
+                                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Business Website" }, "price": "50000", "priceCurrency": "INR" }
+                            ]
+                        },
+                        {
+                            "@type": "OfferCatalog",
+                            "name": "AI Solutions & Automation",
+                            "itemListElement": [
+                                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Starter" }, "price": "40000", "priceCurrency": "INR" }
+                            ]
+                        },
+                        {
+                            "@type": "OfferCatalog",
+                            "name": "Social Media Management",
+                            "itemListElement": [
+                                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Social Media Growth" }, "price": "30000", "priceCurrency": "INR" }
+                            ]
+                        }
+                    ]
+                }
+            ]}
         />
 
             {/* HERO */}
@@ -218,6 +255,6 @@ export default function Pricing() {
                     onClose={() => setSelectedPlan(null)}
                 />
             )}
-        </div>
+        </main>
     );
 }

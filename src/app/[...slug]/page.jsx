@@ -1,5 +1,6 @@
 import CatchAllPageClient from '../CatchAllPageClient';
 import { getActiveSEOVariant } from '@/utils/seo-server';
+import { headers } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
@@ -54,8 +55,8 @@ export async function generateMetadata({ params, searchParams }) {
       description: 'Build an elite social presence with AI-powered content strategy, high-impact community management, and performance-driven social ads that convert followers to fans.'
     },
     'Service-WebDev': {
-      title: 'High-Performance Web Development | EyE PunE',
-      description: 'We build fast, secure, and conversion-optimized websites and web apps. Our development team focuses on user experience and business-driven technology solutions.'
+      title: 'Custom Web Dev, Shopify & WordPress | EyE PunE',
+      description: 'We build high-performance custom websites in React/Next.js, alongside expert e-commerce and CMS solutions using Shopify, Wix, and WordPress tailored for your growth.'
     },
     'Service-AI': {
       title: 'AI Automation & Business Intelligence | EyE PunE',
@@ -145,7 +146,9 @@ export async function generateMetadata({ params, searchParams }) {
   }
 
   // A/B Testing SEO Variant Override
-  const abVariant = await getActiveSEOVariant(`/${baseRoute}`);
+  const headersList = headers();
+  const userAgent = headersList.get('user-agent') || '';
+  const abVariant = await getActiveSEOVariant(`/${baseRoute}`, userAgent);
   if (abVariant) {
     title = abVariant.title;
     description = abVariant.description;

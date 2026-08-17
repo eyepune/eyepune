@@ -1,8 +1,11 @@
 import HomePageClient from './HomePageClient';
 import { getActiveSEOVariant } from '@/utils/seo-server';
+import { headers } from 'next/headers';
 
 export async function generateMetadata() {
-  const variant = await getActiveSEOVariant('/');
+  const headersList = headers();
+  const userAgent = headersList.get('user-agent') || '';
+  const variant = await getActiveSEOVariant('/', userAgent);
   
   if (variant) {
     return {

@@ -1,122 +1,25 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 
 export default function SEOHead({ 
-    title = "EyE PunE - Elite Digital Marketing, Web Development & AI Automation Agency",
-    description = "Transform your business with EyE PunE's elite global digital solutions. We specialize in high-converting web applications, AI automation, B2B lead generation, and performance marketing to scale your growth.",
-    keywords = "global digital marketing agency, enterprise web development, AI automation services, B2B lead generation, performance marketing, CRM solutions, top SEO agency, brand strategy, sales funnels",
-    ogImage = "/opengraph-image.png",
+    title,
+    description,
+    keywords,
+    ogImage,
     canonicalUrl,
     structuredData,
-    author = "EyE PunE"
+    author
 }) {
-    const pathname = usePathname();
-    const [dynamicSEO, setDynamicSEO] = useState({ title, description });
-    const [tracked, setTracked] = useState(false);
+    // We now rely on Next.js 13+ native generateMetadata in page.jsx for title/meta tags.
+    // This component only injects page-specific structured data (JSON-LD) for AEO/GEO.
+    
+    if (!structuredData) return null;
 
-    useEffect(() => {
-        // Fetch A/B SEO variant
-        const fetchVariant = async () => {
-            try {
-                const res = await fetch(`/api/seo-variant?page=${pathname}`);
-                const data = await res.json();
-                
-                if (!data.fallback && data.id) {
-                    setDynamicSEO({
-                        title: data.title || title,
-                        description: data.description || description
-                    });
-
-                    // Track the view
-                    if (!tracked) {
-                        await fetch('/api/track-view', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ variant_id: data.id, page_url: pathname })
-                        });
-                        setTracked(true);
-                    }
-                }
-            } catch (e) {
-                // Ignore errors and use fallback
-            }
-        };
-
-        if (pathname) {
-            fetchVariant();
-        }
-    }, [pathname, title, description, tracked]);
-
-    useEffect(() => {
-        // Update document title
-        document.title = dynamicSEO.title;
-
-        // Helper to update or create meta tag
-        const setMetaTag = (name, content, isProperty = false) => {
-            if (!content) return;
-            const attribute = isProperty ? 'property' : 'name';
-            let tag = document.querySelector(`meta[${attribute}="${name}"]`);
-            if (!tag) {
-                tag = document.createElement('meta');
-                tag.setAttribute(attribute, name);
-                document.head.appendChild(tag);
-            }
-            tag.setAttribute('content', content);
-        };
-
-        // Basic meta tags
-        setMetaTag('description', dynamicSEO.description);
-        setMetaTag('keywords', keywords);
-        setMetaTag('author', author);
-        setMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
-        setMetaTag('viewport', 'width=device-width, initial-scale=1.0');
-        
-        // Open Graph tags (handled by App Router dynamically)
-        setMetaTag('og:title', dynamicSEO.title, true);
-        setMetaTag('og:description', dynamicSEO.description, true);
-        // setMetaTag('og:image', ogImage, true);
-        setMetaTag('og:type', 'website', true);
-        setMetaTag('og:site_name', 'EyE PunE', true);
-        setMetaTag('og:locale', 'en_IN', true);
-        
-        if (canonicalUrl) {
-            setMetaTag('og:url', canonicalUrl, true);
-        }
-
-        // Twitter Card tags (handled by App Router dynamically)
-        setMetaTag('twitter:card', 'summary_large_image');
-        setMetaTag('twitter:title', dynamicSEO.title);
-        setMetaTag('twitter:description', dynamicSEO.description);
-        // setMetaTag('twitter:image', ogImage);
-        setMetaTag('twitter:site', '@eyepune');
-        setMetaTag('twitter:creator', '@eyepune');
-
-        // Canonical URL
-        if (canonicalUrl) {
-            let link = document.querySelector('link[rel="canonical"]');
-            if (!link) {
-                link = document.createElement('link');
-                link.setAttribute('rel', 'canonical');
-                document.head.appendChild(link);
-            }
-            link.setAttribute('href', canonicalUrl);
-        }
-
-        // Structured Data (JSON-LD) — inject as new script each time for multi-schema support
-        if (structuredData) {
-            // Remove old page-level schema if any
-            const old = document.querySelector('script[data-page-schema="true"]');
-            if (old) old.remove();
-            const script = document.createElement('script');
-            script.setAttribute('type', 'application/ld+json');
-            script.setAttribute('data-page-schema', 'true');
-            script.textContent = JSON.stringify(structuredData);
-            document.head.appendChild(script);
-        }
-    }, [dynamicSEO.title, dynamicSEO.description, keywords, ogImage, canonicalUrl, structuredData, author]);
-
-    return null;
+    return (
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+    );
 }
 
 // Helper function to generate organization structured data
@@ -132,7 +35,6 @@ export function generateOrganizationSchema() {
         "description": "Global AI Growth Engine and Elite Digital Agency. We empower Founders, Creators, and Startups with NVIDIA-accelerated AI automation, custom web development, and performance-driven marketing systems.",
         "priceRange": "$$$",
         "telephone": "+91-9284712033",
-        "url": "https://www.eyepune.com",
         "knowsAbout": [
             "AI Automation", 
             "NVIDIA AI Systems", 

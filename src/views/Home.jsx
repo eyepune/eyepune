@@ -52,7 +52,7 @@ export default function Home({ company }) {
                     generateFAQSchema(HOME_FAQS)
                 ]}
             />
-            <div className="bg-transparent text-white">
+            <main className="bg-transparent text-white">
 
                 {/* 1. Hero — animated eye canvas + typewriter */}
                 <HeroSection company={company} />
@@ -127,7 +127,7 @@ export default function Home({ company }) {
                     <CTASection />
                 </Scroll3DReveal>
 
-            </div>
+            </main>
         </>
     );
 }

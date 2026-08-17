@@ -457,10 +457,30 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                 description="Take our 3-minute AI-powered business assessment and receive a personalized growth roadmap. Discover your growth score, identify barriers, and get a 90-day action plan to scale your business in Pune."
                 keywords="business assessment tool, free growth audit, AI business strategy, marketing performance score, business growth roadmap pune, scale your company"
                 canonicalUrl="https://eyepune.com/AI-Assessment"
-                structuredData={{ "@context": "https://schema.org", "@type": "WebPage", "name": "EyE PunE AI Business Assessment", "url": "https://eyepune.com/AI-Assessment" }}
+                structuredData={[
+                    {
+                        "@context": "https://schema.org",
+                        "@type": "WebPage",
+                        "name": "EyE PunE AI Business Assessment",
+                        "url": "https://eyepune.com/AI-Assessment"
+                    },
+                    {
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "EyE PunE AI Business & Website Auditor",
+                        "operatingSystem": "Web",
+                        "applicationCategory": "BusinessApplication",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "description": "An elite AI-powered diagnostic tool that audits your tech stack, analyzes SEO performance, and generates a custom 90-day scaling roadmap."
+                    }
+                ]}
             />
 
-            <div className="min-h-screen bg-transparent text-white pt-20 relative overflow-hidden">
+            <main className="min-h-screen bg-transparent text-white pt-20 relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(239,68,68,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,0.8) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
             
 
@@ -643,7 +663,7 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                     )}
                 </AnimatePresence>
             </div>
-            </div>
+            </main>
         </>
     );
 }

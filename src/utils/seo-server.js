@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Helper to fetch the active A/B tested SEO variant from Supabase on the server
-export async function getActiveSEOVariant(pageUrl) {
+export async function getActiveSEOVariant(pageUrl, userAgent = '') {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
@@ -24,10 +24,19 @@ export async function getActiveSEOVariant(pageUrl) {
             return null;
         }
 
-        // Randomly select one variant (50/50 chance if there's a champion and challenger)
-        // Note: For SSR, this random selection means each server render could get a different one.
-        // It's perfectly fine for A/B testing on the server.
-        const selectedVariant = variants[Math.floor(Math.random() * variants.length)];
+        // --- CRAWLER DETECTION (CRITICAL FOR AEO & SEO) ---
+        // If a known bot is crawling, ALWAYS serve the control/champion variant (variants[0]) deterministically.
+        // This prevents indexing instability where Google/Perplexity sees different metadata on each crawl.
+        const isBot = /bot|crawler|spider|crawling|google|bing|yandex|baidu|duckduck|teoma|slurp|chatgpt|perplexity|claude|anthropic|cohere/i.test(userAgent);
+
+        let selectedVariant;
+        if (isBot) {
+            // Deterministic selection for bots
+            selectedVariant = variants[0];
+        } else {
+            // Randomly select one variant for real human users (A/B testing)
+            selectedVariant = variants[Math.floor(Math.random() * variants.length)];
+        }
 
         return {
             id: selectedVariant.id,

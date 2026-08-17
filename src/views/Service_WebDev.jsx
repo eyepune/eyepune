@@ -9,30 +9,31 @@ import SEOHead from '@/components/seo/SEOHead';
 import LeadMagnetForm from '@/components/seo/LeadMagnetForm';
 
 const faqs = [
-    { question: "How much does website development cost in Pune?", answer: "EyE PunE's website packages start at ₹25,000 for a professional 5-page website. E-commerce sites start at ₹50,000. Custom web applications are priced based on scope." },
-    { question: "How long does it take to build a website?", answer: "A standard business website takes 2-3 weeks. E-commerce sites take 4-6 weeks. Custom web applications can take 6-12 weeks depending on complexity." },
+    { question: "What platforms do you build websites on?", answer: "We provide custom website development in all programming languages (React, Next.js, Node.js) and also offer expert development on major CMS platforms including Shopify, Wix, and WordPress tailored to your specific business needs." },
+    { question: "How much does website development cost in Pune?", answer: "EyE PunE's website packages start at ₹25,000 for a professional 5-page website. Custom e-commerce sites on Shopify or WooCommerce start at ₹50,000. Custom web applications are priced based on scope." },
+    { question: "How long does it take to build a website?", answer: "A standard WordPress or Wix business website takes 2-3 weeks. Custom Shopify E-commerce sites take 4-6 weeks. Complex Next.js web applications can take 6-12 weeks depending on complexity." },
     { question: "Do you build mobile-responsive websites?", answer: "Absolutely. Every website we build is fully responsive and optimized for mobile, tablet, and desktop. Mobile performance is a top priority for SEO and user experience." },
     { question: "Will my website rank on Google?", answer: "Yes! All our websites are built with technical SEO best practices — fast loading, clean code, schema markup, and on-page optimization from day one." },
     { question: "Do you provide website maintenance after launch?", answer: "Yes, we offer monthly maintenance packages including updates, security monitoring, backups, and performance optimization. Packages start at ₹5,000/month." }
 ];
 
 const features = [
-    { icon: Globe, title: "Business Websites", desc: "Professional, SEO-optimized websites that convert visitors into leads." },
+    { icon: Globe, title: "Custom & CMS Websites", desc: "Expert development in custom code (Next.js) or CMS platforms like WordPress and Wix." },
     { icon: Code2, title: "Custom Web Apps", desc: "Scalable web applications built with modern frameworks and clean architecture." },
-    { icon: Smartphone, title: "Mobile-First Design", desc: "Pixel-perfect responsive design that works flawlessly on every device." },
+    { icon: Smartphone, title: "Shopify E-commerce", desc: "High-converting online stores built on Shopify, optimized for sales and performance." },
     { icon: Zap, title: "Performance Optimized", desc: "Fast-loading pages with Core Web Vitals optimization for better rankings." },
     { icon: ShieldCheck, title: "Secure & Reliable", desc: "SSL certificates, security hardening, and regular backups included." },
     { icon: BarChart3, title: "Built-in Analytics", desc: "Google Analytics, Search Console setup, and conversion tracking." },
 ];
 
 const programmaticSeoQueries = [
-    "Website development AI tools in Pune",
-    "Website development and design services Pune",
-    "Free website development consultation Pune",
-    "Best website development company Pune",
-    "Website development course and training",
+    "Shopify experts and developers in Pune",
+    "WordPress website design agency",
+    "Wix website development services",
     "Custom AI website development company",
-    "E-commerce website development services"
+    "Website development AI tools in Pune",
+    "Free website development consultation Pune",
+    "Best website development company Pune"
 ];
 
 const results = [
@@ -88,7 +89,7 @@ export default function Service_WebDev() {
                 structuredData={faqSchema}
             />
 
-            <div className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
+            <main className="min-h-screen bg-transparent text-white overflow-x-hidden pt-20">
             {/* Hero */}
             <section className="relative py-24 md:py-32 overflow-hidden">
                 {/* Background Gradients & Effects from Solutions theme */}
@@ -303,7 +304,7 @@ export default function Service_WebDev() {
                 </Link>
               </div>
             </div>
-        </div>
+        </main>
         </>
     );
 }
