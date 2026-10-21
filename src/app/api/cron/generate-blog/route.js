@@ -46,7 +46,7 @@ async function generateBlog(request) {
                 'Authorization': `Bearer ${LLM_API_KEY}`
             },
             body: JSON.stringify({
-                model: 'meta/llama-3.1-8b-instruct',
+                model: process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                 messages: [{
                     role: 'user',
                     content: `You are an elite digital marketing and AI growth consultant writing for the EyE PunE agency blog. 

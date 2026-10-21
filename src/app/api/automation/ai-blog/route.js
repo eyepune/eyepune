@@ -155,7 +155,7 @@ async function generateAndPostBlog(audience) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: 'meta/llama-3.1-70b-instruct',
+                    model: process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                     messages: [{ role: 'user', content: prompt }],
                     max_tokens: 4096,
                     temperature: 0.8,
@@ -191,7 +191,7 @@ async function generateAndPostBlog(audience) {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'meta/llama-3.1-8b-instruct',
+                        model: process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                         messages: [{ role: 'user', content: prompt }],
                         max_tokens: 4096,
                         temperature: 0.7,

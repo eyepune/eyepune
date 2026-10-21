@@ -75,7 +75,7 @@ Return ONLY the raw text string for the LinkedIn post. Do not include introducto
                         'Authorization': `Bearer ${LLM_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: 'meta/llama-3.1-8b-instruct',
+                        model: process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                         messages: [{ role: 'user', content: prompt }],
                         max_tokens: 1024,
                         temperature: 0.8,

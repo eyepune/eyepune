@@ -99,7 +99,7 @@ async function runDiagnostics() {
                     'Authorization': `Bearer ${llmKey}`
                 },
                 body: JSON.stringify({
-                    model: 'meta/llama-3.1-8b-instruct',
+                    model: process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                     messages: [{ role: 'user', content: 'Say hello in 5 words.' }],
                     max_tokens: 15,
                     temperature: 0.7

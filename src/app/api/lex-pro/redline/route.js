@@ -66,7 +66,7 @@ ${contractText.substring(0, 80000)}
                 'Authorization': `Bearer ${LLM_API_KEY}`
             },
             body: JSON.stringify({
-                model: 'meta/llama-3.1-8b-instruct',
+                model: process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                 messages: [{ role: 'user', content: prompt }],
                 temperature: 0.2,
                 max_tokens: 3000

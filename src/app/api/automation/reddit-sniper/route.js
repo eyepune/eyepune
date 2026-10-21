@@ -78,7 +78,7 @@ Rule 3: DO NOT sound like a bot. Sound like an exhausted senior developer giving
                         'Authorization': `Bearer ${LLM_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: process.env.LLM_MODEL || 'meta/llama-3.1-8b-instruct',
+                        model: process.env.LLM_MODEL || process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                         messages: [{ role: 'user', content: prompt }],
                         temperature: 0.8
                     })

@@ -25,7 +25,7 @@ Respond ONLY with a JSON object in this format:
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: 'meta/llama-3.1-70b-instruct',
+                model: process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                 messages: [{ role: 'user', content: prompt }],
                 max_tokens: 200,
                 temperature: 0.7,

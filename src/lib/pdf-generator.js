@@ -191,23 +191,6 @@ export async function generateStrategyPDF(data) {
 
     let inBoldMode = false;
 
-    function drawFormattedText(textLine, xPos, yPos, baseStyle = "normal") {
-        const segments = textLine.split("**");
-        let currentX = xPos;
-
-        segments.forEach((segment, index) => {
-            if (!segment) {
-                if (index < segments.length - 1) inBoldMode = !inBoldMode;
-                return;
-            }
-            let activeStyle = inBoldMode ? "bold" : baseStyle;
-            doc.setFont("helvetica", activeStyle);
-            doc.text(segment, currentX, yPos);
-            currentX += doc.getTextWidth(segment);
-            if (index < segments.length - 1) inBoldMode = !inBoldMode;
-        });
-    }
-
     function ensureSpace(heightNeeded) {
         if (y + heightNeeded > 260) {
             doc.addPage();
@@ -217,12 +200,93 @@ export async function generateStrategyPDF(data) {
         }
     }
 
+    function renderMarkdownBlock(rawContent, targetX, targetWidth, bulletPrefix = null) {
+        // Strip markdown delimiters for width measurement and word-wrap calculation
+        // but preserve token positions so we can render bold spans seamlessly
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10.5);
+
+        // Parse text into words with bold state
+        const tokens = [];
+        const parts = rawContent.split(/(\*\*[^*]+\*\*)/g);
+        parts.forEach(part => {
+            if (!part) return;
+            if (part.startsWith('**') && part.endsWith('**')) {
+                const text = part.slice(2, -2);
+                tokens.push({ text, bold: true });
+            } else {
+                tokens.push({ text: part, bold: false });
+            }
+        });
+
+        // Split into words with their formatting
+        const words = [];
+        tokens.forEach(tok => {
+            const splitWords = tok.text.split(/(\s+)/);
+            splitWords.forEach(w => {
+                if (w) words.push({ text: w, bold: tok.bold });
+            });
+        });
+
+        // Build wrapped lines
+        const lines = [];
+        let currentLine = [];
+        let currentLineWidth = 0;
+
+        words.forEach(w => {
+            doc.setFont("helvetica", w.bold ? "bold" : "normal");
+            const wWidth = doc.getTextWidth(w.text);
+
+            if (currentLineWidth + wWidth > targetWidth && currentLine.length > 0 && !/^\s+$/.test(w.text)) {
+                lines.push(currentLine);
+                currentLine = [];
+                currentLineWidth = 0;
+                // If it starts with space, ignore leading space on new line
+                if (/^\s+$/.test(w.text)) return;
+            }
+
+            currentLine.push(w);
+            currentLineWidth += wWidth;
+        });
+
+        if (currentLine.length > 0) {
+            lines.push(currentLine);
+        }
+
+        ensureSpace(lines.length * 5.2 + 2);
+        y += 1.5;
+
+        lines.forEach((line, lineIdx) => {
+            let curX = targetX;
+
+            if (lineIdx === 0 && bulletPrefix) {
+                if (bulletPrefix === 'bullet') {
+                    doc.setFillColor(...brandColor);
+                    doc.rect(leftMargin + 1, y - 2.5, 1.5, 1.5, "F");
+                } else if (typeof bulletPrefix === 'string') {
+                    doc.setFont("helvetica", "bold");
+                    doc.setTextColor(...brandColor);
+                    doc.text(bulletPrefix, leftMargin, y);
+                }
+            }
+
+            line.forEach(tok => {
+                doc.setFont("helvetica", tok.bold ? "bold" : "normal");
+                doc.setTextColor(...bodyText);
+                doc.text(tok.text, curX, y);
+                curX += doc.getTextWidth(tok.text);
+            });
+
+            y += 5.2;
+        });
+    }
+
     const mdLines = (report || "").split("\n");
 
     mdLines.forEach((rawLine) => {
         const trimmed = rawLine.trim();
         if (!trimmed) {
-            y += 4;
+            y += 3;
             return;
         }
 
@@ -232,31 +296,31 @@ export async function generateStrategyPDF(data) {
             doc.setDrawColor(230, 230, 230);
             doc.setLineWidth(0.3);
             doc.line(leftMargin, y, 210 - rightMargin, y);
-            y += 8;
+            y += 6;
             return;
         }
 
         if (trimmed.startsWith("# ")) {
             const headingText = trimmed.replace(/^#\s+/, "");
-            ensureSpace(20);
-            y += 6;
+            ensureSpace(18);
+            y += 5;
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
+            doc.setFontSize(20);
             doc.setTextColor(...darkGray);
             doc.text(headingText, leftMargin, y);
-            y += 8;
+            y += 7;
             return;
         }
 
         if (trimmed.startsWith("## ")) {
             const headingText = trimmed.replace(/^##\s+/, "");
-            ensureSpace(16);
-            y += 6;
+            ensureSpace(14);
+            y += 5;
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(16);
+            doc.setFontSize(15);
             doc.setTextColor(...brandColor);
             doc.text(headingText, leftMargin, y);
-            y += 6;
+            y += 5;
             return;
         }
 
@@ -265,31 +329,16 @@ export async function generateStrategyPDF(data) {
             ensureSpace(12);
             y += 4;
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(12);
+            doc.setFontSize(11.5);
             doc.setTextColor(...darkGray);
             doc.text(headingText, leftMargin, y);
-            y += 5;
+            y += 4.5;
             return;
         }
 
         if (trimmed.startsWith("* ") || trimmed.startsWith("- ") || trimmed.startsWith("• ")) {
             const itemContent = trimmed.replace(/^[\*\-\•]\s+/, "");
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10.5);
-            const wrappedLines = doc.splitTextToSize(itemContent, printableWidth - 8);
-
-            ensureSpace(wrappedLines.length * 6 + 3);
-            y += 2;
-
-            wrappedLines.forEach((line, lineIndex) => {
-                if (lineIndex === 0) {
-                    doc.setFillColor(...brandColor);
-                    doc.rect(leftMargin + 1, y - 2.5, 1.5, 1.5, "F");
-                }
-                doc.setTextColor(...bodyText);
-                drawFormattedText(line, leftMargin + 6, y, "normal");
-                y += 5.5;
-            });
+            renderMarkdownBlock(itemContent, leftMargin + 6, printableWidth - 8, 'bullet');
             return;
         }
 
@@ -297,51 +346,22 @@ export async function generateStrategyPDF(data) {
             const numMatch = trimmed.match(/^(\d+\.)\s+/);
             const numPrefix = numMatch ? numMatch[1] : "1.";
             const itemContent = trimmed.replace(/^\d+\.\s+/, "");
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10.5);
-            const wrappedLines = doc.splitTextToSize(itemContent, printableWidth - 8);
-
-            ensureSpace(wrappedLines.length * 6 + 3);
-            y += 2;
-
-            wrappedLines.forEach((line, lineIndex) => {
-                if (lineIndex === 0) {
-                    doc.setFont("helvetica", "bold");
-                    doc.setTextColor(...brandColor);
-                    doc.text(numPrefix, leftMargin, y);
-                }
-                doc.setTextColor(...bodyText);
-                drawFormattedText(line, leftMargin + 6, y, "normal");
-                y += 5.5;
-            });
+            renderMarkdownBlock(itemContent, leftMargin + 6, printableWidth - 8, numPrefix);
             return;
         }
 
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10.5);
-        const wrappedLines = doc.splitTextToSize(trimmed, printableWidth);
-
-        ensureSpace(wrappedLines.length * 6 + 3);
-        y += 1;
-
-        wrappedLines.forEach((line) => {
-            doc.setTextColor(...bodyText);
-            drawFormattedText(line, leftMargin, y, "normal");
-            y += 5.5;
-        });
-        y += 3; 
+        renderMarkdownBlock(trimmed, leftMargin, printableWidth);
+        y += 2;
     });
 
-
-    // --- PAGE 3: RECOMMENDATIONS TABLE ---
-    ensureSpace(60);
-    y += 8;
+    // --- RECOMMENDATIONS TABLE ---
+    ensureSpace(45);
+    y += 6;
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.setTextColor(...darkGray);
     doc.text("Strategic Action Plan", leftMargin, y);
-    y += 8;
+    y += 6;
 
     const recData = [
         ["Phase 1 (0-30 Days)", "Audit & Tracking Foundation Calibration", "High"],
@@ -358,13 +378,13 @@ export async function generateStrategyPDF(data) {
             fillColor: [245, 245, 245], 
             textColor: darkGray, 
             fontStyle: "bold",
-            fontSize: 10,
+            fontSize: 9.5,
             lineWidth: { bottom: 0.5 },
             lineColor: brandColor
         },
         styles: { 
-            fontSize: 9.5, 
-            cellPadding: 6,
+            fontSize: 9, 
+            cellPadding: 5,
             textColor: bodyText,
             lineWidth: { bottom: 0.1 },
             lineColor: [230, 230, 230]

@@ -38,6 +38,23 @@ function checkRateLimit(ip) {
 }
 
 export async function POST(request) {
+    // ── ORIGIN / REFERER PROTECTION ──
+    const origin = request.headers.get('origin');
+    const referer = request.headers.get('referer');
+    const isLocalDev = process.env.NODE_ENV === 'development';
+
+    if (!isLocalDev) {
+        const isAllowed = 
+            !origin && !referer // direct or internal server-to-server
+            || (origin && (origin.includes('eyepune.com') || origin.includes('vercel.app') || origin.includes('localhost')))
+            || (referer && (referer.includes('eyepune.com') || referer.includes('vercel.app') || referer.includes('localhost')));
+
+        if (!isAllowed) {
+            console.warn(`[LLM Proxy] Blocked unauthorized origin: ${origin || referer}`);
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+    }
+
     // Rate limiting
     const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     if (!checkRateLimit(clientIp)) {
@@ -66,6 +83,14 @@ export async function POST(request) {
     } catch (parseError) {
         console.error('[LLM Proxy] Failed to parse request JSON body:', parseError.message);
         return NextResponse.json({ error: 'Invalid JSON request body' }, { status: 400 });
+    }
+
+    // Sanitize input length to prevent token bomb DoS
+    if (body?.messages && Array.isArray(body.messages)) {
+        const totalChars = body.messages.reduce((acc, m) => acc + (m.content ? m.content.length : 0), 0);
+        if (totalChars > 15000) {
+            return NextResponse.json({ error: 'Payload exceeds maximum allowed length' }, { status: 400 });
+        }
     }
 
     try {

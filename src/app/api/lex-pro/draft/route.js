@@ -9,8 +9,8 @@ const LLM_API_KEY = process.env.LLM_API_KEY;
 
 // Ordered list of models to try — primary first, then fallbacks
 const MODEL_PRIORITY = [
-    'meta/llama-3.1-8b-instruct',
-    'meta/llama-3.1-70b-instruct',
+    process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
+    process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
     'mistralai/mistral-7b-instruct-v0.3',
 ];
 

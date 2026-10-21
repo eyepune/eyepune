@@ -119,7 +119,7 @@ export async function GET(request) {
                                     'Authorization': `Bearer ${llmKey}`,
                                 },
                                 body: JSON.stringify({
-                                    model: process.env.LLM_MODEL || 'meta/llama-3.1-8b-instruct',
+                                    model: process.env.LLM_MODEL || process.env.LLM_MODEL || 'moonshotai/kimi-k2.6',
                                     messages: [
                                         {
                                             role: 'user',
