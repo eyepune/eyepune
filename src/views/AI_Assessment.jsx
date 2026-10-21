@@ -188,9 +188,14 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
         }
     };
 
-    const { useSearchParams } = require('next/navigation');
-    const searchParams = useSearchParams();
-    const urlEmail = searchParams ? searchParams.get('email') : null;
+    let urlEmail = null;
+    try {
+        const { useSearchParams } = require('next/navigation');
+        const searchParams = useSearchParams();
+        urlEmail = searchParams ? searchParams.get('email') : null;
+    } catch {
+        // Fallback for SSR or non-navigation context
+    }
 
     React.useEffect(() => {
         const checkAuth = async () => {
@@ -199,9 +204,9 @@ At the very bottom of your response, on a new line, output EXACTLY: [CRM_SCORE: 
                 setUser(currentUser);
                 setFormData(prev => ({
                     ...prev,
-                    lead_name: currentUser.user_metadata?.full_name || currentUser.user_metadata?.name || '',
-                    lead_email: urlEmail || currentUser.email || '',
-                    lead_phone: currentUser.user_metadata?.phone || '',
+                    lead_name: currentUser?.user_metadata?.full_name || currentUser?.user_metadata?.name || '',
+                    lead_email: urlEmail || currentUser?.email || '',
+                    lead_phone: currentUser?.user_metadata?.phone || '',
                 }));
             } catch {
                 setUser(null);
