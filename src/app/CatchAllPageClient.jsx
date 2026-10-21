@@ -195,7 +195,19 @@ export default function CatchAllPageClient({ initialData }) {
   let resolvedPageName = rawPageName;
   let isProgrammatic = false;
   
-  if (rawPageName.toLowerCase().startsWith('solutions/') || rawPageName.toLowerCase().startsWith('solution/')) {
+  const cleanSlug = rawPageName.toLowerCase().replace(/[\/_]/g, '-');
+  
+  if (cleanSlug === 'solutions-startups' || cleanSlug === 'solution-startups' || cleanSlug === 'startups' || cleanSlug === 'solutions-startup' || cleanSlug === 'startup-solutions') {
+    resolvedPageName = 'Solution-Startups';
+  } else if (cleanSlug === 'solutions-founders' || cleanSlug === 'solution-founders' || cleanSlug === 'founders') {
+    resolvedPageName = 'Solution-Founders';
+  } else if (cleanSlug === 'solutions-youtubers' || cleanSlug === 'solution-youtubers' || cleanSlug === 'youtubers') {
+    resolvedPageName = 'Solution-YouTubers';
+  } else if (cleanSlug === 'solutions-b2bgrowth' || cleanSlug === 'solution-b2bgrowth' || cleanSlug === 'b2bgrowth') {
+    resolvedPageName = 'Solution-B2BGrowth';
+  } else if (cleanSlug === 'solutions' || cleanSlug === 'solutions-directory') {
+    resolvedPageName = 'Solutions-Directory';
+  } else if (rawPageName.toLowerCase().startsWith('solutions/') || rawPageName.toLowerCase().startsWith('solution/')) {
     isProgrammatic = true;
     resolvedPageName = 'Solution-Programmatic';
   } else if (rawPageName.toLowerCase().startsWith('blog/') && rawPageName.split('/').length > 1) {

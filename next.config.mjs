@@ -108,8 +108,38 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/post/:path*',
-        destination: '/Blog',
+        source: '/solutions/startups',
+        destination: '/Solution-Startups',
+        permanent: true,
+      },
+      {
+        source: '/startup-solutions',
+        destination: '/Solution-Startups',
+        permanent: true,
+      },
+      {
+        source: '/startups',
+        destination: '/Solution-Startups',
+        permanent: true,
+      },
+      {
+        source: '/startup',
+        destination: '/Solution-Startups',
+        permanent: true,
+      },
+      {
+        source: '/solutions/founders',
+        destination: '/Solution-Founders',
+        permanent: true,
+      },
+      {
+        source: '/solutions/youtubers',
+        destination: '/Solution-YouTubers',
+        permanent: true,
+      },
+      {
+        source: '/solutions/b2bgrowth',
+        destination: '/Solution-B2BGrowth',
         permanent: true,
       },
     ];

@@ -26,11 +26,12 @@ export async function POST(request) {
     const isLocalDev = process.env.NODE_ENV === 'development';
     
     if (!isLocalDev) {
-        const allowedDomain = 'eyepune.com';
-        const isValidOrigin = origin && origin.includes(allowedDomain);
-        const isValidReferer = referer && referer.includes(allowedDomain);
+        const isAllowed = 
+            !origin && !referer // direct or server-to-server
+            || (origin && (origin.includes('eyepune.com') || origin.includes('vercel.app') || origin.includes('localhost')))
+            || (referer && (referer.includes('eyepune.com') || referer.includes('vercel.app') || referer.includes('localhost')));
         
-        if (!isValidOrigin && !isValidReferer) {
+        if (!isAllowed) {
             console.warn(`[Assessment API] Blocked cross-origin request from Origin: ${origin}`);
             return NextResponse.json({ error: 'Unauthorized origin' }, { status: 403 });
         }
